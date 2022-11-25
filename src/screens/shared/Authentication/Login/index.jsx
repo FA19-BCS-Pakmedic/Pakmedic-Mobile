@@ -19,6 +19,8 @@ import {TextDivider} from '../../../../components/shared/Divider';
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
 
+import dimensions from '../../../../utils/styles/themes/dimensions';
+
 const Login = ({navigation}) => {
   // hook for hiding and showing password
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -57,7 +59,7 @@ const Login = ({navigation}) => {
     <View style={styles.root}>
       {/* icon */}
 
-      <SVGImage width={300} height={300} />
+      <SVGImage width={dimensions.Width} height={dimensions.Height / 3} />
 
       {/* email and password fields */}
       <View style={styles.formContainer}>
@@ -105,14 +107,14 @@ const Login = ({navigation}) => {
         onPress={handleSubmit(onSubmit)}
         label="Login"
         type="filled"
-        width="100%"
+        width={dimensions.Width / 1.2}
       />
 
       {/* divider */}
       <TextDivider label="Or Login With" color={colors.secondary1} />
 
       {/* social buttons */}
-      <View style={{width: '100%'}}>
+      <View style={{width: dimensions.Width / 1.2}}>
         <FacebookSocialButton
           buttonViewStyle={{width: '100%', marginVertical: 10}}
         />
