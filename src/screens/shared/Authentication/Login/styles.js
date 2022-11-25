@@ -5,12 +5,10 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export default StyleSheet.create({
-  formContainer: {
-    width: '100%',
-  },
-
-  logoContainer: {
-    alignItems: 'center',
+  root: {
+    flex: 1,
+    width: dimensions.Width,
+    height: dimensions.Height,
     justifyContent: 'center',
   },
 
