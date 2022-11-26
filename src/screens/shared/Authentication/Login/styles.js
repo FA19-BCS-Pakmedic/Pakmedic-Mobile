@@ -18,6 +18,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     marginVertical: dimensions.Height / 150,
+
   },
   socialButtonContainer: {
     width: '100%',
@@ -32,6 +33,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
+
   },
 
   text: {
@@ -43,6 +45,21 @@ export default StyleSheet.create({
     color: colors.primary1,
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.bold,
+  },
+
+  socialButtonContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  socialButton: {
+    width: '48%',
+    height: dimensions.Height / 15,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
   },
 
   registerTextContainer: {
