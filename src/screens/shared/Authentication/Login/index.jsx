@@ -62,14 +62,8 @@ const Login = ({navigation}) => {
     <StaticContainer>
       {/* icon */}
 
-<<<<<<< HEAD
-      <View style={styles.logoContainer}>
-        <SVGImage width={dimensions.Width} height={dimensions.Height / 3} />
-      </View>
-=======
       <SVGImage width={dimensions.Width} height={dimensions.Height / 3} />
 
->>>>>>> 43e713b870e41061eeebaba041924d6ca0321669
       {/* email and password fields */}
       <View style={styles.formContainer}>
         {/* email field */}
@@ -129,23 +123,6 @@ const Login = ({navigation}) => {
       {/* divider */}
       <TextDivider label="Or Login With" color={colors.secondary1} />
 
-<<<<<<< HEAD
-      {/* TODO: ADD SOCIAL BUTTONS */}
-      <View style={styles.socialButtonContainer}>
-        {/* facebook login button */}
-        <TouchableOpacity style={styles.socialButton}>
-          <FaceBookLogo
-            width={dimensions.Width / 10}
-            height={dimensions.Height / 20}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
-          <GoogleLogo
-            width={dimensions.Width / 10}
-            height={dimensions.Height / 20}
-          />
-        </TouchableOpacity>
-=======
       {/* social buttons */}
       <View style={{width: dimensions.Width / 1.2}}>
         <FacebookSocialButton
@@ -159,7 +136,6 @@ const Login = ({navigation}) => {
             marginVertical: 10,
           }}
         />
->>>>>>> 43e713b870e41061eeebaba041924d6ca0321669
       </View>
 
       {/* register with text */}

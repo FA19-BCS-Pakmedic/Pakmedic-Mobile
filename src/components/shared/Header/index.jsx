@@ -19,13 +19,8 @@ export default Header;
 const styles = color =>
   StyleSheet.create({
     root: {
-<<<<<<< HEAD
-      width: '100%',
-      height: dimensions.Height / 15,
-=======
       width: dimensions.Width,
       height: dimensions.Height / 20,
->>>>>>> 43e713b870e41061eeebaba041924d6ca0321669
       backgroundColor: color || colors.secondaryLight,
       justifyContent: 'center',
       alignItems: 'center',
