@@ -11,12 +11,12 @@ import OnBoarding from './src/screens/doctor/OnBoarding';
 
 const App = () => {
   return (
-    // <NavigationContainer>
-    //   <RootNavigation />
-    // </NavigationContainer>
-    <SafeAreaView style={styles.root}>
-      <OnBoarding />
-    </SafeAreaView>
+    <NavigationContainer>
+      <RootNavigation />
+    </NavigationContainer>
+    // <SafeAreaView style={styles.root}>
+    //   <CompleteProfile />
+    // </SafeAreaView>
   );
 };
 

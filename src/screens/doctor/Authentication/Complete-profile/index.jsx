@@ -11,4 +11,4 @@ const CompleteProfile = () => {
   );
 };
 
-export default Complete - Profile;
+export default CompleteProfile;
