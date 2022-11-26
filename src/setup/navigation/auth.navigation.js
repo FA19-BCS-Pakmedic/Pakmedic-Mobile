@@ -53,7 +53,7 @@ const RegisterNavigation = () => {
 const AuthNavigation = () => {
   return (
     <>
-      <Header color={colors.primary1}/>
+      <Header color={colors.primary1} />
       <authStack.Navigator
         screenOptions={{
           headerShown: false,

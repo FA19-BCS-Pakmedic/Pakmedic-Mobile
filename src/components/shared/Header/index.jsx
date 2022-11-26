@@ -4,6 +4,7 @@ import React from 'react';
 // import theme
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
 
 const Header = ({color}) => {
   return (
@@ -18,8 +19,8 @@ export default Header;
 const styles = color =>
   StyleSheet.create({
     root: {
-      width: '100%',
-      height: '5%',
+      width: dimensions.Width,
+      height: dimensions.Height / 20,
       backgroundColor: color || colors.secondaryLight,
       justifyContent: 'center',
       alignItems: 'center',
