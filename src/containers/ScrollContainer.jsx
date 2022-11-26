@@ -31,8 +31,6 @@ const styles = StyleSheet.create({
   },
 
   child: {
-    justifyContent: 'center',
-    alignItems: 'center',
     flexGrow: 1,
     paddingHorizontal: dimensions.Width / 20,
     paddingVertical: dimensions.Height / 40,
