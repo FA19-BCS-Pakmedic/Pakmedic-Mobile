@@ -22,6 +22,8 @@ import StaticContainer from '../../../../containers/StaticContainer';
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
 
+import dimensions from '../../../../utils/styles/themes/dimensions';
+
 const Login = ({navigation}) => {
   // hook for hiding and showing password
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -116,7 +118,7 @@ const Login = ({navigation}) => {
         onPress={handleSubmit(onSubmit)}
         label="Login"
         type="filled"
-        width="100%"
+        width={dimensions.Width / 1.2}
       />
 
       {/* divider */}

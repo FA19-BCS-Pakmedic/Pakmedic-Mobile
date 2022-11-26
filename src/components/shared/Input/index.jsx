@@ -1,11 +1,5 @@
 //node modules import
-import {
-  TextInput,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import {TextInput, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Controller} from 'react-hook-form';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
@@ -21,14 +15,7 @@ import ErrorMessage from '../ErrorMessage';
 
 //contact input field
 
-export const ContactInputField = ({
-  control,
-  name,
-  rules = {},
-  type,
-  width,
-  title,
-}) => {
+export const ContactInputField = ({control, name, rules = {}, type, width}) => {
   return (
     <Controller
       control={control}
@@ -39,7 +26,6 @@ export const ContactInputField = ({
         fieldState: {error, isDirty, isTouched},
       }) => (
         <View style={styles().root}>
-          <Text style={styles().title}>{title}</Text>
           <View
             style={[
               styles(type, width).container,
@@ -95,7 +81,6 @@ export const ValidateInputField = ({
   keyboardType,
   isPasswordField,
   placeholderTextColor,
-  title,
   isPasswordVisible,
   setIsPasswordVisible,
 }) => {
@@ -121,7 +106,6 @@ export const ValidateInputField = ({
       }) => {
         return (
           <View style={styles().root}>
-            <Text style={styles().title}>{title}</Text>
             <View
               style={[
                 styles(type).container,
