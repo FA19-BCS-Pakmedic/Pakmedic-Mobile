@@ -75,11 +75,12 @@ const styles = StyleSheet.create({
   options: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 5,
+    marginBottom: 5,
   },
   title: {
     fontSize: fonts.size.font16,
-    fontWeight: fonts.weight.bold,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   option: {
     flexDirection: 'row',

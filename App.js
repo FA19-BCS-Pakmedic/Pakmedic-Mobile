@@ -10,12 +10,12 @@ import Register from './src/screens/doctor/Authentication/Register';
 
 const App = () => {
   return (
-    // <NavigationContainer>
-    //   <RootNavigation />
-    // </NavigationContainer>
-    <SafeAreaView style={styles.root}>
-      <CompleteProfile />
-    </SafeAreaView>
+    <NavigationContainer>
+      <RootNavigation />
+    </NavigationContainer>
+    // <SafeAreaView style={styles.root}>
+    //   <CompleteProfile />
+    // </SafeAreaView>
   );
 };
 

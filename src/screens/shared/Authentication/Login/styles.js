@@ -2,11 +2,13 @@ import {StyleSheet} from 'react-native';
 
 import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
+import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export default StyleSheet.create({
   root: {
     flex: 1,
-    width: '100%',
+    width: dimensions.Width,
+    height: dimensions.Height,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,

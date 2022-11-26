@@ -12,9 +12,9 @@ const CustomNavHeader = ({screenName}) => {
       <TouchableOpacity style={styles.iconContainer}>
         <Icon name="angle-left" size={25} />
       </TouchableOpacity>
-      {/* <View style={styles.titleContainer}> */}
-      <Text style={styles.title}>{screenName}</Text>
-      {/* </View> */}
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{screenName}</Text>
+      </View>
     </View>
   );
 };
@@ -25,32 +25,29 @@ const styles = StyleSheet.create({
     height: 80,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
+    justifyContent: 'flex-start',
+    paddingHorizontal: 10,
   },
 
   iconContainer: {
-    width: 50,
-    height: 50,
+    width: '12%',
+    height: '50%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.secondaryLight,
     borderRadius: 10,
-    position: 'absolute',
-    left: 20,
   },
 
   titleContainer: {
-    width: '68%',
+    width: '90%',
     height: '100%',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'center',
   },
 
   title: {
     fontSize: fonts.size.font20,
     fontWeight: fonts.weight.bold,
-    alignContent: 'center',
   },
 });
 
