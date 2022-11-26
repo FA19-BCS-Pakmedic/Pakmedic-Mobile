@@ -7,17 +7,16 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 export default Button = props => {
   return (
     <TouchableOpacity
-      style={styles(props.type, props.width).button}
+      style={styles(props.type, props.width, props.borderColor).button}
       onPress={props.onPress}>
       <Text style={styles().buttonLabel}>{props.label}</Text>
     </TouchableOpacity>
   );
 };
 
-const styles = (type, width) =>
+const styles = (type, width, borderColor) =>
   StyleSheet.create({
     button: {
-
       height: dimensions.Height / 15,
       justifyContent: 'center',
       alignItems: 'center',
@@ -25,7 +24,7 @@ const styles = (type, width) =>
       marginVertical: dimensions.Height / 60,
       backgroundColor: type === 'filled' ? colors.primary1 : colors.white,
       borderWidth: 2,
-      borderColor: colors.primary1,
+      borderColor: borderColor ? 'white' : colors.primary1,
       width: width,
     },
 
