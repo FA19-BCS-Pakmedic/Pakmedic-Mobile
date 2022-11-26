@@ -18,6 +18,22 @@ export default StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     marginVertical: dimensions.Height / 150,
+
+  },
+  socialButtonContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  socialButton: {
+    width: '48%',
+    height: dimensions.Height / 15,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+
   },
 
   text: {

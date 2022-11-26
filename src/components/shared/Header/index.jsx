@@ -20,7 +20,7 @@ const styles = color =>
   StyleSheet.create({
     root: {
       width: dimensions.Width,
-      height: dimensions.Height / 20,
+      height: dimensions.Height / 15,
       backgroundColor: color || colors.secondaryLight,
       justifyContent: 'center',
       alignItems: 'center',

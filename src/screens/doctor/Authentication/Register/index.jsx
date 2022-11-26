@@ -8,7 +8,15 @@ import {useForm} from 'react-hook-form';
 
 // custom styles import
 import styles from './styles';
+
+//import theme
 import colors from '../../../../utils/styles/themes/colors';
+import dimensions from '../../../../utils/styles/themes/dimensions';
+
+
+//importing svgs
+import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
+import FaceBookLogo from '../../../../assets/svgs/facebook-logo.svg';
 
 // custom components import
 import {
@@ -30,6 +38,10 @@ import {
   phoneNumberRegex,
 } from '../../../../utils/constants/Regex';
 import ScrollContainer from '../../../../containers/ScrollContainer';
+
+
+
+
 
 const Register = ({navigation}) => {
   // useForm hook from react-hook-form
@@ -94,29 +106,28 @@ const Register = ({navigation}) => {
   };
 
   return (
-    <View style={styles.root}>
-      <ScrollView
-        style={styles.scrollContainer}
-        contentContainerStyle={styles.child}>
-        {/* form */}
-        <View style={styles.formContainer}>
-          {/* pmc id field */}
-          <ValidateInputField
-            placeholder="PMC ID"
-            type="outlined"
-            width="93%"
-            placeholderTextColor={colors.secondary1}
-            control={control}
-            name="pmcId"
-            rules={{
-              required: "PMC ID can't be empty",
-              minLength: {
-                value: 3,
-                message: 'PMC ID must be at least 3 characters',
-              },
-              pattern: {value: pmcIdRegex, message: 'Invalid PMC ID'},
-            }}
-          />
+
+    <ScrollContainer>
+      {/* form */}
+      <View style={styles.formContainer}>
+        {/* pmc id field */}
+        <ValidateInputField
+          placeholder="PMC ID"
+          type="outlined"
+          width="93%"
+          placeholderTextColor={colors.secondary1}
+          control={control}
+          name="pmcId"
+          title={'PMC ID'}
+          rules={{
+            required: "PMC ID can't be empty",
+            minLength: {
+              value: 3,
+              message: 'PMC ID must be at least 3 characters',
+            },
+            pattern: {value: pmcIdRegex, message: 'Invalid PMC ID'},
+          }}
+        />
 
           {/* email field */}
           <ValidateInputField
@@ -284,68 +295,41 @@ const Register = ({navigation}) => {
             }}
           />
 
-          {/* genders radio buttons */}
-          <RadioGroup
-            values={GENDERS}
-            selected={watch('gender')}
-            setSelected={setGender}
-            title="Gender"
-            name="gender"
-            control={control}
-            rules={{required: 'Please select a gender'}}
+      {/* divider */}
+
+      <TextDivider
+        label="Or Register With"
+        color={colors.secondary1}
+        gap={50}
+      />
+
+      {/*SOCIAL BUTTONS */}
+      <View style={styles.socialButtonContainer}>
+        {/* facebook login button */}
+        <TouchableOpacity style={styles.socialButton}>
+          <FaceBookLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
           />
-        </View>
-
-        {/* Register button */}
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          label="Register"
-          type="filled"
-          width="100%"
-        />
-
-        {/* divider */}
-        <TextDivider label="Or Register With" color={colors.secondary1} />
-
-        {/* social buttons */}
-        <View style={styles.socialButtonsContainer}>
-          <FacebookSocialButton
-            buttonViewStyle={{
-              width: '100%',
-              padding: 2,
-            }}
-            logoStyle={{
-              width: 30,
-              height: 30,
-            }}
-            buttonText="Register With Facebook"
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <GoogleLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
           />
-          <GoogleSocialButton
-            buttonViewStyle={{
-              alignItems: 'center',
-              width: '100%',
-              padding: 2,
-              borderWidth: 1,
-              borderColor: '#484848',
-            }}
-            logoStyle={{
-              width: 30,
-              height: 30,
-            }}
-            buttonText="Register With Google"
-          />
-        </View>
+        </TouchableOpacity>
 
-        {/* register with text */}
-        <View style={styles.registerTextContainer}>
-          <Text style={styles.text}>Already have an account? </Text>
-          <TouchableOpacity onPress={navigateToLoginScreen}>
-            <Text style={styles.registerText}>Login Now</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      //{' '}
-    </View>
+      </View>
+
+      {/* register with text */}
+      <View style={styles.registerTextContainer}>
+        <Text style={styles.text}>Already have an account? </Text>
+        <TouchableOpacity onPress={navigateToLoginScreen}>
+          <Text style={styles.registerText}>Login Now</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollContainer>
+
   );
 };
 
