@@ -50,4 +50,7 @@ const styles = (type, width) =>
       fontWeight: fonts.weight.bold,
       color: colors.secondary1,
     },
+    input: {
+      ...getInputType(type),
+    },
   });
