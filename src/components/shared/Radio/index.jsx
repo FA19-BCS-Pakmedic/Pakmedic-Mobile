@@ -72,12 +72,12 @@ const RadioGroup = ({
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    marginVertical: 10,
+    marginVertical: dimensions.Height / 200,
   },
   options: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 5,
+    marginVertical: dimensions.Height / 100,
   },
   title: {
     fontSize: fonts.size.font16,

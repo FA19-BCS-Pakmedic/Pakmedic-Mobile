@@ -70,6 +70,7 @@ const Dropdown = ({
 const styles = StyleSheet.create({
   root: {
     width: '100%',
+    marginVertical: dimensions.Height / 200,
   },
 
   title: {

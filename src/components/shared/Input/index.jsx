@@ -185,7 +185,7 @@ const styles = (type, width) =>
   StyleSheet.create({
     root: {
       width: '100%',
-      marginVertical: dimensions.Height / 150,
+      marginVertical: dimensions.Height / 200,
     },
     container: {
       width: '100%',
