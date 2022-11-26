@@ -8,7 +8,7 @@ import RootNavigation from './src/setup/navigation/root.navigation';
 import CompleteProfile from './src/screens/doctor/Authentication/Complete-profile';
 import Register from './src/screens/doctor/Authentication/Register';
 import Login from './src/screens/shared/Authentication/Login';
-import Onboarding from './src/screens/doctor/On-Boarding';
+import Onboarding from './src/screens/shared/On-Boarding';
 
 const App = () => {
   return (
@@ -16,7 +16,12 @@ const App = () => {
     //   <RootNavigation />
     // </NavigationContainer>
     <SafeAreaView style={styles.root}>
-      <Onboarding />
+      <Onboarding
+        name="DocOnboarding1"
+        text="Hassle Free Appointment Booking Facility for Online and In Person
+            Consultation"
+        pagination="Pagination1"
+      />
     </SafeAreaView>
   );
 };
