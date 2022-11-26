@@ -8,6 +8,7 @@ const size = {
   font14: metrics.screenWidth * (14 / 365),
   font16: metrics.screenWidth * (16 / 365),
   font20: metrics.screenWidth * (20 / 365),
+  font24: metrics.screenWidth * (24 / 365),
 };
 
 const weight = {

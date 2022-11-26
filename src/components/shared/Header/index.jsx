@@ -19,15 +19,15 @@ export default Header;
 const styles = color =>
   StyleSheet.create({
     root: {
-      width: dimensions.Width,
-      height: dimensions.Height / 20,
+      width: '100%',
+      height: dimensions.Height / 15,
       backgroundColor: color || colors.secondaryLight,
       justifyContent: 'center',
       alignItems: 'center',
     },
     text: {
       color: colors.secondary1,
-      fontSize: fonts.size.font20,
+      fontSize: fonts.size.font24,
       fontWeight: fonts.weight.bold,
     },
   });

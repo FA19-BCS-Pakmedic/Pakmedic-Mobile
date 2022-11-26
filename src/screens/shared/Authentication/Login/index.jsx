@@ -1,20 +1,23 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
-import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
-import {
-  FacebookSocialButton,
-  GoogleSocialButton,
-} from 'react-native-social-buttons';
 import {useForm} from 'react-hook-form';
+
+//importing images
+import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
+import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
+import FaceBookLogo from '../../../../assets/svgs/facebook-logo.svg';
 
 // custom styles import
 import styles from './styles';
+
+//import themes
 import colors from '../../../../utils/styles/themes/colors';
 
 // custom components import
 import {ValidateInputField} from '../../../../components/shared/Input';
 import Button from '../../../../components/shared/Button';
 import {TextDivider} from '../../../../components/shared/Divider';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
@@ -56,11 +59,12 @@ const Login = ({navigation}) => {
   };
 
   return (
-    <View style={styles.root}>
+    <StaticContainer>
       {/* icon */}
 
-      <SVGImage width={dimensions.Width} height={dimensions.Height / 3} />
-
+      <View style={styles.logoContainer}>
+        <SVGImage width={dimensions.Width} height={dimensions.Height / 3} />
+      </View>
       {/* email and password fields */}
       <View style={styles.formContainer}>
         {/* email field */}
@@ -71,6 +75,7 @@ const Login = ({navigation}) => {
           placeholderTextColor={colors.secondary1}
           keyboardType="email-address"
           control={control}
+          title={'Email'}
           name="email"
           rules={{
             required: "Email can't be empty",
@@ -89,6 +94,7 @@ const Login = ({navigation}) => {
           keyboardType="password"
           control={control}
           name="password"
+          title={'Password'}
           isPasswordField={true}
           isPasswordVisible={!isPasswordVisible}
           setIsPasswordVisible={setIsPasswordVisible}
@@ -102,6 +108,11 @@ const Login = ({navigation}) => {
         />
       </View>
 
+      {/* forgot password text */}
+      <TouchableOpacity style={styles.textContainer}>
+        <Text style={styles.text}>Forgot Password?</Text>
+      </TouchableOpacity>
+
       {/* login button */}
       <Button
         onPress={handleSubmit(onSubmit)}
@@ -113,29 +124,33 @@ const Login = ({navigation}) => {
       {/* divider */}
       <TextDivider label="Or Login With" color={colors.secondary1} />
 
-      {/* social buttons */}
-      <View style={{width: dimensions.Width / 1.2}}>
-        <FacebookSocialButton
-          buttonViewStyle={{width: '100%', marginVertical: 10}}
-        />
-        <GoogleSocialButton
-          buttonViewStyle={{
-            width: '100%',
-            borderWidth: 1,
-            borderColor: '#484848',
-            marginVertical: 10,
-          }}
-        />
+      {/* TODO: ADD SOCIAL BUTTONS */}
+      <View style={styles.socialButtonContainer}>
+        {/* facebook login button */}
+        <TouchableOpacity style={styles.socialButton}>
+          <FaceBookLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <GoogleLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* register with text */}
-      <View style={styles.registerTextContainer}>
+      <TouchableOpacity
+        style={styles.registerTextContainer}
+        onPress={navigateToRegisterScreen}>
         <Text style={styles.text}>Don't have an account? </Text>
-        <TouchableOpacity onPress={navigateToRegisterScreen}>
+        <Text>
           <Text style={styles.registerText}>Register Now</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+        </Text>
+      </TouchableOpacity>
+    </StaticContainer>
   );
 };
 

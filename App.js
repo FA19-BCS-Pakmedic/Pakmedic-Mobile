@@ -7,15 +7,16 @@ import {NavigationContainer} from '@react-navigation/native';
 import RootNavigation from './src/setup/navigation/root.navigation';
 import CompleteProfile from './src/screens/doctor/Authentication/Complete-profile';
 import Register from './src/screens/doctor/Authentication/Register';
+import Login from './src/screens/shared/Authentication/Login';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <RootNavigation />
-    </NavigationContainer>
-    // <SafeAreaView style={styles.root}>
-    //   <CompleteProfile />
-    // </SafeAreaView>
+    // <NavigationContainer>
+    //   <RootNavigation />
+    // </NavigationContainer>
+    <SafeAreaView style={styles.root}>
+      <Login />
+    </SafeAreaView>
   );
 };
 
