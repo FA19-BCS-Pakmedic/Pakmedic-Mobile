@@ -16,7 +16,7 @@ const OnBoarding = () => {
       <View style={styles.logo}>
         <DocOnboarding1
           width={dimensions.Width}
-          height={dimensions.Height / 2.5}
+          height={dimensions.Height / 3}
         />
       </View>
       <Shadow distance={12}>
