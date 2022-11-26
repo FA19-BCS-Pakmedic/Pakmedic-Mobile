@@ -5,24 +5,6 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
-  root: {
-    width: '100%',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-
-  scrollContainer: {
-    width: '100%',
-  },
-
-  child: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexGrow: 1,
-  },
-
   formContainer: {
     width: '100%',
     flex: 1,
