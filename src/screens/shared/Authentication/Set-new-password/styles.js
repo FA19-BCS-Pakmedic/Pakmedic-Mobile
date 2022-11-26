@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
+    marginVertical: dimensions.Height / 50,
   },
 
   textContainer: {

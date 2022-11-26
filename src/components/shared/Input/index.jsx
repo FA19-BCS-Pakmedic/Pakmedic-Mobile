@@ -213,7 +213,7 @@ const styles = (type, width) =>
 
     errorMessageContainer: {
       width: '100%',
-      height: dimensions.Height / 60,
+      height: dimensions.Height / 40,
       justifyContent: 'flex-start',
       alignItems: 'flex-start',
     },

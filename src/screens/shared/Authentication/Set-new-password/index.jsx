@@ -15,7 +15,7 @@ import SvgImage from '../../../../assets/svgs/reset-password-screen-logo.svg';
 
 // import container
 import StaticContainer from '../../../../containers/StaticContainer';
-import ScrollContainer from '../../../../containers/ScrollContainer';
+// import ScrollContainer from '../../../../containers/ScrollContainer';
 
 //import regex
 import {passwordRegex} from '../../../../utils/constants/Regex';
@@ -46,7 +46,7 @@ const SetNewPassword = () => {
   };
 
   return (
-    <ScrollContainer>
+    <StaticContainer>
       {/* Screen logo */}
       <View style={styles.logoContainer}>
         <SvgImage width={dimensions.Width} height={dimensions.Height / 3} />
@@ -112,7 +112,7 @@ const SetNewPassword = () => {
           label="Verify Code"
         />
       </View>
-    </ScrollContainer>
+    </StaticContainer>
   );
 };
 
