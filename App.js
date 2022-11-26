@@ -17,7 +17,7 @@ const App = () => {
     //   <RootNavigation />
     // </NavigationContainer>
     <SafeAreaView style={styles.root}>
-      <Login />
+      <ForgotPassword />
     </SafeAreaView>
   );
 };

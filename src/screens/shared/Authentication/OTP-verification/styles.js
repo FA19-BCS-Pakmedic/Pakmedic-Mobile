@@ -7,7 +7,8 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: dimensions.Height / 1.5,
+    flex: 2,
+    // height: dimensions.Height / 1.5,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
@@ -41,10 +42,10 @@ export const styles = StyleSheet.create({
 
   buttonContainer: {
     width: '100%',
+    // height: dimensions.Height / 7,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
     alignSelf: 'flex-end',
-    paddingVertical: 50,
-    flex: 1,
   },
 });

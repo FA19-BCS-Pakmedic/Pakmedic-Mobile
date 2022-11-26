@@ -59,7 +59,9 @@ const RadioGroup = ({
               })}
             </View>
             {/* error message */}
-            {error && <ErrorMessage error={error} />}
+            <View style={styles.errorMessageContainer}>
+              {error && <ErrorMessage error={error} />}
+            </View>
           </View>
         );
       }}
@@ -89,6 +91,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: colors.primary1,
   },
+
+  errorMessageContainer: {
+    width: '100%',
+    height: dimensions.Height / 60,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+
   selected: {
     backgroundColor: colors.primary3,
   },

@@ -57,7 +57,9 @@ const Dropdown = ({
               containerStyle={styles.containerStyle}
             />
             {/* error message */}
-            {error && <ErrorMessage error={error} />}
+            <View style={styles.errorMessageContainer}>
+              {error && <ErrorMessage error={error} />}
+            </View>
           </View>
         );
       }}
@@ -87,6 +89,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondaryLight,
     borderColor: colors.secondary1,
     borderBottomColor: colors.primary1,
+  },
+
+  errorMessageContainer: {
+    width: '100%',
+    height: dimensions.Height / 60,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   containerStyle: {
     marginTop: 10,
