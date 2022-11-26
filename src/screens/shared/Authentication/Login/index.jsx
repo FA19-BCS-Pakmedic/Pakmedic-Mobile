@@ -118,7 +118,7 @@ const Login = ({navigation}) => {
         onPress={handleSubmit(onSubmit)}
         label="Login"
         type="filled"
-        width={dimensions.Width / 1.2}
+        width="100%"
       />
 
       {/* divider */}

@@ -18,7 +18,7 @@ const App = () => {
     //   <RootNavigation />
     // </NavigationContainer>
     <SafeAreaView style={styles.root}>
-      <CompleteProfile />
+      <SetNewPassword />
     </SafeAreaView>
   );
 };

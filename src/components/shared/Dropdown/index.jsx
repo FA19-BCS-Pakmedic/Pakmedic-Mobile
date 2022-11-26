@@ -70,8 +70,7 @@ const Dropdown = ({
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    marginVertical: dimensions.Height / 60,
-    borderWidth: 2,
+    marginVertical: dimensions.Height / 200,
   },
 
   title: {
@@ -101,7 +100,6 @@ const styles = StyleSheet.create({
   },
   containerStyle: {
     marginTop: 10,
-    marginBottom: 5,
   },
   placeholderStyle: {
     color: colors.secondary1,
