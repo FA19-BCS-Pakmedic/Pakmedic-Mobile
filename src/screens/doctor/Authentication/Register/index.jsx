@@ -8,7 +8,11 @@ import {useForm} from 'react-hook-form';
 
 // custom styles import
 import styles from './styles';
+
+//import theme
 import colors from '../../../../utils/styles/themes/colors';
+import dimensions from '../../../../utils/styles/themes/dimensions';
+
 
 //importing svgs
 import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
@@ -34,7 +38,10 @@ import {
   phoneNumberRegex,
 } from '../../../../utils/constants/Regex';
 import ScrollContainer from '../../../../containers/ScrollContainer';
-import dimensions from '../../../../utils/styles/themes/dimensions';
+
+
+
+
 
 const Register = ({navigation}) => {
   // useForm hook from react-hook-form
@@ -99,6 +106,7 @@ const Register = ({navigation}) => {
   };
 
   return (
+
     <ScrollContainer>
       {/* form */}
       <View style={styles.formContainer}>
@@ -235,6 +243,7 @@ const Register = ({navigation}) => {
       />
 
       {/* divider */}
+
       <TextDivider
         label="Or Register With"
         color={colors.secondary1}
@@ -256,6 +265,7 @@ const Register = ({navigation}) => {
             height={dimensions.Height / 20}
           />
         </TouchableOpacity>
+
       </View>
 
       {/* register with text */}
@@ -266,6 +276,7 @@ const Register = ({navigation}) => {
         </TouchableOpacity>
       </View>
     </ScrollContainer>
+
   );
 };
 

@@ -23,7 +23,9 @@ const styles = (color, gap) =>
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
+
       marginVertical: dimensions.Height / gap,
+
     },
     halfDivider: {
       height: dimensions.Height / 150,
