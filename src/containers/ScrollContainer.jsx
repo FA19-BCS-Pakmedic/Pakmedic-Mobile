@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 
     width: dimensions.Width,
     backgroundColor: colors.white,
-
   },
 
   container: {
@@ -39,10 +38,8 @@ const styles = StyleSheet.create({
   },
 
   child: {
-    justifyContent: 'center',
-    alignItems: 'center',
     flexGrow: 1,
     paddingHorizontal: dimensions.Width / 20,
-    paddingVertical: dimensions.Height / 40,
+    paddingVertical: dimensions.Height / 50,
   },
 });

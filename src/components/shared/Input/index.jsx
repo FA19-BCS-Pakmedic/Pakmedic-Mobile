@@ -13,8 +13,6 @@ import IntlPhoneInput from 'react-native-intl-phone-input';
 
 // import styles
 import colors from '../../../utils/styles/themes/colors';
-import fonts from '../../../utils/styles/themes/fonts';
-import dimensions from '../../../utils/styles/themes/dimensions';
 
 // custom components import
 import ErrorMessage from '../ErrorMessage';
@@ -200,12 +198,10 @@ const styles = (type, width) =>
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-    },
-
-    title: {
-      fontSize: fonts.size.font16,
-      fontWeight: fonts.weight.bold,
-      marginBottom: dimensions.Height / 100,
+      paddingHorizontal: 10,
+      marginTop: 10,
+      marginBottom: 5,
+      width: '100%',
     },
 
     input: {
