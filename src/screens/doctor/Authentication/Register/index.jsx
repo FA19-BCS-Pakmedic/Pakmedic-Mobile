@@ -235,7 +235,11 @@ const Register = ({navigation}) => {
       />
 
       {/* divider */}
-      <TextDivider label="Or Register With" color={colors.secondary1} />
+      <TextDivider
+        label="Or Register With"
+        color={colors.secondary1}
+        gap={50}
+      />
 
       {/*SOCIAL BUTTONS */}
       <View style={styles.socialButtonContainer}>

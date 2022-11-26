@@ -120,7 +120,7 @@ const Login = ({navigation}) => {
       />
 
       {/* divider */}
-      <TextDivider label="Or Login With" color={colors.secondary1} />
+      <TextDivider label="Or Login With" color={colors.secondary1} gap={40} />
 
       {/* TODO: ADD SOCIAL BUTTONS */}
       <View style={styles.socialButtonContainer}>

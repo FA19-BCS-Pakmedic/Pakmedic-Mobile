@@ -5,18 +5,12 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
-  root: {
-    flex: 1,
+  container: {
     width: '100%',
+    height: dimensions.Height / 1.5,
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-
-  mainContainer: {
-    width: '100%',
-    flex: 2,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    borderWidth: 1,
   },
 
   inputContainer: {

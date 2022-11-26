@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     width: dimensions.Width,
     height: dimensions.Height / 12,
     flexDirection: 'row',
-    borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,

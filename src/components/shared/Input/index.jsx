@@ -77,7 +77,9 @@ export const ContactInputField = ({
             </View>
           </View>
           {/* error message */}
-          {error && <ErrorMessage error={error} />}
+          <View class={styles.errorMessageContainer}>
+            {error && <ErrorMessage error={error} />}
+          </View>
         </View>
       )}
     />
@@ -169,7 +171,9 @@ export const ValidateInputField = ({
               </View>
             </View>
             {/* error message */}
-            {error && <ErrorMessage error={error} />}
+            <View style={styles().errorMessageContainer}>
+              {error && <ErrorMessage error={error} />}
+            </View>
           </View>
         );
       }}
@@ -205,6 +209,13 @@ const styles = (type, width) =>
     input: {
       color: colors.secondary1,
       width: width,
+    },
+
+    errorMessageContainer: {
+      width: '100%',
+      height: dimensions.Height / 60,
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
     },
 
     iconsContainer: {
