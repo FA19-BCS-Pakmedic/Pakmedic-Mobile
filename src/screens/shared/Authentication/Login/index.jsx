@@ -1,24 +1,26 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
-import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
-import {
-  FacebookSocialButton,
-  GoogleSocialButton,
-} from 'react-native-social-buttons';
 import {useForm} from 'react-hook-form';
+
+//importing images
+import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
+import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
+import FaceBookLogo from '../../../../assets/svgs/facebook-logo.svg';
 
 // custom styles import
 import styles from './styles';
+
+//import themes
 import colors from '../../../../utils/styles/themes/colors';
 
 // custom components import
 import {ValidateInputField} from '../../../../components/shared/Input';
 import Button from '../../../../components/shared/Button';
 import {TextDivider} from '../../../../components/shared/Divider';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
-import StaticContainer from '../../../../containers/StaticContainer';
 
 const Login = ({navigation}) => {
   // hook for hiding and showing password
@@ -58,8 +60,9 @@ const Login = ({navigation}) => {
     <StaticContainer>
       {/* icon */}
 
-      <SVGImage width={300} height={300} />
-
+      <View style={styles.logoContainer}>
+        <SVGImage width={dimensions.Width} height={dimensions.Height / 3} />
+      </View>
       {/* email and password fields */}
       <View style={styles.formContainer}>
         {/* email field */}
@@ -103,6 +106,11 @@ const Login = ({navigation}) => {
         />
       </View>
 
+      {/* forgot password text */}
+      <TouchableOpacity style={styles.textContainer}>
+        <Text style={styles.text}>Forgot Password?</Text>
+      </TouchableOpacity>
+
       {/* login button */}
       <Button
         onPress={handleSubmit(onSubmit)}
@@ -115,15 +123,31 @@ const Login = ({navigation}) => {
       <TextDivider label="Or Login With" color={colors.secondary1} />
 
       {/* TODO: ADD SOCIAL BUTTONS */}
-      <View style={styles.socialButtonContainer}></View>
-
-      {/* register with text */}
-      <View style={styles.registerTextContainer}>
-        <Text style={styles.text}>Don't have an account? </Text>
-        <TouchableOpacity onPress={navigateToRegisterScreen}>
-          <Text style={styles.registerText}>Register Now</Text>
+      <View style={styles.socialButtonContainer}>
+        {/* facebook login button */}
+        <TouchableOpacity style={styles.socialButton}>
+          <FaceBookLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <GoogleLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
         </TouchableOpacity>
       </View>
+
+      {/* register with text */}
+      <TouchableOpacity
+        style={styles.registerTextContainer}
+        onPress={navigateToRegisterScreen}>
+        <Text style={styles.text}>Don't have an account? </Text>
+        <Text>
+          <Text style={styles.registerText}>Register Now</Text>
+        </Text>
+      </TouchableOpacity>
     </StaticContainer>
   );
 };

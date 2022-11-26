@@ -27,7 +27,7 @@ const styles = color =>
     },
     text: {
       color: colors.secondary1,
-      fontSize: fonts.size.font20,
+      fontSize: fonts.size.font24,
       fontWeight: fonts.weight.bold,
     },
   });

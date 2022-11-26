@@ -2,18 +2,22 @@ import {StyleSheet} from 'react-native';
 
 import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
+import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export default StyleSheet.create({
-  root: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-
   formContainer: {
     width: '100%',
+  },
+
+  logoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  textContainer: {
+    justifyContent: 'center',
+    width: '100%',
+    marginVertical: dimensions.Height / 150,
   },
 
   text: {
@@ -27,11 +31,26 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
   },
 
+  socialButtonContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  socialButton: {
+    width: '48%',
+    height: dimensions.Height / 15,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+
   registerTextContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: dimensions.Height / 50,
   },
 });

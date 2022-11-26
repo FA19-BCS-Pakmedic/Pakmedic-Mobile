@@ -199,6 +199,7 @@ const styles = (type, width) =>
     title: {
       fontSize: fonts.size.font16,
       fontWeight: fonts.weight.bold,
+      marginBottom: dimensions.Height / 100,
     },
 
     input: {

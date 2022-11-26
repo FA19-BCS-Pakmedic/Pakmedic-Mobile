@@ -1,6 +1,9 @@
 import {View, Text, StyleSheet} from 'react-native';
 
-import {DividerStyles} from './Divider.styles';
+//import themes
+import colors from '../../../utils/styles/themes/colors';
+import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
 
 export const TextDivider = props => {
   return (
@@ -15,13 +18,21 @@ export const TextDivider = props => {
 const styles = color =>
   StyleSheet.create({
     root: {
-      ...DividerStyles.divider,
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: dimensions.Height / 30,
     },
     halfDivider: {
-      ...DividerStyles.halfDivider,
+      height: dimensions.Height / 150,
+      flex: 1,
+      borderRadius: 20,
       backgroundColor: color,
     },
     content: {
-      ...DividerStyles.content,
+      fontSize: fonts.size.font14,
+      fontWeight: fonts.weight.semi,
+      marginHorizontal: dimensions.Width * 0.05,
     },
   });
