@@ -7,8 +7,11 @@ import IntlPhoneInput from 'react-native-intl-phone-input';
 
 // import styles
 import colors from '../../../utils/styles/themes/colors';
+<<<<<<< HEAD
 import fonts from '../../../utils/styles/themes/fonts';
 import dimensions from '../../../utils/styles/themes/dimensions';
+=======
+>>>>>>> 43e713b870e41061eeebaba041924d6ca0321669
 
 // custom components import
 import ErrorMessage from '../ErrorMessage';
@@ -165,7 +168,10 @@ const styles = (type, width) =>
   StyleSheet.create({
     root: {
       width: '100%',
+<<<<<<< HEAD
       marginVertical: dimensions.Height / 150,
+=======
+>>>>>>> 43e713b870e41061eeebaba041924d6ca0321669
     },
     container: {
       width: '100%',
@@ -178,6 +184,7 @@ const styles = (type, width) =>
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
+<<<<<<< HEAD
     },
 
     title: {
@@ -186,6 +193,14 @@ const styles = (type, width) =>
       marginBottom: dimensions.Height / 100,
     },
 
+=======
+      paddingHorizontal: 10,
+      marginTop: 10,
+      marginBottom: 5,
+      width: '100%',
+    },
+
+>>>>>>> 43e713b870e41061eeebaba041924d6ca0321669
     input: {
       color: colors.secondary1,
       width: width,
