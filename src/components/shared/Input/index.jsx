@@ -14,6 +14,7 @@ import IntlPhoneInput from 'react-native-intl-phone-input';
 // import styles
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
 
 // custom components import
 import ErrorMessage from '../ErrorMessage';
@@ -180,21 +181,19 @@ const styles = (type, width) =>
   StyleSheet.create({
     root: {
       width: '100%',
-      marginVertical: 5,
+      marginVertical: dimensions.Height / 150,
     },
     container: {
+      width: '100%',
+      height: dimensions.Height / 17,
       backgroundColor: type === 'filled' ? colors.secondaryLight : colors.white,
       borderWidth: type === 'filled' ? 0 : 1,
       borderColor: type === 'filled' ? colors.secondaryLight : colors.primary1,
-      height: 50,
+      paddingHorizontal: dimensions.Width / 40,
       borderRadius: 5,
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      paddingHorizontal: 10,
-      marginTop: 5,
-      marginBottom: 5,
-      width: '100%',
     },
 
     title: {

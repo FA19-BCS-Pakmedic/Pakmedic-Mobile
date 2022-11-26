@@ -18,6 +18,7 @@ import {TextDivider} from '../../../../components/shared/Divider';
 
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 const Login = ({navigation}) => {
   // hook for hiding and showing password
@@ -54,7 +55,7 @@ const Login = ({navigation}) => {
   };
 
   return (
-    <View style={styles.root}>
+    <StaticContainer>
       {/* icon */}
 
       <SVGImage width={300} height={300} />
@@ -69,6 +70,7 @@ const Login = ({navigation}) => {
           placeholderTextColor={colors.secondary1}
           keyboardType="email-address"
           control={control}
+          title={'Email'}
           name="email"
           rules={{
             required: "Email can't be empty",
@@ -87,6 +89,7 @@ const Login = ({navigation}) => {
           keyboardType="password"
           control={control}
           name="password"
+          title={'Password'}
           isPasswordField={true}
           isPasswordVisible={!isPasswordVisible}
           setIsPasswordVisible={setIsPasswordVisible}
@@ -111,20 +114,8 @@ const Login = ({navigation}) => {
       {/* divider */}
       <TextDivider label="Or Login With" color={colors.secondary1} />
 
-      {/* social buttons */}
-      <View style={{width: '100%'}}>
-        <FacebookSocialButton
-          buttonViewStyle={{width: '100%', marginVertical: 10}}
-        />
-        <GoogleSocialButton
-          buttonViewStyle={{
-            width: '100%',
-            borderWidth: 1,
-            borderColor: '#484848',
-            marginVertical: 10,
-          }}
-        />
-      </View>
+      {/* TODO: ADD SOCIAL BUTTONS */}
+      <View style={styles.socialButtonContainer}></View>
 
       {/* register with text */}
       <View style={styles.registerTextContainer}>
@@ -133,7 +124,7 @@ const Login = ({navigation}) => {
           <Text style={styles.registerText}>Register Now</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </StaticContainer>
   );
 };
 
