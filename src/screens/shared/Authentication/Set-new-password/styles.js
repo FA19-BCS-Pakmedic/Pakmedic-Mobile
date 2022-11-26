@@ -8,11 +8,12 @@ export const styles = StyleSheet.create({
   logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
 
   textContainer: {
     width: '100%',
-    // paddingBottom: dimensions.Height / 20,
+    // paddingVertical: dimensions.Height / 20,
   },
 
   text: {
@@ -30,7 +31,5 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
   },
 });

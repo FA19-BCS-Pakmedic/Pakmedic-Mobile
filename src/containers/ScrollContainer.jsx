@@ -3,15 +3,17 @@ import React from 'react';
 
 //import custom components
 import Header from '../components/shared/Header';
+import CustomNavHeader from '../components/shared/CustomNavHeader';
 
 //import dimension
 import dimensions from '../utils/styles/themes/dimensions';
 import colors from '../utils/styles/themes/colors';
 
-const ScrollContainer = ({children}) => {
+const ScrollContainer = ({children, customHeaderEnable, customHeaderName}) => {
   return (
     <SafeAreaView style={styles.root}>
       <Header color={colors.primary1} />
+      {customHeaderEnable && <CustomNavHeader screenName={customHeaderName} />}
       <ScrollView style={styles.root} contentContainerStyle={styles.child}>
         {children}
       </ScrollView>
