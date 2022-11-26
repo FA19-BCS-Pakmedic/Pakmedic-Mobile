@@ -1,0 +1,5 @@
+<svg width="70" height="10" viewBox="0 0 70 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="5" cy="5" r="5" fill="#FEBABA"/>
+<circle cx="25" cy="5" r="5" fill="#FEBABA"/>
+<path d="M40 5C40 2.23858 42.2386 0 45 0H65C67.7614 0 70 2.23858 70 5C70 7.76142 67.7614 10 65 10H45C42.2386 10 40 7.76142 40 5Z" fill="#F86D6D"/>
+</svg>
