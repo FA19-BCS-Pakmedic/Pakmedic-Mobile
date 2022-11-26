@@ -11,12 +11,12 @@ import Login from './src/screens/shared/Authentication/Login';
 
 const App = () => {
   return (
-    // <NavigationContainer>
-    //   <RootNavigation />
-    // </NavigationContainer>
-    <SafeAreaView style={styles.root}>
-      <Login />
-    </SafeAreaView>
+    <NavigationContainer>
+      <RootNavigation />
+    </NavigationContainer>
+    // <SafeAreaView style={styles.root}>
+    //   <CompleteProfile />
+    // </SafeAreaView>
   );
 };
 
