@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 import colors from '../../../../utils/styles/themes/colors';
+import dimensions from '../../../../utils/styles/themes/dimensions';
 import fonts from '../../../../utils/styles/themes/fonts';
 
 export default StyleSheet.create({
@@ -20,6 +21,21 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexGrow: 1,
+  },
+
+  socialButtonContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  socialButton: {
+    width: '48%',
+    height: dimensions.Height / 15,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
   },
 
   formContainer: {

@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // import theme files
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
 
 const CustomNavHeader = ({screenName}) => {
   return (
@@ -12,37 +13,34 @@ const CustomNavHeader = ({screenName}) => {
       <TouchableOpacity style={styles.iconContainer}>
         <Icon name="angle-left" size={25} />
       </TouchableOpacity>
-      {/* <View style={styles.titleContainer}> */}
       <Text style={styles.title}>{screenName}</Text>
-      {/* </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
-    height: 80,
+    width: dimensions.Width,
+    height: dimensions.Height / 12,
     flexDirection: 'row',
+    borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
 
   iconContainer: {
-    width: 50,
-    height: 50,
+    width: dimensions.Width / 8,
+    height: dimensions.Height / 17,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.secondaryLight,
     borderRadius: 10,
     position: 'absolute',
-    left: 20,
+    left: dimensions.Width / 20,
   },
 
   titleContainer: {
-    width: '68%',
-    height: '100%',
     alignItems: 'flex-start',
     justifyContent: 'center',
   },

@@ -9,6 +9,7 @@ import colors from '../../../utils/styles/themes/colors';
 // custom components import
 import ErrorMessage from '../ErrorMessage';
 import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
 
 const Dropdown = ({
   open,

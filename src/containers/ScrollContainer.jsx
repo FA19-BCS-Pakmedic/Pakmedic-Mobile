@@ -6,11 +6,12 @@ import Header from '../components/shared/Header';
 
 //import dimension
 import dimensions from '../utils/styles/themes/dimensions';
+import colors from '../utils/styles/themes/colors';
 
 const ScrollContainer = ({children}) => {
   return (
     <SafeAreaView style={styles.root}>
-      <Header />
+      <Header color={colors.primary1} />
       <ScrollView style={styles.root} contentContainerStyle={styles.child}>
         {children}
       </ScrollView>
@@ -23,7 +24,8 @@ export default ScrollContainer;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    width: '100%',
+    width: dimensions.Width,
+    backgroundColor: colors.white,
   },
 
   container: {

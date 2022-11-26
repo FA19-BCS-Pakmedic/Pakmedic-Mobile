@@ -19,18 +19,6 @@ export default StyleSheet.create({
     width: '100%',
     marginVertical: dimensions.Height / 150,
   },
-
-  text: {
-    fontSize: fonts.size.font16,
-    fontWeight: fonts.weight.normal,
-  },
-
-  registerText: {
-    color: colors.primary1,
-    fontSize: fonts.size.font16,
-    fontWeight: fonts.weight.bold,
-  },
-
   socialButtonContainer: {
     width: '100%',
     flexDirection: 'row',
@@ -44,6 +32,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
+  },
+
+  text: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.normal,
+  },
+
+  registerText: {
+    color: colors.primary1,
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.bold,
   },
 
   registerTextContainer: {
