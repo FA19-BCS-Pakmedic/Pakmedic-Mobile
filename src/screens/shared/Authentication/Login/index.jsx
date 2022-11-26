@@ -118,11 +118,11 @@ const Login = ({navigation}) => {
         onPress={handleSubmit(onSubmit)}
         label="Login"
         type="filled"
-        width={dimensions.Width / 1.2}
+        width="100%"
       />
 
       {/* divider */}
-      <TextDivider label="Or Login With" color={colors.secondary1} />
+      <TextDivider label="Or Login With" color={colors.secondary1} gap={40} />
 
       {/* TODO: ADD SOCIAL BUTTONS */}
       <View style={styles.socialButtonContainer}>

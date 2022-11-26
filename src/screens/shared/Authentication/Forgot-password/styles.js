@@ -5,12 +5,9 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
-  root: {
-    width: '100%',
-    flex: 1,
-    justifyContent: 'flex-start',
+  logoContainer: {
     alignItems: 'center',
-    paddingHorizontal: 20,
+    justifyContent: 'center',
   },
 
   container: {
@@ -26,7 +23,7 @@ export const styles = StyleSheet.create({
   },
 
   inputContainer: {
-    marginVertical: 20,
+    marginVertical: dimensions.Height / 20,
   },
 
   text: {
@@ -43,10 +40,9 @@ export const styles = StyleSheet.create({
 
   buttonContainer: {
     width: '100%',
+    height: dimensions.Height / 7,
     alignItems: 'center',
     justifyContent: 'flex-end',
     alignSelf: 'flex-end',
-    paddingVertical: 50,
-    flex: 1,
   },
 });

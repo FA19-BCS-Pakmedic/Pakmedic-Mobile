@@ -19,7 +19,7 @@ export default Header;
 const styles = color =>
   StyleSheet.create({
     root: {
-      width: '100%',
+      width: dimensions.Width,
       height: dimensions.Height / 15,
       backgroundColor: color || colors.secondaryLight,
       justifyContent: 'center',

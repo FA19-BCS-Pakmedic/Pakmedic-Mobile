@@ -8,7 +8,15 @@ import {useForm} from 'react-hook-form';
 
 // custom styles import
 import styles from './styles';
+
+//import theme
 import colors from '../../../../utils/styles/themes/colors';
+import dimensions from '../../../../utils/styles/themes/dimensions';
+
+
+//importing svgs
+import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
+import FaceBookLogo from '../../../../assets/svgs/facebook-logo.svg';
 
 // custom components import
 import {
@@ -30,6 +38,10 @@ import {
   phoneNumberRegex,
 } from '../../../../utils/constants/Regex';
 import ScrollContainer from '../../../../containers/ScrollContainer';
+
+
+
+
 
 const Register = ({navigation}) => {
   // useForm hook from react-hook-form
@@ -94,10 +106,7 @@ const Register = ({navigation}) => {
   };
 
   return (
-    // <View style={styles.root}>
-    //   <ScrollView
-    //     style={styles.scrollContainer}
-    //     contentContainerStyle={styles.child}>
+
     <ScrollContainer>
       {/* form */}
       <View style={styles.formContainer}>
@@ -234,35 +243,29 @@ const Register = ({navigation}) => {
       />
 
       {/* divider */}
-      <TextDivider label="Or Register With" color={colors.secondary1} />
 
-      {/* social buttons */}
-      <View style={styles.socialButtonsContainer}>
-        <FacebookSocialButton
-          buttonViewStyle={{
-            width: '100%',
-            padding: 2,
-          }}
-          logoStyle={{
-            width: 30,
-            height: 30,
-          }}
-          buttonText="Register With Facebook"
-        />
-        <GoogleSocialButton
-          buttonViewStyle={{
-            alignItems: 'center',
-            width: '100%',
-            padding: 2,
-            borderWidth: 1,
-            borderColor: '#484848',
-          }}
-          logoStyle={{
-            width: 30,
-            height: 30,
-          }}
-          buttonText="Register With Google"
-        />
+      <TextDivider
+        label="Or Register With"
+        color={colors.secondary1}
+        gap={50}
+      />
+
+      {/*SOCIAL BUTTONS */}
+      <View style={styles.socialButtonContainer}>
+        {/* facebook login button */}
+        <TouchableOpacity style={styles.socialButton}>
+          <FaceBookLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <GoogleLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
+        </TouchableOpacity>
+
       </View>
 
       {/* register with text */}
@@ -273,8 +276,7 @@ const Register = ({navigation}) => {
         </TouchableOpacity>
       </View>
     </ScrollContainer>
-    //   </ScrollView>
-    // </View>
+
   );
 };
 

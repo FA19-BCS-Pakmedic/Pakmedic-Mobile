@@ -1,5 +1,11 @@
 //node modules import
-import {TextInput, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import {Controller} from 'react-hook-form';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
@@ -15,7 +21,14 @@ import ErrorMessage from '../ErrorMessage';
 
 //contact input field
 
-export const ContactInputField = ({control, name, rules = {}, type, width}) => {
+export const ContactInputField = ({
+  control,
+  name,
+  rules = {},
+  type,
+  width,
+  title,
+}) => {
   return (
     <Controller
       control={control}
@@ -26,6 +39,7 @@ export const ContactInputField = ({control, name, rules = {}, type, width}) => {
         fieldState: {error, isDirty, isTouched},
       }) => (
         <View style={styles().root}>
+          <Text style={styles().title}>{title}</Text>
           <View
             style={[
               styles(type, width).container,
@@ -63,7 +77,9 @@ export const ContactInputField = ({control, name, rules = {}, type, width}) => {
             </View>
           </View>
           {/* error message */}
-          {error && <ErrorMessage error={error} />}
+          <View class={styles.errorMessageContainer}>
+            {error && <ErrorMessage error={error} />}
+          </View>
         </View>
       )}
     />
@@ -81,6 +97,7 @@ export const ValidateInputField = ({
   keyboardType,
   isPasswordField,
   placeholderTextColor,
+  title,
   isPasswordVisible,
   setIsPasswordVisible,
 }) => {
@@ -106,6 +123,7 @@ export const ValidateInputField = ({
       }) => {
         return (
           <View style={styles().root}>
+            <Text style={styles().title}>{title}</Text>
             <View
               style={[
                 styles(type).container,
@@ -153,7 +171,9 @@ export const ValidateInputField = ({
               </View>
             </View>
             {/* error message */}
-            {error && <ErrorMessage error={error} />}
+            <View style={styles().errorMessageContainer}>
+              {error && <ErrorMessage error={error} />}
+            </View>
           </View>
         );
       }}
@@ -165,7 +185,9 @@ const styles = (type, width) =>
   StyleSheet.create({
     root: {
       width: '100%',
-      marginVertical: dimensions.Height / 150,
+
+      marginVertical: dimensions.Height / 200,
+
     },
     container: {
       width: '100%',
@@ -189,6 +211,13 @@ const styles = (type, width) =>
     input: {
       color: colors.secondary1,
       width: width,
+    },
+
+    errorMessageContainer: {
+      width: '100%',
+      height: dimensions.Height / 60,
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
     },
 
     iconsContainer: {

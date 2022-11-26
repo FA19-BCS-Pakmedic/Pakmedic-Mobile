@@ -6,6 +6,7 @@ import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import theme
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
 
 const ForgotPasswordCard = ({title, handlePress}) => {
   return (
@@ -33,21 +34,22 @@ export default ForgotPasswordCard;
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    height: 100,
+    height: dimensions.Height / 8,
     borderWidth: 1,
     borderColor: colors.primary1,
     borderRadius: 20,
-    marginVertical: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
+    marginVertical: dimensions.Height / 30,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
   },
 
   textContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: dimensions.Width / 20,
   },
 
-  text: {},
+  text: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.bold,
+  },
 });
