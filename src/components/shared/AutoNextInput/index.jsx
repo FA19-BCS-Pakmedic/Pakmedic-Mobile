@@ -20,7 +20,7 @@ const AutoNextInput = React.forwardRef((props, ref) => {
       }) => (
         <TextInput
           style={[
-            styles(props?.type, props?.width).root,
+            styles(props?.type, props?.width, props?.height).root,
             {
               borderColor:
                 error || props?.customError ? colors.invalid : colors.primary1,
@@ -51,13 +51,13 @@ const AutoNextInput = React.forwardRef((props, ref) => {
 
 export default AutoNextInput;
 
-const styles = (type, width) =>
+const styles = (type, width, height) =>
   StyleSheet.create({
     root: {
       width: width,
       borderWidth: type === 'outlined' ? 1 : 0,
       borderRadius: 10,
-      height: dimensions.Height / 17,
+      height: dimensions.Height / height,
       backgroundColor: type === 'outlined' ? 'white' : colors.secondaryLight,
       borderColor:
         type === 'outlined' ? colors.primary1 : colors.secondaryLight,

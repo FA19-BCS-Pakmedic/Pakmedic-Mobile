@@ -14,6 +14,10 @@ export const styles = StyleSheet.create({
     // borderWidth: 1,
   },
 
+  pinContainer: {
+    width: '100%',
+  },
+
   inputContainer: {
     width: '100%',
     flexDirection: 'row',

@@ -25,8 +25,9 @@ import {
 import Button from '../../../../components/shared/Button';
 import {TextDivider} from '../../../../components/shared/Divider';
 import RadioGroup from '../../../../components/shared/Radio';
-import Dropdown from '../../../../components/shared/Dropdown';
 import AutoNextInput from '../../../../components/shared/AutoNextInput';
+import CustomDatePicker from '../../../../components/shared/CustomDatePicker';
+import ErrorMessage from '../../../../components/shared/ErrorMessage';
 
 // import constants
 import CITIES from '../../../../utils/constants/Cities';
@@ -39,17 +40,12 @@ import {
   phoneNumberRegex,
   numberRegex,
 } from '../../../../utils/constants/Regex';
-import CustomDatePicker from '../../../../components/shared/CustomDatePicker';
-import ErrorMessage from '../../../../components/shared/ErrorMessage';
 
 const Register = () => {
   //input refs
   const inputRef1 = useRef('');
   const inputRef2 = useRef('');
   const inputRef3 = useRef('');
-
-  //cnic error
-  const [cnicError, setCnicError] = useState(false);
 
   // useForm hook from react-hook-form
   const {
@@ -81,11 +77,13 @@ const Register = () => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
 
+  //cnic error
+  const [cnicError, setCnicError] = useState(false);
+
   // for date picker
   const [date, setDate] = useState(new Date());
 
-  // for opening and closing the Dropdown
-  const [open, setOpen] = useState(false);
+  // for opening and closing date modal
   const [openDate, setOpenDate] = useState(false);
 
   // form submit handler
@@ -259,6 +257,7 @@ const Register = () => {
             customError={cnicError}
             setCustomError={setCnicError}
             control={control}
+            height={17}
             rules={{minLength: {value: 5}, pattern: {value: numberRegex}}}
             onChangeText={text => {
               inputRef2.current.focus();
@@ -274,6 +273,7 @@ const Register = () => {
             customError={cnicError}
             setCustomError={setCnicError}
             control={control}
+            height={17}
             rules={{minLength: {value: 7}, pattern: {value: numberRegex}}}
             onChangeText={text => {
               inputRef3.current.focus();
@@ -289,6 +289,7 @@ const Register = () => {
             customError={cnicError}
             setCustomError={setCnicError}
             control={control}
+            height={17}
             rules={{minLength: {value: 1}, pattern: {value: numberRegex}}}
             onChangeText={text => {
               setValue('cnic3', text);
