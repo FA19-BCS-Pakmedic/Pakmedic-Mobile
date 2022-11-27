@@ -15,7 +15,6 @@ const Dropdown = ({
   open,
   items,
   setOpen,
-  // value,
   setValue,
   control,
   placeholder,

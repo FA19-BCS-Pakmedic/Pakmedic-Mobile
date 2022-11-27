@@ -1,9 +1,5 @@
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {useState} from 'react';
-import {
-  FacebookSocialButton,
-  GoogleSocialButton,
-} from 'react-native-social-buttons';
 import {useForm} from 'react-hook-form';
 
 // custom styles import
@@ -12,7 +8,6 @@ import styles from './styles';
 //import theme
 import colors from '../../../../utils/styles/themes/colors';
 import dimensions from '../../../../utils/styles/themes/dimensions';
-
 
 //importing svgs
 import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
@@ -37,11 +32,9 @@ import {
   passwordRegex,
   phoneNumberRegex,
 } from '../../../../utils/constants/Regex';
+
+//importing container
 import ScrollContainer from '../../../../containers/ScrollContainer';
-
-
-
-
 
 const Register = ({navigation}) => {
   // useForm hook from react-hook-form
@@ -94,7 +87,6 @@ const Register = ({navigation}) => {
   };
 
   //navigate back to login screen
-  //navigate to signup screen
   const navigateToLoginScreen = () => {
     console.log('This function is being called');
     navigation.navigate('Auth', {
@@ -106,7 +98,6 @@ const Register = ({navigation}) => {
   };
 
   return (
-
     <ScrollContainer>
       {/* form */}
       <View style={styles.formContainer}>
@@ -265,7 +256,6 @@ const Register = ({navigation}) => {
             height={dimensions.Height / 20}
           />
         </TouchableOpacity>
-
       </View>
 
       {/* register with text */}
@@ -276,7 +266,6 @@ const Register = ({navigation}) => {
         </TouchableOpacity>
       </View>
     </ScrollContainer>
-
   );
 };
 
