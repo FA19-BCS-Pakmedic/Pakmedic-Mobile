@@ -21,6 +21,7 @@ const CustomDatePicker = ({
   type,
   title,
   control,
+  maximumDate,
 }) => {
   return (
     <Controller
@@ -64,6 +65,7 @@ const CustomDatePicker = ({
               onCancel={() => {
                 setOpen(false);
               }}
+              maximumDate={maximumDate}
             />
           </>
         );

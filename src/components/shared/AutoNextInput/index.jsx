@@ -23,7 +23,9 @@ const AutoNextInput = React.forwardRef((props, ref) => {
             styles(props?.type, props?.width, props?.height).root,
             {
               borderColor:
-                error || props?.customError ? colors.invalid : colors.primary1,
+                (error || props?.customError) && props?.type === 'outlined'
+                  ? colors.invalid
+                  : colors.primary1,
             },
           ]}
           onBlur={onBlur}
@@ -33,7 +35,8 @@ const AutoNextInput = React.forwardRef((props, ref) => {
             console.log(error);
             if (error) {
               props?.setCustomError(true);
-            } else if (!error) {
+            }
+            {
               props?.setCustomError(false);
             }
 

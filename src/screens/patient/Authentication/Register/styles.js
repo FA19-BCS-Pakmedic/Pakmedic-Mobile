@@ -61,6 +61,11 @@ export default StyleSheet.create({
     marginVertical: 20,
   },
 
+  buttonContainer: {
+    width: '100%',
+    marginTop: dimensions.Height / 50,
+  },
+
   socialButtonsContainer: {
     width: '100%',
     justifyContent: 'space-between',

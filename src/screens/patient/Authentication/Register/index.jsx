@@ -225,11 +225,12 @@ const Register = () => {
         open={openDate}
         setOpen={setOpenDate}
         onChangeDate={onChangeDate}
-        name="DOB"
+        name="dob"
         date={date}
         rules={{
           required: "Date of birth can't be empty",
         }}
+        maximumDate={new Date()}
         control={control}
         title={'Date of birth'}
       />
@@ -300,12 +301,14 @@ const Register = () => {
       </View>
 
       {/* Register button */}
+      {/* <View style={styles.buttonContainer}> */}
       <Button
         onPress={handleSubmit(onSubmit)}
         label="Register"
         type="filled"
         width="100%"
       />
+      {/* </View> */}
 
       {/* divider */}
 
