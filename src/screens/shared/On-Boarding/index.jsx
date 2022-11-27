@@ -17,6 +17,14 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import Button from '../../../components/shared/Button';
 
 const OnBoarding = props => {
+  const {screenName, text, pagination} = props;
+
+  const navigateToNext = () => {
+    props.navigation.navigate(
+      'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
+    );
+  };
+
   const screens = {
     DocOnboarding1: DocOnboarding1,
     DocOnboarding2: DocOnboarding2,
@@ -29,20 +37,38 @@ const OnBoarding = props => {
     Pagination3: Pagination3,
   };
 
-  const Name = screens[props.name];
+  const Name = screens[props.screenName];
   const Logo = logo[props.pagination];
+
   return (
     <View style={styles.root}>
       <View style={styles.logo}>
-        <Name width={dimensions.Width} height={dimensions.Height / 2.4} />
+        {screenName != undefined ? (
+          <Name width={dimensions.Width} height={dimensions.Height / 2.4} />
+        ) : (
+          <></>
+        )}
       </View>
       <Shadow distance={12}>
         <View style={styles.overlay}>
-          <Text style={styles.heading}>{props.text}</Text>
-          <Logo width={dimensions.Width} height={dimensions.Height / 70} />
+          {text !== undefined ? (
+            <Text style={styles.heading}>{props.text}</Text>
+          ) : (
+            <></>
+          )}
+
+          {Logo !== undefined ? (
+            <Logo width={dimensions.Width} height={dimensions.Height / 70} />
+          ) : (
+            <></>
+          )}
           <View>
             <Button
-              onPress={() => {}}
+              onPress={() => {
+                if (screenName !== 'DocOnboarding3') {
+                  navigateToNext();
+                }
+              }}
               label="Next"
               type="filled"
               width={dimensions.Width / 1.2}
