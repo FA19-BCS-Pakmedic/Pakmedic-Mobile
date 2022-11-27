@@ -8,6 +8,10 @@ import DocOnboarding1 from '../../../assets/svgs/DocOnboarding1.svg';
 import DocOnboarding2 from '../../../assets/svgs/DocOnboarding2.svg';
 import DocOnboarding3 from '../../../assets/svgs/DocOnboarding3.svg';
 
+import PatOnboarding1 from '../../../assets/svgs/PatOnboarding1.svg';
+import PatOnboarding2 from '../../../assets/svgs/PatOnboarding2.svg';
+import PatOnboarding3 from '../../../assets/svgs/PatOnboarding3.svg';
+
 import Pagination1 from '../../../assets/svgs/Pagination1.svg';
 import Pagination2 from '../../../assets/svgs/Pagination2.svg';
 import Pagination3 from '../../../assets/svgs/Pagination3.svg';
@@ -29,6 +33,9 @@ const OnBoarding = props => {
     DocOnboarding1: DocOnboarding1,
     DocOnboarding2: DocOnboarding2,
     DocOnboarding3: DocOnboarding3,
+    PatOnboarding1: PatOnboarding1,
+    PatOnboarding2: PatOnboarding2,
+    PatOnboarding3: PatOnboarding3,
   };
 
   const logo = {
@@ -65,7 +72,10 @@ const OnBoarding = props => {
           <View>
             <Button
               onPress={() => {
-                if (screenName !== 'DocOnboarding3') {
+                if (
+                  screenName !== 'DocOnboarding3' &&
+                  screenName !== 'PatOnboarding3'
+                ) {
                   navigateToNext();
                 }
               }}

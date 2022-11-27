@@ -14,7 +14,7 @@ import Onboarding from './src/screens/shared/On-Boarding';
 const App = () => {
   return (
     <NavigationContainer>
-      <OnboardingNavigation />
+      <OnboardingNavigation side="patient" />
     </NavigationContainer>
     // <SafeAreaView style={styles.root}>
     //   <Onboarding
