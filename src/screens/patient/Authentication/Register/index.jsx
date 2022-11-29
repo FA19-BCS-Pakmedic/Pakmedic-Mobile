@@ -41,6 +41,9 @@ import {
   numberRegex,
 } from '../../../../utils/constants/Regex';
 
+//import patient service
+import {registerPatient} from '../../../../services/patientService';
+
 const Register = () => {
   //input refs
   const inputRef1 = useRef('');
@@ -87,10 +90,42 @@ const Register = () => {
   const [openDate, setOpenDate] = useState(false);
 
   // form submit handler
-  const onSubmit = data => {
-    console.log(data, 'data');
-    console.log(isValid, 'isValid');
-    console.log('error', errors);
+  const onSubmit = async data => {
+    console.log(data);
+
+    const patient = {
+      name: data?.name,
+      email: data?.email,
+      password: data?.password,
+      phone: `0${data?.contact.split('-')[1]}`,
+      dob: `${
+        data?.dob.getMonth().toString().length > 1
+          ? `${data?.dob.getMonth() + 1}`
+          : `0${data?.dob?.getMonth() + 1}`
+      }/${
+        data?.dob.getDate().toString().length > 1
+          ? `${data?.dob.getDate() + 1}`
+          : `0${data?.dob?.getDate() + 1}`
+      }/${data?.dob.getFullYear()}`,
+      gender: data?.gender,
+      cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
+      role: 'Patient',
+    };
+
+    console.log(patient);
+
+    try {
+      const res = await registerPatient(patient);
+      console.log(res.data);
+      alert('Patient was successfully registered');
+    } catch (err) {
+      console.log(err.response.data.message);
+      alert(err.response.data.message);
+    }
+
+    // console.log(data, 'data');
+    // console.log(isValid, 'isValid');
+    // console.log('error', errors);
   };
 
   //function for setting the value of gender
@@ -192,7 +227,7 @@ const Register = () => {
         placeholderTextColor={colors.secondary1}
         keyboardType="password"
         control={control}
-        name="confirm-password"
+        name="confirmPassword"
         title={'Confirm Password'}
         isPasswordField={true}
         isPasswordVisible={!isConfirmPasswordVisible}
