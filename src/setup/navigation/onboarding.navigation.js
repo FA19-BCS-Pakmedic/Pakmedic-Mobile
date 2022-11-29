@@ -1,9 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {useEffect} from 'react';
-
 import Onboarding from '../../screens/shared/On-Boarding';
-import Onboarding2 from '../../screens/shared/On-Boarding';
 
 const onboardingStack = createNativeStackNavigator();
 
