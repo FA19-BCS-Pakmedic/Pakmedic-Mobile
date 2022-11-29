@@ -28,6 +28,7 @@ import {loginPatient} from '../../../../services/patientService';
 
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {loginDoctor} from '../../../../services/doctorServices';
 
 const Login = ({navigation}) => {
   // hook for hiding and showing password
@@ -49,24 +50,30 @@ const Login = ({navigation}) => {
   //on submit of sign up form
   const onSubmit = async data => {
     //TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE LOGIN FUNCTION
-    const role = 'Patient';
+    const role = 'Doctor';
 
-    if (role === 'Patient') {
-      //call patient login api
-      try {
-        const response = await loginPatient({
+    try {
+      let response;
+      if (role === 'Patient') {
+        //call patient login api
+        response = await loginPatient({
           email: data?.email,
           password: data?.password,
         });
-
-        await deviceStorage.saveItem('id_token', response?.data?.token);
-        console.log(await deviceStorage.loadItem('id_token'));
-        alert('Login Successful');
-      } catch (err) {
-        alert(err.response.data.message);
+      } else {
+        //call doctor login api
+        response = await loginDoctor({
+          email: data?.email,
+          password: data?.password,
+        });
       }
-    } else {
-      //TODO: CALL DOCTOR LOGIN API FUNCTION
+
+      // console.log(response.data);
+      await deviceStorage.saveItem('id_token', response?.data?.token);
+      console.log(await deviceStorage.loadItem('id_token'));
+      alert('Login Successful');
+    } catch (err) {
+      alert(err.response.data.message);
     }
 
     console.log(data, 'data');

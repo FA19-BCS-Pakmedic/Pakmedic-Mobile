@@ -57,6 +57,7 @@ const Register = () => {
     formState: {errors, isValid},
     setValue,
     clearErrors,
+    setError,
     watch,
   } = useForm({
     mode: 'all',
@@ -121,6 +122,7 @@ const Register = () => {
     } catch (err) {
       console.log(err.response.data.message);
       alert(err.response.data.message);
+      
     }
 
     // console.log(data, 'data');

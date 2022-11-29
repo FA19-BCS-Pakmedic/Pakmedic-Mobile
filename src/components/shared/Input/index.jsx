@@ -103,6 +103,7 @@ export const ValidateInputField = ({
   title,
   isPasswordVisible,
   setIsPasswordVisible,
+  onBlurEvent,
 }) => {
   // setting the password eye icon name based on the visiblility status
   const passwordIconName = !isPasswordVisible
@@ -139,7 +140,12 @@ export const ValidateInputField = ({
                 keyboardType={keyboardType || 'text'}
                 placeholderTextColor={placeholderTextColor || colors.secondary1}
                 onChangeText={onChange}
-                onBlur={onBlur}
+                onBlur={() => {
+                  onBlur();
+                  if (onBlurEvent) {
+                    onBlurEvent();
+                  }
+                }}
               />
               <View
                 style={

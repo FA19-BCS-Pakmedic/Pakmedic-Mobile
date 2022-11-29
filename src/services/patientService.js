@@ -1,11 +1,14 @@
 import axios from 'axios';
 
+//import api end point
+import {apiEndpoint} from '../utils/constants/APIendpoint';
+
 const API = axios.create({
-  baseURL: 'http://192.168.228.86:8000/api/v1/patients',
+  baseURL: `${apiEndpoint}patients`,
 });
 
 //register a patient
-export const registerPatient = post => API.post('/register', post);
+export const registerPatient = data => API.post('/register', data);
 
 //login a patient
-export const loginPatient = post => API.post('/login', post);
+export const loginPatient = data => API.post('/login', data);
