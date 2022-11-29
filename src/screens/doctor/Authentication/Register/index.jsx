@@ -47,6 +47,10 @@ const Register = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
   const [pmcData, setPmcData] = useState(null);
 
+  //error hook to prevent form submission if pmc id is not verified
+  const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
+  const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
+
   // useForm hook from react-hook-form
   const {
     control,
@@ -80,40 +84,44 @@ const Register = ({navigation}) => {
 
   // form submit handler
   const onSubmit = async formData => {
-    // console.log(formData, 'data');
-    // console.log(pmcData.Name);
+    if (isPmcIdVerified) {
+      const issueDate = pmcData.RegistrationDate.split('/');
+      const expiryDate = pmcData.ValidUpto.split('/');
 
-    const issueDate = pmcData.RegistrationDate.split('/');
-    const expiryDate = pmcData.ValidUpto.split('/');
+      console.log(issueDate, expiryDate);
 
-    console.log(issueDate, expiryDate);
+      const data = {
+        ...formData,
+        phone: `0${formData?.phone?.split('-')[1]}`,
+        role: ROLES.doctor,
+        name: pmcData?.Name?.toLowerCase(),
+        qualifications: pmcData?.Qualifications,
+        issueDate: `${issueDate[2]}-${issueDate[1]}-${issueDate[0]}`,
+        expiryDate: `${expiryDate[2]}-${expiryDate[1]}-${expiryDate[0]}`,
+        status: pmcData?.Status?.toLowerCase(),
+        speciality: 'Dentist',
+      };
 
-    const data = {
-      ...formData,
-      phone: `0${formData?.phone?.split('-')[1]}`,
-      role: ROLES.doctor,
-      name: pmcData?.Name?.toLowerCase(),
-      qualifications: pmcData?.Qualifications,
-      issueDate: `${issueDate[2]}-${issueDate[1]}-${issueDate[0]}`,
-      expiryDate: `${expiryDate[2]}-${expiryDate[1]}-${expiryDate[0]}`,
-      status: pmcData?.Status?.toLowerCase(),
-      speciality: 'Dentist',
-    };
-
-    // console.log(data);
-    try {
-      const response = await registerDoctor(data);
-      console.log(response.data);
-      alert(response.data.message);
-    } catch (err) {
-      console.log(err.response.data);
-      alert(err.response.data.message);
-      if (err.response.data.error.statusCode === 409) {
-        setError('email', {
-          type: 'conflict',
-          message: 'This email is already registered',
-        });
+      // console.log(data);
+      try {
+        const response = await registerDoctor(data);
+        console.log(response.data);
+        alert(response.data.message);
+      } catch (err) {
+        console.log(err.response.data);
+        alert(err.response.data.message);
+        if (err.response.data.error.statusCode === 409) {
+          setError('email', {
+            type: 'conflict',
+            message: 'This email is already registered',
+          });
+        }
       }
+    } else {
+      setError('pmcId', {
+        type: 'duplicate ID',
+        message: pmcIdErrorMessage,
+      });
     }
   };
 
@@ -135,11 +143,16 @@ const Register = ({navigation}) => {
       const response = await pmcIdVerifyDoctor({pmcID: watch('pmcId')});
       const data = response?.data?.data;
       setPmcData(data);
-      clearErrors('pmcId');
+      setIsPmcIdVerified(true);
+      if (data) {
+        clearErrors('pmcId');
+      }
       console.log(data);
     } catch (err) {
       alert(err.response.data.message);
       console.log(err.response.data);
+      setIsPmcIdVerified(false);
+      setPmcIdErrorMessage(err.response.data.message);
       setError('pmcId', {
         type: 'duplicate ID',
         message:
