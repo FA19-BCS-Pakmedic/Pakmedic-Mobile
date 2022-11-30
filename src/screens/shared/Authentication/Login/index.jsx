@@ -29,6 +29,7 @@ import {loginPatient} from '../../../../services/patientServices';
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {loginDoctor} from '../../../../services/doctorServices';
+import ROLES from '../../../../utils/constants/ROLES';
 
 const Login = ({navigation}) => {
   // hook for hiding and showing password
@@ -54,7 +55,7 @@ const Login = ({navigation}) => {
 
     try {
       let response;
-      if (role === 'Patient') {
+      if (role === ROLES.patient) {
         //call patient login api
         response = await loginPatient({
           email: data?.email,

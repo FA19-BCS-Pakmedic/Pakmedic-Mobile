@@ -22,7 +22,7 @@ const App = () => {
     //   <RootNavigation />
     // </NavigationContainer>
     <SafeAreaView style={styles.root}>
-      <OtpVerification />
+      <Login />
     </SafeAreaView>
   );
 };

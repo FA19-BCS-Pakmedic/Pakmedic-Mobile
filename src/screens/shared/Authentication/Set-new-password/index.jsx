@@ -49,13 +49,13 @@ const SetNewPassword = () => {
 
   onSubmit = async data => {
     // TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE RESET PASSWORD FUNCTIONALITY
-    const role = 'Patient';
+    const role = 'Doctor';
 
     //TODO: GET USER EMAIL FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS FORGOT PASSWORD SCREEN
     const email = 'awanmoeed2121@gmail.com';
 
     //TODO: GET USER OTP CODE FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS FORGOT PASSWORD SCREEN
-    const resetPasswordToken = '';
+    const resetPasswordToken = '6683';
 
     try {
       let response;
@@ -73,9 +73,9 @@ const SetNewPassword = () => {
           password: data?.password,
           resetPasswordToken,
         });
-        console.log(response.data);
-        alert(response.data.message);
       }
+      console.log(response.data);
+      alert(response.data.message);
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);

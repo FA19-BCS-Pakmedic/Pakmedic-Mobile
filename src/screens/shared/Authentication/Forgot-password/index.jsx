@@ -28,7 +28,7 @@ import Button from '../../../../components/shared/Button';
 import ForgotPasswordCard from '../../../../components/shared/ForgotPasswordCard';
 import StaticContainer from '../../../../containers/StaticContainer';
 import {forgotPasswordPatient} from '../../../../services/patientServices';
-import { forgotPasswordDoctor } from '../../../../services/doctorServices';
+import {forgotPasswordDoctor} from '../../../../services/doctorServices';
 
 const ForgotPassword = () => {
   //hook for react hook forms
@@ -46,13 +46,13 @@ const ForgotPassword = () => {
   const onSubmit = async data => {
     // TODO: FETCH THE ROLE FROM MOBILE STORAGE DYNAMICALLY
 
-    const role = 'Patient';
+    const role = 'Doctor';
     try {
       let response;
       if (role === ROLES.patient) {
         //calling the forgotten password endpoint for patient
         response = await forgotPasswordPatient(data);
-      }else{
+      } else {
         ///calling the forgotten password endpoint for doctor
         response = await forgotPasswordDoctor(data);
       }

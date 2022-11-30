@@ -78,10 +78,9 @@ const OtpVerification = () => {
   //resend new token function
   const resendToken = async () => {
     // TODO: FETCH THE ROLE FROM MOBILE STORAGE DYNAMICALLY
-    const role = 'Patient';
+    const role = 'Doctor';
 
     // TODO: GET EMAIL FROM THE NAVIGATION PARAM
-
     const email = 'awanmoeed2121@gmail.com';
 
     try {
@@ -93,20 +92,18 @@ const OtpVerification = () => {
         ///calling the forgotten password endpoint for doctor
         response = await forgotPasswordDoctor({email});
       }
-      alert(response.data.message);
-      console.log(response.data);
+      alert(response?.data.message);
+      console.log(response?.data);
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err.response?.data);
       alert(err.response.data.message);
     }
-    console.log(data);
-    console.log(isValid);
   };
 
   // form submit handler
   const onSubmit = async data => {
     //TODO: GET ROLE FROM LOCAL STORAGE
-    const role = 'Patient';
+    const role = 'Doctor';
 
     // TODO: GET USER EMAIL FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS SCREEN
     const email = 'awanmoeed2121@gmail.com';
