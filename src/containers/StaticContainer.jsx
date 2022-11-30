@@ -13,10 +13,11 @@ const StaticContainer = ({
   children,
   customHeaderEnable = false,
   customHeaderName,
+  headerColor,
 }) => {
   return (
     <SafeAreaView style={styles.root}>
-      <Header color={colors.primary1} />
+      <Header color={headerColor} />
       {customHeaderEnable && <CustomNavHeader screenName={customHeaderName} />}
 
       <View style={styles.container}>{children}</View>
@@ -33,17 +34,12 @@ const styles = StyleSheet.create({
     width: dimensions.Width,
     borderWidth: 2,
     backgroundColor: colors.white,
-
   },
 
   container: {
     width: '100%',
-    alignItems: 'center',
-
     flex: 1,
-
-    justifyContent: 'center',
     paddingHorizontal: dimensions.Width / 20,
-    paddingVertical: dimensions.Height / 40,
+    paddingVertical: dimensions.Height / 50,
   },
 });
