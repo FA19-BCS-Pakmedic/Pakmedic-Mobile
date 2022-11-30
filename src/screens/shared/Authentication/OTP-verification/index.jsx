@@ -84,6 +84,7 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef1}
+
             name="pin1"
             customError={pinError}
             setCustomError={setPinError}
@@ -100,6 +101,7 @@ const OtpVerification = () => {
             onChangeText={text => {
               inputRef2.current.focus();
               setValue('pin1', text);
+
             }}
           />
           <AutoNextInput
@@ -107,6 +109,7 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef2}
+
             name="pin2"
             customError={pinError}
             setCustomError={setPinError}
@@ -146,12 +149,14 @@ const OtpVerification = () => {
             onChangeText={text => {
               inputRef4.current.focus();
               setValue('pin3', text);
+
             }}
           />
           <AutoNextInput
             type="filled"
             width="20%"
             maxLength={1}
+
             ref={inputRef4}
             name="pin4"
             customError={pinError}
@@ -168,8 +173,34 @@ const OtpVerification = () => {
             }}
             onChangeText={text => {
               setValue('pin4', text);
+
             }}
           />
+          <AutoNextInput
+            type="filled"
+            width="20%"
+            maxLength={1}
+            ref={inputRef4}
+            onChangeText={text => {
+              setPin4(text);
+            }}
+          />
+        </View>
+        {/* resend code part */}
+        <View style={styles.resendCodeContainer}>
+          {timer > 0 ? (
+            <Text style={styles.text}>
+              Resend Code in{' '}
+              <Text style={{color: colors.accent1}}>{timer}s</Text>
+            </Text>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setTimer(5);
+              }}>
+              <Text style={styles.text}>Resend code</Text>
+            </TouchableOpacity>
+          )}
         </View>
         {/* resend code part */}
         <View style={styles.resendCodeContainer}>
@@ -199,6 +230,7 @@ const OtpVerification = () => {
           isDisabled={!isValid}
         />
       </View>
+
     </StaticContainer>
   );
 };

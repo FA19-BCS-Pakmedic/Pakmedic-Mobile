@@ -24,6 +24,7 @@ export default StyleSheet.create({
   },
 
 
+
   text: {
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.normal,
