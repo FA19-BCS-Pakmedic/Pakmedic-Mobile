@@ -36,12 +36,16 @@ export const ContactInputField = ({
         field: {onChange, onBlur},
         fieldState: {error, isDirty, isTouched},
       }) => (
-        <View style={styles().root}>
+
+        <View style={[styles().root, {paddingBottom: dimensions.Height / 40}]}>
+
           <Text style={styles().title}>{title}</Text>
           <View
             style={[
               styles(type, width).container,
-              {borderColor: error ? colors.invalid : colors.primary1},
+              {
+                borderColor: error ? colors.invalid : colors.primary1,
+              },
             ]}>
             <IntlPhoneInput
               onChangeText={e => {
@@ -55,6 +59,7 @@ export const ContactInputField = ({
               containerStyle={{
                 width: '93.5%',
               }}
+              flagStyle={styles().flagContainer}
             />
             <View>
               {(isDirty || isTouched || error) && (
@@ -198,10 +203,20 @@ const styles = (type, width) =>
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      paddingHorizontal: 10,
-      marginTop: 10,
-      marginBottom: 5,
-      width: '100%',
+
+    },
+
+    flagContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: fonts.size.font24,
+    },
+
+    title: {
+      fontSize: fonts.size.font16,
+      fontWeight: fonts.weight.bold,
+      marginBottom: dimensions.Height / 100,
+
     },
 
     input: {
@@ -211,7 +226,9 @@ const styles = (type, width) =>
 
     errorMessageContainer: {
       width: '100%',
-      height: dimensions.Height / 60,
+
+      height: dimensions.Height / 40,
+
       justifyContent: 'flex-start',
       alignItems: 'flex-start',
     },

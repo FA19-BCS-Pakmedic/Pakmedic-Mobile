@@ -5,24 +5,9 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import fonts from '../../../../utils/styles/themes/fonts';
 
 export default StyleSheet.create({
-  root: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-
-  scrollContainer: {
+  formContainer: {
     width: '100%',
   },
-
-  child: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexGrow: 1,
-  },
-
   socialButtonContainer: {
     width: '100%',
     flexDirection: 'row',
@@ -38,9 +23,7 @@ export default StyleSheet.create({
     borderRadius: 20,
   },
 
-  formContainer: {
-    width: '100%',
-  },
+
 
   text: {
     fontSize: fonts.size.font16,
