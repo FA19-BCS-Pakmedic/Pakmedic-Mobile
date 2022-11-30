@@ -15,3 +15,14 @@ export const registerDoctor = data => API.post('/register', data);
 
 //endpoint for doctor login
 export const loginDoctor = data => API.post('/login', data);
+
+//send forgot password verification code
+export const forgotPasswordDoctor = data => API.patch('/forgot-password', data);
+
+//verify otp endpoint
+export const verifyOtpDoctor = data =>
+  API.get('/verify-otp', {params: {email: data?.email, otp: data?.otp}});
+
+//send reset forgot password
+export const resetForgotPasswordDoctor = data =>
+  API.patch('/reset-forgotten-password', data);

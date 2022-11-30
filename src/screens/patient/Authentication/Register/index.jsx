@@ -40,9 +40,10 @@ import {
   phoneNumberRegex,
   numberRegex,
 } from '../../../../utils/constants/Regex';
+import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
-import {registerPatient} from '../../../../services/patientService';
+import {registerPatient} from '../../../../services/patientServices';
 
 const Register = () => {
   //input refs
@@ -110,7 +111,7 @@ const Register = () => {
       }/${data?.dob.getFullYear()}`,
       gender: data?.gender,
       cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
-      role: 'Patient',
+      role: ROLES.patient,
     };
 
     console.log(patient);
@@ -122,7 +123,6 @@ const Register = () => {
     } catch (err) {
       console.log(err.response.data.message);
       alert(err.response.data.message);
-      
     }
 
     // console.log(data, 'data');

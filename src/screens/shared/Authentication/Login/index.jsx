@@ -24,7 +24,7 @@ import StaticContainer from '../../../../containers/StaticContainer';
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
 
 //import API call for login
-import {loginPatient} from '../../../../services/patientService';
+import {loginPatient} from '../../../../services/patientServices';
 
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
@@ -73,6 +73,7 @@ const Login = ({navigation}) => {
       console.log(await deviceStorage.loadItem('id_token'));
       alert('Login Successful');
     } catch (err) {
+      console.log(err.response.data);
       alert(err.response.data.message);
     }
 
