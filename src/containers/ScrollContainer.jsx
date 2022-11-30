@@ -10,13 +10,21 @@ import CustomNavHeader from '../components/shared/CustomNavHeader';
 import dimensions from '../utils/styles/themes/dimensions';
 import colors from '../utils/styles/themes/colors';
 
-const ScrollContainer = ({children, customHeaderEnable, customHeaderName}) => {
+const ScrollContainer = ({
+  headerColor,
+  children,
+  customHeaderEnable,
+  customHeaderName,
+}) => {
   return (
     <SafeAreaView style={styles.root}>
-      <Header color={colors.primary1} />
+      <Header color={headerColor} />
       {customHeaderEnable && <CustomNavHeader screenName={customHeaderName} />}
 
-      <ScrollView style={styles.root} contentContainerStyle={styles.child}>
+      <ScrollView
+        style={styles.root}
+        contentContainerStyle={styles.child}
+        nestedScrollEnabled={true}>
         {children}
       </ScrollView>
     </SafeAreaView>
@@ -39,10 +47,8 @@ const styles = StyleSheet.create({
   },
 
   child: {
-    justifyContent: 'center',
-    alignItems: 'center',
     flexGrow: 1,
     paddingHorizontal: dimensions.Width / 20,
-    paddingVertical: dimensions.Height / 40,
+    paddingVertical: dimensions.Height / 50,
   },
 });

@@ -15,7 +15,6 @@ import SvgImage from '../../../../assets/svgs/reset-password-screen-logo.svg';
 
 // import container
 import StaticContainer from '../../../../containers/StaticContainer';
-// import ScrollContainer from '../../../../containers/ScrollContainer';
 
 //import regex
 import {passwordRegex} from '../../../../utils/constants/Regex';

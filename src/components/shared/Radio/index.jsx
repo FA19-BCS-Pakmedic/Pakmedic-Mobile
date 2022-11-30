@@ -97,7 +97,9 @@ const styles = StyleSheet.create({
 
   errorMessageContainer: {
     width: '100%',
+
     height: dimensions.Height / 40,
+
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },

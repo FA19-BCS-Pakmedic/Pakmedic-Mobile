@@ -168,8 +168,34 @@ const OtpVerification = () => {
             }}
             onChangeText={text => {
               setValue('pin4', text);
+
             }}
           />
+          <AutoNextInput
+            type="filled"
+            width="20%"
+            maxLength={1}
+            ref={inputRef4}
+            onChangeText={text => {
+              setPin4(text);
+            }}
+          />
+        </View>
+        {/* resend code part */}
+        <View style={styles.resendCodeContainer}>
+          {timer > 0 ? (
+            <Text style={styles.text}>
+              Resend Code in{' '}
+              <Text style={{color: colors.accent1}}>{timer}s</Text>
+            </Text>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setTimer(5);
+              }}>
+              <Text style={styles.text}>Resend code</Text>
+            </TouchableOpacity>
+          )}
         </View>
         {/* resend code part */}
         <View style={styles.resendCodeContainer}>
