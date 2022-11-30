@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 
     width: dimensions.Width,
     backgroundColor: colors.white,
+
   },
 
   container: {

@@ -1,9 +1,5 @@
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {useState} from 'react';
-import {
-  FacebookSocialButton,
-  GoogleSocialButton,
-} from 'react-native-social-buttons';
 import {useForm} from 'react-hook-form';
 
 // custom styles import
@@ -36,6 +32,8 @@ import {
   passwordRegex,
   phoneNumberRegex,
 } from '../../../../utils/constants/Regex';
+
+//importing container
 import ScrollContainer from '../../../../containers/ScrollContainer';
 
 const Register = ({navigation}) => {
@@ -89,7 +87,6 @@ const Register = ({navigation}) => {
   };
 
   //navigate back to login screen
-  //navigate to signup screen
   const navigateToLoginScreen = () => {
     console.log('This function is being called');
     navigation.navigate('Auth', {
@@ -289,13 +286,52 @@ const Register = ({navigation}) => {
           }}
         />
 
-        {/* divider */}
 
-        <TextDivider
-          label="Or Register With"
-          color={colors.secondary1}
-          gap={50}
+        {/* genders radio buttons */}
+        <RadioGroup
+          values={GENDERS}
+          selected={watch('gender')}
+          setSelected={setGender}
+          title="Gender"
+          name="gender"
+          control={control}
+          rules={{required: 'Please select a gender'}}
         />
+      </View>
+
+      {/* Register button */}
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        label="Register"
+        type="filled"
+        width="100%"
+      />
+
+      {/* divider */}
+
+      <TextDivider
+        label="Or Register With"
+        color={colors.secondary1}
+        gap={50}
+      />
+
+      {/*SOCIAL BUTTONS */}
+      <View style={styles.socialButtonContainer}>
+        {/* facebook login button */}
+        <TouchableOpacity style={styles.socialButton}>
+          <FaceBookLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <GoogleLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
+        </TouchableOpacity>
+      </View>
+
 
         {/*SOCIAL BUTTONS */}
         <View style={styles.socialButtonContainer}>

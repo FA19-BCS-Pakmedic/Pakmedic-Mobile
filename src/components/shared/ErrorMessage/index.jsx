@@ -4,11 +4,11 @@ import * as Animatable from 'react-native-animatable';
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
 
-export default ErrorMessage = ({error}) => {
+export default ErrorMessage = ({error, message}) => {
   return (
     <Animatable.View animation="fadeIn" easing="ease-in-out">
       <Text style={styles.errorText}>
-        {error?.message || 'This field is required'}
+        {error?.message || message || 'This field is required'}
       </Text>
     </Animatable.View>
   );
