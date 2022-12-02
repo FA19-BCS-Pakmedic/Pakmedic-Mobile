@@ -11,8 +11,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import IntlPhoneInput from 'react-native-intl-phone-input';
 
-// import styles
+// import theme
 import colors from '../../../utils/styles/themes/colors';
+import dimensions from '../../../utils/styles/themes/dimensions';
+import fonts from '../../../utils/styles/themes/fonts';
 
 // custom components import
 import ErrorMessage from '../ErrorMessage';
@@ -36,9 +38,7 @@ export const ContactInputField = ({
         field: {onChange, onBlur},
         fieldState: {error, isDirty, isTouched},
       }) => (
-
         <View style={[styles().root, {paddingBottom: dimensions.Height / 40}]}>
-
           <Text style={styles().title}>{title}</Text>
           <View
             style={[
@@ -188,9 +188,7 @@ const styles = (type, width) =>
   StyleSheet.create({
     root: {
       width: '100%',
-
       marginVertical: dimensions.Height / 200,
-
     },
     container: {
       width: '100%',
@@ -203,7 +201,6 @@ const styles = (type, width) =>
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-
     },
 
     flagContainer: {
@@ -222,7 +219,6 @@ const styles = (type, width) =>
       fontSize: fonts.size.font16,
       fontWeight: fonts.weight.bold,
       marginBottom: dimensions.Height / 100,
-
     },
 
     input: {

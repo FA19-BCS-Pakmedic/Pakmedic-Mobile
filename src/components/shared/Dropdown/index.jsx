@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   select: {
     borderColor: colors.primary1,
     color: colors.secondary1,
+    paddingHorizontal: dimensions.Width / 20,
   },
 
   listItemLabelStyle: {

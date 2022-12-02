@@ -10,7 +10,7 @@ import colors from '../../../../utils/styles/themes/colors';
 //import svg icon
 import SVGImage from '../../../../assets/svgs/forgot-password-screen-icon.svg';
 
-//import custom components0
+//import custom components
 import AutoNextInput from '../../../../components/shared/AutoNextInput';
 import Button from '../../../../components/shared/Button';
 import StaticContainer from '../../../../containers/StaticContainer';
@@ -24,21 +24,11 @@ const OtpVerification = () => {
   const inputRef3 = useRef('');
   const inputRef4 = useRef('');
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-    setValue,
-    watch,
-  } = useForm({
-    mode: 'all',
-    defaultValues: {
-      pin1: '',
-      pin2: '',
-      pin3: '',
-      pin4: '',
-    },
-  });
+  // useStates to store the state of pins
+  const [pin1, setPin1] = useState('');
+  const [pin2, setPin2] = useState('');
+  const [pin3, setPin3] = useState('');
+  const [pin4, setPin4] = useState('');
 
   //cnic error
   const [pinError, setPinError] = useState(false);
@@ -63,11 +53,15 @@ const OtpVerification = () => {
   }, [timer]);
 
   // form submit handler
-  const onSubmit = data => {
-    console.log(data, 'data');
-    console.log(isValid, 'isValid');
-    console.log('error', errors);
-    console.log(watch('pin1'));
+  const onSubmit = () => {
+    if (isValid()) {
+      console.log(pin1, pin2, pin3, pin4);
+    }
+  };
+
+  const isValid = () => {
+    console.log(pin1 && pin2 && pin3 && pin4);
+    return pin1 && pin2 && pin3 && pin4 ? true : false;
   };
 
   return (
@@ -84,22 +78,10 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef1}
-            name="pin1"
-            customError={pinError}
-            setCustomError={setPinError}
-            control={control}
             height={12}
-            rules={{
-              required: 'Invalid Pin',
-              minLength: {
-                value: 1,
-                message: 'Invalid Pin',
-              },
-              pattern: {value: numberRegex},
-            }}
             onChangeText={text => {
               inputRef2.current.focus();
-              setValue('pin1', text);
+              setPin1(text);
             }}
           />
           <AutoNextInput
@@ -107,22 +89,10 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef2}
-            name="pin2"
-            customError={pinError}
-            setCustomError={setPinError}
-            control={control}
             height={12}
-            rules={{
-              required: 'Invalid Pin',
-              minLength: {
-                value: 1,
-                message: 'Invalid Pin',
-              },
-              pattern: {value: numberRegex},
-            }}
             onChangeText={text => {
               inputRef3.current.focus();
-              setValue('pin2', text);
+              setPin2(text);
             }}
           />
           <AutoNextInput
@@ -130,22 +100,10 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef3}
-            name="pin3"
-            customError={pinError}
-            setCustomError={setPinError}
-            control={control}
             height={12}
-            rules={{
-              required: 'Invalid Pin',
-              minLength: {
-                value: 1,
-                message: 'Invalid Pin',
-              },
-              pattern: {value: numberRegex},
-            }}
             onChangeText={text => {
               inputRef4.current.focus();
-              setValue('pin3', text);
+              setPin3(text);
             }}
           />
           <AutoNextInput
@@ -153,50 +111,13 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef4}
-            name="pin4"
-            customError={pinError}
-            setCustomError={setPinError}
-            control={control}
             height={12}
-            rules={{
-              required: 'Invalid Pin',
-              minLength: {
-                value: 1,
-                message: 'Invalid Pin',
-              },
-              pattern: {value: numberRegex},
-            }}
-            onChangeText={text => {
-              setValue('pin4', text);
-
-            }}
-          />
-          <AutoNextInput
-            type="filled"
-            width="20%"
-            maxLength={1}
-            ref={inputRef4}
             onChangeText={text => {
               setPin4(text);
             }}
           />
         </View>
-        {/* resend code part */}
-        <View style={styles.resendCodeContainer}>
-          {timer > 0 ? (
-            <Text style={styles.text}>
-              Resend Code in{' '}
-              <Text style={{color: colors.accent1}}>{timer}s</Text>
-            </Text>
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                setTimer(5);
-              }}>
-              <Text style={styles.text}>Resend code</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+
         {/* resend code part */}
         <View style={styles.resendCodeContainer}>
           {timer > 0 ? (
@@ -220,9 +141,11 @@ const OtpVerification = () => {
         <Button
           width="90%"
           type="filled"
-          onPress={handleSubmit(onSubmit)}
+          onPress={onSubmit}
           label="Verify Code"
-          isDisabled={!isValid}
+          isDisabled={() => {
+            return !isValid();
+          }}
         />
       </View>
     </StaticContainer>

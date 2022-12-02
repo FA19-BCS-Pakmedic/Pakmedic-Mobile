@@ -9,45 +9,16 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 
 const AutoNextInput = React.forwardRef((props, ref) => {
   return (
-    <Controller
-      control={props.control}
-      name={props.name}
-      rules={props.rules}
-      key={props.name}
-      render={({
-        field: {onChange, onBlur},
-        fieldState: {error, isDirty, isTouched},
-      }) => (
-        <TextInput
-          style={[
-            styles(props?.type, props?.width, props?.height).root,
-            {
-              borderColor:
-                (error || props?.customError) && props?.type === 'outlined'
-                  ? colors.invalid
-                  : colors.primary1,
-            },
-          ]}
-          onBlur={onBlur}
-          keyboardType="number-pad"
-          ref={ref}
-          onChangeText={text => {
-            console.log(error);
-            if (error) {
-              props?.setCustomError(true);
-            }
-            {
-              props?.setCustomError(false);
-            }
-
-            onChange(text);
-            if (text.length >= props?.maxLength) {
-              props?.onChangeText(text);
-            }
-          }}
-          maxLength={props?.maxLength}
-        />
-      )}
+    <TextInput
+      style={[styles(props?.type, props?.width, props?.height).root]}
+      keyboardType="number-pad"
+      ref={ref}
+      onChangeText={text => {
+        if (text.length >= props?.maxLength) {
+          props?.onChangeText(text);
+        }
+      }}
+      maxLength={props?.maxLength}
     />
   );
 });
