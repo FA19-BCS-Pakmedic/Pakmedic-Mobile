@@ -18,6 +18,13 @@ import StaticContainer from '../../../../containers/StaticContainer';
 //importing regex
 import {numberRegex} from '../../../../utils/constants/Regex';
 
+/**
+ *
+ * @returns
+ *
+ * TODO: FIX THE BUTTON DISABLE AND ENABLE
+ */
+
 const OtpVerification = () => {
   const inputRef1 = useRef('');
   const inputRef2 = useRef('');
