@@ -234,6 +234,25 @@ const Register = ({navigation}) => {
           width="100%"
         />
 
+        {/* genders radio buttons */}
+        <RadioGroup
+          values={GENDERS}
+          selected={watch('gender')}
+          setSelected={setGender}
+          title="Gender"
+          name="gender"
+          control={control}
+          rules={{required: 'Please select a gender'}}
+        />
+
+        {/* Register button */}
+        <Button
+          onPress={handleSubmit(onSubmit)}
+          label="Register"
+          type="filled"
+          width="100%"
+        />
+
         {/* divider */}
 
         <TextDivider

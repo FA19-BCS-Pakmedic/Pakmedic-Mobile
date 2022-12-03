@@ -30,6 +30,8 @@ export default StyleSheet.create({
     borderRadius: 20,
   },
 
+
+
   text: {
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.normal,

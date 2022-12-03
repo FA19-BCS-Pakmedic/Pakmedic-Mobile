@@ -38,7 +38,9 @@ export const ContactInputField = ({
         field: {onChange, onBlur},
         fieldState: {error, isDirty, isTouched},
       }) => (
+
         <View style={[styles().root, {paddingBottom: dimensions.Height / 40}]}>
+
           <Text style={styles().title}>{title}</Text>
           <View
             style={[
@@ -188,7 +190,9 @@ const styles = (type, width) =>
   StyleSheet.create({
     root: {
       width: '100%',
+
       marginVertical: dimensions.Height / 200,
+
     },
     container: {
       width: '100%',
@@ -201,12 +205,6 @@ const styles = (type, width) =>
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-    },
-
-    flagContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontSize: fonts.size.font24,
     },
 
     flagContainer: {

@@ -11,6 +11,8 @@ import CompleteProfile from './src/screens/doctor/Authentication/Complete-profil
 import Register from './src/screens/patient/Authentication/Register';
 import Login from './src/screens/shared/Authentication/Login';
 
+import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
+
 import ForgotPassword from './src/screens/shared/Authentication/Forgot-password';
 import OtpVerification from './src/screens/shared/Authentication/OTP-verification';
 import SetNewPassword from './src/screens/shared/Authentication/Set-new-password';
@@ -23,7 +25,9 @@ const App = () => {
     //   <RootNavigation />
     // </NavigationContainer>
     <SafeAreaView style={styles.root}>
-      <SupportHome />
+
+      <Login />
+
     </SafeAreaView>
   );
 };

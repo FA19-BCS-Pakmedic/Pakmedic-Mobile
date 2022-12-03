@@ -6,6 +6,7 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
   container: {
+
     width: '100%',
     flex: 6,
     // height: dimensions.Height / 1.5,
