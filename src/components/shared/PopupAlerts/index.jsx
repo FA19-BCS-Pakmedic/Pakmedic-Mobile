@@ -9,6 +9,7 @@ import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
 
 import ProfileSuccess from '../../../assets/svgs/ProfileSuccess.svg';
+import VectorFailure from '../../../assets/svgs/VectorFailure.svg';
 import ProfileFailure from '../../../assets/svgs/ProfileFailure.svg';
 
 const PopupAlerts = props => {
@@ -17,12 +18,19 @@ const PopupAlerts = props => {
 
   const alertsList = {
     LoginSuccess: ProfileSuccess,
-    LoginFailure: ProfileFailure,
+    LoginFailure: VectorFailure,
     RegisterSuccess: ProfileSuccess,
-    RegisterFailure: ProfileFailure,
+    RegisterFailure: VectorFailure,
   };
 
   const Alert = alertsList[props.alertName];
+
+  useEffect(() => {
+    setTimeout(() => {
+      props.navigation.navigate(props.redirect);
+      setModalVisible(false);
+    }, 1000);
+  }, []);
 
   return (
     <ModalContainer
@@ -38,7 +46,11 @@ const PopupAlerts = props => {
       } Page in a Few Seconds`}</Text>
       <ActivityIndicator
         size="large"
-        color={alertName.includes('Failure') == false ? '#69db7c' : '#d9480f'}
+        color={
+          alertName.includes('Failure') == false
+            ? colors.primary1
+            : colors.accent1
+        }
       />
     </ModalContainer>
   );
