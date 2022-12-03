@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
 
   container: {
     width: dimensions.Width,
-    height: dimensions.Height,
     flex: 1,
     paddingHorizontal: dimensions.Width / 20,
     paddingVertical: dimensions.Height / 50,
