@@ -83,71 +83,75 @@ const SetNewPassword = () => {
   };
 
   return (
-    <StaticContainer>
-      {/* Screen logo */}
-      <View style={styles.logoContainer}>
-        <SvgImage width={dimensions.Width} height={dimensions.Height / 3} />
-      </View>
+    <StaticContainer
+      customHeaderEnable={true}
+      customHeaderName={'Set New Password'}>
+      <View style={styles.container}>
+        {/* Screen logo */}
+        <View style={styles.logoContainer}>
+          <SvgImage width={dimensions.Width} height={dimensions.Height / 3} />
+        </View>
 
-      {/* reset password text */}
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>Create a new password</Text>
-      </View>
-      {/* fields */}
-      <View style={styles.fieldsContainer}>
-        {/* Old password */}
-        <ValidateInputField
-          placeholder="Enter you new password"
-          type="outlined"
-          width="85.5%"
-          placeholderTextColor={colors.secondary1}
-          keyboardType="password"
-          control={control}
-          title="New Password"
-          name="password"
-          isPasswordField={true}
-          isPasswordVisible={!isPasswordVisible}
-          setIsPasswordVisible={setisPasswordVisible}
-          rules={{
-            required: "Password can't be empty",
-            pattern: {
-              value: passwordRegex,
-              message: 'Please enter a valid password',
-            },
-          }}
-        />
+        {/* fields */}
+        <View style={styles.fieldsContainer}>
+          {/* reset password text */}
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Create a new password</Text>
+          </View>
+          {/* Old password */}
+          <ValidateInputField
+            placeholder="Enter you new password"
+            type="outlined"
+            width="85.5%"
+            placeholderTextColor={colors.secondary1}
+            keyboardType="password"
+            control={control}
+            title="New Password"
+            name="password"
+            isPasswordField={true}
+            isPasswordVisible={!isPasswordVisible}
+            setIsPasswordVisible={setisPasswordVisible}
+            rules={{
+              required: "Password can't be empty",
+              pattern: {
+                value: passwordRegex,
+                message: 'Please enter a valid password',
+              },
+            }}
+          />
 
-        {/* New password */}
-        <ValidateInputField
-          placeholder="Enter confirm password"
-          type="outlined"
-          width="85.5%"
-          placeholderTextColor={colors.secondary1}
-          keyboardType="password"
-          control={control}
-          title={'Confirm Password'}
-          name="confirmPassword"
-          isPasswordField={true}
-          isPasswordVisible={!isConfirmPasswordVisible}
-          setIsPasswordVisible={setIsConfirmPasswordVisible}
-          rules={{
-            required: "Password can't be empty",
-            pattern: {
-              value: passwordRegex,
-              message: 'Please enter a valid password',
-            },
-          }}
-        />
-      </View>
+          {/* New password */}
+          <ValidateInputField
+            placeholder="Enter confirm password"
+            type="outlined"
+            width="85.5%"
+            placeholderTextColor={colors.secondary1}
+            keyboardType="password"
+            control={control}
+            title={'Confirm Password'}
+            name="confirmPassword"
+            isPasswordField={true}
+            isPasswordVisible={!isConfirmPasswordVisible}
+            setIsPasswordVisible={setIsConfirmPasswordVisible}
+            rules={{
+              required: "Password can't be empty",
+              pattern: {
+                value: passwordRegex,
+                message: 'Please enter a valid password',
+              },
+            }}
+          />
+        </View>
 
-      {/* Change password button */}
-      <View style={styles.buttonContainer}>
-        <Button
-          width="90%"
-          type="filled"
-          onPress={handleSubmit(onSubmit)}
-          label="Verify Code"
-        />
+        {/* Change password button */}
+        <View style={styles.buttonContainer}>
+          <Button
+            width="90%"
+            type="filled"
+            onPress={handleSubmit(onSubmit)}
+            label="Verify Code"
+          />
+        </View>
       </View>
     </StaticContainer>
   );
