@@ -23,6 +23,11 @@ import {passwordRegex} from '../../../../utils/constants/Regex';
 import {ValidateInputField} from '../../../../components/shared/Input';
 import Button from '../../../../components/shared/Button';
 
+//import set new password apiEndpoint
+import {resetForgotPasswordPatient} from '../../../../services/patientServices';
+import {resetForgotPasswordDoctor} from '../../../../services/doctorServices';
+import ROLES from '../../../../utils/constants/ROLES';
+
 const SetNewPassword = () => {
   //hook for react hook forms
   const {
@@ -32,15 +37,48 @@ const SetNewPassword = () => {
   } = useForm({
     mode: 'all',
     defaultValues: {
-      oldPassword: '',
-      newPassword: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
-  const [isOldPasswordVisible, setIsOldPasswordVisible] = React.useState(false);
-  const [isNewPasswordVisible, setIsNewPasswordVisible] = React.useState(false);
+  const [isPasswordVisible, setisPasswordVisible] = React.useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    React.useState(false);
 
-  onSubmit = data => {
+  onSubmit = async data => {
+    // TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE RESET PASSWORD FUNCTIONALITY
+    const role = 'Doctor';
+
+    //TODO: GET USER EMAIL FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS FORGOT PASSWORD SCREEN
+    const email = 'awanmoeed2121@gmail.com';
+
+    //TODO: GET USER OTP CODE FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS FORGOT PASSWORD SCREEN
+    const resetPasswordToken = '5786';
+
+    try {
+      let response;
+      if (role === ROLES.patient) {
+        //call patient reset password api
+        response = await resetForgotPasswordPatient({
+          email: email,
+          password: data?.password,
+          resetPasswordToken,
+        });
+      } else {
+        //call patient reset password api
+        response = await resetForgotPasswordDoctor({
+          email: email,
+          password: data?.password,
+          resetPasswordToken,
+        });
+      }
+      console.log(response.data);
+      alert(response.data.message);
+    } catch (err) {
+      console.log(err.response.data);
+      alert(err.response.data.message);
+    }
     console.log(data);
   };
 
@@ -59,17 +97,17 @@ const SetNewPassword = () => {
       <View style={styles.fieldsContainer}>
         {/* Old password */}
         <ValidateInputField
-          placeholder="Enter you old password"
+          placeholder="Enter you new password"
           type="outlined"
           width="85.5%"
           placeholderTextColor={colors.secondary1}
           keyboardType="password"
           control={control}
-          title="Old Password"
-          name="oldPassword"
+          title="New Password"
+          name="password"
           isPasswordField={true}
-          isPasswordVisible={!isOldPasswordVisible}
-          setIsPasswordVisible={setIsOldPasswordVisible}
+          isPasswordVisible={!isPasswordVisible}
+          setIsPasswordVisible={setisPasswordVisible}
           rules={{
             required: "Password can't be empty",
             pattern: {
@@ -81,17 +119,17 @@ const SetNewPassword = () => {
 
         {/* New password */}
         <ValidateInputField
-          placeholder="Enter you new password"
+          placeholder="Enter confirm password"
           type="outlined"
           width="85.5%"
           placeholderTextColor={colors.secondary1}
           keyboardType="password"
           control={control}
-          title={'New Password'}
-          name="newPassword"
+          title={'Confirm Password'}
+          name="confirmPassword"
           isPasswordField={true}
-          isPasswordVisible={!isNewPasswordVisible}
-          setIsPasswordVisible={setIsNewPasswordVisible}
+          isPasswordVisible={!isConfirmPasswordVisible}
+          setIsPasswordVisible={setIsConfirmPasswordVisible}
           rules={{
             required: "Password can't be empty",
             pattern: {

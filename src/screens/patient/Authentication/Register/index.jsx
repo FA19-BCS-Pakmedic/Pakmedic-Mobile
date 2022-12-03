@@ -40,13 +40,13 @@ import {
   phoneNumberRegex,
   numberRegex,
 } from '../../../../utils/constants/Regex';
+import ROLES from '../../../../utils/constants/ROLES';
+
+//import patient service
+import {registerPatient} from '../../../../services/patientServices';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 const Register = () => {
-  //input refs
-  const inputRef1 = useRef('');
-  const inputRef2 = useRef('');
-  const inputRef3 = useRef('');
-
   // useForm hook from react-hook-form
   const {
     control,
@@ -54,6 +54,7 @@ const Register = () => {
     formState: {errors, isValid},
     setValue,
     clearErrors,
+    setError,
     watch,
   } = useForm({
     mode: 'all',
@@ -66,9 +67,9 @@ const Register = () => {
       phoneNumber: '',
       dob: new Date(),
       gender: '',
-      cnic1: '',
-      cnic2: '',
-      cnic3: '',
+      // cnic1: '',
+      // cnic2: '',
+      // cnic3: '',
     },
   });
 
@@ -87,10 +88,49 @@ const Register = () => {
   const [openDate, setOpenDate] = useState(false);
 
   // form submit handler
-  const onSubmit = data => {
-    console.log(data, 'data');
-    console.log(isValid, 'isValid');
-    console.log('error', errors);
+  const onSubmit = async data => {
+    console.log(data);
+
+    //creating a patient object to send to the backend.
+    const patient = {
+      name: data?.name,
+      email: data?.email,
+      password: data?.password,
+      phone: `0${data?.contact.split('-')[1]}`,
+      dob: `${
+        data?.dob.getMonth().toString().length > 1
+          ? `${data?.dob.getMonth() + 1}`
+          : `0${data?.dob?.getMonth() + 1}`
+      }/${
+        data?.dob.getDate().toString().length > 1
+          ? `${data?.dob.getDate() + 1}`
+          : `0${data?.dob?.getDate() + 1}`
+      }/${data?.dob.getFullYear()}`,
+      gender: data?.gender,
+      // cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
+      role: ROLES.patient,
+    };
+
+    console.log(patient);
+
+    try {
+      const res = await registerPatient(patient);
+      console.log(res.data);
+      alert('Patient was successfully registered');
+    } catch (err) {
+      console.log(err.response.data.message);
+      alert(err.response.data.message);
+      if (err.response.data.error.statusCode === 409) {
+        setError('email', {
+          type: 'conflict',
+          message: 'This email is already registered',
+        });
+      }
+    }
+
+    // console.log(data, 'data');
+    // console.log(isValid, 'isValid');
+    // console.log('error', errors);
   };
 
   //function for setting the value of gender
@@ -126,7 +166,7 @@ const Register = () => {
   };
 
   return (
-    <ScrollContainer>
+    <StaticContainer>
       <View style={styles.container}>
         {/* name field */}
         <ValidateInputField
@@ -236,6 +276,7 @@ const Register = () => {
           title={'Date of birth'}
         />
         {/* genders radio buttons */}
+        <Text style={styles.radioText}>Gender</Text>
         <RadioGroup
           values={GENDERS}
           selected={watch('gender')}
@@ -324,14 +365,14 @@ const Register = () => {
           {/* facebook login button */}
           <TouchableOpacity style={styles.socialButton}>
             <FaceBookLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
+              width={dimensions.Width / 12}
+              height={dimensions.Height / 22}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialButton}>
             <GoogleLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
+              width={dimensions.Width / 12}
+              height={dimensions.Height / 22}
             />
           </TouchableOpacity>
         </View>
@@ -344,7 +385,7 @@ const Register = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollContainer>
+    </StaticContainer>
   );
 };
 

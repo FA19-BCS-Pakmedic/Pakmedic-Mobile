@@ -10,6 +10,7 @@ import colors from '../../../utils/styles/themes/colors';
 
 import ProfileSuccess from '../../../assets/svgs/ProfileSuccess.svg';
 import VectorFailure from '../../../assets/svgs/VectorFailure.svg';
+import ProfileFailure from '../../../assets/svgs/ProfileFailure.svg';
 
 const PopupAlerts = props => {
   const {isModalVisible, setModalVisible, height, width, type, alertName} =

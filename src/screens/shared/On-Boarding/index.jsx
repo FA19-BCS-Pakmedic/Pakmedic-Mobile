@@ -25,7 +25,6 @@ import PopupAlerts from '../../../components/shared/PopupAlerts';
 const OnBoarding = props => {
   const {screenName, text, pagination} = props;
   const [isModalVisible, setModalVisible] = useState(false);
-
   const navigateToNext = () => {
     props.navigation.navigate(
       'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
@@ -85,20 +84,14 @@ const OnBoarding = props => {
           </View>
         </View>
       </Shadow>
-      {isModalVisible ? (
-        <PopupAlerts
-          {...props}
-          isModalVisible={isModalVisible}
-          setModalVisible={setModalVisible}
-          height={1.8}
-          width={1.2}
-          alertName={'RegisterFailure'}
-          message={'Registration Failed'}
-          redirect={'Onboarding2'}
-        />
-      ) : (
-        <></>
-      )}
+      <PopupAlerts
+        isModalVisible={isModalVisible}
+        setModalVisible={setModalVisible}
+        height={1.8}
+        width={1.2}
+        alertName={'RegisterFailure'}
+        message={'Registration Failed'}
+        redirect={'Home'}></PopupAlerts>
     </View>
   );
 };

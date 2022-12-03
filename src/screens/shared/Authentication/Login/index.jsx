@@ -22,6 +22,15 @@ import StaticContainer from '../../../../containers/StaticContainer';
 
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
+import ScrollContainer from '../../../../containers/ScrollContainer';
+
+//import API call for login
+import {loginPatient} from '../../../../services/patientServices';
+
+//importing deviceStorage handler
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {loginDoctor} from '../../../../services/doctorServices';
+import ROLES from '../../../../utils/constants/ROLES';
 
 const Login = ({navigation}) => {
   // hook for hiding and showing password
@@ -41,7 +50,35 @@ const Login = ({navigation}) => {
   });
 
   //on submit of sign up form
-  const onSubmit = data => {
+  const onSubmit = async data => {
+    //TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE LOGIN FUNCTION
+    const role = 'Doctor';
+
+    try {
+      let response;
+      if (role === ROLES.patient) {
+        //call patient login api
+        response = await loginPatient({
+          email: data?.email,
+          password: data?.password,
+        });
+      } else {
+        //call doctor login api
+        response = await loginDoctor({
+          email: data?.email,
+          password: data?.password,
+        });
+      }
+
+      // console.log(response.data);
+      await deviceStorage.saveItem('id_token', response?.data?.token);
+      console.log(await deviceStorage.loadItem('id_token'));
+      alert('Login Successful');
+    } catch (err) {
+      console.log(err.response.data);
+      alert(err.response.data.message);
+    }
+
     console.log(data, 'data');
     console.log(errors, 'error');
   };
@@ -62,50 +99,52 @@ const Login = ({navigation}) => {
       <View style={styles.container}>
         {/* icon */}
 
-        <SVGImage width={dimensions.Width} height={dimensions.Height / 3} />
-
-        {/* email and password fields */}
-        <View style={styles.formContainer}>
-          {/* email field */}
-          <ValidateInputField
-            placeholder="Email"
-            type="outlined"
-            width="93%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="email-address"
-            control={control}
-            title={'Email'}
-            name="email"
-            rules={{
-              required: "Email can't be empty",
-              pattern: {
-                value: emailRegex,
-                message: 'Please enter a valid email',
-              },
-            }}
-          />
-          {/* password field */}
-          <ValidateInputField
-            placeholder="Password"
-            type="outlined"
-            width="85.5%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="password"
-            control={control}
-            name="password"
-            title={'Password'}
-            isPasswordField={true}
-            isPasswordVisible={!isPasswordVisible}
-            setIsPasswordVisible={setIsPasswordVisible}
-            rules={{
-              required: "Password can't be empty",
-              pattern: {
-                value: passwordRegex,
-                message: 'Please enter a valid password',
-              },
-            }}
+        <View style={styles.imageContainer}>
+          <SVGImage
+            width={dimensions.Width / 1.6}
+            height={dimensions.Height / 3}
           />
         </View>
+
+        {/* email field */}
+        <ValidateInputField
+          placeholder="Email"
+          type="outlined"
+          width="93%"
+          placeholderTextColor={colors.secondary1}
+          keyboardType="email-address"
+          control={control}
+          title={'Email'}
+          name="email"
+          rules={{
+            required: "Email can't be empty",
+            pattern: {
+              value: emailRegex,
+              message: 'Please enter a valid email',
+            },
+          }}
+        />
+        {/* password field */}
+        <ValidateInputField
+          placeholder="Password"
+          type="outlined"
+          width="85.5%"
+          placeholderTextColor={colors.secondary1}
+          keyboardType="password"
+          control={control}
+          name="password"
+          title={'Password'}
+          isPasswordField={true}
+          isPasswordVisible={!isPasswordVisible}
+          setIsPasswordVisible={setIsPasswordVisible}
+          rules={{
+            required: "Password can't be empty",
+            pattern: {
+              value: passwordRegex,
+              message: 'Please enter a valid password',
+            },
+          }}
+        />
 
         {/* forgot password text */}
         <TouchableOpacity style={styles.textContainer}>
@@ -128,14 +167,14 @@ const Login = ({navigation}) => {
           {/* facebook login button */}
           <TouchableOpacity style={styles.socialButton}>
             <FaceBookLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
+              width={dimensions.Width / 12}
+              height={dimensions.Height / 22}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialButton}>
             <GoogleLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
+              width={dimensions.Width / 12}
+              height={dimensions.Height / 22}
             />
           </TouchableOpacity>
         </View>
