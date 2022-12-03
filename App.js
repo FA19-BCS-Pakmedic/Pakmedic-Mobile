@@ -16,7 +16,6 @@ import SetNewPassword from './src/screens/shared/Authentication/Set-new-password
 import Onboarding from './src/screens/doctor/On-Boarding';
 import SupportHome from './src/screens/shared/Support-communities/Home';
 
-
 const App = () => {
   return (
     // <NavigationContainer>

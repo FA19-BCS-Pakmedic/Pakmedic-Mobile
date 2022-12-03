@@ -36,7 +36,6 @@ export default ScrollContainer;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-
     width: dimensions.Width,
     backgroundColor: colors.white,
   },
@@ -44,7 +43,6 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
   },
-
   child: {
     flexGrow: 1,
     paddingHorizontal: dimensions.Width / 20,
