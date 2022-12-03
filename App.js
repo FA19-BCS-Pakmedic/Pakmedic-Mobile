@@ -11,13 +11,15 @@ import CompleteProfile from './src/screens/doctor/Authentication/Complete-profil
 import Register from './src/screens/doctor/Authentication/Register';
 import Login from './src/screens/shared/Authentication/Login';
 import Onboarding from './src/screens/shared/On-Boarding';
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
+    SplashScreen.hide();
     setTimeout(() => {
       setIsLoaded(true);
-    }, 1500);
+    }, 1000);
   });
 
   return (

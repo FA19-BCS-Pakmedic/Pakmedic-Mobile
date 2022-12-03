@@ -23,6 +23,7 @@
     "react-native-screens": "^3.18.2",
     "react-native-shadow-2": "^7.0.6",
     "react-native-social-buttons": "^1.2.0",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^13.6.0",
     "react-native-svg-transformer": "^1.0.0",
     "react-native-vector-icons": "^9.2.0"
