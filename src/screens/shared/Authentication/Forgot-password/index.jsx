@@ -79,7 +79,7 @@ const ForgotPassword = () => {
           iterationCount={1}
           style={styles.inputContainer}>
           <ValidateInputField
-            placeholder="Email"
+            placeholder="Enter your email"
             type="outlined"
             width="93%"
             title={`Enter your email`}
