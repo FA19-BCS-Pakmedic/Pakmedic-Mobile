@@ -38,13 +38,15 @@ export const ContactInputField = ({
         field: {onChange, onBlur},
         fieldState: {error, isDirty, isTouched},
       }) => (
-        <View style={[styles().root, {paddingBottom: dimensions.Height / 40}]}>
-          <Text style={styles().title}>{title}</Text>
+        <View style={[styles().root]}>
+          {/* <Text style={styles().title}>{title}</Text> */}
           <View
             style={[
               styles(type, width).container,
+
               {
                 borderColor: error ? colors.invalid : colors.primary1,
+                paddingLeft: 1,
               },
             ]}>
             <IntlPhoneInput
@@ -53,11 +55,14 @@ export const ContactInputField = ({
                   `${e.dialCode}-${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
                 );
               }}
+              placeholder="Phone Number"
+              placeholderTextColor={colors.secondary1}
               onBlur={onBlur}
               defaultCountry="PK"
               phoneInputStyle={styles(type, width).input}
               containerStyle={{
                 width: '93.5%',
+                // borderWidth: 1,
               }}
               flagStyle={styles().flagContainer}
             />
@@ -80,7 +85,7 @@ export const ContactInputField = ({
             </View>
           </View>
           {/* error message */}
-          <View class={styles.errorMessageContainer}>
+          <View style={styles().errorMessageContainer}>
             {error && <ErrorMessage error={error} />}
           </View>
         </View>
@@ -126,7 +131,7 @@ export const ValidateInputField = ({
       }) => {
         return (
           <View style={styles().root}>
-            <Text style={styles().title}>{title}</Text>
+            {/* <Text style={styles().title}>{title}</Text> */}
             <View
               style={[
                 styles(type).container,
@@ -188,7 +193,7 @@ const styles = (type, width) =>
   StyleSheet.create({
     root: {
       width: '100%',
-
+      // borderWidth: 1,
       marginVertical: dimensions.Height / 200,
     },
     container: {
@@ -225,9 +230,7 @@ const styles = (type, width) =>
 
     errorMessageContainer: {
       width: '100%',
-
       height: dimensions.Height / 40,
-
       justifyContent: 'flex-start',
       alignItems: 'flex-start',
     },

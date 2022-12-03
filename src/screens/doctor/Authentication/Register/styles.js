@@ -8,7 +8,7 @@ export default StyleSheet.create({
   container: {
     width: '100%',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
 
@@ -18,31 +18,33 @@ export default StyleSheet.create({
   socialButtonContainer: {
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
-
   socialButton: {
-    width: '48%',
-    height: dimensions.Height / 15,
+    width: '40%',
+    height: dimensions.Height / 17,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
   },
 
-
-
   text: {
-    fontSize: fonts.size.font16,
+    fontSize: fonts.size.font14,
     fontWeight: fonts.weight.normal,
   },
 
   registerText: {
     color: colors.primary1,
-    fontSize: fonts.size.font16,
+    fontSize: fonts.size.font14,
     fontWeight: fonts.weight.bold,
   },
 
+  radioText: {
+    fontSize: fonts.size.font14,
+    fontWeight: fonts.weight.semi,
+    marginBottom: dimensions.Height / 55,
+  },
   registerTextContainer: {
     width: '100%',
     flexDirection: 'row',
@@ -51,9 +53,18 @@ export default StyleSheet.create({
     marginVertical: 20,
   },
 
+  buttonContainer: {
+    width: '100%',
+    marginTop: dimensions.Height / 50,
+  },
+
   socialButtonsContainer: {
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+
+  radioContainer: {
+    width: '100%',
   },
 });

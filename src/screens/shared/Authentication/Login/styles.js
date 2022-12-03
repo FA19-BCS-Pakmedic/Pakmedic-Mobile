@@ -10,12 +10,14 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    // borderWidth: 1,
   },
 
   textContainer: {
     justifyContent: 'center',
+    paddingHorizontal: dimensions.Width / 30,
     width: '100%',
-    marginVertical: dimensions.Height / 150,
+    // marginVertical: dimensions.Height / 150,
   },
   socialButtonContainer: {
     width: '100%',
@@ -24,7 +26,7 @@ export default StyleSheet.create({
   },
 
   socialButton: {
-    width: '48%',
+    width: '40%',
     height: dimensions.Height / 15,
     borderWidth: 1,
     justifyContent: 'center',
@@ -33,24 +35,25 @@ export default StyleSheet.create({
   },
 
   text: {
-    fontSize: fonts.size.font16,
+    fontSize: fonts.size.font14,
     fontWeight: fonts.weight.normal,
+    textAlign: 'right',
   },
 
   registerText: {
     color: colors.primary1,
-    fontSize: fonts.size.font16,
+    fontSize: fonts.size.font14,
     fontWeight: fonts.weight.bold,
   },
 
   socialButtonContainer: {
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
 
   socialButton: {
-    width: '48%',
+    width: '40%',
     height: dimensions.Height / 15,
     borderWidth: 1,
     justifyContent: 'center',

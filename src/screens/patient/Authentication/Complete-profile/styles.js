@@ -13,46 +13,25 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
-  cnicText: {
-    fontSize: fonts.size.font16,
+  genderText: {
+    fontSize: fonts.size.font14,
     fontWeight: fonts.weight.bold,
-    marginBottom: dimensions.Height / 150,
+    width: '100%',
+    marginBottom: dimensions.Height / 65,
   },
 
   formContainer: {
     width: '100%',
   },
-  socialButtonContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-
-  socialButton: {
-    width: '48%',
-    height: dimensions.Height / 15,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 20,
-  },
-
-  cnicContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: colors.white,
-  },
 
   text: {
-    fontSize: fonts.size.font16,
+    fontSize: fonts.size.font14,
     fontWeight: fonts.weight.normal,
   },
 
   registerText: {
     color: colors.primary1,
-    fontSize: fonts.size.font16,
+    fontSize: fonts.size.font14,
     fontWeight: fonts.weight.bold,
   },
 
@@ -61,7 +40,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
   },
 
   socialButtonsContainer: {

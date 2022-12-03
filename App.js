@@ -8,8 +8,8 @@ import AnimatedSplash from 'react-native-animated-splash-screen';
 import RootNavigation from './src/setup/navigation/root.navigation';
 import OnboardingNavigation from './src/setup/navigation/onboarding.navigation';
 // import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
-// import Register from './src/screens/doctor/Authentication/Register';
-import Register from './src/screens/patient/Authentication/Register';
+import Register from './src/screens/doctor/Authentication/Register';
+// import Register from './src/screens/patient/Authentication/Register';
 import Login from './src/screens/shared/Authentication/Login';
 import SplashScreen from 'react-native-splash-screen';
 import ForgotPassword from './src/screens/shared/Authentication/Forgot-password';
@@ -28,37 +28,28 @@ const App = () => {
   });
 
   return (
-    <AnimatedSplash
-      translucent={true}
-      isLoaded={isLoaded}
-      logoImage={require('./src/assets/images/Logo.png')}
-      backgroundColor={'#FFFFFF'}
-      logoHeight={200}
-      logoWidth={200}>
-      <NavigationContainer>
-        <OnboardingNavigation side="patient" />
-      </NavigationContainer>
-    </AnimatedSplash>
-
-    // <SafeAreaView style={styles.root}>
-    //   <Login></Login>
-    // </SafeAreaView>
+    // <AnimatedSplash
+    //   translucent={true}
+    //   isLoaded={isLoaded}
+    //   logoImage={require('./src/assets/images/Logo.png')}
+    //   backgroundColor={'#FFFFFF'}
+    //   logoHeight={200}
+    //   logoWidth={200}>
+    //   <NavigationContainer>
+    //     <OnboardingNavigation side="doctor" />
+    //   </NavigationContainer>
+    // </AnimatedSplash>
     // <NavigationContainer>
     //   <OnboardingNavigation side="doctor" />
     // </NavigationContainer>
-    // <SafeAreaView style={styles.root}>
-    //   <Login />
-    // </SafeAreaView>
+    <SafeAreaView style={styles.root}>
+      <Register />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  root: {},
 });
 
 export default App;
