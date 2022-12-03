@@ -40,6 +40,10 @@ import {
   phoneNumberRegex,
   numberRegex,
 } from '../../../../utils/constants/Regex';
+import ROLES from '../../../../utils/constants/ROLES';
+
+//import patient service
+import {registerPatient} from '../../../../services/patientServices';
 
 const Register = () => {
   //input refs
@@ -54,6 +58,7 @@ const Register = () => {
     formState: {errors, isValid},
     setValue,
     clearErrors,
+    setError,
     watch,
   } = useForm({
     mode: 'all',
@@ -87,10 +92,42 @@ const Register = () => {
   const [openDate, setOpenDate] = useState(false);
 
   // form submit handler
-  const onSubmit = data => {
-    console.log(data, 'data');
-    console.log(isValid, 'isValid');
-    console.log('error', errors);
+  const onSubmit = async data => {
+    console.log(data);
+
+    const patient = {
+      name: data?.name,
+      email: data?.email,
+      password: data?.password,
+      phone: `0${data?.contact.split('-')[1]}`,
+      dob: `${
+        data?.dob.getMonth().toString().length > 1
+          ? `${data?.dob.getMonth() + 1}`
+          : `0${data?.dob?.getMonth() + 1}`
+      }/${
+        data?.dob.getDate().toString().length > 1
+          ? `${data?.dob.getDate() + 1}`
+          : `0${data?.dob?.getDate() + 1}`
+      }/${data?.dob.getFullYear()}`,
+      gender: data?.gender,
+      cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
+      role: ROLES.patient,
+    };
+
+    console.log(patient);
+
+    try {
+      const res = await registerPatient(patient);
+      console.log(res.data);
+      alert('Patient was successfully registered');
+    } catch (err) {
+      console.log(err.response.data.message);
+      alert(err.response.data.message);
+    }
+
+    // console.log(data, 'data');
+    // console.log(isValid, 'isValid');
+    // console.log('error', errors);
   };
 
   //function for setting the value of gender

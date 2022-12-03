@@ -24,6 +24,18 @@ import {numberRegex} from '../../../../utils/constants/Regex';
  *
  * TODO: FIX THE BUTTON DISABLE AND ENABLE
  */
+//verify otp endpoint
+import {
+  forgotPasswordPatient,
+  verifyOtpPatient,
+} from '../../../../services/patientServices';
+import {
+  forgotPasswordDoctor,
+  verifyOtpDoctor,
+} from '../../../../services/doctorServices';
+
+//import constants
+import ROLES from '../../../../utils/constants/ROLES';
 
 const OtpVerification = () => {
   const inputRef1 = useRef('');
@@ -59,16 +71,58 @@ const OtpVerification = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
-  // form submit handler
-  const onSubmit = () => {
-    if (isValid()) {
-      console.log(pin1, pin2, pin3, pin4);
+  //resend new token function
+  const resendToken = async () => {
+    // TODO: FETCH THE ROLE FROM MOBILE STORAGE DYNAMICALLY
+    const role = 'Doctor';
+
+    // TODO: GET EMAIL FROM THE NAVIGATION PARAM
+    const email = 'awanmoeed2121@gmail.com';
+
+    try {
+      let response;
+      if (role === ROLES.patient) {
+        //calling the forgotten password endpoint for patient
+        response = await forgotPasswordPatient({email});
+      } else {
+        ///calling the forgotten password endpoint for doctor
+        response = await forgotPasswordDoctor({email});
+      }
+      alert(response?.data.message);
+      console.log(response?.data);
+    } catch (err) {
+      console.log(err.response?.data);
+      alert(err.response.data.message);
     }
   };
 
-  const isValid = () => {
-    console.log(pin1 && pin2 && pin3 && pin4);
-    return pin1 && pin2 && pin3 && pin4 ? true : false;
+  // form submit handler
+  const onSubmit = async data => {
+    //TODO: GET ROLE FROM LOCAL STORAGE
+    const role = 'Doctor';
+
+    // TODO: GET USER EMAIL FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS SCREEN
+    const email = 'awanmoeed2121@gmail.com';
+
+    //merge otp pins into one
+    const otp = data.pin1 + data.pin2 + data.pin3 + data.pin4;
+
+    try {
+      let response;
+      if (role === ROLES.patient) {
+        //call patient verify otp end point
+        response = await verifyOtpPatient({email: email, otp: otp});
+      } else {
+        //call doctor verify otp end point
+        response = await verifyOtpDoctor({email: email, otp: otp});
+      }
+
+      console.log(response.data);
+      alert(response.data.message);
+    } catch (err) {
+      console.log(err.response.data);
+      alert(err.response.data.message);
+    }
   };
 
   return (
@@ -145,6 +199,7 @@ const OtpVerification = () => {
             <TouchableOpacity
               onPress={() => {
                 setTimer(5);
+                resendToken();
               }}>
               <Text style={styles.text}>Resend code</Text>
             </TouchableOpacity>

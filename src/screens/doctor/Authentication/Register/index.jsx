@@ -32,11 +32,25 @@ import {
   passwordRegex,
   phoneNumberRegex,
 } from '../../../../utils/constants/Regex';
+import ROLES from '../../../../utils/constants/ROLES';
 
 //importing container
 import ScrollContainer from '../../../../containers/ScrollContainer';
 
+//importing doctors service to call end points
+import {
+  pmcIdVerifyDoctor,
+  registerDoctor,
+} from '../../../../services/doctorServices';
+
 const Register = ({navigation}) => {
+  //to store the information fetched from the pmc endpoint
+  const [pmcData, setPmcData] = useState(null);
+
+  //error hook to prevent form submission if pmc id is not verified
+  const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
+  const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
+
   // useForm hook from react-hook-form
   const {
     control,
@@ -45,6 +59,7 @@ const Register = ({navigation}) => {
     setValue,
     clearErrors,
     watch,
+    setError,
   } = useForm({
     mode: 'all',
     revalidate: 'all',
@@ -53,8 +68,8 @@ const Register = ({navigation}) => {
       email: '',
       password: '',
       confirmPassword: '',
-      phoneNumber: '',
-      city: '',
+      phone: '',
+      location: '',
       gender: '',
     },
   });
@@ -68,22 +83,84 @@ const Register = ({navigation}) => {
   const [open, setOpen] = useState(false);
 
   // form submit handler
-  const onSubmit = data => {
-    console.log(data, 'data');
-    console.log(isValid, 'isValid');
-    console.log('error', errors);
+  const onSubmit = async formData => {
+    if (isPmcIdVerified) {
+      const issueDate = pmcData.RegistrationDate.split('/');
+      const expiryDate = pmcData.ValidUpto.split('/');
+
+      console.log(issueDate, expiryDate);
+
+      const data = {
+        ...formData,
+        phone: `0${formData?.phone?.split('-')[1]}`,
+        role: ROLES.doctor,
+        name: pmcData?.Name?.toLowerCase(),
+        qualifications: pmcData?.Qualifications,
+        issueDate: `${issueDate[2]}-${issueDate[1]}-${issueDate[0]}`,
+        expiryDate: `${expiryDate[2]}-${expiryDate[1]}-${expiryDate[0]}`,
+        status: pmcData?.Status?.toLowerCase(),
+        speciality: 'Dentist',
+      };
+
+      // console.log(data);
+      try {
+        const response = await registerDoctor(data);
+        console.log(response.data);
+        alert(response.data.message);
+      } catch (err) {
+        console.log(err.response.data);
+        alert(err.response.data.message);
+        if (err.response.data.error.statusCode === 409) {
+          setError('email', {
+            type: 'conflict',
+            message: 'This email is already registered',
+          });
+        }
+      }
+    } else {
+      setError('pmcId', {
+        type: 'duplicate ID',
+        message: pmcIdErrorMessage,
+      });
+    }
   };
 
   //function for setting the value of city
   const setCity = callback => {
-    setValue('city', callback());
-    clearErrors('city');
+    setValue('location', callback());
+    clearErrors('location');
   };
 
   //function for setting the value of gender
   const setGender = gender => {
     setValue('gender', gender);
     clearErrors('gender');
+  };
+
+  //function to send the pmc id to the backend to retrieve data from the pmc endpoint
+  const getPmcData = async () => {
+    try {
+      const response = await pmcIdVerifyDoctor({pmcID: watch('pmcId')});
+      const data = response?.data?.data;
+      setPmcData(data);
+      setIsPmcIdVerified(true);
+      if (data) {
+        clearErrors('pmcId');
+      }
+      console.log(data);
+    } catch (err) {
+      alert(err.response.data.message);
+      console.log(err.response.data);
+      setIsPmcIdVerified(false);
+      setPmcIdErrorMessage(err.response.data.message);
+      setError('pmcId', {
+        type: 'duplicate ID',
+        message:
+          err.response.data.error.statusCode === 500
+            ? 'An error has occured fetching details'
+            : err.response.data.message,
+      });
+    }
   };
 
   //navigate back to login screen

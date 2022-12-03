@@ -23,6 +23,14 @@ import StaticContainer from '../../../../containers/StaticContainer';
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
 
+//import API call for login
+import {loginPatient} from '../../../../services/patientServices';
+
+//importing deviceStorage handler
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {loginDoctor} from '../../../../services/doctorServices';
+import ROLES from '../../../../utils/constants/ROLES';
+
 const Login = ({navigation}) => {
   // hook for hiding and showing password
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -41,7 +49,35 @@ const Login = ({navigation}) => {
   });
 
   //on submit of sign up form
-  const onSubmit = data => {
+  const onSubmit = async data => {
+    //TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE LOGIN FUNCTION
+    const role = 'Doctor';
+
+    try {
+      let response;
+      if (role === ROLES.patient) {
+        //call patient login api
+        response = await loginPatient({
+          email: data?.email,
+          password: data?.password,
+        });
+      } else {
+        //call doctor login api
+        response = await loginDoctor({
+          email: data?.email,
+          password: data?.password,
+        });
+      }
+
+      // console.log(response.data);
+      await deviceStorage.saveItem('id_token', response?.data?.token);
+      console.log(await deviceStorage.loadItem('id_token'));
+      alert('Login Successful');
+    } catch (err) {
+      console.log(err.response.data);
+      alert(err.response.data.message);
+    }
+
     console.log(data, 'data');
     console.log(errors, 'error');
   };

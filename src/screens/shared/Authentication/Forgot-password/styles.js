@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
   },
 
   inputContainer: {
+    width: '100%',
     marginVertical: dimensions.Height / 20,
   },
 
