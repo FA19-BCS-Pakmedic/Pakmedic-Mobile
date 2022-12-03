@@ -1,5 +1,5 @@
 import {StyleSheet, TextInput, View} from 'react-native';
-import React from 'react';
+import {forwardRef} from 'react';
 import {Controller} from 'react-hook-form';
 
 //importing theme
@@ -7,23 +7,35 @@ import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
-const AutoNextInput = React.forwardRef((props, ref) => {
-  return (
-    <TextInput
-      style={[styles(props?.type, props?.width, props?.height).root]}
-      keyboardType="number-pad"
-      ref={ref}
-      onChangeText={text => {
-        if (text.length >= props?.maxLength) {
-          props?.onChangeText(text);
-        }
-      }}
-      maxLength={props?.maxLength}
-    />
-  );
-});
-
-export default AutoNextInput;
+const AutoNextInput = forwardRef(
+  (
+    {control, rules, type, width, height, maxLength, onChangeText, name},
+    ref,
+  ) => {
+    return (
+      <Controller
+        control={control}
+        rules={rules}
+        name={name}
+        render={({field: {onChange, onBlur}}) => (
+          <TextInput
+            style={[styles(type, width, height).root]}
+            keyboardType="number-pad"
+            ref={ref}
+            onBlur={onBlur}
+            onChangeText={text => {
+              if (text?.length >= maxLength) {
+                onChange(text);
+                onChangeText();
+              }
+            }}
+            maxLength={maxLength}
+          />
+        )}
+      />
+    );
+  },
+);
 
 const styles = (type, width, height) =>
   StyleSheet.create({
@@ -44,3 +56,5 @@ const styles = (type, width, height) =>
       color: colors.secondary1,
     },
   });
+
+export default AutoNextInput;

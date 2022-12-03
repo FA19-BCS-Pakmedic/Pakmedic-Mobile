@@ -4,23 +4,28 @@ import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
-export default Button = props => {
+export default Button = ({
+  isDisabled,
+  width,
+  type,
+  label,
+  onPress,
+  borderColor,
+}) => {
   return (
     <TouchableOpacity
       style={
-        props?.isDisabled && props?.isDisabled()
-          ? styles(props.type, props.width, props.borderColor).disabled
-          : styles(props.type, props.width, props.borderColor).button
+        isDisabled ? styles(type, width).disabled : styles(type, width).button
       }
-      activeOpacity={props?.isDisabled && props?.isDisabled() ? 1 : 0.2}
-      onPress={props.onPress}>
+      activeOpacity={isDisabled ? 1 : 0.2}
+      onPress={() => {
+        !isDisabled && onPress();
+      }}>
       <Text
         style={
-          props?.isDisabled && props?.isDisabled()
-            ? styles().buttonLabelDisabled
-            : styles().buttonLabel
+          isDisabled ? styles().buttonLabelDisabled : styles().buttonLabel
         }>
-        {props.label}
+        {label}
       </Text>
     </TouchableOpacity>
   );
@@ -36,7 +41,7 @@ const styles = (type, width, borderColor) =>
       marginVertical: dimensions.Height / 60,
       backgroundColor: type === 'filled' ? colors.primary1 : colors.white,
       borderWidth: 2,
-      borderColor: borderColor ? 'white' : colors.primary1,
+      borderColor: borderColor ? borderColor : colors.primary1,
       width: width,
     },
 
