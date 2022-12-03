@@ -30,7 +30,6 @@ export default StaticContainer;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-
     width: dimensions.Width,
     borderWidth: 2,
     backgroundColor: colors.white,

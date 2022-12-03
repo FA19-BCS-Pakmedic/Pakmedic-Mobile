@@ -46,14 +46,9 @@ const App = () => {
     // <NavigationContainer>
     //   <OnboardingNavigation side="doctor" />
     // </NavigationContainer>
-    // <SafeAreaView style={styles.root}>
-    //   <Onboarding
-    //     screenName="DocOnboarding1"
-    //     text="Hassle Free Appointment Booking Facility for Online and In Person
-    //         Consultation"
-    //     pagination="Pagination1"
-    //   />
-    // </SafeAreaView>
+    <SafeAreaView style={styles.root}>
+      <Login />
+    </SafeAreaView>
   );
 };
 
