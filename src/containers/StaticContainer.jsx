@@ -6,10 +6,20 @@ import Header from '../components/shared/Header';
 // importing dimensions
 import dimensions from '../utils/styles/themes/dimensions';
 
-const StaticContainer = ({children}) => {
+import CustomNavHeader from '../components/shared/CustomNavHeader';
+import colors from '../utils/styles/themes/colors';
+
+const StaticContainer = ({
+  children,
+  customHeaderEnable = false,
+  customHeaderName,
+  headerColor,
+}) => {
   return (
     <SafeAreaView style={styles.root}>
-      <Header />
+      <Header color={headerColor} />
+      {customHeaderEnable && <CustomNavHeader screenName={customHeaderName} />}
+
       <View style={styles.container}>{children}</View>
     </SafeAreaView>
   );
@@ -20,14 +30,16 @@ export default StaticContainer;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    width: '100%',
+
+    width: dimensions.Width,
+    borderWidth: 2,
+    backgroundColor: colors.white,
   },
 
   container: {
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1,
     paddingHorizontal: dimensions.Width / 20,
-    paddingVertical: dimensions.Height / 40,
+    paddingVertical: dimensions.Height / 50,
   },
 });

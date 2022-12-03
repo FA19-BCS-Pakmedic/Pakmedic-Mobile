@@ -1,14 +1,17 @@
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {useState} from 'react';
-import {
-  FacebookSocialButton,
-  GoogleSocialButton,
-} from 'react-native-social-buttons';
 import {useForm} from 'react-hook-form';
 
 // custom styles import
 import styles from './styles';
+
+//import theme
 import colors from '../../../../utils/styles/themes/colors';
+import dimensions from '../../../../utils/styles/themes/dimensions';
+
+//importing svgs
+import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
+import FaceBookLogo from '../../../../assets/svgs/facebook-logo.svg';
 
 // custom components import
 import {
@@ -29,6 +32,8 @@ import {
   passwordRegex,
   phoneNumberRegex,
 } from '../../../../utils/constants/Regex';
+
+//importing container
 import ScrollContainer from '../../../../containers/ScrollContainer';
 
 const Register = ({navigation}) => {
@@ -82,7 +87,6 @@ const Register = ({navigation}) => {
   };
 
   //navigate back to login screen
-  //navigate to signup screen
   const navigateToLoginScreen = () => {
     console.log('This function is being called');
     navigation.navigate('Auth', {
@@ -94,10 +98,6 @@ const Register = ({navigation}) => {
   };
 
   return (
-    // <View style={styles.root}>
-    //   <ScrollView
-    //     style={styles.scrollContainer}
-    //     contentContainerStyle={styles.child}>
     <ScrollContainer>
       {/* form */}
       <View style={styles.formContainer}>
@@ -117,6 +117,79 @@ const Register = ({navigation}) => {
               message: 'PMC ID must be at least 3 characters',
             },
             pattern: {value: pmcIdRegex, message: 'Invalid PMC ID'},
+          }}
+        />
+
+        {/* email field */}
+        <ValidateInputField
+          placeholder="Email"
+          type="outlined"
+          width="93%"
+          placeholderTextColor={colors.secondary1}
+          keyboardType="email-address"
+          control={control}
+          name="email"
+          rules={{
+            required: "Email can't be empty",
+            pattern: {value: emailRegex, message: 'Invalid Email'},
+          }}
+        />
+        {/* password field */}
+        <ValidateInputField
+          placeholder="Password"
+          type="outlined"
+          width="85.5%"
+          placeholderTextColor={colors.secondary1}
+          keyboardType="password"
+          control={control}
+          name="password"
+          isPasswordField={true}
+          isPasswordVisible={!isPasswordVisible}
+          setIsPasswordVisible={setIsPasswordVisible}
+          rules={{
+            required: "Password can't be empty",
+            pattern: {
+              value: passwordRegex,
+              message:
+                'Password must contain atleast 1 uppercase, 1 lowercase, and 1 number',
+            },
+            minLength: {
+              value: 8,
+              message: 'Password must be at least 8 characters',
+            },
+          }}
+        />
+        {/* confirm password field */}
+        <ValidateInputField
+          placeholder="Confirm Password"
+          type="outlined"
+          width="85.5%"
+          placeholderTextColor={colors.secondary1}
+          keyboardType="password"
+          control={control}
+          name="confirm-password"
+          isPasswordField={true}
+          isPasswordVisible={!isConfirmPasswordVisible}
+          setIsPasswordVisible={setIsConfirmPasswordVisible}
+          rules={{
+            required: "Confirm password can't be empty",
+            validate: value => {
+              return value === watch('password') || 'Passwords do not match';
+            },
+          }}
+        />
+        {/* contact field */}
+        <ContactInputField
+          type="outlined"
+          width="86%"
+          control={control}
+          name="contact"
+          rules={{
+            required: "Phone number can't be empty",
+            pattern: {
+              value: phoneNumberRegex,
+              message: 'Invalid phone number',
+            },
           }}
         />
 
@@ -213,6 +286,7 @@ const Register = ({navigation}) => {
           }}
         />
 
+
         {/* genders radio buttons */}
         <RadioGroup
           values={GENDERS}
@@ -234,47 +308,57 @@ const Register = ({navigation}) => {
       />
 
       {/* divider */}
-      <TextDivider label="Or Register With" color={colors.secondary1} />
 
-      {/* social buttons */}
-      <View style={styles.socialButtonsContainer}>
-        <FacebookSocialButton
-          buttonViewStyle={{
-            width: '100%',
-            padding: 2,
-          }}
-          logoStyle={{
-            width: 30,
-            height: 30,
-          }}
-          buttonText="Register With Facebook"
-        />
-        <GoogleSocialButton
-          buttonViewStyle={{
-            alignItems: 'center',
-            width: '100%',
-            padding: 2,
-            borderWidth: 1,
-            borderColor: '#484848',
-          }}
-          logoStyle={{
-            width: 30,
-            height: 30,
-          }}
-          buttonText="Register With Google"
-        />
-      </View>
+      <TextDivider
+        label="Or Register With"
+        color={colors.secondary1}
+        gap={50}
+      />
 
-      {/* register with text */}
-      <View style={styles.registerTextContainer}>
-        <Text style={styles.text}>Already have an account? </Text>
-        <TouchableOpacity onPress={navigateToLoginScreen}>
-          <Text style={styles.registerText}>Login Now</Text>
+      {/*SOCIAL BUTTONS */}
+      <View style={styles.socialButtonContainer}>
+        {/* facebook login button */}
+        <TouchableOpacity style={styles.socialButton}>
+          <FaceBookLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <GoogleLogo
+            width={dimensions.Width / 10}
+            height={dimensions.Height / 20}
+          />
         </TouchableOpacity>
       </View>
+
+
+        {/*SOCIAL BUTTONS */}
+        <View style={styles.socialButtonContainer}>
+          {/* facebook login button */}
+          <TouchableOpacity style={styles.socialButton}>
+            <FaceBookLogo
+              width={dimensions.Width / 10}
+              height={dimensions.Height / 20}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <GoogleLogo
+              width={dimensions.Width / 10}
+              height={dimensions.Height / 20}
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* register with text */}
+        <View style={styles.registerTextContainer}>
+          <Text style={styles.text}>Already have an account? </Text>
+          <TouchableOpacity onPress={navigateToLoginScreen}>
+            <Text style={styles.registerText}>Login Now</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </ScrollContainer>
-    //   </ScrollView>
-    // </View>
   );
 };
 

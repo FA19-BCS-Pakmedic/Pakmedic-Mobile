@@ -1,5 +1,5 @@
 //nodemodules import
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Controller} from 'react-hook-form';
 
@@ -8,17 +8,19 @@ import colors from '../../../utils/styles/themes/colors';
 
 // custom components import
 import ErrorMessage from '../ErrorMessage';
+import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
 
 const Dropdown = ({
   open,
   items,
   setOpen,
-  // value,
   setValue,
   control,
   placeholder,
   name,
   rules,
+  title,
 }) => {
   return (
     <Controller
@@ -28,6 +30,8 @@ const Dropdown = ({
       render={({field: {value}, fieldState: {error}}) => {
         return (
           <View style={styles.root}>
+            <Text style={styles.title}>{title}</Text>
+
             <DropDownPicker
               dropDownDirection="TOP"
               listMode="SCROLLVIEW"
@@ -52,7 +56,9 @@ const Dropdown = ({
               containerStyle={styles.containerStyle}
             />
             {/* error message */}
-            {error && <ErrorMessage error={error} />}
+            <View style={styles.errorMessageContainer}>
+              {error && <ErrorMessage error={error} />}
+            </View>
           </View>
         );
       }}
@@ -63,6 +69,12 @@ const Dropdown = ({
 const styles = StyleSheet.create({
   root: {
     width: '100%',
+    marginVertical: dimensions.Height / 200,
+  },
+
+  title: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.bold,
   },
 
   select: {
@@ -78,9 +90,17 @@ const styles = StyleSheet.create({
     borderColor: colors.secondary1,
     borderBottomColor: colors.primary1,
   },
+
+  errorMessageContainer: {
+    width: '100%',
+
+    height: dimensions.Height / 40,
+
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
   containerStyle: {
     marginTop: 10,
-    marginBottom: 5,
   },
   placeholderStyle: {
     color: colors.secondary1,

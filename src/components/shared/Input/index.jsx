@@ -1,5 +1,11 @@
 //node modules import
-import {TextInput, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import {Controller} from 'react-hook-form';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
@@ -7,15 +13,20 @@ import IntlPhoneInput from 'react-native-intl-phone-input';
 
 // import styles
 import colors from '../../../utils/styles/themes/colors';
-import fonts from '../../../utils/styles/themes/fonts';
-import dimensions from '../../../utils/styles/themes/dimensions';
 
 // custom components import
 import ErrorMessage from '../ErrorMessage';
 
 //contact input field
 
-export const ContactInputField = ({control, name, rules = {}, type, width}) => {
+export const ContactInputField = ({
+  control,
+  name,
+  rules = {},
+  type,
+  width,
+  title,
+}) => {
   return (
     <Controller
       control={control}
@@ -25,11 +36,16 @@ export const ContactInputField = ({control, name, rules = {}, type, width}) => {
         field: {onChange, onBlur},
         fieldState: {error, isDirty, isTouched},
       }) => (
-        <View style={styles().root}>
+
+        <View style={[styles().root, {paddingBottom: dimensions.Height / 40}]}>
+
+          <Text style={styles().title}>{title}</Text>
           <View
             style={[
               styles(type, width).container,
-              {borderColor: error ? colors.invalid : colors.primary1},
+              {
+                borderColor: error ? colors.invalid : colors.primary1,
+              },
             ]}>
             <IntlPhoneInput
               onChangeText={e => {
@@ -43,6 +59,7 @@ export const ContactInputField = ({control, name, rules = {}, type, width}) => {
               containerStyle={{
                 width: '93.5%',
               }}
+              flagStyle={styles().flagContainer}
             />
             <View>
               {(isDirty || isTouched || error) && (
@@ -63,7 +80,9 @@ export const ContactInputField = ({control, name, rules = {}, type, width}) => {
             </View>
           </View>
           {/* error message */}
-          {error && <ErrorMessage error={error} />}
+          <View class={styles.errorMessageContainer}>
+            {error && <ErrorMessage error={error} />}
+          </View>
         </View>
       )}
     />
@@ -81,6 +100,7 @@ export const ValidateInputField = ({
   keyboardType,
   isPasswordField,
   placeholderTextColor,
+  title,
   isPasswordVisible,
   setIsPasswordVisible,
 }) => {
@@ -106,6 +126,7 @@ export const ValidateInputField = ({
       }) => {
         return (
           <View style={styles().root}>
+            <Text style={styles().title}>{title}</Text>
             <View
               style={[
                 styles(type).container,
@@ -153,7 +174,9 @@ export const ValidateInputField = ({
               </View>
             </View>
             {/* error message */}
-            {error && <ErrorMessage error={error} />}
+            <View style={styles().errorMessageContainer}>
+              {error && <ErrorMessage error={error} />}
+            </View>
           </View>
         );
       }}
@@ -165,7 +188,9 @@ const styles = (type, width) =>
   StyleSheet.create({
     root: {
       width: '100%',
-      marginVertical: dimensions.Height / 150,
+
+      marginVertical: dimensions.Height / 200,
+
     },
     container: {
       width: '100%',
@@ -178,17 +203,34 @@ const styles = (type, width) =>
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
+
+    },
+
+    flagContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: fonts.size.font24,
     },
 
     title: {
       fontSize: fonts.size.font16,
       fontWeight: fonts.weight.bold,
       marginBottom: dimensions.Height / 100,
+
     },
 
     input: {
       color: colors.secondary1,
       width: width,
+    },
+
+    errorMessageContainer: {
+      width: '100%',
+
+      height: dimensions.Height / 40,
+
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
     },
 
     iconsContainer: {

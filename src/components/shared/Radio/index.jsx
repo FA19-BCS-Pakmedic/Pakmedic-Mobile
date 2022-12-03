@@ -6,6 +6,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 // styles import
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
+
+// import custom error
 import ErrorMessage from '../ErrorMessage';
 
 const RadioGroup = ({
@@ -59,7 +62,9 @@ const RadioGroup = ({
               })}
             </View>
             {/* error message */}
-            {error && <ErrorMessage error={error} />}
+            <View style={styles.errorMessageContainer}>
+              {error && <ErrorMessage error={error} />}
+            </View>
           </View>
         );
       }}
@@ -70,17 +75,16 @@ const RadioGroup = ({
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    marginVertical: 10,
+    marginVertical: dimensions.Height / 250,
   },
   options: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 5,
+    marginVertical: dimensions.Height / 100,
   },
   title: {
     fontSize: fonts.size.font16,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontWeight: fonts.weight.bold,
   },
   option: {
     flexDirection: 'row',
@@ -90,6 +94,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: colors.primary1,
   },
+
+  errorMessageContainer: {
+    width: '100%',
+
+    height: dimensions.Height / 40,
+
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+
   selected: {
     backgroundColor: colors.primary3,
   },

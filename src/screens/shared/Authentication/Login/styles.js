@@ -5,11 +5,11 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export default StyleSheet.create({
-  formContainer: {
-    width: '100%',
-  },
-
-  logoContainer: {
+  root: {
+    flex: 1,
+    width: dimensions.Width,
+    height: dimensions.Height,
+    justifyContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -18,6 +18,22 @@ export default StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     marginVertical: dimensions.Height / 150,
+
+  },
+  socialButtonContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  socialButton: {
+    width: '48%',
+    height: dimensions.Height / 15,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+
   },
 
   text: {

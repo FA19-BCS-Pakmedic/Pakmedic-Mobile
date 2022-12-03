@@ -6,8 +6,9 @@ import fonts from '../../../utils/styles/themes/fonts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
 export const TextDivider = props => {
+  console.log(props.gap);
   return (
-    <View style={styles().root}>
+    <View style={styles(props.color, props.gap).root}>
       <View style={styles(props.color).halfDivider}></View>
       <Text style={styles().content}>{props.label}</Text>
       <View style={styles(props.color).halfDivider}></View>
@@ -15,14 +16,16 @@ export const TextDivider = props => {
   );
 };
 
-const styles = color =>
+const styles = (color, gap) =>
   StyleSheet.create({
     root: {
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      marginVertical: dimensions.Height / 30,
+
+      marginVertical: dimensions.Height / gap,
+
     },
     halfDivider: {
       height: dimensions.Height / 150,
