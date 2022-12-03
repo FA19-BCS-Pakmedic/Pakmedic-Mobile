@@ -42,7 +42,7 @@ const App = () => {
     // </AnimatedSplash>
 
     <SafeAreaView style={styles.root}>
-      <Login />
+      <ForgotPassword />
     </SafeAreaView>
 
     // <NavigationContainer>

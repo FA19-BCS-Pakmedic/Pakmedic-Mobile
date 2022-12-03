@@ -1,7 +1,6 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, {useEffect} from 'react';
+import {View} from 'react-native';
+import React from 'react';
 import {useForm} from 'react-hook-form';
-import * as Animatable from 'react-native-animatable';
 
 // import styles
 import {styles} from './styles';
@@ -14,18 +13,14 @@ import SvgImage from '../../../../assets/svgs/forgot-password-screen-icon.svg';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 //import regex
-import {emailRegex, phoneNumberRegex} from '../../../../utils/constants/Regex';
+import {emailRegex} from '../../../../utils/constants/Regex';
 
 //import constants
 import ROLES from '../../../../utils/constants/ROLES';
 
 //import custom components
-import {
-  ContactInputField,
-  ValidateInputField,
-} from '../../../../components/shared/Input';
+import {ValidateInputField} from '../../../../components/shared/Input';
 import Button from '../../../../components/shared/Button';
-import ForgotPasswordCard from '../../../../components/shared/ForgotPasswordCard';
 import StaticContainer from '../../../../containers/StaticContainer';
 import {forgotPasswordPatient} from '../../../../services/patientServices';
 import {forgotPasswordDoctor} from '../../../../services/doctorServices';
@@ -71,11 +66,12 @@ const ForgotPassword = () => {
     <StaticContainer
       customHeaderEnable={true}
       customHeaderName="Forgot Password">
-      {/* Screen logo */}
-      <View style={styles.logoContainer}>
-        <SvgImage width={dimensions.Width} height={dimensions.Height / 3} />
-      </View>
       <View style={styles.container}>
+        {/* Screen logo */}
+        <View style={styles.logoContainer}>
+          <SvgImage width={dimensions.Width} height={dimensions.Height / 3} />
+        </View>
+
         {/* email field container */}
         <View
           animation="pulse"
@@ -100,11 +96,9 @@ const ForgotPassword = () => {
             }}
           />
         </View>
-      </View>
 
-      {/* Send Code button */}
+        {/* Send Code button */}
 
-      <View style={styles.buttonContainer}>
         <Button
           width="100%"
           type="filled"

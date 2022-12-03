@@ -5,17 +5,17 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
-  logoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
   container: {
     width: '100%',
-    justifyContent: 'center',
+    flex: 1,
     alignItems: 'center',
-    marginVertical: 10,
+    justifyContent: 'space-between',
   },
+
+  // logoContainer: {
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
 
   textContainer: {
     width: '100%',
@@ -41,7 +41,6 @@ export const styles = StyleSheet.create({
 
   buttonContainer: {
     width: '100%',
-    height: dimensions.Height / 7,
     alignItems: 'center',
     justifyContent: 'flex-end',
     alignSelf: 'flex-end',
