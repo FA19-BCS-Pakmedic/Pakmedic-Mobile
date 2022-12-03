@@ -18,6 +18,7 @@ export default RootNavigation = () => {
         headerShown: false,
       }}>
       <rootStack.Screen name="Auth" component={AuthNavigation} />
+      
     </rootStack.Navigator>
   );
 };

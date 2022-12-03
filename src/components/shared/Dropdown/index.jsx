@@ -15,7 +15,6 @@ const Dropdown = ({
   open,
   items,
   setOpen,
-  // value,
   setValue,
   control,
   placeholder,
@@ -81,6 +80,7 @@ const styles = StyleSheet.create({
   select: {
     borderColor: colors.primary1,
     color: colors.secondary1,
+    paddingHorizontal: dimensions.Width / 20,
   },
 
   listItemLabelStyle: {
@@ -94,7 +94,9 @@ const styles = StyleSheet.create({
 
   errorMessageContainer: {
     width: '100%',
-    height: dimensions.Height / 60,
+
+    height: dimensions.Height / 40,
+
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },

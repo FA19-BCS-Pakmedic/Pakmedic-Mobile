@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: dimensions.Width,
     backgroundColor: colors.white,
+
   },
 
   container: {

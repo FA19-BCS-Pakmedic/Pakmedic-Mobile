@@ -1,6 +1,7 @@
 // importing libraries`
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
+import {useForm} from 'react-hook-form';
 
 // importing styles
 import {styles} from './styles';
@@ -8,13 +9,21 @@ import colors from '../../../../utils/styles/themes/colors';
 
 //import svg icon
 import SVGImage from '../../../../assets/svgs/forgot-password-screen-icon.svg';
-import CustomNavHeader from '../../../../components/shared/CustomNavHeader';
-import Header from '../../../../components/shared/Header';
+
+//import custom components
 import AutoNextInput from '../../../../components/shared/AutoNextInput';
 import Button from '../../../../components/shared/Button';
 import StaticContainer from '../../../../containers/StaticContainer';
 
-//importing custom
+//importing regex
+import {numberRegex} from '../../../../utils/constants/Regex';
+
+/**
+ *
+ * @returns
+ *
+ * TODO: FIX THE BUTTON DISABLE AND ENABLE
+ */
 
 const OtpVerification = () => {
   const inputRef1 = useRef('');
@@ -22,11 +31,16 @@ const OtpVerification = () => {
   const inputRef3 = useRef('');
   const inputRef4 = useRef('');
 
+  // useStates to store the state of pins
   const [pin1, setPin1] = useState('');
   const [pin2, setPin2] = useState('');
   const [pin3, setPin3] = useState('');
   const [pin4, setPin4] = useState('');
 
+  //cnic error
+  const [pinError, setPinError] = useState(false);
+
+  //timer
   const [timer, setTimer] = useState(0);
 
   useEffect(() => {
@@ -45,9 +59,16 @@ const OtpVerification = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
-  onSubmit = () => {
-    console.log('submit');
-    console.log(pin1, pin2, pin3, pin4);
+  // form submit handler
+  const onSubmit = () => {
+    if (isValid()) {
+      console.log(pin1, pin2, pin3, pin4);
+    }
+  };
+
+  const isValid = () => {
+    console.log(pin1 && pin2 && pin3 && pin4);
+    return pin1 && pin2 && pin3 && pin4 ? true : false;
   };
 
   return (
@@ -64,6 +85,7 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef1}
+            height={12}
             onChangeText={text => {
               inputRef2.current.focus();
               setPin1(text);
@@ -74,6 +96,7 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef2}
+            height={12}
             onChangeText={text => {
               inputRef3.current.focus();
               setPin2(text);
@@ -84,9 +107,21 @@ const OtpVerification = () => {
             width="20%"
             maxLength={1}
             ref={inputRef3}
+            height={12}
             onChangeText={text => {
               inputRef4.current.focus();
               setPin3(text);
+            }}
+          />
+          <AutoNextInput
+            type="filled"
+            width="20%"
+            maxLength={1}
+
+            ref={inputRef4}
+            height={12}
+            onChangeText={text => {
+              setPin4(text);
             }}
           />
           <AutoNextInput
@@ -115,6 +150,23 @@ const OtpVerification = () => {
             </TouchableOpacity>
           )}
         </View>
+
+        {/* resend code part */}
+        <View style={styles.resendCodeContainer}>
+          {timer > 0 ? (
+            <Text style={styles.text}>
+              Resend Code in{' '}
+              <Text style={{color: colors.accent1}}>{timer}s</Text>
+            </Text>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setTimer(5);
+              }}>
+              <Text style={styles.text}>Resend code</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       {/* submit button */}
@@ -124,8 +176,12 @@ const OtpVerification = () => {
           type="filled"
           onPress={onSubmit}
           label="Verify Code"
+          isDisabled={() => {
+            return !isValid();
+          }}
         />
       </View>
+
     </StaticContainer>
   );
 };

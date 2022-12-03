@@ -1,26 +1,16 @@
 import {StyleSheet, TextInput, View} from 'react-native';
 import React from 'react';
+import {Controller} from 'react-hook-form';
 
-//importing premade styles
-import {AutoNextInputStyles} from './AutoNextInput.styles';
+//importing theme
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
-
-getInputType = type => {
-  switch (type) {
-    case 'filled':
-      return AutoNextInputStyles.filled;
-    case 'outlined':
-      return AutoNextInputStyles.outlined;
-    default:
-      return 'default';
-  }
-};
+import dimensions from '../../../utils/styles/themes/dimensions';
 
 const AutoNextInput = React.forwardRef((props, ref) => {
   return (
     <TextInput
-      style={styles(props?.type, props?.width).root}
+      style={[styles(props?.type, props?.width, props?.height).root]}
       keyboardType="number-pad"
       ref={ref}
       onChangeText={text => {
@@ -35,14 +25,16 @@ const AutoNextInput = React.forwardRef((props, ref) => {
 
 export default AutoNextInput;
 
-const styles = (type, width) =>
+const styles = (type, width, height) =>
   StyleSheet.create({
     root: {
       width: width,
-      borderWidth: type === 'outlined' ? 2 : 0,
+      borderWidth: type === 'outlined' ? 1 : 0,
       borderRadius: 10,
-      height: 60,
+      height: dimensions.Height / height,
       backgroundColor: type === 'outlined' ? 'white' : colors.secondaryLight,
+      borderColor:
+        type === 'outlined' ? colors.primary1 : colors.secondaryLight,
       justifyContent: 'center',
       alignItems: 'center',
       textAlign: 'center',
