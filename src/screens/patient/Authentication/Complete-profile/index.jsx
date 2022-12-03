@@ -131,209 +131,211 @@ const CompleteProfile = () => {
     <ScrollContainer
       customHeaderEnable={true}
       customHeaderName="Complete Profile">
-      {/* page icon */}
-      <SVGImage width={150} height={150} />
-      {/* name field */}
-      <ValidateInputField
-        placeholder="Name"
-        type="outlined"
-        width="93%"
-        placeholderTextColor={colors.secondary1}
-        keyboardType="text"
-        control={control}
-        title={'Name'}
-        name="name"
-        rules={{
-          required: "Name can't be empty",
-          minLength: {value: 3, message: 'Name must be atleast 3 characters'},
-          pattern: {value: stringRegex, message: 'Invalid Name'},
-        }}
-      />
-
-      {/* password field */}
-      <ValidateInputField
-        placeholder="Password"
-        type="outlined"
-        width="85.5%"
-        placeholderTextColor={colors.secondary1}
-        keyboardType="password"
-        control={control}
-        name="password"
-        isPasswordField={true}
-        title={'Password'}
-        isPasswordVisible={!isPasswordVisible}
-        setIsPasswordVisible={setIsPasswordVisible}
-        rules={{
-          required: "Password can't be empty",
-          pattern: {
-            value: passwordRegex,
-            message:
-              'Password must contain atleast 1 uppercase, 1 lowercase, and 1 number',
-          },
-          minLength: {
-            value: 8,
-            message: 'Password must be at least 8 characters',
-          },
-        }}
-      />
-      {/* confirm password field */}
-      <ValidateInputField
-        placeholder="Confirm Password"
-        type="outlined"
-        width="85.5%"
-        placeholderTextColor={colors.secondary1}
-        keyboardType="password"
-        control={control}
-        name="confirm-password"
-        title={'Confirm Password'}
-        isPasswordField={true}
-        isPasswordVisible={!isConfirmPasswordVisible}
-        setIsPasswordVisible={setIsConfirmPasswordVisible}
-        rules={{
-          required: "Confirm password can't be empty",
-          validate: value => {
-            return value === watch('password') || 'Passwords do not match';
-          },
-        }}
-      />
-      {/* contact field */}
-      <ContactInputField
-        type="outlined"
-        width="86%"
-        control={control}
-        name="contact"
-        title={'Phone number'}
-        rules={{
-          required: "Phone number can't be empty",
-          pattern: {
-            value: phoneNumberRegex,
-            message: 'Invalid phone number',
-          },
-        }}
-      />
-      {/* dob date picker */}
-      <CustomDatePicker
-        type="outlined"
-        open={openDate}
-        setOpen={setOpenDate}
-        onChangeDate={onChangeDate}
-        name="DOB"
-        date={date}
-        maximumDate={new Date()}
-        rules={{
-          required: "Date of birth can't be empty",
-          validate: value => {
-            return value < new Date() || "Date can't be in future";
-          },
-        }}
-        control={control}
-        title={'Date of birth'}
-      />
-      {/* genders radio buttons */}
-      <RadioGroup
-        values={GENDERS}
-        selected={watch('gender')}
-        setSelected={setGender}
-        title="Gender"
-        name="gender"
-        control={control}
-        rules={{required: 'Please select a gender'}}
-      />
-      {/* CNIC container */}
-
       <View style={styles.container}>
-        <Text style={styles.cnicText}>CNIC</Text>
-        <View style={styles.cnicContainer}>
-          <AutoNextInput
-            type="outlined"
-            width="28%"
-            maxLength={5}
-            ref={inputRef1}
-            name="cnic1"
-            customError={cnicError}
-            setCustomError={setCnicError}
-            control={control}
-            height={17}
-            rules={{minLength: {value: 5}, pattern: {value: numberRegex}}}
-            onChangeText={text => {
-              inputRef2.current.focus();
-              setValue('cnic1', text);
-            }}
-          />
-          <AutoNextInput
-            type="outlined"
-            width="48%"
-            maxLength={7}
-            ref={inputRef2}
-            name="cnic2"
-            customError={cnicError}
-            setCustomError={setCnicError}
-            control={control}
-            height={17}
-            rules={{minLength: {value: 7}, pattern: {value: numberRegex}}}
-            onChangeText={text => {
-              inputRef3.current.focus();
-              setValue('cnic2', text);
-            }}
-          />
-          <AutoNextInput
-            type="outlined"
-            width="18%"
-            maxLength={1}
-            ref={inputRef3}
-            name="cnic3"
-            customError={cnicError}
-            setCustomError={setCnicError}
-            control={control}
-            height={17}
-            rules={{minLength: {value: 1}, pattern: {value: numberRegex}}}
-            onChangeText={text => {
-              setValue('cnic3', text);
-            }}
-          />
+        {/* page image */}
+        <SVGImage width={150} height={150} />
+        {/* name field */}
+        <ValidateInputField
+          placeholder="Name"
+          type="outlined"
+          width="93%"
+          placeholderTextColor={colors.secondary1}
+          keyboardType="text"
+          control={control}
+          title={'Name'}
+          name="name"
+          rules={{
+            required: "Name can't be empty",
+            minLength: {value: 3, message: 'Name must be atleast 3 characters'},
+            pattern: {value: stringRegex, message: 'Invalid Name'},
+          }}
+        />
+
+        {/* password field */}
+        <ValidateInputField
+          placeholder="Password"
+          type="outlined"
+          width="85.5%"
+          placeholderTextColor={colors.secondary1}
+          keyboardType="password"
+          control={control}
+          name="password"
+          isPasswordField={true}
+          title={'Password'}
+          isPasswordVisible={!isPasswordVisible}
+          setIsPasswordVisible={setIsPasswordVisible}
+          rules={{
+            required: "Password can't be empty",
+            pattern: {
+              value: passwordRegex,
+              message:
+                'Password must contain atleast 1 uppercase, 1 lowercase, and 1 number',
+            },
+            minLength: {
+              value: 8,
+              message: 'Password must be at least 8 characters',
+            },
+          }}
+        />
+        {/* confirm password field */}
+        <ValidateInputField
+          placeholder="Confirm Password"
+          type="outlined"
+          width="85.5%"
+          placeholderTextColor={colors.secondary1}
+          keyboardType="password"
+          control={control}
+          name="confirm-password"
+          title={'Confirm Password'}
+          isPasswordField={true}
+          isPasswordVisible={!isConfirmPasswordVisible}
+          setIsPasswordVisible={setIsConfirmPasswordVisible}
+          rules={{
+            required: "Confirm password can't be empty",
+            validate: value => {
+              return value === watch('password') || 'Passwords do not match';
+            },
+          }}
+        />
+        {/* contact field */}
+        <ContactInputField
+          type="outlined"
+          width="86%"
+          control={control}
+          name="contact"
+          title={'Phone number'}
+          rules={{
+            required: "Phone number can't be empty",
+            pattern: {
+              value: phoneNumberRegex,
+              message: 'Invalid phone number',
+            },
+          }}
+        />
+        {/* dob date picker */}
+        <CustomDatePicker
+          type="outlined"
+          open={openDate}
+          setOpen={setOpenDate}
+          onChangeDate={onChangeDate}
+          name="DOB"
+          date={date}
+          maximumDate={new Date()}
+          rules={{
+            required: "Date of birth can't be empty",
+            validate: value => {
+              return value < new Date() || "Date can't be in future";
+            },
+          }}
+          control={control}
+          title={'Date of birth'}
+        />
+        {/* genders radio buttons */}
+        <RadioGroup
+          values={GENDERS}
+          selected={watch('gender')}
+          setSelected={setGender}
+          title="Gender"
+          name="gender"
+          control={control}
+          rules={{required: 'Please select a gender'}}
+        />
+
+        {/* CNIC container */}
+        {/* <View style={styles.container}>
+          <Text style={styles.cnicText}>CNIC</Text>
+          <View style={styles.cnicContainer}>
+            <AutoNextInput
+              type="outlined"
+              width="28%"
+              maxLength={5}
+              ref={inputRef1}
+              name="cnic1"
+              customError={cnicError}
+              setCustomError={setCnicError}
+              control={control}
+              height={17}
+              rules={{minLength: {value: 5}, pattern: {value: numberRegex}}}
+              onChangeText={text => {
+                inputRef2.current.focus();
+                setValue('cnic1', text);
+              }}
+            />
+            <AutoNextInput
+              type="outlined"
+              width="48%"
+              maxLength={7}
+              ref={inputRef2}
+              name="cnic2"
+              customError={cnicError}
+              setCustomError={setCnicError}
+              control={control}
+              height={17}
+              rules={{minLength: {value: 7}, pattern: {value: numberRegex}}}
+              onChangeText={text => {
+                inputRef3.current.focus();
+                setValue('cnic2', text);
+              }}
+            />
+            <AutoNextInput
+              type="outlined"
+              width="18%"
+              maxLength={1}
+              ref={inputRef3}
+              name="cnic3"
+              customError={cnicError}
+              setCustomError={setCnicError}
+              control={control}
+              height={17}
+              rules={{minLength: {value: 1}, pattern: {value: numberRegex}}}
+              onChangeText={text => {
+                setValue('cnic3', text);
+              }}
+            />
+          </View>
+          {cnicError && <ErrorMessage message={'Invalid CNIC'} />}
+        </View> */}
+
+        {/* Register button */}
+        <Button
+          onPress={handleSubmit(onSubmit)}
+          label="Register"
+          type="filled"
+          width="100%"
+        />
+
+        {/* divider */}
+
+        <TextDivider
+          label="Or Register With"
+          color={colors.secondary1}
+          gap={50}
+        />
+
+        {/*SOCIAL BUTTONS */}
+        <View style={styles.socialButtonContainer}>
+          {/* facebook login button */}
+          <TouchableOpacity style={styles.socialButton}>
+            <FaceBookLogo
+              width={dimensions.Width / 10}
+              height={dimensions.Height / 20}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <GoogleLogo
+              width={dimensions.Width / 10}
+              height={dimensions.Height / 20}
+            />
+          </TouchableOpacity>
         </View>
-        {cnicError && <ErrorMessage message={'Invalid CNIC'} />}
-      </View>
 
-      {/* Register button */}
-      <Button
-        onPress={handleSubmit(onSubmit)}
-        label="Register"
-        type="filled"
-        width="100%"
-      />
-
-      {/* divider */}
-
-      <TextDivider
-        label="Or Register With"
-        color={colors.secondary1}
-        gap={50}
-      />
-
-      {/*SOCIAL BUTTONS */}
-      <View style={styles.socialButtonContainer}>
-        {/* facebook login button */}
-        <TouchableOpacity style={styles.socialButton}>
-          <FaceBookLogo
-            width={dimensions.Width / 10}
-            height={dimensions.Height / 20}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
-          <GoogleLogo
-            width={dimensions.Width / 10}
-            height={dimensions.Height / 20}
-          />
-        </TouchableOpacity>
-      </View>
-
-      {/* register with text */}
-      <View style={styles.registerTextContainer}>
-        <Text style={styles.text}>Already have an account? </Text>
-        <TouchableOpacity onPress={navigateToLoginScreen}>
-          <Text style={styles.registerText}>Login Now</Text>
-        </TouchableOpacity>
+        {/* register with text */}
+        <View style={styles.registerTextContainer}>
+          <Text style={styles.text}>Already have an account? </Text>
+          <TouchableOpacity onPress={navigateToLoginScreen}>
+            <Text style={styles.registerText}>Login Now</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollContainer>
   );

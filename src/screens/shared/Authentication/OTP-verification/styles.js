@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
 
   pinContainer: {
     width: '100%',
-
   },
 
   inputContainer: {
