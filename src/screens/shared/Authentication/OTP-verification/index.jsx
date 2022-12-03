@@ -1,4 +1,4 @@
-// importing libraries`
+// importing libraries
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
@@ -6,9 +6,6 @@ import {useForm} from 'react-hook-form';
 // importing styles
 import {styles} from './styles';
 import colors from '../../../../utils/styles/themes/colors';
-
-//import svg icon
-import SVGImage from '../../../../assets/svgs/forgot-password-screen-icon.svg';
 
 //import custom components
 import AutoNextInput from '../../../../components/shared/AutoNextInput';
@@ -43,14 +40,21 @@ const OtpVerification = () => {
   const inputRef3 = useRef('');
   const inputRef4 = useRef('');
 
-  // useStates to store the state of pins
-  const [pin1, setPin1] = useState('');
-  const [pin2, setPin2] = useState('');
-  const [pin3, setPin3] = useState('');
-  const [pin4, setPin4] = useState('');
-
-  //cnic error
-  const [pinError, setPinError] = useState(false);
+  // useForm hook from react-hook-form
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: {isValid},
+  } = useForm({
+    mode: 'all',
+    defaultValues: {
+      pin1: '',
+      pin2: '',
+      pin3: '',
+      pin4: '',
+    },
+  });
 
   //timer
   const [timer, setTimer] = useState(0);
@@ -111,10 +115,10 @@ const OtpVerification = () => {
       let response;
       if (role === ROLES.patient) {
         //call patient verify otp end point
-        response = await verifyOtpPatient({email: email, otp: otp});
+        response = await verifyOtpPatient({email, otp});
       } else {
         //call doctor verify otp end point
-        response = await verifyOtpDoctor({email: email, otp: otp});
+        response = await verifyOtpDoctor({email, otp});
       }
 
       console.log(response.data);
@@ -140,9 +144,13 @@ const OtpVerification = () => {
             maxLength={1}
             ref={inputRef1}
             height={12}
-            onChangeText={text => {
+            control={control}
+            name="pin1"
+            rules={{
+              required: 'This field is required',
+            }}
+            onChangeText={() => {
               inputRef2.current.focus();
-              setPin1(text);
             }}
           />
           <AutoNextInput
@@ -151,9 +159,13 @@ const OtpVerification = () => {
             maxLength={1}
             ref={inputRef2}
             height={12}
-            onChangeText={text => {
+            control={control}
+            name="pin2"
+            rules={{
+              required: 'This field is required',
+            }}
+            onChangeText={() => {
               inputRef3.current.focus();
-              setPin2(text);
             }}
           />
           <AutoNextInput
@@ -162,32 +174,38 @@ const OtpVerification = () => {
             maxLength={1}
             ref={inputRef3}
             height={12}
-            onChangeText={text => {
+            control={control}
+            name="pin3"
+            rules={{
+              required: 'This field is required',
+            }}
+            onChangeText={() => {
               inputRef4.current.focus();
-              setPin3(text);
             }}
           />
           <AutoNextInput
             type="filled"
             width="20%"
             maxLength={1}
-
             ref={inputRef4}
             height={12}
-            onChangeText={text => {
-              setPin4(text);
+            control={control}
+            name="pin4"
+            rules={{
+              required: 'This field is required',
             }}
-          />
-          <AutoNextInput
-            type="filled"
-            width="20%"
-            maxLength={1}
-            ref={inputRef4}
-            onChangeText={text => {
-              setPin4(text);
+            onChangeText={() => {
+              console.log(isValid);
+              console.log(
+                watch('pin1'),
+                watch('pin2'),
+                watch('pin3'),
+                watch('pin4'),
+              );
             }}
           />
         </View>
+
         {/* resend code part */}
         <View style={styles.resendCodeContainer}>
           {timer > 0 ? (
@@ -205,23 +223,6 @@ const OtpVerification = () => {
             </TouchableOpacity>
           )}
         </View>
-
-        {/* resend code part */}
-        <View style={styles.resendCodeContainer}>
-          {timer > 0 ? (
-            <Text style={styles.text}>
-              Resend Code in{' '}
-              <Text style={{color: colors.accent1}}>{timer}s</Text>
-            </Text>
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                setTimer(5);
-              }}>
-              <Text style={styles.text}>Resend code</Text>
-            </TouchableOpacity>
-          )}
-        </View>
       </View>
 
       {/* submit button */}
@@ -229,14 +230,11 @@ const OtpVerification = () => {
         <Button
           width="90%"
           type="filled"
-          onPress={onSubmit}
+          onPress={handleSubmit(onSubmit)}
           label="Verify Code"
-          isDisabled={() => {
-            return !isValid();
-          }}
+          isDisabled={!isValid}
         />
       </View>
-
     </StaticContainer>
   );
 };

@@ -51,7 +51,7 @@ const Login = ({navigation}) => {
   //on submit of sign up form
   const onSubmit = async data => {
     //TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE LOGIN FUNCTION
-    const role = 'Patient';
+    const role = 'Doctor';
 
     try {
       let response;
