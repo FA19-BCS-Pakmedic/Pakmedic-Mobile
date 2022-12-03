@@ -46,11 +46,6 @@ import ROLES from '../../../../utils/constants/ROLES';
 import {registerPatient} from '../../../../services/patientServices';
 
 const Register = () => {
-  //input refs
-  const inputRef1 = useRef('');
-  const inputRef2 = useRef('');
-  const inputRef3 = useRef('');
-
   // useForm hook from react-hook-form
   const {
     control,
@@ -71,9 +66,9 @@ const Register = () => {
       phoneNumber: '',
       dob: new Date(),
       gender: '',
-      cnic1: '',
-      cnic2: '',
-      cnic3: '',
+      // cnic1: '',
+      // cnic2: '',
+      // cnic3: '',
     },
   });
 
@@ -95,6 +90,7 @@ const Register = () => {
   const onSubmit = async data => {
     console.log(data);
 
+    //creating a patient object to send to the backend.
     const patient = {
       name: data?.name,
       email: data?.email,
@@ -110,7 +106,7 @@ const Register = () => {
           : `0${data?.dob?.getDate() + 1}`
       }/${data?.dob.getFullYear()}`,
       gender: data?.gender,
-      cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
+      // cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
       role: ROLES.patient,
     };
 
@@ -123,6 +119,12 @@ const Register = () => {
     } catch (err) {
       console.log(err.response.data.message);
       alert(err.response.data.message);
+      if (err.response.data.error.statusCode === 409) {
+        setError('email', {
+          type: 'conflict',
+          message: 'This email is already registered',
+        });
+      }
     }
 
     // console.log(data, 'data');

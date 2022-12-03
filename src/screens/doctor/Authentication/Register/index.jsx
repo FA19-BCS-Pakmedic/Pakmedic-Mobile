@@ -185,6 +185,7 @@ const Register = ({navigation}) => {
             type="outlined"
             width="93%"
             placeholderTextColor={colors.secondary1}
+            onBlurEvent={getPmcData}
             control={control}
             name="pmcId"
             title={'PMC ID'}
@@ -247,7 +248,7 @@ const Register = ({navigation}) => {
             placeholderTextColor={colors.secondary1}
             keyboardType="password"
             control={control}
-            name="confirm-password"
+            name="confirmPassword"
             title={'Confirm Password'}
             isPasswordField={true}
             isPasswordVisible={!isConfirmPasswordVisible}
@@ -264,7 +265,7 @@ const Register = ({navigation}) => {
             type="outlined"
             width="86%"
             control={control}
-            name="contact"
+            name="phone"
             title={'Phone number'}
             rules={{
               required: "Phone number can't be empty",
@@ -283,7 +284,7 @@ const Register = ({navigation}) => {
             control={control}
             title="City"
             setValue={setCity}
-            name="city"
+            name="location"
             placeholder="Please select your city"
             rules={{
               required: 'Please select a city',
@@ -302,25 +303,6 @@ const Register = ({navigation}) => {
             rules={{required: 'Please select a gender'}}
           />
         </View>
-
-        {/* Register button */}
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          label="Register"
-          type="filled"
-          width="100%"
-        />
-
-        {/* genders radio buttons */}
-        <RadioGroup
-          values={GENDERS}
-          selected={watch('gender')}
-          setSelected={setGender}
-          title="Gender"
-          name="gender"
-          control={control}
-          rules={{required: 'Please select a gender'}}
-        />
 
         {/* Register button */}
         <Button

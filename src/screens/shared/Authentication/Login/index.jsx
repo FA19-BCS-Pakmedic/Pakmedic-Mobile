@@ -51,7 +51,7 @@ const Login = ({navigation}) => {
   //on submit of sign up form
   const onSubmit = async data => {
     //TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE LOGIN FUNCTION
-    const role = 'Doctor';
+    const role = 'Patient';
 
     try {
       let response;
@@ -135,9 +135,9 @@ const Login = ({navigation}) => {
             setIsPasswordVisible={setIsPasswordVisible}
             rules={{
               required: "Password can't be empty",
-              pattern: {
-                value: passwordRegex,
-                message: 'Please enter a valid password',
+              minLength: {
+                value: 8,
+                message: 'Password must be at least 8 characters long',
               },
             }}
           />

@@ -29,17 +29,22 @@ const App = () => {
   });
 
   return (
-    <AnimatedSplash
-      translucent={true}
-      isLoaded={isLoaded}
-      logoImage={require('./src/assets/images/Logo.png')}
-      backgroundColor={'#FFFFFF'}
-      logoHeight={200}
-      logoWidth={200}>
-      <NavigationContainer>
-        <OnboardingNavigation side="doctor" />
-      </NavigationContainer>
-    </AnimatedSplash>
+    // <AnimatedSplash
+    //   translucent={true}
+    //   isLoaded={isLoaded}
+    //   logoImage={require('./src/assets/images/Logo.png')}
+    //   backgroundColor={'#FFFFFF'}
+    //   logoHeight={200}
+    //   logoWidth={200}>
+    //   <NavigationContainer>
+    //     <OnboardingNavigation side="doctor" />
+    //   </NavigationContainer>
+    // </AnimatedSplash>
+
+    <SafeAreaView style={styles.root}>
+      <Login />
+    </SafeAreaView>
+
     // <NavigationContainer>
     //   <OnboardingNavigation side="doctor" />
     // </NavigationContainer>
