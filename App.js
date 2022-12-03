@@ -17,7 +17,7 @@ import OtpVerification from './src/screens/shared/Authentication/OTP-verificatio
 import SetNewPassword from './src/screens/shared/Authentication/Set-new-password';
 import SupportHome from './src/screens/shared/Support-communities/Home';
 import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
-
+import ChooseRole from './src/screens/shared/ChooseRole';
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -28,17 +28,17 @@ const App = () => {
   });
 
   return (
-    <AnimatedSplash
-      translucent={true}
-      isLoaded={isLoaded}
-      logoImage={require('./src/assets/images/Logo.png')}
-      backgroundColor={'#FFFFFF'}
-      logoHeight={200}
-      logoWidth={200}>
-      <NavigationContainer>
-        <OnboardingNavigation side="patient" />
-      </NavigationContainer>
-    </AnimatedSplash>
+    // <AnimatedSplash
+    //   translucent={true}
+    //   isLoaded={isLoaded}
+    //   logoImage={require('./src/assets/images/Logo.png')}
+    //   backgroundColor={'#FFFFFF'}
+    //   logoHeight={200}
+    //   logoWidth={200}>
+    //   <NavigationContainer>
+    //     <OnboardingNavigation side="patient" />
+    //   </NavigationContainer>
+    // </AnimatedSplash>
 
     // <SafeAreaView style={styles.root}>
     //   <Login></Login>
@@ -46,9 +46,9 @@ const App = () => {
     // <NavigationContainer>
     //   <OnboardingNavigation side="doctor" />
     // </NavigationContainer>
-    // <SafeAreaView style={styles.root}>
-    //   <Login />
-    // </SafeAreaView>
+    <SafeAreaView style={styles.root}>
+      <ChooseRole />
+    </SafeAreaView>
   );
 };
 
