@@ -17,7 +17,7 @@ import OtpVerification from './src/screens/shared/Authentication/OTP-verificatio
 import SetNewPassword from './src/screens/shared/Authentication/Set-new-password';
 import SupportHome from './src/screens/shared/Support-communities/Home';
 import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
-
+import ChooseRole from './src/screens/shared/ChooseRole';
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -43,7 +43,7 @@ const App = () => {
     //   <OnboardingNavigation side="doctor" />
     // </NavigationContainer>
     <SafeAreaView style={styles.root}>
-      <Register />
+      <ChooseRole />
     </SafeAreaView>
   );
 };
