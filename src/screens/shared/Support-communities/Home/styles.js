@@ -18,9 +18,9 @@ export const styles = StyleSheet.create({
   dropDown: {
     minHeight: dimensions.Height / 23,
     width: dimensions.Width / 2.7,
-    backgroundColor: colors.secondaryLight,
+    backgroundColor: colors.secondaryMonoChrome100,
     borderRadius: 10,
-    borderColor: colors.secondaryLight,
+    borderColor: colors.secondaryMonoChrome100,
   },
   dropDownContainer: {
     borderBottomWidth: 0.5,
@@ -42,11 +42,11 @@ export const styles = StyleSheet.create({
   },
   joinedCommunity: {
     height: dimensions.Height / 3,
-    backgroundColor: colors.secondaryLight,
+    backgroundColor: colors.secondaryMonoChrome100,
   },
   otherCommunity: {
     height: dimensions.Height / 3,
-    backgroundColor: colors.secondaryLight,
+    backgroundColor: colors.secondaryMonoChrome100,
   },
   communityText: {
     fontSize: fonts.size.font16,

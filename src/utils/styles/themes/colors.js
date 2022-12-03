@@ -6,7 +6,7 @@ const colors = {
   secondary1: '#003762',
   secondary2: '#005BA1',
   secondary3: '#2087D6',
-  secondaryLight: '#E0F1FF',
+  secondaryMonoChrome100: '#E0F1FF',
   accent1: '#F86D6D',
   accent2: '#FC9292',
   accent3: '#FEBABA',
