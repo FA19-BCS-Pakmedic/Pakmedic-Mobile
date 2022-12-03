@@ -31,12 +31,14 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     width: dimensions.Width,
+    height: dimensions.Height,
     borderWidth: 2,
     backgroundColor: colors.white,
   },
 
   container: {
-    width: '100%',
+    width: dimensions.Width,
+    height: dimensions.Height,
     flex: 1,
     paddingHorizontal: dimensions.Width / 20,
     paddingVertical: dimensions.Height / 50,
