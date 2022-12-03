@@ -31,9 +31,8 @@ const CustomDatePicker = ({
       render={({field: {value}, fieldState: {error}}) => {
         return (
           <>
-            <View
-              style={[styles().root, {paddingBottom: dimensions.Height / 40}]}>
-              <Text style={styles().title}>{title}</Text>
+            <View style={[styles().root]}>
+              {/* <Text style={styles().title}>{title}</Text> */}
               <TouchableOpacity
                 style={[
                   styles(type).container,
@@ -51,7 +50,7 @@ const CustomDatePicker = ({
               </TouchableOpacity>
 
               {/* error message */}
-              <View style={styles.errorMessageContainer}>
+              <View style={styles().errorMessageContainer}>
                 {error && <ErrorMessage error={error} />}
               </View>
             </View>
@@ -80,7 +79,7 @@ const styles = type =>
   StyleSheet.create({
     root: {
       width: '100%',
-      marginVertical: dimensions.Height / 200,
+      // borderWidth: 1,
     },
 
     container: {
@@ -94,7 +93,6 @@ const styles = type =>
       paddingHorizontal: dimensions.Width / 17,
       borderRadius: 5,
       flexDirection: 'row',
-
       alignItems: 'center',
       justifyContent: 'space-between',
     },
@@ -103,6 +101,13 @@ const styles = type =>
       fontSize: fonts.size.font16,
       fontWeight: fonts.weight.bold,
       marginBottom: dimensions.Height / 100,
+    },
+
+    errorMessageContainer: {
+      width: '100%',
+      height: dimensions.Height / 40,
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
     },
 
     iconContainer: {

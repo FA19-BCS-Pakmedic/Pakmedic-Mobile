@@ -11,7 +11,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 DropDownPicker.setListMode('SCROLLVIEW');
 
 import {styles} from './styles';
-const {width, height} = Dimensions.get('window');
 
 const Home = () => {
   const [open, setOpen] = useState(false);
@@ -34,10 +33,10 @@ const Home = () => {
     {id: 8, label: 'C/Dermatologist', members: 200},
     {id: 9, label: 'C/Dermatologist', members: 200},
   ]);
-
   return (
-    <StaticContainer>
-      <BackHeader text={'Communities'} />
+    <StaticContainer
+      customHeaderEnable={true}
+      customHeaderName={'Support Community'}>
       <View style={styles.container}>
         <View style={styles.search}>
           <View>

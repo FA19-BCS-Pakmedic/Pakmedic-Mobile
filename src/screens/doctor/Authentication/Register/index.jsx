@@ -36,6 +36,7 @@ import ROLES from '../../../../utils/constants/ROLES';
 
 //importing container
 import ScrollContainer from '../../../../containers/ScrollContainer';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 //importing doctors service to call end points
 import {
@@ -175,7 +176,7 @@ const Register = ({navigation}) => {
   };
 
   return (
-    <ScrollContainer>
+    <StaticContainer>
       <View style={styles.container}>
         {/* form */}
         <View style={styles.formContainer}>
@@ -293,6 +294,7 @@ const Register = ({navigation}) => {
           />
 
           {/* genders radio buttons */}
+          <Text style={styles.radioText}>Gender</Text>
           <RadioGroup
             values={GENDERS}
             selected={watch('gender')}
@@ -345,7 +347,7 @@ const Register = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollContainer>
+    </StaticContainer>
   );
 };
 

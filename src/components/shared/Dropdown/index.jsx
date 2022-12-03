@@ -30,14 +30,13 @@ const Dropdown = ({
       render={({field: {value}, fieldState: {error}}) => {
         return (
           <View style={styles.root}>
-            <Text style={styles.title}>{title}</Text>
-
             <DropDownPicker
-              dropDownDirection="TOP"
+              dropDownDirection="BOTTOM"
               listMode="SCROLLVIEW"
               scrollViewProps={{
                 decelerationRate: 'fast',
               }}
+              maxHeight={dimensions.Height / 6.5}
               open={open}
               value={value}
               items={items}
@@ -69,7 +68,6 @@ const Dropdown = ({
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    marginVertical: dimensions.Height / 200,
   },
 
   title: {
@@ -87,9 +85,11 @@ const styles = StyleSheet.create({
     color: colors.secondary1,
   },
   dropDownContainerStyle: {
-    backgroundColor: colors.secondaryMonoChrome100,
+    backgroundColor: colors.primaryMonoChrome100,
     borderColor: colors.secondary1,
     borderBottomColor: colors.primary1,
+    borderRadius: 10,
+    borderWidth: 0.5,
   },
 
   errorMessageContainer: {
@@ -100,9 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
-  containerStyle: {
-    marginTop: 10,
-  },
+
   placeholderStyle: {
     color: colors.secondary1,
   },
