@@ -46,9 +46,9 @@ const App = () => {
     // <NavigationContainer>
     //   <OnboardingNavigation side="doctor" />
     // </NavigationContainer>
-    <SafeAreaView style={styles.root}>
-      <Login />
-    </SafeAreaView>
+    // <SafeAreaView style={styles.root}>
+    //   <Login />
+    // </SafeAreaView>
   );
 };
 
