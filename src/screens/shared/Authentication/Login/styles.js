@@ -5,20 +5,17 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export default StyleSheet.create({
-  root: {
+  container: {
+    width: '100%',
     flex: 1,
-    width: dimensions.Width,
-    height: dimensions.Height,
     justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'center',
   },
 
   textContainer: {
     justifyContent: 'center',
     width: '100%',
     marginVertical: dimensions.Height / 150,
-
   },
   socialButtonContainer: {
     width: '100%',
@@ -33,7 +30,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
-
   },
 
   text: {

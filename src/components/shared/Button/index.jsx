@@ -8,15 +8,15 @@ export default Button = props => {
   return (
     <TouchableOpacity
       style={
-        props?.isDisabled
+        props?.isDisabled && props?.isDisabled()
           ? styles(props.type, props.width, props.borderColor).disabled
           : styles(props.type, props.width, props.borderColor).button
       }
-      activeOpacity={props?.isDisabled ? 1 : 0.2}
+      activeOpacity={props?.isDisabled && props?.isDisabled() ? 1 : 0.2}
       onPress={props.onPress}>
       <Text
         style={
-          props?.isDisabled
+          props?.isDisabled && props?.isDisabled()
             ? styles().buttonLabelDisabled
             : styles().buttonLabel
         }>

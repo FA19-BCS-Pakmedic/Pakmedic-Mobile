@@ -8,7 +8,11 @@ import fonts from '../../../../utils/styles/themes/fonts';
 export default StyleSheet.create({
   container: {
     width: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
   cnicText: {
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.bold,

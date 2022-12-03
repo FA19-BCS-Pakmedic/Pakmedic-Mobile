@@ -6,13 +6,13 @@ import AnimatedSplash from 'react-native-animated-splash-screen';
 
 // import root navigation
 import RootNavigation from './src/setup/navigation/root.navigation';
-// import OnboardingNavigation from './src/setup/navigation/onboarding.navigation';
+import OnboardingNavigation from './src/setup/navigation/onboarding.navigation';
 import CompleteProfile from './src/screens/doctor/Authentication/Complete-profile';
+// import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
 // import Register from './src/screens/doctor/Authentication/Register';
 import Register from './src/screens/patient/Authentication/Register';
 import Login from './src/screens/shared/Authentication/Login';
 import Onboarding from './src/screens/shared/On-Boarding';
-
 import SplashScreen from 'react-native-splash-screen';
 
 import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
@@ -20,20 +20,15 @@ import CompleteProfile from './src/screens/patient/Authentication/Complete-profi
 import ForgotPassword from './src/screens/shared/Authentication/Forgot-password';
 import OtpVerification from './src/screens/shared/Authentication/OTP-verification';
 import SetNewPassword from './src/screens/shared/Authentication/Set-new-password';
-
 import Onboarding from './src/screens/doctor/On-Boarding';
 import SupportHome from './src/screens/shared/Support-communities/Home';
 
-
 import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
-
 import ForgotPassword from './src/screens/shared/Authentication/Forgot-password';
 import OtpVerification from './src/screens/shared/Authentication/OTP-verification';
 import SetNewPassword from './src/screens/shared/Authentication/Set-new-password';
-
 import Onboarding from './src/screens/doctor/On-Boarding';
 import SupportHome from './src/screens/shared/Support-communities/Home';
-
 
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
