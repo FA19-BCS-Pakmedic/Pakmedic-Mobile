@@ -11,7 +11,8 @@ import OnboardingNavigation from './src/setup/navigation/onboarding.navigation';
 import Register from './src/screens/doctor/Authentication/Register';
 // import Register from './src/screens/patient/Authentication/Register';
 //import Doctor TabStack
-import DoctorTabStack from './src/setup/navigation/Doctor-Navigation/doctor.navigation';
+import DoctorNavigation from './src/setup/navigation/Doctor-Navigation/doctor.navigation';
+import DoctorTabStack from './src/setup/navigation/Doctor-Navigation/doctor.tab.navigator';
 import Login from './src/screens/shared/Authentication/Login';
 import SplashScreen from 'react-native-splash-screen';
 import ForgotPassword from './src/screens/shared/Authentication/Forgot-password';
@@ -45,7 +46,7 @@ const App = () => {
       <DoctorTabStack />
     </NavigationContainer>
     // <SafeAreaView style={styles.root}>
-    //   <ChooseRole />
+    //   <DoctorNavigation />
     // </SafeAreaView>
   );
 };

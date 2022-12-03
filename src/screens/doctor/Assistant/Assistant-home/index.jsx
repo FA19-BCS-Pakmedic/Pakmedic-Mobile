@@ -1,11 +1,14 @@
 import {View, Text} from 'react-native';
 import React from 'react';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 const AssistantHome = () => {
   return (
-    <View>
-      <Text>Assistant home</Text>
-    </View>
+    <StaticContainer>
+      <View>
+        <Text>Assistant home</Text>
+      </View>
+    </StaticContainer>
   );
 };
 
