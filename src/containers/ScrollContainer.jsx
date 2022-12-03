@@ -15,15 +15,18 @@ const ScrollContainer = ({
   children,
   customHeaderEnable,
   customHeaderName,
+  isBack = true,
 }) => {
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={styles().root}>
       <Header color={headerColor} />
-      {customHeaderEnable && <CustomNavHeader screenName={customHeaderName} />}
+      {customHeaderEnable && (
+        <CustomNavHeader screenName={customHeaderName} isBack={isBack} />
+      )}
 
       <ScrollView
-        style={styles.root}
-        contentContainerStyle={styles.child}
+        style={styles().root}
+        contentContainerStyle={styles(customHeaderEnable).child}
         nestedScrollEnabled={true}>
         {children}
       </ScrollView>
@@ -33,19 +36,20 @@ const ScrollContainer = ({
 
 export default ScrollContainer;
 
-const styles = StyleSheet.create({
-  root: {
-    height: dimensions.Height,
-    width: dimensions.Width,
-    backgroundColor: colors.white,
-  },
+const styles = isPadding =>
+  StyleSheet.create({
+    root: {
+      height: dimensions.Height,
+      width: dimensions.Width,
+      backgroundColor: colors.white,
+    },
 
-  container: {
-    width: '100%',
-  },
-  child: {
-    flexGrow: 1,
-    paddingHorizontal: dimensions.Width / 20,
-    paddingVertical: dimensions.Height / 50,
-  },
-});
+    container: {
+      width: '100%',
+    },
+    child: {
+      flexGrow: 1,
+      paddingHorizontal: dimensions.Width / 20,
+      paddingVertical: isPadding ? dimensions.Height / 50 : 0,
+    },
+  });

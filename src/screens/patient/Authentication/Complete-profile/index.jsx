@@ -43,6 +43,7 @@ import {
   phoneNumberRegex,
   numberRegex,
 } from '../../../../utils/constants/Regex';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 const CompleteProfile = () => {
   //input refs
@@ -128,12 +129,16 @@ const CompleteProfile = () => {
   };
 
   return (
-    <ScrollContainer
+    <StaticContainer
       customHeaderEnable={true}
-      customHeaderName="Complete Profile">
+      customHeaderName="Complete Profile"
+      isBack={false}>
       <View style={styles.container}>
         {/* page image */}
-        <SVGImage width={150} height={150} />
+        <SVGImage
+          width={dimensions.Width / 2}
+          height={dimensions.Height / 6.5}
+        />
         {/* name field */}
         <ValidateInputField
           placeholder="Name"
@@ -231,6 +236,8 @@ const CompleteProfile = () => {
           title={'Date of birth'}
         />
         {/* genders radio buttons */}
+        {/* <View></View> */}
+        <Text style={styles.genderText}>Gender</Text>
         <RadioGroup
           values={GENDERS}
           selected={watch('gender')}
@@ -304,31 +311,6 @@ const CompleteProfile = () => {
           width="100%"
         />
 
-        {/* divider */}
-
-        <TextDivider
-          label="Or Register With"
-          color={colors.secondary1}
-          gap={50}
-        />
-
-        {/*SOCIAL BUTTONS */}
-        <View style={styles.socialButtonContainer}>
-          {/* facebook login button */}
-          <TouchableOpacity style={styles.socialButton}>
-            <FaceBookLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
-            <GoogleLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
-            />
-          </TouchableOpacity>
-        </View>
-
         {/* register with text */}
         <View style={styles.registerTextContainer}>
           <Text style={styles.text}>Already have an account? </Text>
@@ -337,7 +319,7 @@ const CompleteProfile = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollContainer>
+    </StaticContainer>
   );
 };
 

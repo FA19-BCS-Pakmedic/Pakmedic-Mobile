@@ -34,8 +34,9 @@ const Home = () => {
     {id: 9, label: 'C/Dermatologist', members: 200},
   ]);
   return (
-    <StaticContainer>
-      <BackHeader text={'Communities'} />
+    <StaticContainer
+      customHeaderEnable={true}
+      customHeaderName={'Support Community'}>
       <View style={styles.container}>
         <View style={styles.search}>
           <View>

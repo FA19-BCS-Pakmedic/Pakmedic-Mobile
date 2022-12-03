@@ -2,17 +2,21 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import Back from '../../../assets/svgs/Backicon';
+
 // import theme files
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
-const CustomNavHeader = ({screenName}) => {
+const CustomNavHeader = ({screenName, isBack}) => {
   return (
     <View style={styles.root}>
-      <TouchableOpacity style={styles.iconContainer}>
-        <Icon name="angle-left" size={25} />
-      </TouchableOpacity>
+      {isBack && (
+        <TouchableOpacity style={styles.iconContainer}>
+          <Back width={dimensions.Width / 35} height={dimensions.Height / 35} />
+        </TouchableOpacity>
+      )}
       <Text style={styles.title}>{screenName}</Text>
     </View>
   );
@@ -29,21 +33,15 @@ const styles = StyleSheet.create({
   },
 
   iconContainer: {
-    width: dimensions.Width / 8,
-    height: dimensions.Height / 17,
+    width: dimensions.Width / 10,
+    height: dimensions.Height / 20,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.secondaryLight,
-    borderRadius: 10,
+    borderRadius: 7,
     position: 'absolute',
     left: dimensions.Width / 20,
   },
-
-  titleContainer: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
-
   title: {
     fontSize: fonts.size.font20,
     fontWeight: fonts.weight.bold,

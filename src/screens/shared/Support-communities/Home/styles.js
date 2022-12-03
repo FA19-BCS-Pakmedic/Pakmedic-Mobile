@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: dimensions.Width / 100,
-    paddingVertical: dimensions.Height / 50,
+    paddingBottom: dimensions.Height / 50,
   },
   dropDown: {
     minHeight: dimensions.Height / 23,

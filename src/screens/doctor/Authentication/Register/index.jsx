@@ -35,6 +35,7 @@ import {
 
 //importing container
 import ScrollContainer from '../../../../containers/ScrollContainer';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 const Register = ({navigation}) => {
   // useForm hook from react-hook-form
@@ -98,7 +99,7 @@ const Register = ({navigation}) => {
   };
 
   return (
-    <ScrollContainer>
+    <StaticContainer>
       <View style={styles.container}>
         {/* form */}
         <View style={styles.formContainer}>
@@ -215,6 +216,7 @@ const Register = ({navigation}) => {
           />
 
           {/* genders radio buttons */}
+          <Text style={styles.radioText}>Gender</Text>
           <RadioGroup
             values={GENDERS}
             selected={watch('gender')}
@@ -225,25 +227,6 @@ const Register = ({navigation}) => {
             rules={{required: 'Please select a gender'}}
           />
         </View>
-
-        {/* Register button */}
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          label="Register"
-          type="filled"
-          width="100%"
-        />
-
-        {/* genders radio buttons */}
-        <RadioGroup
-          values={GENDERS}
-          selected={watch('gender')}
-          setSelected={setGender}
-          title="Gender"
-          name="gender"
-          control={control}
-          rules={{required: 'Please select a gender'}}
-        />
 
         {/* Register button */}
         <Button
@@ -286,7 +269,7 @@ const Register = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollContainer>
+    </StaticContainer>
   );
 };
 

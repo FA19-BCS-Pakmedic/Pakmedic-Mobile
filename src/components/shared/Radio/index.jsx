@@ -39,7 +39,6 @@ const RadioGroup = ({
       render={({fieldState: {error}}) => {
         return (
           <View style={styles.root}>
-            <Text style={styles.title}>{title}</Text>
             <View style={styles.options}>
               {options.map((option, index) => {
                 return (
@@ -75,12 +74,12 @@ const RadioGroup = ({
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    marginVertical: dimensions.Height / 250,
+    // marginVertical: dimensions.Height / 250,
   },
   options: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: dimensions.Height / 100,
+    // marginVertical: dimensions.Height / 100,
   },
   title: {
     fontSize: fonts.size.font16,
@@ -97,7 +96,6 @@ const styles = StyleSheet.create({
 
   errorMessageContainer: {
     width: '100%',
-
     height: dimensions.Height / 40,
 
     justifyContent: 'flex-start',
@@ -105,10 +103,10 @@ const styles = StyleSheet.create({
   },
 
   selected: {
-    backgroundColor: colors.primary3,
+    backgroundColor: '#DDF5F2',
   },
   text: {
-    marginRight: 10,
+    marginRight: dimensions.Width / 50,
   },
 });
 
