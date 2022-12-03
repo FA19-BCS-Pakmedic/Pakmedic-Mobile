@@ -35,10 +35,9 @@ export default ScrollContainer;
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    height: dimensions.Height,
     width: dimensions.Width,
     backgroundColor: colors.white,
-
   },
 
   container: {
