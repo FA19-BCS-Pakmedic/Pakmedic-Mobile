@@ -18,6 +18,7 @@ import SetNewPassword from './src/screens/shared/Authentication/Set-new-password
 import Onboarding from './src/screens/doctor/On-Boarding';
 import SupportHome from './src/screens/shared/Support-communities/Home';
 import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
+
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
