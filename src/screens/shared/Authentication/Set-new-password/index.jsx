@@ -54,7 +54,7 @@ const SetNewPassword = () => {
     const email = 'awanmoeed2121@gmail.com';
 
     //TODO: GET USER OTP CODE FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS FORGOT PASSWORD SCREEN
-    const resetPasswordToken = '8336';
+    const resetPasswordToken = '5786';
 
     try {
       let response;
