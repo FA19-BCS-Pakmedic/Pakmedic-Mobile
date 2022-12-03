@@ -35,8 +35,8 @@ const styles = isPadding =>
     root: {
       width: dimensions.Width,
       height: dimensions.Height,
-      borderWidth: 1,
-      borderColor: 'red',
+      // borderWidth: 1,
+      // borderColor: 'red',
       backgroundColor: colors.white,
     },
 

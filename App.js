@@ -43,7 +43,7 @@ const App = () => {
     //   <OnboardingNavigation side="doctor" />
     // </NavigationContainer>
     <SafeAreaView style={styles.root}>
-      <Register />
+      <CompleteProfile />
     </SafeAreaView>
   );
 };
