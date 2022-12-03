@@ -28,7 +28,7 @@ import {resetForgotPasswordPatient} from '../../../../services/patientServices';
 import {resetForgotPasswordDoctor} from '../../../../services/doctorServices';
 import ROLES from '../../../../utils/constants/ROLES';
 
-const SetNewPassword = () => {
+const SetNewPassword = ({navigation}) => {
   //hook for react hook forms
   const {
     control,
@@ -54,7 +54,7 @@ const SetNewPassword = () => {
     const email = 'awanmoeed2121@gmail.com';
 
     //TODO: GET USER OTP CODE FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS FORGOT PASSWORD SCREEN
-    const resetPasswordToken = '5786';
+    const resetPasswordToken = '3390';
 
     try {
       let response;
@@ -75,6 +75,11 @@ const SetNewPassword = () => {
       }
       console.log(response.data);
       alert(response.data.message);
+
+      //navigate to login screen
+      navigation.navigate('Auth', {
+        screen: 'Login',
+      });
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);

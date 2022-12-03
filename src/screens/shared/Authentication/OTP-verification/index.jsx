@@ -34,7 +34,7 @@ import {
 //import constants
 import ROLES from '../../../../utils/constants/ROLES';
 
-const OtpVerification = () => {
+const OtpVerification = ({navigation}) => {
   const inputRef1 = useRef('');
   const inputRef2 = useRef('');
   const inputRef3 = useRef('');
@@ -123,6 +123,11 @@ const OtpVerification = () => {
 
       console.log(response.data);
       alert(response.data.message);
+
+      //navigate to set password screen
+      navigation.navigate('Auth', {
+        screen: 'SetNewPassword',
+      });
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);

@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import React from 'react';
 import {useForm} from 'react-hook-form';
 
@@ -25,7 +25,7 @@ import StaticContainer from '../../../../containers/StaticContainer';
 import {forgotPasswordPatient} from '../../../../services/patientServices';
 import {forgotPasswordDoctor} from '../../../../services/doctorServices';
 
-const ForgotPassword = () => {
+const ForgotPassword = ({navigation}) => {
   //hook for react hook forms
   const {
     control,
@@ -53,6 +53,11 @@ const ForgotPassword = () => {
       }
       alert(response.data.message);
       console.log(response.data);
+
+      //navigate to otp verification screen
+      navigation.navigate('Auth', {
+        screen: 'OtpVerification',
+      });
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);
@@ -78,6 +83,7 @@ const ForgotPassword = () => {
           easing="ease-out"
           iterationCount={1}
           style={styles.inputContainer}>
+          <Text style={styles.text}>Enter your account email</Text>
           <ValidateInputField
             placeholder="Enter your email"
             type="outlined"

@@ -34,6 +34,7 @@ export default Button = ({
 const styles = (type, width, borderColor) =>
   StyleSheet.create({
     button: {
+      marginTop: dimensions.Height / 50, //remove if it there is unneseccary space
       height: dimensions.Height / 17,
       justifyContent: 'center',
       alignItems: 'center',

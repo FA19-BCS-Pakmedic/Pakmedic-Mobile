@@ -1,5 +1,5 @@
 import {View, Text, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 
 //importing images
@@ -33,8 +33,9 @@ import {loginDoctor} from '../../../../services/doctorServices';
 import ROLES from '../../../../utils/constants/ROLES';
 
 const Login = ({navigation}) => {
-  // hook for hiding and showing password
+  // states
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [role, setRole] = useState('');
 
   //hook for react hook forms
   const {
@@ -49,11 +50,19 @@ const Login = ({navigation}) => {
     },
   });
 
+  //TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
+  useEffect(() => {
+    const getRole = async () => {
+      const role = await deviceStorage.getItem('role');
+      setRole(role);
+    };
+    getRole();
+
+    console.log(role);
+  }, []);
+
   //on submit of sign up form
   const onSubmit = async data => {
-    //TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE LOGIN FUNCTION
-    const role = 'Doctor';
-
     try {
       let response;
       if (role === ROLES.patient) {
@@ -74,6 +83,8 @@ const Login = ({navigation}) => {
       await deviceStorage.saveItem('id_token', response?.data?.token);
       console.log(await deviceStorage.loadItem('id_token'));
       alert('Login Successful');
+
+      //TODO: navigate to the respctive dashboard screen of the role
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);
@@ -87,10 +98,14 @@ const Login = ({navigation}) => {
   const navigateToRegisterScreen = () => {
     console.log('This function is being called');
     navigation.navigate('Auth', {
-      screen: 'RegisterNavigation',
-      params: {
-        screen: 'Register',
-      },
+      screen: 'Register',
+    });
+  };
+
+  //navigate to forgot password screen
+  const navigateToForgotPasswordScreen = () => {
+    navigation.navigate('Auth', {
+      screen: 'ForgotPassword',
     });
   };
 
@@ -147,8 +162,10 @@ const Login = ({navigation}) => {
         />
 
         {/* forgot password text */}
-        <TouchableOpacity style={styles.textContainer}>
-          <Text style={styles.text}>Forgot Password?</Text>
+        <TouchableOpacity
+          style={styles.textContainer}
+          onPress={navigateToForgotPasswordScreen}>
+          <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
 
         {/* login button */}
