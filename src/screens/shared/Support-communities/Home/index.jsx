@@ -5,17 +5,18 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import StaticContainer from '../../../../containers/StaticContainer';
 import BackHeader from '../../../../components/shared/BackHeader';
 import Search from '../../../../components/shared/CommunitySearch';
+import Logo from '../../../../assets/svgs/community-logo';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 DropDownPicker.setListMode('SCROLLVIEW');
 
 import {styles} from './styles';
-const {width, height} = Dimensions.get('window');
 
 const Home = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
+    {label: 'C/Dermatologist', value: 'home'},
     {label: 'C/Dermatologist', value: 'haris'},
     {label: 'C/Dermatologist', value: 'moeed'},
     {label: 'C/Dermatologist', value: 'ali'},
@@ -32,10 +33,10 @@ const Home = () => {
     {id: 8, label: 'C/Dermatologist', members: 200},
     {id: 9, label: 'C/Dermatologist', members: 200},
   ]);
-
   return (
-    <StaticContainer>
-      <BackHeader text={'Communities'} />
+    <StaticContainer
+      customHeaderEnable={true}
+      customHeaderName={'Support Community'}>
       <View style={styles.container}>
         <View style={styles.search}>
           <View>
@@ -52,6 +53,7 @@ const Home = () => {
               textStyle={{
                 fontSize: 12,
               }}
+              maxHeight={dimensions.Height * 0.15}
             />
           </View>
           <Search />
@@ -65,8 +67,16 @@ const Home = () => {
               renderItem={({item}) => (
                 <View style={styles.community}>
                   <View style={styles.communitydetail}>
-                    <Text style={styles.communityName}>{item.label}</Text>
-                    <Text style={styles.communityMembers}>{item.members}</Text>
+                    <Logo
+                      width={dimensions.Width / 12}
+                      height={dimensions.Height / 18}
+                    />
+                    <View style={{marginLeft: dimensions.Width / 40}}>
+                      <Text style={styles.communityName}>{item.label}</Text>
+                      <Text style={styles.communityMembers}>
+                        Members: {item.members}
+                      </Text>
+                    </View>
                   </View>
                   <TouchableOpacity style={styles.communityButton}>
                     <Text style={styles.communityButtonText}>Leave</Text>
@@ -83,8 +93,21 @@ const Home = () => {
               data={community}
               renderItem={({item}) => (
                 <View style={styles.community}>
-                  <Text style={styles.communityName}>{item.label}</Text>
-                  <Text style={styles.communityMembers}>{item.members}</Text>
+                  <View style={styles.communitydetail}>
+                    <Logo
+                      width={dimensions.Width / 12}
+                      height={dimensions.Height / 18}
+                    />
+                    <View style={{marginLeft: dimensions.Width / 40}}>
+                      <Text style={styles.communityName}>{item.label}</Text>
+                      <Text style={styles.communityMembers}>
+                        Members: {item.members}
+                      </Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity style={styles.communityButton}>
+                    <Text style={styles.communityButtonText}>Join</Text>
+                  </TouchableOpacity>
                 </View>
               )}
               keyExtractor={item => item.id}

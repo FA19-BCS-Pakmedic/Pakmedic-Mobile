@@ -14,32 +14,36 @@ const StaticContainer = ({
   customHeaderEnable = false,
   customHeaderName,
   headerColor,
+  isBack = true,
 }) => {
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={styles().root}>
       <Header color={headerColor} />
-      {customHeaderEnable && <CustomNavHeader screenName={customHeaderName} />}
+      {customHeaderEnable && (
+        <CustomNavHeader screenName={customHeaderName} isBack={isBack} />
+      )}
 
-      <View style={styles.container}>{children}</View>
+      <View style={styles(!customHeaderEnable).container}>{children}</View>
     </SafeAreaView>
   );
 };
 
 export default StaticContainer;
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
+const styles = isPadding =>
+  StyleSheet.create({
+    root: {
+      width: dimensions.Width,
+      height: dimensions.Height,
+      // borderWidth: 1,
+      // borderColor: 'red',
+      backgroundColor: colors.white,
+    },
 
-    width: dimensions.Width,
-    borderWidth: 2,
-    backgroundColor: colors.white,
-  },
-
-  container: {
-    width: '100%',
-    flex: 1,
-    paddingHorizontal: dimensions.Width / 20,
-    paddingVertical: dimensions.Height / 50,
-  },
-});
+    container: {
+      width: '100%',
+      flex: 1,
+      paddingHorizontal: dimensions.Width / 20,
+      paddingVertical: isPadding ? dimensions.Height / 50 : 0,
+    },
+  });

@@ -44,6 +44,7 @@ import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
 import {registerPatient} from '../../../../services/patientServices';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 const Register = () => {
   // useForm hook from react-hook-form
@@ -165,7 +166,7 @@ const Register = () => {
   };
 
   return (
-    <ScrollContainer>
+    <StaticContainer>
       <View style={styles.container}>
         {/* name field */}
         <ValidateInputField
@@ -275,6 +276,7 @@ const Register = () => {
           title={'Date of birth'}
         />
         {/* genders radio buttons */}
+        <Text style={styles.radioText}>Gender</Text>
         <RadioGroup
           values={GENDERS}
           selected={watch('gender')}
@@ -363,14 +365,14 @@ const Register = () => {
           {/* facebook login button */}
           <TouchableOpacity style={styles.socialButton}>
             <FaceBookLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
+              width={dimensions.Width / 12}
+              height={dimensions.Height / 22}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialButton}>
             <GoogleLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
+              width={dimensions.Width / 12}
+              height={dimensions.Height / 22}
             />
           </TouchableOpacity>
         </View>
@@ -383,7 +385,7 @@ const Register = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollContainer>
+    </StaticContainer>
   );
 };
 
