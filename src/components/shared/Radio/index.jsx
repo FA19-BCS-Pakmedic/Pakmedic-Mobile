@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
 
   selected: {
-    backgroundColor: '#DDF5F2',
+    backgroundColor: colors.primaryMonoChrome100,
   },
   text: {
     marginRight: dimensions.Width / 50,

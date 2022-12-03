@@ -31,7 +31,7 @@ const Dropdown = ({
         return (
           <View style={styles.root}>
             <DropDownPicker
-              dropDownDirection="TOP"
+              dropDownDirection="BOTTOM"
               listMode="SCROLLVIEW"
               scrollViewProps={{
                 decelerationRate: 'fast',
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     color: colors.secondary1,
   },
   dropDownContainerStyle: {
-    backgroundColor: colors.secondaryMonoChrome100,
+    backgroundColor: colors.primaryMonoChrome100,
     borderColor: colors.secondary1,
     borderBottomColor: colors.primary1,
     borderRadius: 10,
