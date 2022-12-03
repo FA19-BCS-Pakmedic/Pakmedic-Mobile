@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import {React, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {styles} from './styles';
 
@@ -9,28 +9,29 @@ import PatientFlowIcon from '../../../../src/assets/svgs/PatientFlow-Icon.svg';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import Button from '../../../components/shared/Button';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import deviceStorage from '../../../utils/helpers/deviceStorage';
 
 const ChooseRole = props => {
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@role');
-      if (value !== null) {
-        console.log(value);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-  const storeData = async value => {
-    try {
-      await AsyncStorage.setItem('@role', value);
-    } catch (e) {
-      // saving error
-    }
-  };
+  [state, setState] = useState('');
+  // const getData = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('@role');
+  //     if (value !== null) {
+  //       console.log(value);
+  //     }
+  //   } catch (e) {
+  //     // error reading value
+  //   }
+  // };
+  // const storeData = async value => {
+  //   try {
+  //     await AsyncStorage.setItem('@role', value);
+  //   } catch (e) {
+  //     // saving error
+  //   }
+  // };
   useEffect(() => {
-    getData();
+    console.log(state);
   });
 
   return (
@@ -41,8 +42,9 @@ const ChooseRole = props => {
           height={dimensions?.Height / 3.5}
         />
         <Button
-          onPress={() => {
-            storeData('doctor');
+          onPress={async () => {
+            deviceStorage.saveItem('role', 'doctor');
+            setState(await deviceStorage.loadItem('role'));
           }}
           type="filled"
           label="Continue as a Doctor"
@@ -53,8 +55,9 @@ const ChooseRole = props => {
           height={dimensions?.Height / 3.5}
         />
         <Button
-          onPress={() => {
-            storeData('patient');
+          onPress={async () => {
+            deviceStorage.saveItem('role', 'patient');
+            setState(await deviceStorage.loadItem('role'));
           }}
           type="filled"
           label="Continue as a Patient"
