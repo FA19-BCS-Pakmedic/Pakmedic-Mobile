@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     height: dimensions.Height / 17,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.secondaryLight,
+    backgroundColor: colors.secondaryMonoChrome100,
     borderRadius: 10,
     position: 'absolute',
     left: dimensions.Width / 20,

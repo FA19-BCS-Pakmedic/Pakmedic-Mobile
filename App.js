@@ -15,7 +15,6 @@ import SplashScreen from 'react-native-splash-screen';
 import ForgotPassword from './src/screens/shared/Authentication/Forgot-password';
 import OtpVerification from './src/screens/shared/Authentication/OTP-verification';
 import SetNewPassword from './src/screens/shared/Authentication/Set-new-password';
-import Onboarding from './src/screens/doctor/On-Boarding';
 import SupportHome from './src/screens/shared/Support-communities/Home';
 import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
 
@@ -37,19 +36,18 @@ const App = () => {
       logoHeight={200}
       logoWidth={200}>
       <NavigationContainer>
-        <OnboardingNavigation side="doctor" />
+        <OnboardingNavigation side="patient" />
       </NavigationContainer>
     </AnimatedSplash>
+
+    // <SafeAreaView style={styles.root}>
+    //   <Login></Login>
+    // </SafeAreaView>
     // <NavigationContainer>
     //   <OnboardingNavigation side="doctor" />
     // </NavigationContainer>
     // <SafeAreaView style={styles.root}>
-    //   <Onboarding
-    //     screenName="DocOnboarding1"
-    //     text="Hassle Free Appointment Booking Facility for Online and In Person
-    //         Consultation"
-    //     pagination="Pagination1"
-    //   />
+    //   <Login />
     // </SafeAreaView>
   );
 };

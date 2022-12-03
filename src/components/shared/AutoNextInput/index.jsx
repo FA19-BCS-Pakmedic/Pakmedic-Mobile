@@ -32,9 +32,10 @@ const styles = (type, width, height) =>
       borderWidth: type === 'outlined' ? 1 : 0,
       borderRadius: 10,
       height: dimensions.Height / height,
-      backgroundColor: type === 'outlined' ? 'white' : colors.secondaryLight,
+      backgroundColor:
+        type === 'outlined' ? 'white' : colors.secondaryMonoChrome100,
       borderColor:
-        type === 'outlined' ? colors.primary1 : colors.secondaryLight,
+        type === 'outlined' ? colors.primary1 : colors.secondaryMonoChrome100,
       justifyContent: 'center',
       alignItems: 'center',
       textAlign: 'center',

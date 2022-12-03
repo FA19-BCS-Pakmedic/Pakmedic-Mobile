@@ -21,7 +21,7 @@ const styles = color =>
     root: {
       width: dimensions.Width,
       height: dimensions.Height / 15,
-      backgroundColor: color || colors.secondaryLight,
+      backgroundColor: color || colors.secondaryMonoChrome100,
       justifyContent: 'center',
       alignItems: 'center',
     },

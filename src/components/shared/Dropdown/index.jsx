@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     color: colors.secondary1,
   },
   dropDownContainerStyle: {
-    backgroundColor: colors.secondaryLight,
+    backgroundColor: colors.secondaryMonoChrome100,
     borderColor: colors.secondary1,
     borderBottomColor: colors.primary1,
   },
