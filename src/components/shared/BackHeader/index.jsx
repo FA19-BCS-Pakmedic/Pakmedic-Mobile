@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     color: colors.secondary1,
-    backgroundColor: colors.secondaryLight,
+    backgroundColor: colors.secondaryMonoChrome100,
   },
 });

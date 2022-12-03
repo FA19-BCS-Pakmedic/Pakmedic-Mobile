@@ -15,7 +15,6 @@ import SplashScreen from 'react-native-splash-screen';
 import ForgotPassword from './src/screens/shared/Authentication/Forgot-password';
 import OtpVerification from './src/screens/shared/Authentication/OTP-verification';
 import SetNewPassword from './src/screens/shared/Authentication/Set-new-password';
-import Onboarding from './src/screens/doctor/On-Boarding';
 import SupportHome from './src/screens/shared/Support-communities/Home';
 import CompleteProfile from './src/screens/patient/Authentication/Complete-profile';
 

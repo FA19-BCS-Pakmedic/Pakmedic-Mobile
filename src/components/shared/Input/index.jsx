@@ -199,9 +199,11 @@ const styles = (type, width) =>
     container: {
       width: '100%',
       height: dimensions.Height / 17,
-      backgroundColor: type === 'filled' ? colors.secondaryLight : colors.white,
+      backgroundColor:
+        type === 'filled' ? colors.secondaryMonochrome100 : colors.white,
       borderWidth: type === 'filled' ? 0 : 1,
-      borderColor: type === 'filled' ? colors.secondaryLight : colors.primary1,
+      borderColor:
+        type === 'filled' ? colors.secondaryMonochrome100 : colors.primary1,
       paddingHorizontal: dimensions.Width / 40,
       borderRadius: 5,
       flexDirection: 'row',
