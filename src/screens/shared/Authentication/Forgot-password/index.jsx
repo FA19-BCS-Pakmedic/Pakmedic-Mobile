@@ -1,5 +1,5 @@
-import {View} from 'react-native';
-import React from 'react';
+import {Text, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 
 // import styles
@@ -25,7 +25,13 @@ import StaticContainer from '../../../../containers/StaticContainer';
 import {forgotPasswordPatient} from '../../../../services/patientServices';
 import {forgotPasswordDoctor} from '../../../../services/doctorServices';
 
-const ForgotPassword = () => {
+//utility helper functions
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+
+const ForgotPassword = ({navigation}) => {
+  //states
+  const [role, setRole] = useState('');
+
   //hook for react hook forms
   const {
     control,
@@ -38,10 +44,19 @@ const ForgotPassword = () => {
     },
   });
 
-  const onSubmit = async data => {
-    // TODO: FETCH THE ROLE FROM MOBILE STORAGE DYNAMICALLY
 
-    const role = 'Doctor';
+
+  
+  useEffect(() => {
+    const getRole = async () => {
+      const data = await deviceStorage.loadItem('role');
+      setRole(data ? data : ROLES.patient);
+    };
+    getRole();
+
+  }, []);
+
+  const onSubmit = async data => {
     try {
       let response;
       if (role === ROLES.patient) {
@@ -53,13 +68,18 @@ const ForgotPassword = () => {
       }
       alert(response.data.message);
       console.log(response.data);
+
+      //navigate to otp verification screen
+      navigation.navigate('Auth', {
+        screen: 'OtpVerification',
+        params: {
+          email: data.email,
+        },
+      });
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);
     }
-
-    console.log(data);
-    console.log(isValid);
   };
 
   return (
@@ -78,8 +98,9 @@ const ForgotPassword = () => {
           easing="ease-out"
           iterationCount={1}
           style={styles.inputContainer}>
+          <Text style={styles.text}>Enter your account email</Text>
           <ValidateInputField
-            placeholder="Email"
+            placeholder="Enter your email"
             type="outlined"
             width="93%"
             title={`Enter your email`}

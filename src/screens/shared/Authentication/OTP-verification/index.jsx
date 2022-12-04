@@ -15,12 +15,6 @@ import StaticContainer from '../../../../containers/StaticContainer';
 //importing regex
 import {numberRegex} from '../../../../utils/constants/Regex';
 
-/**
- *
- * @returns
- *
- * TODO: FIX THE BUTTON DISABLE AND ENABLE
- */
 //verify otp endpoint
 import {
   forgotPasswordPatient,
@@ -33,8 +27,14 @@ import {
 
 //import constants
 import ROLES from '../../../../utils/constants/ROLES';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
 
-const OtpVerification = () => {
+const OtpVerification = ({route, navigation}) => {
+  //states
+  const [role, setRole] = useState('');
+  const [email, setEmail] = useState('');
+
+  //input refs for focusing different fields
   const inputRef1 = useRef('');
   const inputRef2 = useRef('');
   const inputRef3 = useRef('');
@@ -60,6 +60,15 @@ const OtpVerification = () => {
   const [timer, setTimer] = useState(0);
 
   useEffect(() => {
+    //getting role and email from localStorage and email from route params
+    const getData = async () => {
+      const data = await deviceStorage.loadItem('role');
+      setRole(data ? data : ROLES.patient);
+      setEmail(route.params.email);
+    };
+    getData();
+
+    //timer
     inputRef1.current.focus();
     setTimer(5);
   }, []);
@@ -77,12 +86,6 @@ const OtpVerification = () => {
 
   //resend new token function
   const resendToken = async () => {
-    // TODO: FETCH THE ROLE FROM MOBILE STORAGE DYNAMICALLY
-    const role = 'Doctor';
-
-    // TODO: GET EMAIL FROM THE NAVIGATION PARAM
-    const email = 'awanmoeed2121@gmail.com';
-
     try {
       let response;
       if (role === ROLES.patient) {
@@ -102,14 +105,10 @@ const OtpVerification = () => {
 
   // form submit handler
   const onSubmit = async data => {
-    //TODO: GET ROLE FROM LOCAL STORAGE
-    const role = 'Doctor';
-
-    // TODO: GET USER EMAIL FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS SCREEN
-    const email = 'awanmoeed2121@gmail.com';
-
     //merge otp pins into one
     const otp = data.pin1 + data.pin2 + data.pin3 + data.pin4;
+
+    console.log(role, otp, email);
 
     try {
       let response;
@@ -123,6 +122,15 @@ const OtpVerification = () => {
 
       console.log(response.data);
       alert(response.data.message);
+
+      //navigate to set password screen
+      navigation.navigate('Auth', {
+        screen: 'SetNewPassword',
+        params: {
+          email: email,
+          otp: otp,
+        },
+      });
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);

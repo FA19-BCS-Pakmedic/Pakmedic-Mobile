@@ -26,9 +26,17 @@ const OnBoarding = props => {
   const {screenName, text, pagination} = props;
   const [isModalVisible, setModalVisible] = useState(false);
   const navigateToNext = () => {
-    props.navigation.navigate(
-      'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
-    );
+    if (screenName !== 'DocOnboarding3' && screenName !== 'PatOnboarding3') {
+      props.navigation.navigate(
+        'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
+      );
+    }else {
+      props.navigation.navigate(
+        'Auth', {
+          screen: 'Login',
+        }
+      )
+    }
   };
 
   const screens = {
@@ -61,12 +69,7 @@ const OnBoarding = props => {
           <View>
             <Button
               onPress={() => {
-                if (
-                  screenName !== 'DocOnboarding3' &&
-                  screenName !== 'PatOnboarding3'
-                ) {
-                  navigateToNext();
-                }
+                navigateToNext();
               }}
               label="Next"
               type="filled"
@@ -84,14 +87,14 @@ const OnBoarding = props => {
           </View>
         </View>
       </Shadow>
-      <PopupAlerts
+      {/* <PopupAlerts
         isModalVisible={isModalVisible}
         setModalVisible={setModalVisible}
         height={1.8}
         width={1.2}
         alertName={'RegisterFailure'}
         message={'Registration Failed'}
-        redirect={'Home'}></PopupAlerts>
+        redirect={'Home'}></PopupAlerts> */}
     </View>
   );
 };

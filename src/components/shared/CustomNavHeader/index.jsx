@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.secondaryMonoChrome100,
-    borderRadius: 10,
+    borderRadius: 7,
     position: 'absolute',
     left: dimensions.Width / 20,
   },
