@@ -34,9 +34,7 @@ const Chatbot = ({route, navigation}) => {
   // TODO: REPLACE THIS WITH DYNAMIC USER ID
   const userId = '6969';
 
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+
 
   // useEffect to run when ever there is data from the backend
   useEffect(() => {
