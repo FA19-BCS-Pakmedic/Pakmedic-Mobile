@@ -1,6 +1,8 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useEffect} from 'react';
 
 import Onboarding from '../../screens/shared/On-Boarding';
+import ROLES from '../../utils/constants/ROLES';
 
 const onboardingStack = createNativeStackNavigator();
 
@@ -100,7 +102,7 @@ const patientSide = () => {
 
 //stack navigator for onboarding Screens
 const OnboardingNavigation = props => {
-  return props.side == 'doctor' ? doctorSide() : patientSide();
+  return props.side == ROLES.doctor ? doctorSide() : patientSide();
 };
 
 export default OnboardingNavigation;
