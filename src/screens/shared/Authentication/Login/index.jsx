@@ -40,11 +40,7 @@ const Login = ({navigation}) => {
   const [role, setRole] = useState('');
 
   //hook for react hook forms
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm({
+  const {control, handleSubmit, setValue, watch} = useForm({
     mode: 'all',
     defaultValues: {
       email: '',
@@ -86,14 +82,19 @@ const Login = ({navigation}) => {
       console.log(await deviceStorage.loadItem('jwtToken'));
       alert('Login Successful');
 
-      //TODO: navigate to the respctive dashboard screen of the role
+      //clear all inputs
+      setValue('email', '');
+      setValue('password', '');
+
+      //navigate to the app stack
+      navigation.navigate('App');
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);
     }
 
-    console.log(data, 'data');
-    console.log(errors, 'error');
+    // console.log(data, 'data');
+    // console.log(errors, 'error');
   };
 
   //navigate to signup screen
@@ -140,6 +141,7 @@ const Login = ({navigation}) => {
               message: 'Please enter a valid email',
             },
           }}
+          text={watch('email')}
         />
         {/* password field */}
         <ValidateInputField
@@ -161,6 +163,7 @@ const Login = ({navigation}) => {
               message: 'Please enter a valid password',
             },
           }}
+          text={watch('password')}
         />
 
         {/* forgot password text */}

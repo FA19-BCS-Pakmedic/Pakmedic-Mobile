@@ -16,14 +16,12 @@ const Stack = createNativeStackNavigator();
 
 const PatientNavigation = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{headerShown: false}}
-        initialRouteName="PatientTabStack">
-        <Stack.Screen name="PatientTabStack" component={PatientTabStack} />
-        <Stack.Screen name="Support Communities" component={Support} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName="PatientTabStack">
+      <Stack.Screen name="PatientTabStack" component={PatientTabStack} />
+      <Stack.Screen name="Support Communities" component={Support} />
+    </Stack.Navigator>
   );
 };
 
