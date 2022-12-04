@@ -6,7 +6,7 @@ import {Bubble} from 'react-native-gifted-chat';
 // import theme
 import colors from '../../../utils/styles/themes/colors';
 
-const ChatBubble = props => {
+const GiftedChatBubble = props => {
   return (
     <Bubble
       {...props}
@@ -43,4 +43,4 @@ const ChatBubble = props => {
   );
 };
 
-export default ChatBubble;
+export default GiftedChatBubble;

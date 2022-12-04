@@ -8,6 +8,11 @@ export const styles = StyleSheet.create({
   container: {
     width: '100%',
     flex: 1,
-    
+  },
+
+  sendIconContainer: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

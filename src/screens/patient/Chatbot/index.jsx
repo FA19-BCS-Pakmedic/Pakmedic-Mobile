@@ -1,9 +1,11 @@
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
 import {GiftedChat} from 'react-native-gifted-chat';
 import SplashScreen from 'react-native-splash-screen';
 
 import BotSvg from '../../../assets/svgs/bot.svg';
+
+import BotAvatar from '../../../assets/images/bot-container.png';
 
 //import container
 import StaticContainer from '../../../containers/StaticContainer';
@@ -14,7 +16,13 @@ import ChatbotHeader from '../../../components/patient/ChatbotHeader';
 
 //import service
 import {chatWithBot} from '../../../services/chatbotServices';
-import ChatBubble from '../../../components/shared/ChatBubble';
+import GiftedChatBubble from '../../../components/shared/GiftedChatBubble';
+
+//import icon
+import SendIcon from '../../../assets/svgs/Send.svg';
+import dimensions from '../../../utils/styles/themes/dimensions';
+import GiftedChatSend from '../../../components/shared/GiftedChatSend';
+import GiftedChatInput from '../../../components/shared/GiftedChatInput';
 
 const Chatbot = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
@@ -42,7 +50,7 @@ const Chatbot = ({route, navigation}) => {
           user: {
             _id: sessionId,
             name: 'Bot',
-            avatar: 'https://placeimg.com/140/140/any',
+            avatar: BotAvatar,
           },
         },
       ];
@@ -56,6 +64,15 @@ const Chatbot = ({route, navigation}) => {
   }, [data]);
 
   const onSend = useCallback(async (messages = []) => {
+    messages[0] = {
+      ...messages[0],
+      user: {
+        _id: userId,
+
+        avatar: BotAvatar,
+      },
+    };
+
     console.log(messages[0]);
 
     setMessages(previousMessages =>
@@ -70,14 +87,18 @@ const Chatbot = ({route, navigation}) => {
     setData(data.data.data);
   }, []);
 
-
-
+  //render bubble with custom styling
   const renderBubble = props => {
-    return (
-      <ChatBubble {...props} />
-    )
-    
-  }
+    return <GiftedChatBubble {...props} />;
+  };
+  //render send button with custom icon
+  renderSend = props => {
+    return <GiftedChatSend {...props} />;
+  };
+  //render input toolbar with custom styling
+  renderInputToolbar = props => {
+    return <GiftedChatInput {...props} />;
+  };
 
   return (
     <View style={styles.container}>
@@ -89,6 +110,10 @@ const Chatbot = ({route, navigation}) => {
           _id: userId,
         }}
         renderBubble={renderBubble}
+        renderInputToolbar={renderInputToolbar}
+        renderSend={renderSend}
+        alwaysShowSend={true}
+        // minimumInputToolbarHeight={dimensions.Height * 0.1}
       />
     </View>
   );
