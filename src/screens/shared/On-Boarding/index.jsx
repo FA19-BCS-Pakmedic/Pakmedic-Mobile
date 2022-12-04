@@ -32,7 +32,9 @@ const OnBoarding = props => {
         'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
       );
     } else {
+
       deviceStorage.saveItem('isFirstTime', 'false');
+
       props.navigation.navigate('Auth', {
         screen: 'Login',
       });
@@ -40,7 +42,9 @@ const OnBoarding = props => {
   };
 
   const skipOboarding = () => {
+
     deviceStorage.saveItem('isFirstTime', 'false');
+
     props.navigation.navigate('Auth', {
       screen: 'Login',
     });
