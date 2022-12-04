@@ -25,7 +25,7 @@ const screenOptions = {
 };
 
 //stack navigator for nested register and login screen
-const AuthNavigation = () => {
+const AuthNavigation = ({navigation}) => {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
@@ -40,6 +40,15 @@ const AuthNavigation = () => {
     };
 
     getRole();
+  }, []);
+
+  //useEffect to get the jwtToken if the user has already signed in
+  useEffect(() => {
+    const getJwtToken = async () => {
+      let jwtToken = await deviceStorage?.loadItem('jwtToken');
+      jwtToken && navigation.navigate('App');
+    };
+    getJwtToken();
   }, []);
 
   return (

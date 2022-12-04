@@ -7,7 +7,7 @@ import PatientNavigation from './src/setup/navigation/Patient-Navigation/patient
 import SplashScreen from 'react-native-splash-screen';
 const App = () => {
   SplashScreen.hide();
-  return <PatientNavigation />;
+  return <AppNavigation />;
 };
 
 export default App;
