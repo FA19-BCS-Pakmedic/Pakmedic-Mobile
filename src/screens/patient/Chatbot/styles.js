@@ -5,7 +5,9 @@ import fonts from '../../../utils/styles/themes/fonts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
-  root: {},
-
-  container: {},
+  container: {
+    width: '100%',
+    flex: 1,
+    
+  },
 });
