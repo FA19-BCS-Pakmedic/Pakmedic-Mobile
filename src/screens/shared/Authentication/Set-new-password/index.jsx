@@ -51,13 +51,8 @@ const SetNewPassword = ({route, navigation}) => {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
 
-  // TODO: REMOVE THIS USEEFFECT
   useEffect(() => {
-    console.log(role, email, otp);
-  }, [role, email, otp]);
-
-  useEffect(() => {
-    //TODO: TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
+    //method to fetch roles from device storage and email along with otp from navigation params
     const getData = async () => {
       let data = await deviceStorage.loadItem('role');
       setRole(data ? data : ROLES.patient);

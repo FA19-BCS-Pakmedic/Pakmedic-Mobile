@@ -44,12 +44,9 @@ const ForgotPassword = ({navigation}) => {
     },
   });
 
-  // TODO: REMOVE THIS USEEFFECT
-  useEffect(() => {
-    console.log(role);
-  }, [role]);
 
-  //TODO: TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
+
+  
   useEffect(() => {
     const getRole = async () => {
       const data = await deviceStorage.loadItem('role');
@@ -57,7 +54,6 @@ const ForgotPassword = ({navigation}) => {
     };
     getRole();
 
-    console.log(role);
   }, []);
 
   const onSubmit = async data => {

@@ -52,12 +52,7 @@ const Login = ({navigation}) => {
     },
   });
 
-  // TODO: REMOVE THIS USEEFFECT
-  useEffect(() => {
-    console.log(role);
-  }, [role]);
-
-  //TODO: TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
+  //useeffect to get the roles from device storage
   useEffect(() => {
     const getRole = async () => {
       const data = await deviceStorage.loadItem('role');

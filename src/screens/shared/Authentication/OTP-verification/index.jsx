@@ -15,12 +15,6 @@ import StaticContainer from '../../../../containers/StaticContainer';
 //importing regex
 import {numberRegex} from '../../../../utils/constants/Regex';
 
-/**
- *
- * @returns
- *
- * TODO: FIX THE BUTTON DISABLE AND ENABLE
- */
 //verify otp endpoint
 import {
   forgotPasswordPatient,
@@ -65,13 +59,8 @@ const OtpVerification = ({route, navigation}) => {
   //timer
   const [timer, setTimer] = useState(0);
 
-  // TODO: REMOVE THIS USEEFFECT
   useEffect(() => {
-    console.log(role, email);
-  }, [role, email]);
-
-  useEffect(() => {
-    //TODO: TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
+    //getting role and email from localStorage and email from route params
     const getData = async () => {
       const data = await deviceStorage.loadItem('role');
       setRole(data ? data : ROLES.patient);
@@ -79,7 +68,7 @@ const OtpVerification = ({route, navigation}) => {
     };
     getData();
 
-    //NOT TEMPORARY CODE
+    //timer
     inputRef1.current.focus();
     setTimer(5);
   }, []);
