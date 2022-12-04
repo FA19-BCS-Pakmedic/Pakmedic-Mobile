@@ -40,11 +40,13 @@ import {
   phoneNumberRegex,
   numberRegex,
 } from '../../../../utils/constants/Regex';
+
+import StaticContainer from '../../../../containers/StaticContainer';
+
 import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
 import {registerPatient} from '../../../../services/patientServices';
-import StaticContainer from '../../../../containers/StaticContainer';
 
 const PatientRegister = ({navigation}) => {
   // useForm hook from react-hook-form
