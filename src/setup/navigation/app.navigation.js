@@ -28,9 +28,16 @@ const AppNavigation = () => {
   // );
 
   return (
-    <NavigationContainer>
-      <RootNavigation />
-    </NavigationContainer>
+    <AnimatedSplash
+      isLoaded={isLoaded}
+      logoImage={require('../../assets/images/Logo.png')}
+      backgroundColor={'#FFFFFF'}
+      logoHeight={200}
+      logoWidth={200}>
+      <NavigationContainer>
+        <RootNavigation />
+      </NavigationContainer>
+    </AnimatedSplash>
   );
 };
 

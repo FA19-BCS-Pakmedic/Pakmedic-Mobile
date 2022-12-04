@@ -1,17 +1,15 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-
-import {styles} from './styles';
 import StaticContainer from '../../../../containers/StaticContainer';
 
-const AllPatients = () => {
+const AssistantHome = () => {
   return (
     <StaticContainer>
       <View>
-        <Text>AllPatients</Text>
+        <Text>Assistant home</Text>
       </View>
     </StaticContainer>
   );
 };
 
-export default AllPatients;
+export default AssistantHome;
