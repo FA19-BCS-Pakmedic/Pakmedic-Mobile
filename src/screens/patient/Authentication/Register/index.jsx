@@ -40,6 +40,7 @@ import {
   phoneNumberRegex,
   numberRegex,
 } from '../../../../utils/constants/Regex';
+
 import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
