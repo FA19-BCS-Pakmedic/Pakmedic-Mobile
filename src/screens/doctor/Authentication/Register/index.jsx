@@ -169,7 +169,6 @@ const DoctorRegister = ({navigation}) => {
     console.log('This function is being called');
     navigation.navigate('Auth', {
       screen: 'Login',
-     
     });
   };
 
@@ -338,11 +337,11 @@ const DoctorRegister = ({navigation}) => {
         </View>
 
         {/* register with text */}
-        <TouchableOpacity style={styles.registerTextContainer} onPress={navigateToLoginScreen}>
+        <TouchableOpacity
+          style={styles.registerTextContainer}
+          onPress={navigateToLoginScreen}>
           <Text style={styles.text}>Already have an account? </Text>
-          <TouchableOpacity >
-            <Text style={styles.registerText}>Login Now</Text>
-          </TouchableOpacity>
+          <Text style={styles.registerText}>Login Now</Text>
         </TouchableOpacity>
       </View>
     </StaticContainer>
