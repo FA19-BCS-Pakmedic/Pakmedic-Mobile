@@ -10,29 +10,13 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import Button from '../../../components/shared/Button';
 
 import deviceStorage from '../../../utils/helpers/deviceStorage';
+import ROLES from '../../../utils/constants/ROLES';
 
-const ChooseRole = props => {
-  [state, setState] = useState('');
-  // const getData = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem('@role');
-  //     if (value !== null) {
-  //       console.log(value);
-  //     }
-  //   } catch (e) {
-  //     // error reading value
-  //   }
-  // };
-  // const storeData = async value => {
-  //   try {
-  //     await AsyncStorage.setItem('@role', value);
-  //   } catch (e) {
-  //     // saving error
-  //   }
-  // };
-  useEffect(() => {
-    console.log(state);
-  });
+const ChooseRole = ({navigation}) => {
+  const chooseRole = role => {
+    deviceStorage.saveItem('role', role);
+    navigation.navigate('Onboarding');
+  };
 
   return (
     <StaticContainer>
@@ -42,9 +26,8 @@ const ChooseRole = props => {
           height={dimensions?.Height / 3.5}
         />
         <Button
-          onPress={async () => {
-            deviceStorage.saveItem('role', 'doctor');
-            setState(await deviceStorage.loadItem('role'));
+          onPress={() => {
+            chooseRole(ROLES.doctor);
           }}
           type="filled"
           label="Continue as a Doctor"
@@ -55,9 +38,8 @@ const ChooseRole = props => {
           height={dimensions?.Height / 3.5}
         />
         <Button
-          onPress={async () => {
-            deviceStorage.saveItem('role', 'patient');
-            setState(await deviceStorage.loadItem('role'));
+          onPress={() => {
+            chooseRole(ROLES.patient);
           }}
           type="filled"
           label="Continue as a Patient"

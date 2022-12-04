@@ -13,6 +13,12 @@ export default StyleSheet.create({
     // borderWidth: 1,
   },
 
+  forgotText: {
+    fontSize: fonts.size.font14,
+    fontWeight: fonts.weight.semi,
+    textAlign: 'right',
+  },
+
   textContainer: {
     justifyContent: 'center',
     paddingHorizontal: dimensions.Width / 30,
@@ -37,7 +43,6 @@ export default StyleSheet.create({
   text: {
     fontSize: fonts.size.font14,
     fontWeight: fonts.weight.normal,
-    textAlign: 'right',
   },
 
   registerText: {

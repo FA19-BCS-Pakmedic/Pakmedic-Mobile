@@ -47,7 +47,7 @@ import ROLES from '../../../../utils/constants/ROLES';
 import {registerPatient} from '../../../../services/patientServices';
 import StaticContainer from '../../../../containers/StaticContainer';
 
-const Register = () => {
+const PatientRegister = ({navigation}) => {
   // useForm hook from react-hook-form
   const {
     control,
@@ -159,10 +159,7 @@ const Register = () => {
   const navigateToLoginScreen = () => {
     console.log('This function is being called');
     navigation.navigate('Auth', {
-      screen: 'LoginNavigation',
-      params: {
-        screen: 'Login',
-      },
+      screen: 'Login',
     });
   };
 
@@ -379,15 +376,17 @@ const Register = () => {
         </View>
 
         {/* register with text */}
-        <View style={styles.registerTextContainer}>
+        <TouchableOpacity
+          style={styles.registerTextContainer}
+          onPress={navigateToLoginScreen}>
           <Text style={styles.text}>Already have an account? </Text>
-          <TouchableOpacity onPress={navigateToLoginScreen}>
+          <TouchableOpacity>
             <Text style={styles.registerText}>Login Now</Text>
           </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </View>
     </StaticContainer>
   );
 };
 
-export default Register;
+export default PatientRegister;
