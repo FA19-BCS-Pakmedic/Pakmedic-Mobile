@@ -141,7 +141,7 @@ const DoctorRegister = ({navigation}) => {
   //function to send the pmc id to the backend to retrieve data from the pmc endpoint
   const getPmcData = async () => {
     try {
-      const response = await pmcIdVerifyDoctor({pmcID: watch('pmcId')});
+      const response = await pmcIdVerifyDoctor({pmcId: watch('pmcId')});
       const data = response?.data?.data;
       setPmcData(data);
       setIsPmcIdVerified(true);
