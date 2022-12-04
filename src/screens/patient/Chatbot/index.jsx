@@ -27,7 +27,9 @@ import GiftedChatInput from '../../../components/shared/GiftedChatInput';
 const Chatbot = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
+
   const [isTyping, setIsTyping] = useState(false);
+
 
   // TODO: REPLACE THIS WITH A DYNAMIC SESSION ID
   const sessionId = '123456';
@@ -94,14 +96,18 @@ const Chatbot = ({route, navigation}) => {
       GiftedChat.append(previousMessages, messages),
     );
 
+
     setIsTyping(true);
+
     const data = await chatWithBot({
       message: messages[0].text,
       sessionId: sessionId,
     });
 
+
     setData(data.data.data);
     setIsTyping(false);
+
   }, []);
 
   //render bubble with custom styling
@@ -117,6 +123,7 @@ const Chatbot = ({route, navigation}) => {
     return <GiftedChatInput {...props} />;
   };
 
+
   return (
     <View style={styles.container}>
       <ChatbotHeader />
@@ -130,7 +137,9 @@ const Chatbot = ({route, navigation}) => {
         renderInputToolbar={renderInputToolbar}
         renderSend={renderSend}
         alwaysShowSend={true}
+
         isTyping={isTyping}
+
         // minimumInputToolbarHeight={dimensions.Height * 0.1}
       />
     </View>
