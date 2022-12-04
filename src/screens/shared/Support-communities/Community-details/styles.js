@@ -35,6 +35,5 @@ export const styles = StyleSheet.create({
   flatList: {
     flex: 1,
     height: '100%',
-    marginBottom: dimensions.Height / 30,
   },
 });
