@@ -34,7 +34,23 @@ const Chatbot = ({route, navigation}) => {
   // TODO: REPLACE THIS WITH DYNAMIC USER ID
   const userId = '6969';
 
-
+  useEffect(() => {
+    // navigation.getParent()?.setOptions({
+    //   tabBarStyle: {
+    //     display: 'none',
+    //   },
+    // });
+    console.log(navigation.getParent());
+    navigation.getParent().setOptions({
+      tabBarStyle: {display: 'none'},
+      tabBarVisible: false,
+    });
+    return () =>
+      navigation.getParent()?.setOptions({
+        tabBarStyle: undefined,
+        tabBarVisible: undefined,
+      });
+  }, []);
 
   // useEffect to run when ever there is data from the backend
   useEffect(() => {
@@ -98,6 +114,7 @@ const Chatbot = ({route, navigation}) => {
     return <GiftedChatInput {...props} />;
   };
 
+  
   return (
     <View style={styles.container}>
       <ChatbotHeader />

@@ -10,11 +10,19 @@ import fonts from '../../../utils/styles/themes/fonts';
 import RobotSVG from '../../../assets/svgs/bot.svg';
 import BackSVG from '../../../assets/svgs/Backicon.svg';
 
+import {useNavigation} from '@react-navigation/native';
+
 const ChatbotHeader = () => {
+  const navigation = useNavigation();
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.root}>
       {/* backicon */}
-      <TouchableOpacity style={styles.backIconContainer}>
+      <TouchableOpacity style={styles.backIconContainer} onPress={goBack}>
         <BackSVG width={dimensions.Width * 0.05} />
       </TouchableOpacity>
       {/* screen header */}
