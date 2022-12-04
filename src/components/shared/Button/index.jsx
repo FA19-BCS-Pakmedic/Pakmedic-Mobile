@@ -21,7 +21,7 @@ export default Button = ({
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
-        !isDisabled && onPress();
+        !isDisabled && onPress ? onPress() : () => {};
       }}>
       <Text
         style={

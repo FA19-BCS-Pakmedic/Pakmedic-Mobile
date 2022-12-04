@@ -30,13 +30,17 @@ const OnBoarding = props => {
       props.navigation.navigate(
         'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
       );
-    }else {
-      props.navigation.navigate(
-        'Auth', {
-          screen: 'Login',
-        }
-      )
+    } else {
+      props.navigation.navigate('Auth', {
+        screen: 'Login',
+      });
     }
+  };
+
+  const skipOboarding = () => {
+    props.navigation.navigate('Auth', {
+      screen: 'Login',
+    });
   };
 
   const screens = {
@@ -77,7 +81,7 @@ const OnBoarding = props => {
             />
             <Button
               onPress={() => {
-                setModalVisible(true);
+                skipOboarding();
               }}
               label="Skip"
               type="empty"

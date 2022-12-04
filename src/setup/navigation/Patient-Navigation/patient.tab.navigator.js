@@ -12,7 +12,7 @@ import MenuIcon from '../../../assets/svgs/menuIcon.svg';
 
 //Screens
 import Home from '../../../screens/patient/Authentication/Dashboard';
-import Chatbot from '../../../screens/patient/Chatbot/Home';
+import Chatbot from '../../../screens/patient/Chatbot';
 import Appointment from '../../../screens/patient/Appointment-management/Book-appointment';
 import Telemedicine from '../../../screens/patient/Labs/Home';
 import Modal from './patient.modal.navigator';
@@ -130,6 +130,7 @@ const PatientTabStack = props => {
           },
           tabBarShowLabel: false,
           tabBarStyle: {
+            display: route.name === 'ChatbotScreen' ? 'none' : 'flex',
             height: dimensions.Height / 12,
             backgroundColor: Colors.primaryMonoChrome100,
           },
