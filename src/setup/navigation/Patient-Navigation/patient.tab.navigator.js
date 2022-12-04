@@ -11,15 +11,13 @@ import TelemedicineIcon from '../../../assets/svgs/telemedicineIcon.svg';
 import MenuIcon from '../../../assets/svgs/menuIcon.svg';
 
 //Screens
-import Home from '../../../screens/doctor/Authentication/Dashboard';
-import Assistant from '../../../screens/doctor/Assistant/Assistant-home';
-import Appointment from '../../../screens/doctor/Appointment-management/Appointments';
-import Telemedicine from '../../../screens/doctor/Telemedicine/Patients-list';
-import Modal from './doctor.modal.navigator';
+import Home from '../../../screens/patient/Authentication/Dashboard';
+import Chatbot from '../../../screens/patient/Chatbot/Home';
+import Appointment from '../../../screens/patient/Appointment-management/Book-appointment';
+import Telemedicine from '../../../screens/patient/Labs/Home';
+import Modal from './patient.modal.navigator';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
-import PopupAlerts from '../../../components/shared/PopupAlerts';
 
 //theme
 import dimensions from '../../../utils/styles/themes/dimensions';
@@ -28,7 +26,7 @@ import Colors from '../../../utils/styles/themes/colors';
 
 const Tab = createBottomTabNavigator();
 
-const DoctorTabStack = props => {
+const PatientTabStack = props => {
   const [isModalVisible, setModalVisible] = React.useState(false);
   return (
     <>
@@ -56,14 +54,14 @@ const DoctorTabStack = props => {
                   <Text style={styles.labelText}>Home</Text>
                 </View>
               );
-            } else if (route.name === 'AssistantScreen') {
+            } else if (route.name === 'ChatbotScreen') {
               return focused ? (
                 <View style={styles.activeStyle}>
                   <ChatBotIcon
                     width={dimensions.Width / 15}
                     height={dimensions.Height / 15}
                   />
-                  <Text style={styles.labelText}>Assistant</Text>
+                  <Text style={styles.labelText}>Chatbot</Text>
                 </View>
               ) : (
                 <View style={styles.inactiveStyle}>
@@ -71,7 +69,7 @@ const DoctorTabStack = props => {
                     width={dimensions.Width / 15}
                     height={dimensions.Height / 15}
                   />
-                  <Text style={styles.labelText}>Assistant</Text>
+                  <Text style={styles.labelText}>Chatbot</Text>
                 </View>
               );
             } else if (route.name === 'AppointmentScreen') {
@@ -133,12 +131,12 @@ const DoctorTabStack = props => {
           tabBarShowLabel: false,
           tabBarStyle: {
             height: dimensions.Height / 12,
-            backgroundColor: Colors.secondaryMonoChrome100,
+            backgroundColor: Colors.primaryMonoChrome100,
           },
           //tabBarActiveBackgroundColor: Colors.secondaryMonoChrome300,
         })}>
         <Tab.Screen name="HomeScreen" component={Home} />
-        <Tab.Screen name="AssistantScreen" component={Assistant} />
+        <Tab.Screen name="ChatbotScreen" component={Chatbot} />
         <Tab.Screen name="AppointmentScreen" component={Appointment} />
         <Tab.Screen name="TelemedicineScreen" component={Telemedicine} />
         <Tab.Screen
@@ -151,7 +149,6 @@ const DoctorTabStack = props => {
             },
           })}
         />
-        {/* <Tab.Screen name="MenuScreen" component={Modal}/> */}
       </Tab.Navigator>
       <Modal
         Visible={isModalVisible}
@@ -173,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: dimensions.Width / 6,
     height: dimensions.Height / 13,
-    backgroundColor: Colors.secondaryMonoChrome500,
+    backgroundColor: Colors.primaryMonoChrome300,
     borderRadius: 23,
     padding: dimensions.Height / 200,
   },
@@ -185,4 +182,4 @@ const styles = StyleSheet.create({
     padding: dimensions.Height / 200,
   },
 });
-export default DoctorTabStack;
+export default PatientTabStack;

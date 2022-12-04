@@ -1,9 +1,12 @@
 //libraries App navigation
 import AppNavigation from './src/setup/navigation/app.navigation';
 
-
+import DoctorNavigation from './src/setup/navigation/Doctor-Navigation/doctor.navigation';
+import PatientNavigation from './src/setup/navigation/Patient-Navigation/patient.navigation';
+import SplashScreen from 'react-native-splash-screen';
 const App = () => {
-  return <AppNavigation />;
+  SplashScreen.hide();
+  return <DoctorNavigation />;
 };
 
 export default App;

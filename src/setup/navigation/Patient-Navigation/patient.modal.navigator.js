@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 import ModalContainer from '../../../containers/ModalContainer';
-import PopupAlerts from '../../../components/shared/PopupAlerts';
 
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
@@ -10,7 +9,7 @@ import colors from '../../../utils/styles/themes/colors';
 
 import {useNavigation} from '@react-navigation/native';
 
-const DoctorModalNavigator = props => {
+const PatientModalNavigator = props => {
   const {Visible, setModalVisible, navigation} = props;
   //const navigation = useNavigation();
   return (
@@ -22,7 +21,7 @@ const DoctorModalNavigator = props => {
       type="bottom"
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
-      bgColor={colors.secondaryMonoChrome100}>
+      bgColor={colors.primaryMonoChrome100}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.text}>Services</Text>
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: colors.secondaryMonoChrome100,
+    backgroundColor: colors.primaryMonoChrome100,
   },
   button: {
     width: dimensions.Width,
@@ -93,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DoctorModalNavigator;
+export default PatientModalNavigator;

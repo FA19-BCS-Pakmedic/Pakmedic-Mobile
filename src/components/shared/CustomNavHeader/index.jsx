@@ -4,16 +4,23 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Back from '../../../assets/svgs/Backicon';
 
+import {useNavigation} from '@react-navigation/native';
+
 // import theme files
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
 const CustomNavHeader = ({screenName, isBack}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.root}>
       {isBack && (
-        <TouchableOpacity style={styles.iconContainer}>
+        <TouchableOpacity
+          style={styles.iconContainer}
+          onPress={() => {
+            navigation.pop();
+          }}>
           <Back width={dimensions.Width / 35} height={dimensions.Height / 35} />
         </TouchableOpacity>
       )}

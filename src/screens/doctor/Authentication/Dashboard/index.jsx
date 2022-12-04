@@ -15,7 +15,7 @@ const Dashboard = () => {
             setModalVisible(true);
           }}
           style={{fontSize: 30}}>
-          Dashboard
+          DOCTOR Dashboard
         </Text>
       </View>
       <PopupAlerts
