@@ -19,8 +19,6 @@ const ModalContainer = props => {
     bgColor,
     padding,
   } = props;
-
-  console.log(padding);
   return (
     <Modal
       deviceHeight={Height}
