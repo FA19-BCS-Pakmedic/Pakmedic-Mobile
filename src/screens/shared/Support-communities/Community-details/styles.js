@@ -29,4 +29,12 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: colors.secondaryMonoChrome100,
   },
+  icon: {
+    alignSelf: 'flex-end',
+  },
+  flatList: {
+    flex: 1,
+    height: '100%',
+    marginBottom: dimensions.Height / 30,
+  },
 });
