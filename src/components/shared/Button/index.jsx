@@ -15,7 +15,9 @@ export default Button = ({
   return (
     <TouchableOpacity
       style={
-        isDisabled ? styles(type, width).disabled : styles(type, width).button
+        isDisabled
+          ? styles(type, width).disabled
+          : styles(type, width, borderColor).button
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
@@ -34,6 +36,7 @@ export default Button = ({
 const styles = (type, width, borderColor) =>
   StyleSheet.create({
     button: {
+      marginTop: dimensions.Height / 50, //remove if it there is unneseccary space
       height: dimensions.Height / 17,
       justifyContent: 'center',
       alignItems: 'center',
