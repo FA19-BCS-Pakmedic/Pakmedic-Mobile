@@ -1,5 +1,5 @@
 import {View, Text, TextInput} from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 
 // import styles
@@ -27,8 +27,9 @@ import Button from '../../../../components/shared/Button';
 import {resetForgotPasswordPatient} from '../../../../services/patientServices';
 import {resetForgotPasswordDoctor} from '../../../../services/doctorServices';
 import ROLES from '../../../../utils/constants/ROLES';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
 
-const SetNewPassword = ({navigation}) => {
+const SetNewPassword = ({route, navigation}) => {
   //hook for react hook forms
   const {
     control,
@@ -42,20 +43,31 @@ const SetNewPassword = ({navigation}) => {
     },
   });
 
-  const [isPasswordVisible, setisPasswordVisible] = React.useState(false);
+  const [isPasswordVisible, setisPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    React.useState(false);
+    useState(false);
+
+  const [role, setRole] = useState('');
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+
+  // TODO: REMOVE THIS USEEFFECT
+  useEffect(() => {
+    console.log(role, email, otp);
+  }, [role, email, otp]);
+
+  useEffect(() => {
+    //TODO: TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
+    const getData = async () => {
+      let data = await deviceStorage.loadItem('role');
+      setRole(data ? data : ROLES.patient);
+      setEmail(route.params.email);
+      setOtp(route.params.otp);
+    };
+    getData();
+  }, []);
 
   onSubmit = async data => {
-    // TODO: GET ROLE FROM LOCAL STORAGE TO CALL THE RESPECTIVE RESET PASSWORD FUNCTIONALITY
-    const role = 'Doctor';
-
-    //TODO: GET USER EMAIL FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS FORGOT PASSWORD SCREEN
-    const email = 'awanmoeed2121@gmail.com';
-
-    //TODO: GET USER OTP CODE FROM NAVIGATION PARAMS PASSED BY THE PREVIOUS FORGOT PASSWORD SCREEN
-    const resetPasswordToken = '3390';
-
     try {
       let response;
       if (role === ROLES.patient) {
@@ -63,14 +75,14 @@ const SetNewPassword = ({navigation}) => {
         response = await resetForgotPasswordPatient({
           email: email,
           password: data?.password,
-          resetPasswordToken,
+          resetPasswordToken: otp,
         });
       } else {
         //call patient reset password api
         response = await resetForgotPasswordDoctor({
           email: email,
           password: data?.password,
-          resetPasswordToken,
+          resetPasswordToken: otp,
         });
       }
       console.log(response.data);
@@ -84,7 +96,6 @@ const SetNewPassword = ({navigation}) => {
       console.log(err.response.data);
       alert(err.response.data.message);
     }
-    console.log(data);
   };
 
   return (

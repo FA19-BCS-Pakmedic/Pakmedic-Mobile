@@ -1,5 +1,6 @@
 // importing stack navigator
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useState, useEffect} from 'react';
 
 // importing screens
 import Login from '../../screens/shared/Authentication/Login';
@@ -12,6 +13,9 @@ import OtpVerification from '../../screens/shared/Authentication/OTP-verificatio
 //import constants
 import ROLES from '../../utils/constants/ROLES';
 
+//import helper functions
+import deviceStorage from '../../utils/helpers/deviceStorage';
+
 // create stacks
 const authStack = createNativeStackNavigator();
 
@@ -22,12 +26,21 @@ const screenOptions = {
 
 //stack navigator for nested register and login screen
 const AuthNavigation = () => {
-  const getRegisterScreen = () => {
-    // TODO: UNCOMMENT THIS COMMENTED LINE OF CODE
-    // const role = await AsyncStorage.getItem('role');
-    const role = 'Patient';
-    return role;
-  };
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    const getRole = async () => {
+      // let role;
+      let role = await deviceStorage?.loadItem('role');
+      if (!role) {
+        role = 'Patient';
+      }
+
+      setRole(role);
+    };
+
+    getRole();
+  }, []);
 
   return (
     <authStack.Navigator
@@ -37,7 +50,7 @@ const AuthNavigation = () => {
       initialRouteName="LoginNavigation">
       <authStack.Screen name="Login" component={Login} />
       {/* <authStack.Screen name="Register" component={getRegisterScreen} /> */}
-      {getRegisterScreen() === ROLES.doctor ? (
+      {role === ROLES.doctor ? (
         <authStack.Screen name="Register" component={DoctorRegister} />
       ) : (
         <authStack.Screen name="Register" component={PatientRegister} />

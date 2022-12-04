@@ -1,5 +1,5 @@
 import {Text, View} from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 
 // import styles
@@ -25,7 +25,13 @@ import StaticContainer from '../../../../containers/StaticContainer';
 import {forgotPasswordPatient} from '../../../../services/patientServices';
 import {forgotPasswordDoctor} from '../../../../services/doctorServices';
 
+//utility helper functions
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+
 const ForgotPassword = ({navigation}) => {
+  //states
+  const [role, setRole] = useState('');
+
   //hook for react hook forms
   const {
     control,
@@ -38,10 +44,23 @@ const ForgotPassword = ({navigation}) => {
     },
   });
 
-  const onSubmit = async data => {
-    // TODO: FETCH THE ROLE FROM MOBILE STORAGE DYNAMICALLY
+  // TODO: REMOVE THIS USEEFFECT
+  useEffect(() => {
+    console.log(role);
+  }, [role]);
 
-    const role = 'Doctor';
+  //TODO: TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
+  useEffect(() => {
+    const getRole = async () => {
+      const data = await deviceStorage.loadItem('role');
+      setRole(data ? data : ROLES.patient);
+    };
+    getRole();
+
+    console.log(role);
+  }, []);
+
+  const onSubmit = async data => {
     try {
       let response;
       if (role === ROLES.patient) {
@@ -57,14 +76,14 @@ const ForgotPassword = ({navigation}) => {
       //navigate to otp verification screen
       navigation.navigate('Auth', {
         screen: 'OtpVerification',
+        params: {
+          email: data.email,
+        },
       });
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);
     }
-
-    console.log(data);
-    console.log(isValid);
   };
 
   return (

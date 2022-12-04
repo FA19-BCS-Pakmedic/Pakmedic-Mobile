@@ -15,7 +15,9 @@ export default Button = ({
   return (
     <TouchableOpacity
       style={
-        isDisabled ? styles(type, width).disabled : styles(type, width).button
+        isDisabled
+          ? styles(type, width).disabled
+          : styles(type, width, borderColor).button
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {

@@ -22,6 +22,9 @@ import StaticContainer from '../../../../containers/StaticContainer';
 
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
+import ROLES from '../../../../utils/constants/ROLES';
+
+//import container
 import ScrollContainer from '../../../../containers/ScrollContainer';
 
 //import API call for login
@@ -30,7 +33,6 @@ import {loginPatient} from '../../../../services/patientServices';
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {loginDoctor} from '../../../../services/doctorServices';
-import ROLES from '../../../../utils/constants/ROLES';
 
 const Login = ({navigation}) => {
   // states
@@ -50,11 +52,16 @@ const Login = ({navigation}) => {
     },
   });
 
-  //TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
+  // TODO: REMOVE THIS USEEFFECT
+  useEffect(() => {
+    console.log(role);
+  }, [role]);
+
+  //TODO: TEMPORARY USEEFFECT HOOK FOR FETCHING THE ROLE FROM THE ASYNC STORAGE
   useEffect(() => {
     const getRole = async () => {
-      const role = await deviceStorage.getItem('role');
-      setRole(role);
+      const data = await deviceStorage.loadItem('role');
+      setRole(data ? data : ROLES.patient);
     };
     getRole();
 
@@ -80,8 +87,8 @@ const Login = ({navigation}) => {
       }
 
       // console.log(response.data);
-      await deviceStorage.saveItem('id_token', response?.data?.token);
-      console.log(await deviceStorage.loadItem('id_token'));
+      await deviceStorage.saveItem('jwtToken', response?.data?.token);
+      console.log(await deviceStorage.loadItem('jwtToken'));
       alert('Login Successful');
 
       //TODO: navigate to the respctive dashboard screen of the role
