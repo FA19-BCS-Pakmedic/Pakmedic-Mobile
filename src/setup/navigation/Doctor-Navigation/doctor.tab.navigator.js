@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 
-import {Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 //ICONS
 import HomeIcon from '../../../assets/svgs/homeIcon.svg';
@@ -18,6 +18,8 @@ import Telemedicine from '../../../screens/doctor/Telemedicine/Patients-list';
 import Modal from './doctor.modal.navigator';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+import PopupAlerts from '../../../components/shared/PopupAlerts';
 
 //theme
 import dimensions from '../../../utils/styles/themes/dimensions';
@@ -36,67 +38,121 @@ const DoctorTabStack = () => {
           tabBarHideOnKeyboard: true,
           headerShown: false,
           tabBarIcon: ({focused, color, size}) => {
-            let iconName;
-
             if (route.name === 'HomeScreen') {
-              return (
-                <HomeIcon
-                  width={dimensions.Width / 15}
-                  height={dimensions.Height / 15}
-                />
+              return focused ? (
+                <View style={styles.activeStyle}>
+                  <HomeIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Home</Text>
+                </View>
+              ) : (
+                <View style={styles.inactiveStyle}>
+                  <HomeIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Home</Text>
+                </View>
               );
             } else if (route.name === 'AssistantScreen') {
-              return (
-                <ChatBotIcon
-                  width={dimensions.Width / 15}
-                  height={dimensions.Height / 15}
-                />
+              return focused ? (
+                <View style={styles.activeStyle}>
+                  <ChatBotIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Assistant</Text>
+                </View>
+              ) : (
+                <View style={styles.inactiveStyle}>
+                  <ChatBotIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Assistant</Text>
+                </View>
               );
             } else if (route.name === 'AppointmentScreen') {
-              return (
-                <AppointmentIcon
-                  width={dimensions.Width / 15}
-                  height={dimensions.Height / 15}
-                />
+              return focused ? (
+                <View style={styles.activeStyle}>
+                  <AppointmentIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Appointment</Text>
+                </View>
+              ) : (
+                <View style={styles.inactiveStyle}>
+                  <AppointmentIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Appointment</Text>
+                </View>
               );
             } else if (route.name === 'TelemedicineScreen') {
-              return (
-                <TelemedicineIcon
-                  width={dimensions.Width / 15}
-                  height={dimensions.Height / 15}
-                />
+              return focused ? (
+                <View style={styles.activeStyle}>
+                  <TelemedicineIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Telemedicine</Text>
+                </View>
+              ) : (
+                <View style={styles.inactiveStyle}>
+                  <TelemedicineIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Telemedicine</Text>
+                </View>
               );
             } else if (route.name === 'MenuScreen') {
-              return (
-                <MenuIcon
-                  width={dimensions.Width / 15}
-                  height={dimensions.Height / 15}
-                />
+              return focused ? (
+                <View style={styles.activeStyle}>
+                  <MenuIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Menu</Text>
+                </View>
+              ) : (
+                <View style={styles.inactiveStyle}>
+                  <MenuIcon
+                    width={dimensions.Width / 15}
+                    height={dimensions.Height / 15}
+                  />
+                  <Text style={styles.labelText}>Menu</Text>
+                </View>
               );
             }
           },
-          tabBarLabel: () => {
-            if (route.name === 'HomeScreen') {
-              return <Text style={styles.labelText}>Home</Text>;
-            }
-            if (route.name === 'AppointmentScreen') {
-              return <Text style={styles.labelText}>Appointments</Text>;
-            }
-            if (route.name === 'TelemedicineScreen') {
-              return <Text style={styles.labelText}>Telemedicine</Text>;
-            }
-            if (route.name === 'AssistantScreen') {
-              return <Text style={styles.labelText}>Assistant</Text>;
-            }
-            if (route.name === 'MenuScreen') {
-              return <Text style={styles.labelText}>Menu</Text>;
-            }
-          },
+          // tabBarLabel: () => {
+          //   if (route.name === 'HomeScreen') {
+          //     return <Text style={styles.labelText}>Home</Text>;
+          //   }
+          //   if (route.name === 'AppointmentScreen') {
+          //     return <Text style={styles.labelText}>Appointments</Text>;
+          //   }
+          //   if (route.name === 'TelemedicineScreen') {
+          //     return <Text style={styles.labelText}>Telemedicine</Text>;
+          //   }
+          //   if (route.name === 'AssistantScreen') {
+          //     return <Text style={styles.labelText}>Assistant</Text>;
+          //   }
+          //   if (route.name === 'MenuScreen') {
+          //     return <Text style={styles.labelText}>Menu</Text>;
+          //   }
+          // },
+          tabBarShowLabel: false,
           tabBarStyle: {
             height: dimensions.Height / 12,
             backgroundColor: Colors.secondaryMonoChrome100,
           },
-          tabBarActiveBackgroundColor: Colors.secondaryMonoChrome300,
+          //tabBarActiveBackgroundColor: Colors.secondaryMonoChrome300,
         })}>
         <Tab.Screen name="HomeScreen" component={Home} />
         <Tab.Screen name="AssistantScreen" component={Assistant} />
@@ -114,16 +170,32 @@ const DoctorTabStack = () => {
         />
         {/* <Tab.Screen name="MenuScreen" component={Modal}/> */}
       </Tab.Navigator>
-      {/* <Modal Visible={isModalVisible} /> */}
+      <Modal Visible={isModalVisible} setModalVisible={setModalVisible} />
     </>
   );
 };
 
 const styles = StyleSheet.create({
   labelText: {
-    fontSize: fonts.size.font8,
+    fontSize: 9,
     marginBottom: dimensions.Height / 100,
     color: Colors.secondary1,
+  },
+  activeStyle: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: dimensions.Width / 6,
+    height: dimensions.Height / 13,
+    backgroundColor: Colors.secondaryMonoChrome500,
+    borderRadius: 23,
+    padding: dimensions.Height / 200,
+  },
+  inactiveStyle: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: dimensions.Width / 6,
+    height: dimensions.Height / 13,
+    padding: dimensions.Height / 200,
   },
 });
 export default DoctorTabStack;

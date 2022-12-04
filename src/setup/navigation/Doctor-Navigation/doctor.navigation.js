@@ -22,7 +22,6 @@ const DoctorNavigation = () => {
           component={DoctorModalNavigator}
         />
       </Stack.Navigator>
-      <DoctorModalNavigator />
     </>
   );
 };

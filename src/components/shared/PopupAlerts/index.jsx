@@ -13,8 +13,17 @@ import VectorFailure from '../../../assets/svgs/VectorFailure.svg';
 import ProfileFailure from '../../../assets/svgs/ProfileFailure.svg';
 
 const PopupAlerts = props => {
-  const {isModalVisible, setModalVisible, height, width, type, alertName} =
-    props;
+  const {
+    isModalVisible,
+    setModalVisible,
+    height,
+    width,
+    type,
+    alertName,
+    backDropOpacity,
+    backDropColor,
+    bgColor,
+  } = props;
 
   const alertsList = {
     LoginSuccess: ProfileSuccess,
@@ -27,7 +36,7 @@ const PopupAlerts = props => {
 
   useEffect(() => {
     setTimeout(() => {
-      props.navigation.navigate(props.redirect);
+      //props.navigation.navigate(props.redirect);
       setModalVisible(false);
     }, 1000);
   }, []);
@@ -38,16 +47,17 @@ const PopupAlerts = props => {
       setModalVisible={setModalVisible}
       height={dimensions.Height / height}
       width={dimensions.Width / width}
+      bgColor={bgColor}
       type={type}>
       <Alert />
-      <Text style={styles().font}>{props.message}</Text>
-      <Text style={styles().message}>{`You will be redirected to ${
+      <Text style={styles()?.font}>{props.message}</Text>
+      <Text style={styles()?.message}>{`You will be redirected to ${
         !props?.redirect ? '' : props?.redirect
       } Page in a Few Seconds`}</Text>
       <ActivityIndicator
         size="large"
         color={
-          alertName.includes('Failure') == false
+          alertName?.includes('Failure') == false
             ? colors.primary1
             : colors.accent1
         }
