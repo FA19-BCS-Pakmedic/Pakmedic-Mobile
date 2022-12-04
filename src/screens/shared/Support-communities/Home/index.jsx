@@ -12,7 +12,7 @@ DropDownPicker.setListMode('SCROLLVIEW');
 
 import {styles} from './styles';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -33,6 +33,8 @@ const Home = () => {
     {id: 8, label: 'C/Dermatologist', members: 200},
     {id: 9, label: 'C/Dermatologist', members: 200},
   ]);
+
+  console.log('navigation', navigation);
   return (
     <StaticContainer
       customHeaderEnable={true}
@@ -65,7 +67,13 @@ const Home = () => {
             <FlatList
               data={community}
               renderItem={({item}) => (
-                <View style={styles.community}>
+                <TouchableOpacity
+                  style={styles.community}
+                  onPress={() => {
+                    navigation.navigate('CommunityDetails', {
+                      communityName: item.label,
+                    });
+                  }}>
                   <View style={styles.communitydetail}>
                     <Logo
                       width={dimensions.Width / 12}
@@ -81,7 +89,7 @@ const Home = () => {
                   <TouchableOpacity style={styles.communityButton}>
                     <Text style={styles.communityButtonText}>Leave</Text>
                   </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               )}
               keyExtractor={item => item.id}
             />
@@ -92,7 +100,7 @@ const Home = () => {
             <FlatList
               data={community}
               renderItem={({item}) => (
-                <View style={styles.community}>
+                <TouchableOpacity style={styles.community}>
                   <View style={styles.communitydetail}>
                     <Logo
                       width={dimensions.Width / 12}
@@ -108,7 +116,7 @@ const Home = () => {
                   <TouchableOpacity style={styles.communityButton}>
                     <Text style={styles.communityButtonText}>Join</Text>
                   </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               )}
               keyExtractor={item => item.id}
             />
