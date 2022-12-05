@@ -141,7 +141,7 @@ const DoctorRegister = ({navigation}) => {
   //function to send the pmc id to the backend to retrieve data from the pmc endpoint
   const getPmcData = async () => {
     try {
-      const response = await pmcIdVerifyDoctor({pmcID: watch('pmcId')});
+      const response = await pmcIdVerifyDoctor({pmcId: watch('pmcId')});
       const data = response?.data?.data;
       setPmcData(data);
       setIsPmcIdVerified(true);
@@ -169,7 +169,6 @@ const DoctorRegister = ({navigation}) => {
     console.log('This function is being called');
     navigation.navigate('Auth', {
       screen: 'Login',
-     
     });
   };
 
@@ -338,11 +337,11 @@ const DoctorRegister = ({navigation}) => {
         </View>
 
         {/* register with text */}
-        <TouchableOpacity style={styles.registerTextContainer} onPress={navigateToLoginScreen}>
+        <TouchableOpacity
+          style={styles.registerTextContainer}
+          onPress={navigateToLoginScreen}>
           <Text style={styles.text}>Already have an account? </Text>
-          <TouchableOpacity >
-            <Text style={styles.registerText}>Login Now</Text>
-          </TouchableOpacity>
+          <Text style={styles.registerText}>Login Now</Text>
         </TouchableOpacity>
       </View>
     </StaticContainer>

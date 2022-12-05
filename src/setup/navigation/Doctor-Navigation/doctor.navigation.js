@@ -17,15 +17,13 @@ const Stack = createNativeStackNavigator();
 
 const DoctorNavigation = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{headerShown: false}}
-        initialRouteName="DoctorTabStack">
-        <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
-        <Stack.Screen name="Support Communities" component={Support} />
-        <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName="DoctorTabStack">
+      <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
+      <Stack.Screen name="Support Communities" component={Support} />
+      <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
+    </Stack.Navigator>
   );
 };
 

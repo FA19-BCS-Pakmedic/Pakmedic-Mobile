@@ -21,6 +21,7 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import Button from '../../../components/shared/Button';
 import ModalContainer from '../../../containers/ModalContainer';
 import PopupAlerts from '../../../components/shared/PopupAlerts';
+import deviceStorage from '../../../utils/helpers/deviceStorage';
 
 const OnBoarding = props => {
   const {screenName, text, pagination} = props;
@@ -30,13 +31,23 @@ const OnBoarding = props => {
       props.navigation.navigate(
         'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
       );
-    }else {
-      props.navigation.navigate(
-        'Auth', {
-          screen: 'Login',
-        }
-      )
+    } else {
+
+      deviceStorage.saveItem('isFirstTime', 'false');
+
+      props.navigation.navigate('Auth', {
+        screen: 'Login',
+      });
     }
+  };
+
+  const skipOboarding = () => {
+
+    deviceStorage.saveItem('isFirstTime', 'false');
+
+    props.navigation.navigate('Auth', {
+      screen: 'Login',
+    });
   };
 
   const screens = {
@@ -77,7 +88,7 @@ const OnBoarding = props => {
             />
             <Button
               onPress={() => {
-                setModalVisible(true);
+                skipOboarding();
               }}
               label="Skip"
               type="empty"

@@ -105,7 +105,7 @@ export const ValidateInputField = ({
   keyboardType,
   isPasswordField,
   placeholderTextColor,
-  title,
+  text,
   isPasswordVisible,
   setIsPasswordVisible,
   onBlurEvent,
@@ -151,6 +151,7 @@ export const ValidateInputField = ({
                     onBlurEvent();
                   }
                 }}
+                value={text}
               />
               <View
                 style={

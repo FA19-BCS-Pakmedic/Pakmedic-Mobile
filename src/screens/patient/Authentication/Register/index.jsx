@@ -3,7 +3,7 @@ import {useState, useEffect, useRef} from 'react';
 import {useForm} from 'react-hook-form';
 
 // import container
-import ScrollContainer from '../../../../containers/ScrollContainer';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 //import styles
 import styles from './styles';
@@ -40,8 +40,6 @@ import {
   phoneNumberRegex,
   numberRegex,
 } from '../../../../utils/constants/Regex';
-
-import StaticContainer from '../../../../containers/StaticContainer';
 
 import ROLES from '../../../../utils/constants/ROLES';
 
@@ -381,9 +379,7 @@ const PatientRegister = ({navigation}) => {
           style={styles.registerTextContainer}
           onPress={navigateToLoginScreen}>
           <Text style={styles.text}>Already have an account? </Text>
-          <TouchableOpacity>
-            <Text style={styles.registerText}>Login Now</Text>
-          </TouchableOpacity>
+          <Text style={styles.registerText}>Login Now</Text>
         </TouchableOpacity>
       </View>
     </StaticContainer>
