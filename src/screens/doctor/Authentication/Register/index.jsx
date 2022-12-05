@@ -43,6 +43,7 @@ import {
   pmcIdVerifyDoctor,
   registerDoctor,
 } from '../../../../services/doctorServices';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
@@ -107,7 +108,13 @@ const DoctorRegister = ({navigation}) => {
       try {
         const response = await registerDoctor(data);
         console.log(response.data);
-        alert(response.data.message);
+        alert('User registered successfully');
+
+        // console.log(response.data);
+        await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+        //navigate to the app stack
+        navigation.navigate('App');
       } catch (err) {
         console.log(err.response.data);
         alert(err.response.data.message);

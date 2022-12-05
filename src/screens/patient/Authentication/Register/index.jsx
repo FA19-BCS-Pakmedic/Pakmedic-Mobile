@@ -45,6 +45,7 @@ import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
 import {registerPatient} from '../../../../services/patientServices';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
 
 const PatientRegister = ({navigation}) => {
   // useForm hook from react-hook-form
@@ -114,9 +115,15 @@ const PatientRegister = ({navigation}) => {
     console.log(patient);
 
     try {
-      const res = await registerPatient(patient);
-      console.log(res.data);
+      const response = await registerPatient(patient);
+      console.log(response.data);
       alert('Patient was successfully registered');
+
+      // console.log(response.data);
+      await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+      //navigate to the app stack
+      navigation.navigate('App');
     } catch (err) {
       console.log(err.response.data.message);
       alert(err.response.data.message);

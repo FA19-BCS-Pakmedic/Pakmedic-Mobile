@@ -26,7 +26,7 @@ export default RootNavigation = () => {
     const getRole = async () => {
       // let role;
       let role = await deviceStorage?.loadItem('role');
-
+      console.log('HERE IN ROOT NAVIGATION', role);
       setRole(role);
     };
 
@@ -41,8 +41,6 @@ export default RootNavigation = () => {
     };
     getFirstTime();
   }, []);
-
-  
 
   return (
     <rootStack.Navigator
