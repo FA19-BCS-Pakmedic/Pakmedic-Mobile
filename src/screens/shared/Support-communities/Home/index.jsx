@@ -34,7 +34,6 @@ const Home = ({navigation}) => {
     {id: 9, label: 'C/Dermatologist', members: 200},
   ]);
 
-  console.log('navigation', navigation);
   return (
     <StaticContainer
       customHeaderEnable={true}
@@ -72,6 +71,7 @@ const Home = ({navigation}) => {
                   onPress={() => {
                     navigation.navigate('CommunityDetails', {
                       communityName: item.label,
+                      item: {item},
                     });
                   }}>
                   <View style={styles.communitydetail}>

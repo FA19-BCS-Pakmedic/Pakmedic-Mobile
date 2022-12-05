@@ -1,0 +1,103 @@
+import {TouchableOpacity, Text, StyleSheet, View, Image} from 'react-native';
+
+import fonts from '../../../utils/styles/themes/fonts';
+import colors from '../../../utils/styles/themes/colors';
+import dimensions from '../../../utils/styles/themes/dimensions';
+import Logo from '../../../assets/svgs/community-logo';
+import CommunityPostImage from '../../../assets/images/CommunityPostImage.png';
+import Button from '../../../components/shared/Button';
+
+export default CommunityPostCard = props => {
+  const item = props.item;
+
+  return (
+    <TouchableOpacity style={styles.container}>
+      <View style={[styles.flexRow, {width: dimensions.Width / 1.2}]}>
+        <View style={[styles.flexRow, {width: 'auto'}]}>
+          <Logo width={dimensions.Width / 10} height={dimensions.Height / 16} />
+          <View style={{marginLeft: dimensions.Width / 100}}>
+            <Text style={styles.communityName}>{item.label}</Text>
+            <Text style={styles.communityMembers}>{`u/${item.user}`}</Text>
+          </View>
+        </View>
+      </View>
+      <Image source={item.image} style={styles.image} />
+      <Text style={[styles.communityName, styles.text]}>{item.title}</Text>
+      <Text style={[styles.communityMembers, styles.text, {width: 'auto'}]}>
+        {item.description}
+      </Text>
+      <Text
+        style={[
+          styles.communityMembers,
+          styles.text,
+          {
+            width: 'auto',
+            paddingVertical: dimensions.Height / 200,
+            color: colors.accent1,
+            alignSelf: 'flex-start',
+          },
+        ]}>
+        2 days Ago
+      </Text>
+      <View
+        style={[
+          styles.flexRow,
+          {
+            width: dimensions.Width / 1.6,
+            height: dimensions.Height / 15,
+          },
+        ]}>
+        <Button
+          label="Delete"
+          type="empty"
+          width={dimensions.Width / 4}
+          height={dimensions.Height / 20}
+        />
+        <Button
+          label="View"
+          type="filled"
+          width={dimensions.Width / 4}
+          height={dimensions.Height / 20}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: dimensions.Height / 100,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 'auto',
+    borderWidth: 2,
+    borderColor: colors.primary1,
+    borderRadius: 10,
+    paddingVertical: 10,
+  },
+  flexRow: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  text: {
+    width: dimensions.Width / 2,
+    alignSelf: 'flex-start',
+    paddingHorizontal: dimensions.Width / 20,
+  },
+  communityName: {
+    fontSize: fonts.size.font16,
+    fontWeight: 'bold',
+    color: colors.secondary1,
+  },
+
+  communityMembers: {
+    fontSize: fonts.size.font12,
+    color: colors.secondary1,
+  },
+  image: {
+    position: 'absolute',
+    top: dimensions.Height / 100,
+    right: dimensions.Width / 20,
+  },
+});
