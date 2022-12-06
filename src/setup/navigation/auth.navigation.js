@@ -32,7 +32,7 @@ const AuthNavigation = ({navigation}) => {
     const getRole = async () => {
       // let role;
       let role = await deviceStorage?.loadItem('role');
-      console.log('HERE ', role);
+      console.log('HERE auth navigation', role);
 
       if (!role) {
         role = 'Patient';

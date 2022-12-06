@@ -52,6 +52,7 @@ const Login = ({navigation}) => {
   useEffect(() => {
     const getRole = async () => {
       const data = await deviceStorage.loadItem('role');
+      console.log('HERE ', data);
       setRole(data ? data : ROLES.patient);
     };
     getRole();
