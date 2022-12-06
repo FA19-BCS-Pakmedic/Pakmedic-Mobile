@@ -1,6 +1,10 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
+//import google config
+import {googleConfig} from '../../../../utils/helpers/googleConfig';
 
 //importing images
 import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
@@ -47,6 +51,21 @@ const Login = ({navigation}) => {
       password: '',
     },
   });
+
+  //useeffect to configure google login api
+  useEffect(() => {
+    GoogleSignin.configure(googleConfig);
+  }, []);
+
+  //function to handle login
+  const googleLogin = async () => {
+    try {
+      const user = await GoogleSignin.signIn();
+      console.log(user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   //useeffect to get the roles from device storage
   useEffect(() => {
@@ -193,7 +212,7 @@ const Login = ({navigation}) => {
               height={dimensions.Height / 22}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
+          <TouchableOpacity style={styles.socialButton} onPress={googleLogin}>
             <GoogleLogo
               width={dimensions.Width / 12}
               height={dimensions.Height / 22}
