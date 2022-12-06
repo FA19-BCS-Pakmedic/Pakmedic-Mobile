@@ -65,7 +65,7 @@ const PatientRegister = ({navigation}) => {
       email: '',
       password: '',
       confirmPassword: '',
-      phoneNumber: '',
+      phone: '',
       dob: new Date(),
       gender: '',
       // cnic1: '',
@@ -97,7 +97,7 @@ const PatientRegister = ({navigation}) => {
       name: data?.name,
       email: data?.email,
       password: data?.password,
-      phone: `0${data?.contact.split('-')[1]}`,
+      phone: data?.phone,
       dob: `${
         data?.dob.getMonth().toString().length > 1
           ? `${data?.dob.getMonth() + 1}`
@@ -254,7 +254,7 @@ const PatientRegister = ({navigation}) => {
           type="outlined"
           width="86%"
           control={control}
-          name="contact"
+          name="phone"
           title={'Phone number'}
           rules={{
             required: "Phone number can't be empty",

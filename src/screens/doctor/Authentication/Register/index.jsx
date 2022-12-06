@@ -94,7 +94,7 @@ const DoctorRegister = ({navigation}) => {
 
       const data = {
         ...formData,
-        phone: `0${formData?.phone?.split('-')[1]}`,
+        phone: formData?.phone,
         role: ROLES.doctor,
         name: pmcData?.Name?.toLowerCase(),
         qualifications: pmcData?.Qualifications,
