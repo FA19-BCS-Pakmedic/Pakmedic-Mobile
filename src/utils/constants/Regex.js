@@ -15,4 +15,5 @@ export const stringRegex = /^[a-zA-Z ]*$/gm;
 export const numberRegex = /^[0-9]*$/gm;
 
 //phone number regex
-export const phoneNumberRegex = /^(\+)([0-9]{1,4})(\-)([0-9]{9,12})$/gm;
+// export const phoneNumberRegex = /^(\+)([0-9]{1,4})(\-)([0-9]{11,12})$/gm;
+export const phoneNumberRegex = /^[0-9]{11}$/gm;
