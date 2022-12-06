@@ -1,8 +1,9 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
 import Onboarding from '../../screens/shared/On-Boarding';
 import ROLES from '../../utils/constants/ROLES';
+import deviceStorage from '../../utils/helpers/deviceStorage';
 
 const onboardingStack = createNativeStackNavigator();
 
@@ -102,7 +103,19 @@ const patientSide = () => {
 
 //stack navigator for onboarding Screens
 const OnboardingNavigation = props => {
-  return props.side == ROLES.doctor ? doctorSide() : patientSide();
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    const getRole = async () => {
+
+      const role = await deviceStorage.loadItem('role');
+      setRole(role);
+      
+    };
+    getRole();
+  }, []);
+
+  return role == ROLES.doctor ? doctorSide() : patientSide();
 };
 
 export default OnboardingNavigation;

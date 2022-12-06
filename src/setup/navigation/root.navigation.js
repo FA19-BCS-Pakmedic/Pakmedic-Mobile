@@ -58,11 +58,13 @@ export default RootNavigation = () => {
 
       <rootStack.Screen name="Auth" component={AuthNavigation} />
 
-      {role === ROLES.doctor ? (
+      {/* {role === ROLES.doctor ? (
         <rootStack.Screen name="App" component={DoctorNavigation} />
       ) : (
         <rootStack.Screen name="App" component={PatientNavigation} />
-      )}
+      )} */}
+      <rootStack.Screen name="Doctor" component={DoctorNavigation} />
+      <rootStack.Screen name="Patient" component={PatientNavigation} />
     </rootStack.Navigator>
   );
 };

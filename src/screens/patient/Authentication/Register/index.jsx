@@ -88,6 +88,16 @@ const PatientRegister = ({navigation}) => {
   // for opening and closing date modal
   const [openDate, setOpenDate] = useState(false);
 
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    const getRole = async () => {
+      const role = await deviceStorage.loadItem('role');
+      setRole(role);
+    };
+    getRole();
+  });
+
   // form submit handler
   const onSubmit = async data => {
     console.log(data);
@@ -123,7 +133,8 @@ const PatientRegister = ({navigation}) => {
       await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
       //navigate to the app stack
-      navigation.navigate('App');
+      // navigation.navigate('App');
+      navigation.navigate(role === ROLES.doctor ? 'Doctor' : 'Patient');
     } catch (err) {
       console.log(err.response.data.message);
       alert(err.response.data.message);

@@ -37,8 +37,14 @@ const AuthNavigation = ({navigation}) => {
       if (!role) {
         role = 'Patient';
       }
+      const getJwtToken = async () => {
+        let jwtToken = await deviceStorage?.loadItem('jwtToken');
+        jwtToken &&
+          navigation.navigate(role === ROLES.doctor ? 'Doctor' : 'Patient');
+      };
 
       setRole(role);
+      getJwtToken();
     };
 
     getRole();
@@ -46,11 +52,12 @@ const AuthNavigation = ({navigation}) => {
 
   //useEffect to get the jwtToken if the user has already signed in
   useEffect(() => {
-    const getJwtToken = async () => {
-      let jwtToken = await deviceStorage?.loadItem('jwtToken');
-      jwtToken && navigation.navigate('App');
-    };
-    getJwtToken();
+    // const getJwtToken = async () => {
+    //   let jwtToken = await deviceStorage?.loadItem('jwtToken');
+    //   jwtToken &&
+    //     navigation.navigate(role === ROLES.doctor ? 'Doctor' : 'Patient');
+    // };
+    // getJwtToken();
   }, []);
 
   return (

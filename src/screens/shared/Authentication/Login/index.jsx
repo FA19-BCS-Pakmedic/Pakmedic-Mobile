@@ -88,7 +88,8 @@ const Login = ({navigation}) => {
       setValue('password', '');
 
       //navigate to the app stack
-      navigation.navigate('App');
+      // navigation.navigate('App');
+      navigation.navigate(role === ROLES.doctor ? 'Doctor' : 'Patient');
     } catch (err) {
       console.log(err.response.data);
       alert(err.response.data.message);

@@ -1,5 +1,5 @@
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 
 // custom styles import
@@ -84,6 +84,16 @@ const DoctorRegister = ({navigation}) => {
   // for opening and closing the Dropdown
   const [open, setOpen] = useState(false);
 
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    const getRole = async () => {
+      const role = await deviceStorage.loadItem('role');
+      setRole(role);
+    };
+    getRole();
+  });
+
   // form submit handler
   const onSubmit = async formData => {
     if (isPmcIdVerified) {
@@ -114,7 +124,8 @@ const DoctorRegister = ({navigation}) => {
         await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
         //navigate to the app stack
-        navigation.navigate('App');
+        // navigation.navigate('App');
+        navigation.navigate(role === ROLES.doctor ? 'Doctor' : 'Patient');
       } catch (err) {
         console.log(err.response.data);
         alert(err.response.data.message);
