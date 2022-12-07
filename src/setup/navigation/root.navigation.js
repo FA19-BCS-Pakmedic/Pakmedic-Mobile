@@ -47,7 +47,7 @@ export default RootNavigation = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      {!role && <rootStack.Screen name="ChooseRole" component={ChooseRole} />}
+      <rootStack.Screen name="ChooseRole" component={ChooseRole} />
       {isFirstTime && (
         <rootStack.Screen
           name="Onboarding"

@@ -8,17 +8,16 @@ const authSlice = createSlice({
     loading: false,
   },
   reducers: {
-    authStart: (state, action) => {
-      //   state.error = null;
-      state.loading = true;
-    },
     authSuccess: (state, action) => {
       state.token = action.payload.token;
       state.user = action.payload.user;
-      state.loading = false;
+    },
+    authFail: state => {
+      state.token = null;
+      state.user = null;
     },
   },
 });
 
-export const {authStart, authSuccess} = authSlice.actions;
+export const {authFail, authSuccess} = authSlice.actions;
 export default authSlice.reducer;

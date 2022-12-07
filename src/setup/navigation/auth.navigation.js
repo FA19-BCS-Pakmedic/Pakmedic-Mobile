@@ -1,6 +1,5 @@
 // importing stack navigator
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useState, useEffect} from 'react';
 
 // importing screens
 import Login from '../../screens/shared/Authentication/Login';
@@ -26,40 +25,6 @@ const screenOptions = {
 
 //stack navigator for nested register and login screen
 const AuthNavigation = ({navigation}) => {
-  const [role, setRole] = useState(null);
-
-  useEffect(() => {
-    const getRole = async () => {
-      // let role;
-      let role = await deviceStorage?.loadItem('role');
-      console.log('HERE auth navigation', role);
-
-      if (!role) {
-        role = 'Patient';
-      }
-      const getJwtToken = async () => {
-        let jwtToken = await deviceStorage?.loadItem('jwtToken');
-        jwtToken &&
-          navigation.navigate(role === ROLES.doctor ? 'Doctor' : 'Patient');
-      };
-
-      setRole(role);
-      getJwtToken();
-    };
-
-    getRole();
-  }, []);
-
-  //useEffect to get the jwtToken if the user has already signed in
-  useEffect(() => {
-    // const getJwtToken = async () => {
-    //   let jwtToken = await deviceStorage?.loadItem('jwtToken');
-    //   jwtToken &&
-    //     navigation.navigate(role === ROLES.doctor ? 'Doctor' : 'Patient');
-    // };
-    // getJwtToken();
-  }, []);
-
   return (
     <authStack.Navigator
       screenOptions={{
@@ -67,12 +32,11 @@ const AuthNavigation = ({navigation}) => {
       }}
       initialRouteName="LoginNavigation">
       <authStack.Screen name="Login" component={Login} />
-      {/* <authStack.Screen name="Register" component={getRegisterScreen} /> */}
-      {role === ROLES.doctor ? (
-        <authStack.Screen name="Register" component={DoctorRegister} />
-      ) : (
-        <authStack.Screen name="Register" component={PatientRegister} />
-      )}
+
+      {/* <authStack.Screen name="Register" component={DoctorRegister} /> */}
+
+      {/* <authStack.Screen name="Register" component={PatientRegister} /> */}
+
       <authStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <authStack.Screen name="OtpVerification" component={OtpVerification} />
       <authStack.Screen name="SetNewPassword" component={SetNewPassword} />

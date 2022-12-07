@@ -1,14 +1,16 @@
-//libraries App navigation
-import Chatbot from './src/screens/patient/Chatbot';
+// app entry point
 import AppNavigation from './src/setup/navigation/app.navigation';
 
-import DoctorNavigation from './src/setup/navigation/Doctor-Navigation/doctor.navigation';
-import PatientNavigation from './src/setup/navigation/Patient-Navigation/patient.navigation';
-import SplashScreen from 'react-native-splash-screen';
+//redux toolkit store
+import {Provider} from 'react-redux';
+import {store} from './src/setup/redux/store';
+
 const App = () => {
-
-  return <AppNavigation />;
-
+  return (
+    <Provider store={store}>
+      <AppNavigation />
+    </Provider>
+  );
 };
 
 export default App;
