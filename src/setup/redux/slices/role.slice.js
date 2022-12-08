@@ -4,14 +4,12 @@ const roleSlice = createSlice({
   name: 'role',
   initialState: {
     role: null,
-    loading: false,
   },
   reducers: {
     setRole: (state, action) => {
-      state.role = action.payload.role;
+      state.role = action.payload;
     },
   },
 });
 export const {setRole} = roleSlice.actions;
 export default roleSlice.reducer;
-

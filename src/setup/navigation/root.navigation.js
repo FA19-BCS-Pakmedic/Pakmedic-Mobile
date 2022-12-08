@@ -3,6 +3,16 @@ import {useState, useEffect} from 'react';
 //import stack navigator
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+//import redux hooks
+import {useDispatch} from 'react-redux';
+
+//import actions
+import {authSuccess, setRole} from '../redux/actions';
+
+//import services
+import {getPatient} from '../../services/patientServices';
+import {getDoctor} from '../../services/doctorServices';
+
 //import navigation stacks
 import OnboardingNavigation from './onboarding.navigation';
 import AuthNavigation from './auth.navigation';
@@ -17,54 +27,51 @@ const rootStack = createNativeStackNavigator();
 
 //configure root navigator
 export default RootNavigation = () => {
-  const [role, setRole] = useState(null);
+  const [userRole, setUserRole] = useState();
   const [isFirstTime, setIsFirstTime] = useState(true);
-  const [jwt, setJwt] = useState(null);
+  const dispatch = useDispatch();
 
-  //useEffect to get roles
+  // use effect to check if user has selected a role
   useEffect(() => {
     const getRole = async () => {
-      // let role;
-      let role = await deviceStorage?.loadItem('role');
-      console.log('HERE IN ROOT NAVIGATION', role);
-      setRole(role);
+      const storedRole = await deviceStorage.loadItem('role');
+      if (storedRole) {
+        dispatch(setRole(storedRole));
+        setUserRole(storedRole);
+      }
     };
-
     getRole();
   }, []);
 
-  //useEffect to get the firstTime
+  // use effect to check if the user has already gone through the onboarding
   useEffect(() => {
-    const getFirstTime = async () => {
-      let firstTime = await deviceStorage?.loadItem('isFirstTime');
-      firstTime && setIsFirstTime(false);
+    const getIsFirstTime = async () => {
+      const isFirstTime = await deviceStorage.loadItem('isFirstTime');
+      setIsFirstTime(isFirstTime === null);
     };
-    getFirstTime();
-  }, []);
+
+    getIsFirstTime();
+  });
 
   return (
     <rootStack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
-      <rootStack.Screen name="ChooseRole" component={ChooseRole} />
+      {!userRole && (
+        <rootStack.Screen name="ChooseRole" component={ChooseRole} />
+      )}
       {isFirstTime && (
-        <rootStack.Screen
-          name="Onboarding"
-          component={OnboardingNavigation}
-          side={role}
-        />
+        <rootStack.Screen name="Onboarding" component={OnboardingNavigation} />
       )}
 
       <rootStack.Screen name="Auth" component={AuthNavigation} />
 
-      {/* {role === ROLES.doctor ? (
+      {userRole === ROLES.doctor ? (
         <rootStack.Screen name="App" component={DoctorNavigation} />
       ) : (
         <rootStack.Screen name="App" component={PatientNavigation} />
-      )} */}
-      <rootStack.Screen name="Doctor" component={DoctorNavigation} />
-      <rootStack.Screen name="Patient" component={PatientNavigation} />
+      )}
     </rootStack.Navigator>
   );
 };

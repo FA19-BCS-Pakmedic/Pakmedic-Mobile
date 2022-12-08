@@ -8,20 +8,18 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setLoading} from '../redux/actions';
 
 const AppNavigation = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const dispatch = useDispatch();
-  const loading = useSelector(state => state.load.loading);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     SplashScreen.hide();
     setTimeout(() => {
-      dispatch(setLoading(false));
-      setIsLoaded(!loading);
+      setIsLoading(false);
     }, 1000);
-  });
+  }, []);
+
   return (
     <AnimatedSplash
-      isLoaded={isLoaded}
+      isLoaded={!isLoading}
       logoImage={require('../../assets/images/Logo.png')}
       backgroundColor={'#FFFFFF'}
       logoHeight={200}

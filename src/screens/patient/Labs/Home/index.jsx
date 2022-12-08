@@ -7,7 +7,7 @@ import colors from '../../../../utils/styles/themes/colors';
 
 const Home = () => {
   return (
-    <StaticContainer headerColor={colors.primaryMonoChrome300}>
+    <StaticContainer>
       <View>
         <Text>Home</Text>
       </View>

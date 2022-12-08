@@ -4,12 +4,17 @@ import {styles} from './styles';
 import React from 'react';
 import StaticContainer from '../../../../containers/StaticContainer';
 import colors from '../../../../utils/styles/themes/colors';
+import {useSelector} from 'react-redux';
 
 const Dashboard = () => {
+  const user = useSelector(state => state.auth.user);
+
+  console.log(user);
+
   return (
-    <StaticContainer headerColor={colors.primaryMonoChrome300}>
+    <StaticContainer>
       <View>
-        <Text>PATIENT Dashboard</Text>
+        <Text>welcome {user?.name}</Text>
       </View>
     </StaticContainer>
   );

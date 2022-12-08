@@ -35,7 +35,6 @@ import {
 import ROLES from '../../../../utils/constants/ROLES';
 
 //importing container
-import ScrollContainer from '../../../../containers/ScrollContainer';
 import StaticContainer from '../../../../containers/StaticContainer';
 
 //importing doctors service to call end points
@@ -54,27 +53,20 @@ const DoctorRegister = ({navigation}) => {
   const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
 
   // useForm hook from react-hook-form
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-    setValue,
-    clearErrors,
-    watch,
-    setError,
-  } = useForm({
-    mode: 'all',
-    revalidate: 'all',
-    defaultValues: {
-      pmcId: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      phone: '',
-      location: '',
-      gender: '',
-    },
-  });
+  const {control, handleSubmit, setValue, clearErrors, watch, setError} =
+    useForm({
+      mode: 'all',
+      revalidate: 'all',
+      defaultValues: {
+        pmcId: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        location: '',
+        gender: '',
+      },
+    });
 
   // for setting the password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -83,16 +75,6 @@ const DoctorRegister = ({navigation}) => {
 
   // for opening and closing the Dropdown
   const [open, setOpen] = useState(false);
-
-  const [role, setRole] = useState('');
-
-  useEffect(() => {
-    const getRole = async () => {
-      const role = await deviceStorage.loadItem('role');
-      setRole(role);
-    };
-    getRole();
-  });
 
   // form submit handler
   const onSubmit = async formData => {
@@ -125,7 +107,6 @@ const DoctorRegister = ({navigation}) => {
 
         //navigate to the app stack
         // navigation.navigate('App');
-        navigation.navigate(role === ROLES.doctor ? 'Doctor' : 'Patient');
       } catch (err) {
         console.log(err.response.data);
         alert(err.response.data.message);

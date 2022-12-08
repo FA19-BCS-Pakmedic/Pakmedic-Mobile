@@ -1,4 +1,9 @@
-import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 
 import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
@@ -12,7 +17,9 @@ export default Button = ({
   onPress,
   borderColor,
   height,
+  isLoading,
 }) => {
+  console.log('button is loading', isLoading);
   return (
     <TouchableOpacity
       style={
@@ -22,14 +29,18 @@ export default Button = ({
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
-        !isDisabled && onPress ? onPress() : () => {};
+        !isLoading && !isDisabled && onPress ? onPress() : () => {};
       }}>
-      <Text
-        style={
-          isDisabled ? styles().buttonLabelDisabled : styles().buttonLabel
-        }>
-        {label}
-      </Text>
+      {isLoading ? (
+        <ActivityIndicator size="small" color={colors.white} />
+      ) : (
+        <Text
+          style={
+            isDisabled ? styles().buttonLabelDisabled : styles().buttonLabel
+          }>
+          {label}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
