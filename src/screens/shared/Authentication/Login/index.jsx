@@ -34,9 +34,9 @@ import {getDoctor, loginDoctor} from '../../../../services/doctorServices';
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {
+  authLogout,
   authSuccess,
-  setButtonLoading,
-  setLoading,
+
 } from '../../../../setup/redux/actions';
 
 const Login = ({navigation}) => {
@@ -55,8 +55,6 @@ const Login = ({navigation}) => {
       password: '',
     },
   });
-
-  
 
   //on submit of sign up form
   const onSubmit = async data => {
@@ -89,6 +87,7 @@ const Login = ({navigation}) => {
       //navigate to the app stack
       navigation.navigate('App');
     } catch (err) {
+      dispatch(authLogout());
       console.log(err.response.data);
       alert(err.response.data.message);
       setIsLoading(false);

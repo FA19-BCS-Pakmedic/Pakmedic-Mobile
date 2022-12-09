@@ -8,7 +8,6 @@ import roleReducer from './slices/role.slice';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    load: loadingReducer,
     role: roleReducer,
   },
 });

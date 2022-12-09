@@ -43,10 +43,14 @@ import {
   registerDoctor,
 } from '../../../../services/doctorServices';
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {useDispatch} from 'react-redux';
+import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
   const [pmcData, setPmcData] = useState(null);
+
+  const dispatch = useDispatch();
 
   //error hook to prevent form submission if pmc id is not verified
   const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
@@ -99,15 +103,20 @@ const DoctorRegister = ({navigation}) => {
       // console.log(data);
       try {
         const response = await registerDoctor(data);
-        console.log(response.data);
         alert('User registered successfully');
 
-        // console.log(response.data);
+        //storing jwt token to mobile storage
         await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
-        //navigate to the app stack
-        // navigation.navigate('App');
+        //initializing global state with jwt token and user object
+        dispatch(
+          authSuccess({user: response.data.user, token: response.data.token}),
+        );
+
+        // navigate to the app stack
+        navigation.navigate('App');
       } catch (err) {
+        dispatch(authLogout());
         console.log(err.response.data);
         alert(err.response.data.message);
         if (err.response.data.error.statusCode === 409) {
@@ -118,6 +127,7 @@ const DoctorRegister = ({navigation}) => {
         }
       }
     } else {
+      dispatch(authLogout());
       setError('pmcId', {
         type: 'duplicate ID',
         message: pmcIdErrorMessage,

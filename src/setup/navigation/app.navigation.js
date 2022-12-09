@@ -5,7 +5,7 @@ import SplashScreen from 'react-native-splash-screen';
 import RootNavigation from './root.navigation';
 
 import {useSelector, useDispatch} from 'react-redux';
-import {setLoading} from '../redux/actions';
+
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
