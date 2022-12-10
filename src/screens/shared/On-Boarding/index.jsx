@@ -34,16 +34,17 @@ const OnBoarding = props => {
     } else {
       await deviceStorage.saveItem('isFirstTime', 'false');
 
-      props.navigation.navigate('Auth', {
-        screen: 'Login',
-      });
+      navigateToLogin();
     }
   };
 
   const skipOboarding = async () => {
     await deviceStorage.saveItem('isFirstTime', 'false');
-    console.log(await deviceStorage.loadItem('isFirstTime'), 'skipOnboarding');
-    props.navigation.navigate('Auth', {
+    navigateToLogin();
+  };
+
+  const navigateToLogin = () => {
+    props.navigation.replace('Auth', {
       screen: 'Login',
     });
   };

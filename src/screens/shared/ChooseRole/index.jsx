@@ -20,7 +20,7 @@ const ChooseRole = ({navigation}) => {
   const chooseRole = async role => {
     await deviceStorage.saveItem('role', role);
     dispatch(setRole(role));
-    navigation.navigate('Onboarding');
+    navigation.replace('Onboarding');
   };
 
   return (

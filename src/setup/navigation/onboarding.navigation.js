@@ -5,7 +5,7 @@ import Onboarding from '../../screens/shared/On-Boarding';
 import ROLES from '../../utils/constants/ROLES';
 import {useSelector} from 'react-redux';
 
-const onboardingStack = createNativeStackNavigator();
+const OnboardingStack = createNativeStackNavigator();
 
 const doctorText = [
   'Hassle Free Appointment Booking Facility for Online and In PersonConsultation',
@@ -21,12 +21,12 @@ const patientText = [
 
 const doctorSide = () => {
   return (
-    <onboardingStack.Navigator
+    <OnboardingStack.Navigator
       screenOptions={{
         headerShown: false,
       }}
       initialRouteName="DoctorOnboarding">
-      <onboardingStack.Screen name="Onboarding1">
+      <OnboardingStack.Screen name="Onboarding1">
         {props => (
           <Onboarding
             {...props}
@@ -35,8 +35,8 @@ const doctorSide = () => {
             pagination="Pagination1"
           />
         )}
-      </onboardingStack.Screen>
-      <onboardingStack.Screen name="Onboarding2">
+      </OnboardingStack.Screen>
+      <OnboardingStack.Screen name="Onboarding2">
         {props => (
           <Onboarding
             {...props}
@@ -45,8 +45,8 @@ const doctorSide = () => {
             pagination="Pagination2"
           />
         )}
-      </onboardingStack.Screen>
-      <onboardingStack.Screen name="Onboarding3">
+      </OnboardingStack.Screen>
+      <OnboardingStack.Screen name="Onboarding3">
         {props => (
           <Onboarding
             {...props}
@@ -55,19 +55,19 @@ const doctorSide = () => {
             pagination="Pagination3"
           />
         )}
-      </onboardingStack.Screen>
-    </onboardingStack.Navigator>
+      </OnboardingStack.Screen>
+    </OnboardingStack.Navigator>
   );
 };
 
 const patientSide = () => {
   return (
-    <onboardingStack.Navigator
+    <OnboardingStack.Navigator
       screenOptions={{
         headerShown: false,
       }}
       initialRouteName="PatientOnboarding">
-      <onboardingStack.Screen name="Onboarding1">
+      <OnboardingStack.Screen name="Onboarding1">
         {props => (
           <Onboarding
             {...props}
@@ -76,8 +76,8 @@ const patientSide = () => {
             pagination="Pagination1"
           />
         )}
-      </onboardingStack.Screen>
-      <onboardingStack.Screen name="Onboarding2">
+      </OnboardingStack.Screen>
+      <OnboardingStack.Screen name="Onboarding2">
         {props => (
           <Onboarding
             {...props}
@@ -86,8 +86,8 @@ const patientSide = () => {
             pagination="Pagination2"
           />
         )}
-      </onboardingStack.Screen>
-      <onboardingStack.Screen name="Onboarding3">
+      </OnboardingStack.Screen>
+      <OnboardingStack.Screen name="Onboarding3">
         {props => (
           <Onboarding
             {...props}
@@ -96,14 +96,22 @@ const patientSide = () => {
             pagination="Pagination3"
           />
         )}
-      </onboardingStack.Screen>
-    </onboardingStack.Navigator>
+      </OnboardingStack.Screen>
+    </OnboardingStack.Navigator>
   );
 };
 
 //stack navigator for onboarding Screens
 const OnboardingNavigation = () => {
   const role = useSelector(state => state.role.role);
+
+  // //useEffect to remove all the previous screens from the stack navigator
+  // useEffect(() => {
+  //   OnboardingStack.reset({
+  //     index: 0,
+  //     routes: [{name: 'Onboarding1'}],
+  //   });
+  // }, []);
 
   return role == ROLES.doctor ? doctorSide() : patientSide();
 };
