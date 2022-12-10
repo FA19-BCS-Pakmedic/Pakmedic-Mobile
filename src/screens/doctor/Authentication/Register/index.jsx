@@ -1,5 +1,5 @@
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 
 // custom styles import
@@ -35,7 +35,6 @@ import {
 import ROLES from '../../../../utils/constants/ROLES';
 
 //importing container
-import ScrollContainer from '../../../../containers/ScrollContainer';
 import StaticContainer from '../../../../containers/StaticContainer';
 
 //importing doctors service to call end points
@@ -43,37 +42,35 @@ import {
   pmcIdVerifyDoctor,
   registerDoctor,
 } from '../../../../services/doctorServices';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {useDispatch} from 'react-redux';
+import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
   const [pmcData, setPmcData] = useState(null);
+
+  const dispatch = useDispatch();
 
   //error hook to prevent form submission if pmc id is not verified
   const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
   const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
 
   // useForm hook from react-hook-form
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-    setValue,
-    clearErrors,
-    watch,
-    setError,
-  } = useForm({
-    mode: 'all',
-    revalidate: 'all',
-    defaultValues: {
-      pmcId: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      phone: '',
-      location: '',
-      gender: '',
-    },
-  });
+  const {control, handleSubmit, setValue, clearErrors, watch, setError} =
+    useForm({
+      mode: 'all',
+      revalidate: 'all',
+      defaultValues: {
+        pmcId: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        location: '',
+        gender: '',
+      },
+    });
 
   // for setting the password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -93,7 +90,7 @@ const DoctorRegister = ({navigation}) => {
 
       const data = {
         ...formData,
-        phone: `0${formData?.phone?.split('-')[1]}`,
+        phone: formData?.phone,
         role: ROLES.doctor,
         name: pmcData?.Name?.toLowerCase(),
         qualifications: pmcData?.Qualifications,
@@ -106,9 +103,20 @@ const DoctorRegister = ({navigation}) => {
       // console.log(data);
       try {
         const response = await registerDoctor(data);
-        console.log(response.data);
-        alert(response.data.message);
+        alert('User registered successfully');
+
+        //storing jwt token to mobile storage
+        await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+        //initializing global state with jwt token and user object
+        dispatch(
+          authSuccess({user: response.data.user, token: response.data.token}),
+        );
+
+        // navigate to the app stack
+        navigation.navigate('App');
       } catch (err) {
+        dispatch(authLogout());
         console.log(err.response.data);
         alert(err.response.data.message);
         if (err.response.data.error.statusCode === 409) {
@@ -119,6 +127,7 @@ const DoctorRegister = ({navigation}) => {
         }
       }
     } else {
+      dispatch(authLogout());
       setError('pmcId', {
         type: 'duplicate ID',
         message: pmcIdErrorMessage,

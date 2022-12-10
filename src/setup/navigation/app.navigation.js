@@ -4,32 +4,22 @@ import AnimatedSplash from 'react-native-animated-splash-screen';
 import SplashScreen from 'react-native-splash-screen';
 import RootNavigation from './root.navigation';
 
+import {useSelector, useDispatch} from 'react-redux';
+
+
 const AppNavigation = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     SplashScreen.hide();
     setTimeout(() => {
-      setIsLoaded(true);
+      setIsLoading(false);
     }, 1000);
-  });
-
-  // return isLoaded ? (
-  //   <NavigationContainer>
-  //     <RootNavigation />
-  //   </NavigationContainer>
-  // ) : (
-  //   <AnimatedSplash
-  //     translucent={true}
-  //     isLoaded={isLoaded}
-  //     logoImage={require('../../assets/images/Logo.png')}
-  //     backgroundColor={'#FFFFFF'}
-  //     logoHeight={200}
-  //     logoWidth={200}></AnimatedSplash>
-  // );
+  }, []);
 
   return (
     <AnimatedSplash
-      isLoaded={isLoaded}
+      isLoaded={!isLoading}
       logoImage={require('../../assets/images/Logo.png')}
       backgroundColor={'#FFFFFF'}
       logoHeight={200}

@@ -7,32 +7,30 @@ import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import deviceStorage from '../../../utils/helpers/deviceStorage';
+import ROLES from '../../../utils/constants/ROLES';
+import {useDispatch, useSelector} from 'react-redux';
+import {authLogout} from '../../../setup/redux/actions';
 
 const Header = ({color}) => {
   const navigation = useNavigation();
 
-  const [token, setToken] = useState(null);
+  const role = useSelector(state => state.role.role);
+  const user = useSelector(state => state.auth.user) || null;
 
-  useEffect(() => {
-    const getToken = async () => {
-      const data = await deviceStorage.loadItem('jwtToken');
-      setToken(data);
-    };
-    getToken();
-  }, []);
+  const dispatch = useDispatch();
 
   const logout = async () => {
     await deviceStorage.deleteItem('jwtToken');
-    setToken(null);
+    dispatch(authLogout());
     navigation.navigate('Auth', {
       screen: 'Login',
     });
   };
 
   return (
-    <View style={styles(color).root}>
+    <View style={styles(role).root}>
       <Text style={styles().text}>Pakmedic</Text>
-      {token && (
+      {user && (
         <TouchableOpacity onPress={logout} style={styles().logoutContainer}>
           <Text>Logout</Text>
         </TouchableOpacity>
@@ -43,12 +41,15 @@ const Header = ({color}) => {
 
 export default Header;
 
-const styles = color =>
+const styles = role =>
   StyleSheet.create({
     root: {
       width: dimensions.Width,
       height: dimensions.Height / 15,
-      backgroundColor: color || colors.secondaryMonoChrome300,
+      backgroundColor:
+        role === ROLES.doctor
+          ? colors.secondaryMonoChrome300
+          : colors.primaryMonoChrome300,
       justifyContent: 'center',
       alignItems: 'center',
       position: 'relative',

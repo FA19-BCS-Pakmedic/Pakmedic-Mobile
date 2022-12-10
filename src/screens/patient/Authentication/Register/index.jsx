@@ -45,33 +45,28 @@ import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
 import {registerPatient} from '../../../../services/patientServices';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {useDispatch} from 'react-redux';
+import { authSuccess } from '../../../../setup/redux/actions';
 
 const PatientRegister = ({navigation}) => {
+  const dispatch = useDispatch();
+
   // useForm hook from react-hook-form
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-    setValue,
-    clearErrors,
-    setError,
-    watch,
-  } = useForm({
-    mode: 'all',
-    revalidate: 'all',
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      phoneNumber: '',
-      dob: new Date(),
-      gender: '',
-      // cnic1: '',
-      // cnic2: '',
-      // cnic3: '',
-    },
-  });
+  const {control, handleSubmit, setValue, clearErrors, setError, watch} =
+    useForm({
+      mode: 'all',
+      revalidate: 'all',
+      defaultValues: {
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        dob: new Date(),
+        gender: '',
+      },
+    });
 
   // for setting the password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -79,7 +74,6 @@ const PatientRegister = ({navigation}) => {
     useState(false);
 
   //cnic error
-  const [cnicError, setCnicError] = useState(false);
 
   // for date picker
   const [date, setDate] = useState(new Date());
@@ -96,7 +90,7 @@ const PatientRegister = ({navigation}) => {
       name: data?.name,
       email: data?.email,
       password: data?.password,
-      phone: `0${data?.contact.split('-')[1]}`,
+      phone: data?.phone,
       dob: `${
         data?.dob.getMonth().toString().length > 1
           ? `${data?.dob.getMonth() + 1}`
@@ -114,11 +108,21 @@ const PatientRegister = ({navigation}) => {
     console.log(patient);
 
     try {
-      const res = await registerPatient(patient);
-      console.log(res.data);
+      const response = await registerPatient(patient);
+      console.log('response', response.data);
       alert('Patient was successfully registered');
+
+      //store jwt in local storage
+      await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+      //initializing global state with jwt token and user object
+      dispatch(
+        authSuccess({user: response.data.user, token: response.data.token}),
+      );
+
+      // navigate to the app stack
+      navigation.navigate('App');
     } catch (err) {
-      console.log(err.response.data.message);
       alert(err.response.data.message);
       if (err.response.data.error.statusCode === 409) {
         setError('email', {
@@ -127,10 +131,6 @@ const PatientRegister = ({navigation}) => {
         });
       }
     }
-
-    // console.log(data, 'data');
-    // console.log(isValid, 'isValid');
-    // console.log('error', errors);
   };
 
   //function for setting the value of gender
@@ -247,7 +247,7 @@ const PatientRegister = ({navigation}) => {
           type="outlined"
           width="86%"
           control={control}
-          name="contact"
+          name="phone"
           title={'Phone number'}
           rules={{
             required: "Phone number can't be empty",

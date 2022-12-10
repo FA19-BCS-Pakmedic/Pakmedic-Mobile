@@ -7,7 +7,7 @@ import colors from '../../../../utils/styles/themes/colors';
 
 const BookAppointment = () => {
   return (
-    <StaticContainer headerColor={colors.primaryMonoChrome300}>
+    <StaticContainer >
       <View>
         <Text>BookAppointment</Text>
       </View>

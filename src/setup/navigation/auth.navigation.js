@@ -1,6 +1,6 @@
 // importing stack navigator
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 // importing screens
 import Login from '../../screens/shared/Authentication/Login';
@@ -15,6 +15,10 @@ import ROLES from '../../utils/constants/ROLES';
 
 //import helper functions
 import deviceStorage from '../../utils/helpers/deviceStorage';
+import {useEffect} from 'react';
+import {getDoctor} from '../../services/doctorServices';
+import {getPatient} from '../../services/patientServices';
+import {authSuccess} from '../redux/actions';
 
 // create stacks
 const authStack = createNativeStackNavigator();
@@ -26,29 +30,38 @@ const screenOptions = {
 
 //stack navigator for nested register and login screen
 const AuthNavigation = ({navigation}) => {
-  const [role, setRole] = useState(null);
+  const role = useSelector(state => state.role.role);
 
+  const dispatch = useDispatch();
+
+  //useEffect hook to check if the user is already logged in
   useEffect(() => {
-    const getRole = async () => {
-      // let role;
-      let role = await deviceStorage?.loadItem('role');
-      if (!role) {
-        role = 'Patient';
+    const checkIfLoggedIn = async () => {
+      const token = await deviceStorage.loadItem('jwtToken');
+      if (token && role) {
+        try {
+          //getting logged in user data
+          const response =
+            role === ROLES.doctor
+              ? await getDoctor(token)
+              : await getPatient(token);
+
+          // setting the global state with the jwt and user information received in the response
+          dispatch(
+            authSuccess({
+              user: response?.data?.data?.user,
+              token: token,
+            }),
+          );
+
+          //navigate to user app if the user is logged in
+          navigation.navigate('App');
+        } catch (err) {
+          console.log(err);
+        }
       }
-
-      setRole(role);
     };
-
-    getRole();
-  }, []);
-
-  //useEffect to get the jwtToken if the user has already signed in
-  useEffect(() => {
-    const getJwtToken = async () => {
-      let jwtToken = await deviceStorage?.loadItem('jwtToken');
-      jwtToken && navigation.navigate('App');
-    };
-    getJwtToken();
+    checkIfLoggedIn();
   }, []);
 
   return (
@@ -58,12 +71,13 @@ const AuthNavigation = ({navigation}) => {
       }}
       initialRouteName="LoginNavigation">
       <authStack.Screen name="Login" component={Login} />
-      {/* <authStack.Screen name="Register" component={getRegisterScreen} /> */}
+
       {role === ROLES.doctor ? (
         <authStack.Screen name="Register" component={DoctorRegister} />
       ) : (
         <authStack.Screen name="Register" component={PatientRegister} />
       )}
+
       <authStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <authStack.Screen name="OtpVerification" component={OtpVerification} />
       <authStack.Screen name="SetNewPassword" component={SetNewPassword} />

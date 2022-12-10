@@ -11,7 +11,6 @@ import dimensions from '../utils/styles/themes/dimensions';
 import colors from '../utils/styles/themes/colors';
 
 const ScrollContainer = ({
-  headerColor,
   children,
   customHeaderEnable,
   customHeaderName,
@@ -19,7 +18,7 @@ const ScrollContainer = ({
 }) => {
   return (
     <SafeAreaView style={styles().root}>
-      <Header color={headerColor} />
+      <Header />
       {customHeaderEnable && (
         <CustomNavHeader screenName={customHeaderName} isBack={isBack} />
       )}

@@ -52,8 +52,9 @@ export const ContactInputField = ({
             <IntlPhoneInput
               onChangeText={e => {
                 onChange(
-                  `${e.dialCode}-${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
-                );
+                // `${e.dialCode}-${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
+                 `0${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
+                 );
               }}
               placeholder="Phone Number"
               placeholderTextColor={colors.secondary1}

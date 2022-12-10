@@ -1,10 +1,20 @@
 import axios from 'axios';
 
+//import helper function
+import deviceStorage from '../utils/helpers/deviceStorage';
+
 //import api end point
 import {apiEndpoint} from '../utils/constants/APIendpoint';
 
+const getToken = async () => {
+  return await deviceStorage.loadItem('jwtToken');
+};
+
+// axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
+
 const API = axios.create({
   baseURL: `${apiEndpoint}doctors`,
+  withCredentials: true,
 });
 
 //endpoint for doctor pmc id verification
@@ -26,3 +36,6 @@ export const verifyOtpDoctor = data =>
 //send reset forgot password
 export const resetForgotPasswordDoctor = data =>
   API.patch('/reset-forgotten-password', data);
+
+//get patient if he is logged in
+export const getDoctor = () => API.get('/');

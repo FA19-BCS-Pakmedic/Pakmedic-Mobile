@@ -1,6 +1,7 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
+import {useSelector, useDispatch} from 'react-redux';
 
 //importing images
 import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
@@ -18,26 +19,33 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import {ValidateInputField} from '../../../../components/shared/Input';
 import Button from '../../../../components/shared/Button';
 import {TextDivider} from '../../../../components/shared/Divider';
-import StaticContainer from '../../../../containers/StaticContainer';
 
 //constants import
 import {emailRegex, passwordRegex} from '../../../../utils/constants/Regex';
 import ROLES from '../../../../utils/constants/ROLES';
 
 //import container
-import ScrollContainer from '../../../../containers/ScrollContainer';
+import StaticContainer from '../../../../containers/StaticContainer';
 
 //import API call for login
-import {loginPatient} from '../../../../services/patientServices';
+import {getPatient, loginPatient} from '../../../../services/patientServices';
+import {getDoctor, loginDoctor} from '../../../../services/doctorServices';
 
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
-import {loginDoctor} from '../../../../services/doctorServices';
+import {
+  authLogout,
+  authSuccess,
+
+} from '../../../../setup/redux/actions';
 
 const Login = ({navigation}) => {
   // states
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [role, setRole] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const role = useSelector(state => state.role.role);
+
+  const dispatch = useDispatch();
 
   //hook for react hook forms
   const {control, handleSubmit, setValue, watch} = useForm({
@@ -48,39 +56,29 @@ const Login = ({navigation}) => {
     },
   });
 
-  //useeffect to get the roles from device storage
-  useEffect(() => {
-    const getRole = async () => {
-      const data = await deviceStorage.loadItem('role');
-      setRole(data ? data : ROLES.patient);
-    };
-    getRole();
-
-    console.log(role);
-  }, []);
-
   //on submit of sign up form
   const onSubmit = async data => {
+    setIsLoading(true);
+    // console.log('after setting button loading', isLoading);
     try {
-      let response;
-      if (role === ROLES.patient) {
-        //call patient login api
-        response = await loginPatient({
-          email: data?.email,
-          password: data?.password,
-        });
-      } else {
-        //call doctor login api
-        response = await loginDoctor({
-          email: data?.email,
-          password: data?.password,
-        });
-      }
+      const response =
+        role === ROLES.doctor
+          ? await loginDoctor({email: data?.email, password: data?.password})
+          : await loginPatient({email: data?.email, password: data?.password});
 
-      // console.log(response.data);
+      // preserving jwt token in async storage
       await deviceStorage.saveItem('jwtToken', response?.data?.token);
-      console.log(await deviceStorage.loadItem('jwtToken'));
+
+      // setting the global state with the jwt and user information received in the response
+      dispatch(
+        authSuccess({
+          user: response?.data?.user,
+          token: response?.data?.token,
+        }),
+      );
+
       alert('Login Successful');
+      setIsLoading(false);
 
       //clear all inputs
       setValue('email', '');
@@ -89,17 +87,15 @@ const Login = ({navigation}) => {
       //navigate to the app stack
       navigation.navigate('App');
     } catch (err) {
+      dispatch(authLogout());
       console.log(err.response.data);
       alert(err.response.data.message);
+      setIsLoading(false);
     }
-
-    // console.log(data, 'data');
-    // console.log(errors, 'error');
   };
 
   //navigate to signup screen
   const navigateToRegisterScreen = () => {
-    console.log('This function is being called');
     navigation.navigate('Auth', {
       screen: 'Register',
     });
@@ -179,6 +175,7 @@ const Login = ({navigation}) => {
           label="Login"
           type="filled"
           width="100%"
+          isLoading={isLoading}
         />
 
         {/* divider */}

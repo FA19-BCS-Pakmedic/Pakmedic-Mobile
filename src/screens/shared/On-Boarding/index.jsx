@@ -26,26 +26,25 @@ import deviceStorage from '../../../utils/helpers/deviceStorage';
 const OnBoarding = props => {
   const {screenName, text, pagination} = props;
   const [isModalVisible, setModalVisible] = useState(false);
-  const navigateToNext = () => {
+  const navigateToNext = async () => {
     if (screenName !== 'DocOnboarding3' && screenName !== 'PatOnboarding3') {
       props.navigation.navigate(
         'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
       );
     } else {
+      await deviceStorage.saveItem('isFirstTime', 'false');
 
-      deviceStorage.saveItem('isFirstTime', 'false');
-
-      props.navigation.navigate('Auth', {
-        screen: 'Login',
-      });
+      navigateToLogin();
     }
   };
 
-  const skipOboarding = () => {
+  const skipOboarding = async () => {
+    await deviceStorage.saveItem('isFirstTime', 'false');
+    navigateToLogin();
+  };
 
-    deviceStorage.saveItem('isFirstTime', 'false');
-
-    props.navigation.navigate('Auth', {
+  const navigateToLogin = () => {
+    props.navigation.replace('Auth', {
       screen: 'Login',
     });
   };
