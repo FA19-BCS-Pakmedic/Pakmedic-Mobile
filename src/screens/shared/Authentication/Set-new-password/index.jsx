@@ -62,7 +62,7 @@ const SetNewPassword = ({route, navigation}) => {
     getData();
   }, []);
 
-  onSubmit = async data => {
+  const onSubmit = async data => {
     try {
       let response;
       if (role === ROLES.patient) {
@@ -84,7 +84,7 @@ const SetNewPassword = ({route, navigation}) => {
       alert(response.data.message);
 
       //navigate to login screen
-      navigation.navigate('Auth', {
+      navigation.replace('Auth', {
         screen: 'Login',
       });
     } catch (err) {

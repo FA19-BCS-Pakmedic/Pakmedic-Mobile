@@ -47,7 +47,7 @@ import ROLES from '../../../../utils/constants/ROLES';
 import {registerPatient} from '../../../../services/patientServices';
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {useDispatch} from 'react-redux';
-import { authSuccess } from '../../../../setup/redux/actions';
+import {authSuccess} from '../../../../setup/redux/actions';
 
 const PatientRegister = ({navigation}) => {
   const dispatch = useDispatch();
@@ -121,7 +121,7 @@ const PatientRegister = ({navigation}) => {
       );
 
       // navigate to the app stack
-      navigation.navigate('App');
+      navigation.replace('App');
     } catch (err) {
       alert(err.response.data.message);
       if (err.response.data.error.statusCode === 409) {

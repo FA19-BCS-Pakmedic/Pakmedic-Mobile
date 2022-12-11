@@ -55,7 +55,7 @@ const AuthNavigation = ({navigation}) => {
           );
 
           //navigate to user app if the user is logged in
-          navigation.navigate('App');
+          navigation.replace('App');
         } catch (err) {
           console.log(err);
         }

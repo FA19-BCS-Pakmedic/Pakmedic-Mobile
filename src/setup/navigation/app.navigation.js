@@ -4,11 +4,12 @@ import AnimatedSplash from 'react-native-animated-splash-screen';
 import SplashScreen from 'react-native-splash-screen';
 import RootNavigation from './root.navigation';
 
-import {useSelector, useDispatch} from 'react-redux';
-
+import Image from '../../assets/images/Logo.png';
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log(Image);
 
   useEffect(() => {
     SplashScreen.hide();
