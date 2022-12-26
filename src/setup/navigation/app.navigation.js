@@ -6,6 +6,7 @@ import RootNavigation from './root.navigation';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import {googleConfig} from '../../utils/helpers/googleConfig';
+import ProfileManagement from '../../screens/doctor/Profile-management/Home';
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,16 +20,17 @@ const AppNavigation = () => {
   }, []);
 
   return (
-    <AnimatedSplash
-      isLoaded={!isLoading}
-      logoImage={require('../../assets/images/Logo.png')}
-      backgroundColor={'#FFFFFF'}
-      logoHeight={200}
-      logoWidth={200}>
-      <NavigationContainer>
-        <RootNavigation />
-      </NavigationContainer>
-    </AnimatedSplash>
+    // <AnimatedSplash
+    //   isLoaded={!isLoading}
+    //   logoImage={require('../../assets/images/Logo.png')}
+    //   backgroundColor={'#FFFFFF'}
+    //   logoHeight={200}
+    //   logoWidth={200}>
+    <NavigationContainer>
+      {/* <RootNavigation /> */}
+      <ProfileManagement />
+    </NavigationContainer>
+    // </AnimatedSplash>
   );
 };
 
