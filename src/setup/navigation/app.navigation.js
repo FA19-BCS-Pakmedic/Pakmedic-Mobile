@@ -3,15 +3,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import AnimatedSplash from 'react-native-animated-splash-screen';
 import SplashScreen from 'react-native-splash-screen';
 import RootNavigation from './root.navigation';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-import Image from '../../assets/images/Logo.png';
+import {googleConfig} from '../../utils/helpers/googleConfig';
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(Image);
-
   useEffect(() => {
+    GoogleSignin.configure({...googleConfig});
     SplashScreen.hide();
     setTimeout(() => {
       setIsLoading(false);

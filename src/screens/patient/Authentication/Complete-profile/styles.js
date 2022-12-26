@@ -13,38 +13,16 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
-  genderText: {
-    fontSize: fonts.size.font14,
-    fontWeight: fonts.weight.bold,
-    width: '100%',
-    marginBottom: dimensions.Height / 65,
-  },
-
   formContainer: {
     width: '100%',
+    flex: 1,
   },
-
   text: {
-    fontSize: fonts.size.font14,
+    fontSize: fonts.size.font16,
     fontWeight: fonts.weight.normal,
   },
 
-  registerText: {
-    color: colors.primary1,
-    fontSize: fonts.size.font14,
-    fontWeight: fonts.weight.bold,
-  },
-
-  registerTextContainer: {
+  buttonContainer: {
     width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  socialButtonsContainer: {
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
 });

@@ -2,6 +2,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {useSelector, useDispatch} from 'react-redux';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 //importing images
 import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
@@ -35,6 +36,9 @@ import {getDoctor, loginDoctor} from '../../../../services/doctorServices';
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 
+//import google config
+import {googleConfig} from '../../../../utils/helpers/googleConfig';
+
 const Login = ({navigation}) => {
   // states
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -55,12 +59,77 @@ const Login = ({navigation}) => {
   //on submit of sign up form
   const onSubmit = async data => {
     setIsLoading(true);
+    onLogin({email: data?.email, password: data?.password});
     // console.log('after setting button loading', isLoading);
+    // try {
+    //   const response =
+    //     role === ROLES.doctor
+    //       ? await loginDoctor({email: data?.email, password: data?.password})
+    //       : await loginPatient({email: data?.email, password: data?.password});
+
+    //   // preserving jwt token in async storage
+    //   await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+    //   // setting the global state with the jwt and user information received in the response
+    //   dispatch(
+    //     authSuccess({
+    //       user: response?.data?.user,
+    //       token: response?.data?.token,
+    //     }),
+    //   );
+
+    //   alert('Login Successful');
+    //   setIsLoading(false);
+
+    //   //clear all inputs
+    //   setValue('email', '');
+    //   setValue('password', '');
+
+    //   //navigate to the app stack
+    //   navigation.replace('App');
+    // } catch (err) {
+    //   dispatch(authLogout());
+    //   console.log(err.response.data);
+    //   alert(err.response.data.message);
+    //   setIsLoading(false);
+    // }
+  };
+
+  //navigate to signup screen
+  const navigateToRegisterScreen = () => {
+    navigation.navigate('Auth', {
+      screen: 'Register',
+    });
+  };
+
+  //navigate to forgot password screen
+  const navigateToForgotPasswordScreen = () => {
+    navigation.navigate('Auth', {
+      screen: 'ForgotPassword',
+    });
+  };
+
+  //google login functionality
+  const onPressGoogleLogin = async () => {
+    const email = 'awanmoeed2121@gmail.com'; //remove this line of code once the google api starts working
+    try {
+      const response = await GoogleSignin.signIn();
+      console.log(response);
+
+      // TODO: Send the request to the backend api endpoint to check if the user exists and redirect them to dashboard if they have completed their profile
+    } catch (err) {
+      console.log(err);
+      await GoogleSignin.signOut();
+    }
+    onLogin({email, isThirdParty: true}); //this line of code will run after the user has successfully got a response from the google api
+  };
+
+  const onLogin = async data => {
     try {
       const response =
         role === ROLES.doctor
-          ? await loginDoctor({email: data?.email, password: data?.password})
-          : await loginPatient({email: data?.email, password: data?.password});
+          ? await loginDoctor({...data})
+          : await loginPatient({...data});
 
       // preserving jwt token in async storage
       await deviceStorage.saveItem('jwtToken', response?.data?.token);
@@ -88,20 +157,6 @@ const Login = ({navigation}) => {
       alert(err.response.data.message);
       setIsLoading(false);
     }
-  };
-
-  //navigate to signup screen
-  const navigateToRegisterScreen = () => {
-    navigation.navigate('Auth', {
-      screen: 'Register',
-    });
-  };
-
-  //navigate to forgot password screen
-  const navigateToForgotPasswordScreen = () => {
-    navigation.navigate('Auth', {
-      screen: 'ForgotPassword',
-    });
   };
 
   return (
@@ -186,7 +241,9 @@ const Login = ({navigation}) => {
               height={dimensions.Height / 22}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={onPressGoogleLogin}>
             <GoogleLogo
               width={dimensions.Width / 12}
               height={dimensions.Height / 22}

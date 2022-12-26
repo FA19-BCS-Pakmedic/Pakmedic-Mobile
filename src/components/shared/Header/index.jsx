@@ -74,7 +74,7 @@ const Header = ({color}) => {
         </TouchableOpacity>
         {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
-        <TouchableOpacity onPress={openMenu}>
+        <TouchableOpacity onPress={logout}>
           <Image
             source={require('../../../assets/images/default-avatar.png')}
             style={styles().avatar}

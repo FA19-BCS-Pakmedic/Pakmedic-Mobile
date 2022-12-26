@@ -1,6 +1,7 @@
 import {View, Text, ScrollView} from 'react-native';
 import React, {useState, Fragment} from 'react';
 import {useForm} from 'react-hook-form';
+import {useDispatch} from 'react-redux';
 
 // import icon
 import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
@@ -29,8 +30,30 @@ import {
   passwordRegex,
   phoneNumberRegex,
 } from '../../../../utils/constants/Regex';
+import dimensions from '../../../../utils/styles/themes/dimensions';
+import {
+  pmcIdVerifyDoctor,
+  registerDoctor,
+} from '../../../../services/doctorServices';
+import {authLogout, authSuccess} from '../../../../setup/redux/actions';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import StaticContainer from '../../../../containers/StaticContainer';
 
-const CompleteProfile = () => {
+const CompleteProfile = ({route, navigation}) => {
+  const {email} = route.params;
+
+  //to store the information fetched from the pmc endpoint
+  const [pmcData, setPmcData] = useState(null);
+
+  const dispatch = useDispatch();
+
+  //error hook to prevent form submission if pmc id is not verified
+  const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
+  const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
+
+  // for opening and closing the Dropdown
+  const [open, setOpen] = useState(false);
+
   // useForm hook from react-hook-form
   const {
     control,
@@ -44,33 +67,16 @@ const CompleteProfile = () => {
     revalidate: 'all',
     defaultValues: {
       pmcId: '',
-      password: '',
-      confirmPassword: '',
-      phoneNumber: '',
-      city: '',
+      phone: '',
+      location: '',
       gender: '',
     },
   });
 
-  // for setting the password visibility
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
-
-  // for opening and closing the Dropdown
-  const [open, setOpen] = useState(false);
-
-  // form submit handler
-  const onSubmit = data => {
-    console.log(data, 'data');
-    console.log(isValid, 'isValid');
-    console.log('error', errors);
-  };
-
-  //function for setting the value of city
-  const setCity = callback => {
-    setValue('city', callback());
-    clearErrors('city');
+  //function for setting the value of location
+  const setLocation = callback => {
+    setValue('location', callback());
+    clearErrors('location');
   };
 
   //function for setting the value of gender
@@ -79,13 +85,100 @@ const CompleteProfile = () => {
     clearErrors('gender');
   };
 
+  // form submit handler
+  const onSubmit = async formData => {
+    if (isPmcIdVerified) {
+      const issueDate = pmcData.RegistrationDate.split('/');
+      const expiryDate = pmcData.ValidUpto.split('/');
+
+      console.log(issueDate, expiryDate);
+
+      const data = {
+        ...formData,
+        email: email,
+        phone: formData?.phone,
+        role: ROLES.doctor,
+        name: pmcData?.Name?.toLowerCase(),
+        qualifications: pmcData?.Qualifications,
+        issueDate: `${issueDate[2]}-${issueDate[1]}-${issueDate[0]}`,
+        expiryDate: `${expiryDate[2]}-${expiryDate[1]}-${expiryDate[0]}`,
+        status: pmcData?.Status?.toLowerCase(),
+        speciality: 'Dentist', //TODO: REPLACE WITH A FIELD DATA
+        isThirdParty: true,
+      };
+
+      console.log(data);
+      try {
+        const response = await registerDoctor(data);
+        alert('User registered successfully');
+        onSuccess(response);
+      } catch (err) {
+        dispatch(authLogout());
+        console.log(err.response.data);
+        alert(err.response.data.message);
+        if (err.response.data.error.statusCode === 409) {
+          setError('email', {
+            type: 'conflict',
+            message: 'This email is already registered',
+          });
+        }
+      }
+    } else {
+      dispatch(authLogout());
+      setError('pmcId', {
+        type: 'duplicate ID',
+        message: pmcIdErrorMessage,
+      });
+    }
+  };
+
+  //on successfull registration
+  const onSuccess = async response => {
+    //storing jwt token to mobile storage
+    await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+    //initializing global state with jwt token and user object
+    dispatch(
+      authSuccess({user: response.data.user, token: response.data.token}),
+    );
+
+    // navigate to the app stack
+    navigation.replace('App');
+  };
+
+  //function to send the pmc id to the backend to retrieve data from the pmc endpoint
+  const getPmcData = async () => {
+    try {
+      const response = await pmcIdVerifyDoctor({pmcId: watch('pmcId')});
+      const data = response?.data?.data;
+      setPmcData(data);
+      setIsPmcIdVerified(true);
+      if (data) {
+        clearErrors('pmcId');
+      }
+      console.log(data);
+    } catch (err) {
+      alert(err.response.data.message);
+      console.log(err.response.data);
+      setIsPmcIdVerified(false);
+      setPmcIdErrorMessage(err.response.data.message);
+      setError('pmcId', {
+        type: 'duplicate ID',
+        message:
+          err.response.data.error.statusCode === 500
+            ? 'An error has occured fetching details'
+            : err.response.data.message,
+      });
+    }
+  };
+
   return (
-    <ScrollContainer
+    <StaticContainer
       customHeaderEnable={true}
       customHeaderName="Complete Profile">
       <View style={styles.container}>
         {/* page icon */}
-        <SVGImage width={150} height={150} />
+        <SVGImage width={dimensions.Width / 2} height={dimensions.Width / 2} />
         {/* form */}
         <View style={styles.formContainer}>
           {/* pmc id field */}
@@ -95,6 +188,7 @@ const CompleteProfile = () => {
             width="93%"
             placeholderTextColor={colors.secondary1}
             control={control}
+            onBlurEvent={getPmcData}
             name="pmcId"
             title={'PMC ID'}
             rules={{
@@ -106,58 +200,13 @@ const CompleteProfile = () => {
               pattern: {value: pmcIdRegex, message: 'Invalid PMC ID'},
             }}
           />
-          {/* password field */}
-          <ValidateInputField
-            placeholder="Password"
-            type="outlined"
-            width="85.5%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="password"
-            control={control}
-            name="password"
-            isPasswordField={true}
-            title={'Password'}
-            isPasswordVisible={!isPasswordVisible}
-            setIsPasswordVisible={setIsPasswordVisible}
-            rules={{
-              required: "Password can't be empty",
-              pattern: {
-                value: passwordRegex,
-                message:
-                  'Password must contain atleast 1 uppercase, 1 lowercase, and 1 number',
-              },
-              minLength: {
-                value: 8,
-                message: 'Password must be at least 8 characters',
-              },
-            }}
-          />
-          {/* confirm password field */}
-          <ValidateInputField
-            placeholder="Confirm Password"
-            type="outlined"
-            width="85.5%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="password"
-            control={control}
-            name="confirm-password"
-            title={'Confirm Password'}
-            isPasswordField={true}
-            isPasswordVisible={!isConfirmPasswordVisible}
-            setIsPasswordVisible={setIsConfirmPasswordVisible}
-            rules={{
-              required: "Confirm password can't be empty",
-              validate: value => {
-                return value === watch('password') || 'Passwords do not match';
-              },
-            }}
-          />
+
           {/* contact field */}
           <ContactInputField
             type="outlined"
             width="86%"
             control={control}
-            name="contact"
+            name="phone"
             title={'Phone number'}
             rules={{
               required: "Phone number can't be empty",
@@ -175,13 +224,13 @@ const CompleteProfile = () => {
             items={CITIES}
             control={control}
             title={'Cities'}
-            // value={watch('city')}
-            setValue={setCity}
-            name="city"
-            placeholder="Please select your city"
+            // value={watch('location')}
+            setValue={setLocation}
+            name="location"
+            placeholder="Please select your location"
             rules={{
-              required: 'Please select a city',
-              validate: value => value !== null || 'Please select a city',
+              required: 'Please select a location',
+              validate: value => value !== null || 'Please select a location',
             }}
           />
 
@@ -206,7 +255,7 @@ const CompleteProfile = () => {
           width="100%"
         />
       </View>
-    </ScrollContainer>
+    </StaticContainer>
   );
 };
 

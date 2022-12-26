@@ -37,5 +37,5 @@ export const verifyOtpDoctor = data =>
 export const resetForgotPasswordDoctor = data =>
   API.patch('/reset-forgotten-password', data);
 
-//get patient if he is logged in
+//get doctor if he is logged in
 export const getDoctor = () => API.get('/');

@@ -1,6 +1,7 @@
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 // custom styles import
 import styles from './styles';
@@ -39,6 +40,7 @@ import StaticContainer from '../../../../containers/StaticContainer';
 
 //importing doctors service to call end points
 import {
+  loginDoctor,
   pmcIdVerifyDoctor,
   registerDoctor,
 } from '../../../../services/doctorServices';
@@ -105,16 +107,17 @@ const DoctorRegister = ({navigation}) => {
         const response = await registerDoctor(data);
         alert('User registered successfully');
 
-        //storing jwt token to mobile storage
-        await deviceStorage.saveItem('jwtToken', response?.data?.token);
+        // //storing jwt token to mobile storage
+        // await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
-        //initializing global state with jwt token and user object
-        dispatch(
-          authSuccess({user: response.data.user, token: response.data.token}),
-        );
+        // //initializing global state with jwt token and user object
+        // dispatch(
+        //   authSuccess({user: response.data.user, token: response.data.token}),
+        // );
 
-        // navigate to the app stack
-        navigation.replace('App');
+        // // navigate to the app stack
+        // navigation.replace('App');
+        onSuccess(response);
       } catch (err) {
         dispatch(authLogout());
         console.log(err.response.data);
@@ -133,6 +136,20 @@ const DoctorRegister = ({navigation}) => {
         message: pmcIdErrorMessage,
       });
     }
+  };
+
+  //on successfull registration
+  const onSuccess = async response => {
+    //storing jwt token to mobile storage
+    await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+    //initializing global state with jwt token and user object
+    dispatch(
+      authSuccess({user: response.data.user, token: response.data.token}),
+    );
+
+    // navigate to the app stack
+    navigation.replace('App');
   };
 
   //function for setting the value of city
@@ -180,6 +197,89 @@ const DoctorRegister = ({navigation}) => {
       screen: 'Login',
     });
   };
+
+  //google login functionality
+  const onPressGoogleLogin = async () => {
+    const email = 'test2@gmail.com';
+
+    try {
+      const response = await GoogleSignin.signIn();
+      console.log(response);
+      // TODO: Send the request to the backend api endpoint to check if the user exists and if they do log them in and if they don't redirect them to the complete profile page
+      // try {
+      //   const response = await loginDoctor({email, isThirdParty: true});
+      //   onSuccess(response);
+      // } catch (err) {
+      //   dispatch(authLogout());
+      //   console.log(err.response.data);
+      //   // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
+      //   navigation.navigate('Auth', {
+      //     screen: 'CompleteProfile',
+      // params: {
+      //   email,
+      //   // avatar
+      // }
+      //   });
+      // }
+    } catch (err) {
+      console.log(err);
+      await GoogleSignin.signOut();
+    }
+
+    // REMOVE THE ENTIRE CODE BELOW THIS COMMENT AFTER GOOGLE API WORKS
+    try {
+      const response = await loginDoctor({email, isThirdParty: true});
+      onSuccess(response);
+    } catch (err) {
+      dispatch(authLogout());
+      console.log(err.response.data);
+      // alert(err.response.data.message);
+      // setIsLoading(false);
+      // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
+      navigation.navigate('Auth', {
+        screen: 'CompleteProfile',
+        params: {
+          email,
+        },
+      });
+    }
+
+    // onLogin({email, isThirdParty: true});
+  };
+
+  // //function to check if the user with the following email already exists and log them in if they do
+  // const onLogin = async data => {
+  //   try {
+  //     const response = await loginDoctor({...data});
+
+  //     console.log(response?.data);
+
+  //     // preserving jwt token in async storage
+  //     await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+  //     // setting the global state with the jwt and user information received in the response
+  //     dispatch(
+  //       authSuccess({
+  //         user: response?.data?.user,
+  //         token: response?.data?.token,
+  //       }),
+  //     );
+
+  //     alert('Login Successful');
+
+  //     //navigate to the app stack
+  //     navigation.replace('App');
+  //   } catch (err) {
+  //     dispatch(authLogout());
+  //     console.log(err.response.data);
+  //     // alert(err.response.data.message);
+  //     // setIsLoading(false);
+  //     // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
+  //     navigation.navigate('Auth', {
+  //       screen: 'CompleteProfile',
+  //     });
+  //   }
+  // };
 
   return (
     <StaticContainer>
@@ -337,7 +437,9 @@ const DoctorRegister = ({navigation}) => {
               height={dimensions.Height / 20}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={onPressGoogleLogin}>
             <GoogleLogo
               width={dimensions.Width / 10}
               height={dimensions.Height / 20}
