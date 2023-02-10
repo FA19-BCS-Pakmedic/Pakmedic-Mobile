@@ -5,7 +5,11 @@ import {StyleSheet} from 'react-native';
 // import dimensions from '../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
 
   container: {},
 });

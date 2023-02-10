@@ -16,6 +16,10 @@ export const TextDivider = props => {
   );
 };
 
+export const LineDivider = props => {
+  return <View style={styles(props.color, props.gap).fullLine}></View>;
+};
+
 const styles = (color, gap) =>
   StyleSheet.create({
     root: {
@@ -35,5 +39,12 @@ const styles = (color, gap) =>
       fontSize: fonts.size.font14,
       fontWeight: fonts.weight.semi,
       marginHorizontal: dimensions.Width * 0.05,
+    },
+    fullLine: {
+      height: dimensions.Height / 400,
+      width: '100%',
+      borderRadius: 20,
+      backgroundColor: color,
+      marginVertical: dimensions.Height / gap,
     },
   });
