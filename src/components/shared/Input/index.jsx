@@ -52,9 +52,9 @@ export const ContactInputField = ({
             <IntlPhoneInput
               onChangeText={e => {
                 onChange(
-                // `${e.dialCode}-${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
-                 `0${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
-                 );
+                  // `${e.dialCode}-${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
+                  `0${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
+                );
               }}
               placeholder="Phone Number"
               placeholderTextColor={colors.secondary1}
@@ -253,5 +253,105 @@ const styles = (type, width) =>
       width: 25,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+  });
+
+export const ModalInputField = ({
+  control,
+  name,
+  rules = {},
+  type,
+  placeholder,
+  width,
+  keyboardType,
+  placeholderTextColor,
+  text,
+  title,
+  isDisabled,
+}) => {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      rules={rules}
+      key={name}
+      render={({
+        field: {onChange},
+        fieldState: {error, isDirty, isTouched},
+      }) => {
+        return (
+          <View style={modalInputStyles().root}>
+            {title ? (
+              <Text style={modalInputStyles().title}>{title}</Text>
+            ) : null}
+            <View style={modalInputStyles().inputContainer}>
+              <TextInput
+              editable={!isDisabled}
+                style={modalInputStyles(type, isDisabled).input}
+                placeholder={placeholder}
+                keyboardType={keyboardType || 'text'}
+                placeholderTextColor={
+                  isDisabled
+                    ? colors.gray2
+                    : placeholderTextColor || colors.secondary1
+                }
+                onChangeText={onChange}
+                value={text}
+              />
+            </View>
+            {(isDirty || isTouched || error) && (
+              <Animatable.View
+                animation="fadeIn"
+                easing="ease-in-out"
+                style={modalInputStyles().iconContainer}>
+                {!error && <Icon name="checkmark-circle-outline" size={18} />}
+                {error && (
+                  <Icon
+                    name="close-circle-outline"
+                    size={18}
+                    color={colors.invalid}
+                  />
+                )}
+              </Animatable.View>
+            )}
+          </View>
+        );
+      }}
+    />
+  );
+};
+
+const modalInputStyles = (type, isDisabled) =>
+  StyleSheet.create({
+    root: {
+      width: '100%',
+      // borderWidth: 1,
+    },
+
+    title: {
+      fontSize: fonts.size.font14,
+      fontWeight: fonts.weight.semi,
+    },
+
+    inputContainer: {
+      width: '100%',
+      paddingHorizontal: dimensions.Width / 40,
+      height: dimensions.Height / 19,
+      marginTop: dimensions.Height / 100,
+    },
+
+    input: {
+      borderWidth: type === 'outlined' ? 1 : 0,
+      borderColor:
+        type === 'outlined' && !isDisabled ? colors.primary1 : colors.white,
+      backgroundColor:
+        type === 'outlined'
+          ? isDisabled
+            ? colors.gray
+            : colors.white
+          : colors.secondaryMonoChrome100,
+      color: colors.secondary1,
+      borderRadius: 5,
+      paddingHorizontal: dimensions.Width / 60,
     },
   });

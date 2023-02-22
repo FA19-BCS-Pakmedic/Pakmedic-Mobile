@@ -6,6 +6,9 @@ import ProfileCard from '../../../../components/shared/ProfileCard';
 import StaticContainer from '../../../../containers/StaticContainer';
 import ProfileOptions from '../../../../components/shared/ProfileOptions';
 import ProfileInformation from '../../../../components/shared/ProfileInformation';
+import Services from '../../../../components/doctor/Services';
+import AvailableTreatments from '../../../../components/doctor/Available-Treatments';
+import Experiences from '../../../../components/doctor/Experience';
 
 const ProfileManagement = () => {
   return (
@@ -13,7 +16,10 @@ const ProfileManagement = () => {
       <View style={styles.root}>
         <ProfileCard />
         <ProfileOptions />
-        <ProfileInformation />
+        {/* <ProfileInformation /> */}
+        {/* <Services /> */}
+        {/* <AvailableTreatments /> */}
+        <Experiences />
       </View>
     </StaticContainer>
   );

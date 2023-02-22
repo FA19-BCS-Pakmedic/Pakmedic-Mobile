@@ -11,7 +11,7 @@ import ErrorMessage from '../ErrorMessage';
 import fonts from '../../../utils/styles/themes/fonts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
-const Dropdown = ({
+export const ValidateDropdown = ({
   open,
   items,
   setOpen,
@@ -20,7 +20,6 @@ const Dropdown = ({
   placeholder,
   name,
   rules,
-  title,
 }) => {
   return (
     <Controller
@@ -29,7 +28,7 @@ const Dropdown = ({
       rules={rules}
       render={({field: {value}, fieldState: {error}}) => {
         return (
-          <View style={styles.root}>
+          <View style={styles().validateRoot}>
             <DropDownPicker
               dropDownDirection="BOTTOM"
               listMode="SCROLLVIEW"
@@ -43,19 +42,19 @@ const Dropdown = ({
               setOpen={setOpen}
               setValue={setValue}
               style={[
-                styles.select,
+                styles().select,
                 {
                   borderColor: error ? colors.invalid : colors.primary1,
                 },
               ]}
               placeholder={placeholder}
-              placeholderStyle={styles.placeholderStyle}
-              listItemLabelStyle={styles.listItemLabelStyle}
-              dropDownContainerStyle={styles.dropDownContainerStyle}
-              containerStyle={styles.containerStyle}
+              placeholderStyle={styles().placeholderStyle}
+              listItemLabelStyle={styles().listItemLabelStyle}
+              dropDownContainerStyle={styles().dropDownContainerStyle}
+              containerStyle={styles().containerStyle}
             />
             {/* error message */}
-            <View style={styles.errorMessageContainer}>
+            <View style={styles().errorMessageContainer}>
               {error && <ErrorMessage error={error} />}
             </View>
           </View>
@@ -65,45 +64,99 @@ const Dropdown = ({
   );
 };
 
-const styles = StyleSheet.create({
-  root: {
-    width: '100%',
-  },
+export const Dropdown = ({
+  width,
+  open,
+  items,
+  setOpen,
+  setValue,
+  placeholder,
+  value,
+  minHeight,
+}) => {
+  return (
+    <View style={styles(width).root}>
+      <DropDownPicker
+        dropDownDirection="BOTTOM"
+        listMode="SCROLLVIEW"
+        scrollViewProps={{
+          decelerationRate: 'fast',
+        }}
+        maxHeight={dimensions.Height / 5}
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        style={[
+          styles().select,
 
-  title: {
-    fontSize: fonts.size.font16,
-    fontWeight: fonts.weight.bold,
-  },
+          {
+            borderColor: colors.primary1,
+            minHeight: minHeight,
+          },
+        ]}
+        placeholder={placeholder}
+        placeholderStyle={styles().placeholderStyle}
+        listItemLabelStyle={styles().listItemLabelStyle}
+        dropDownContainerStyle={styles().dropDownContainerStyle}
+        containerStyle={styles().containerStyle}
+      />
+    </View>
+  );
+};
 
-  select: {
-    borderColor: colors.primary1,
-    color: colors.secondary1,
-    paddingHorizontal: dimensions.Width / 20,
-  },
+const styles = width =>
+  StyleSheet.create({
+    validateRoot: {
+      width: '100%',
+    },
 
-  listItemLabelStyle: {
-    color: colors.secondary1,
-  },
-  dropDownContainerStyle: {
-    backgroundColor: colors.primaryMonoChrome100,
-    borderColor: colors.secondary1,
-    borderBottomColor: colors.primary1,
-    borderRadius: 10,
-    borderWidth: 0.5,
-  },
+    root: {
+      width: width,
+      paddingHorizontal: dimensions.Width / 80,
+    },
 
-  errorMessageContainer: {
-    width: '100%',
+    title: {
+      fontSize: fonts.size.font16,
+      fontWeight: fonts.weight.bold,
+    },
 
-    height: dimensions.Height / 40,
+    select: {
+      borderColor: colors.primary1,
+      color: colors.secondary1,
+      paddingHorizontal: dimensions.Width / 30,
+      marginVertical: dimensions.Height / 100,
+      zIndex: -1,
+    },
 
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-  },
+    containerStyle: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
 
-  placeholderStyle: {
-    color: colors.secondary1,
-  },
-});
+    listItemLabelStyle: {
+      color: colors.secondary1,
+    },
+    dropDownContainerStyle: {
+      backgroundColor: colors.primaryMonoChrome100,
+      borderColor: colors.secondary1,
+      borderBottomColor: colors.primary1,
+      borderRadius: 10,
+      borderWidth: 0.5,
+      zIndex: 999,
+    },
 
-export default Dropdown;
+    errorMessageContainer: {
+      width: '100%',
+
+      height: dimensions.Height / 40,
+
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+    },
+
+    placeholderStyle: {
+      color: colors.secondary1,
+    },
+  });

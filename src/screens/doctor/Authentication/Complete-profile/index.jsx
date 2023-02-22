@@ -16,7 +16,7 @@ import ScrollContainer from '../../../../containers/ScrollContainer';
 // import custom components
 import Button from '../../../../components/shared/Button';
 import RadioGroup from '../../../../components/shared/Radio';
-import Dropdown from '../../../../components/shared/Dropdown';
+import {ValidateDropdown} from '../../../../components/shared/Dropdown';
 import {
   ContactInputField,
   ValidateInputField,
@@ -218,7 +218,7 @@ const CompleteProfile = ({route, navigation}) => {
           />
 
           {/* cities dropdown */}
-          <Dropdown
+          <ValidateDropdown
             open={open}
             setOpen={setOpen}
             items={CITIES}

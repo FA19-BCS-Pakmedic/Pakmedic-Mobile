@@ -22,7 +22,7 @@ import {
 import Button from '../../../../components/shared/Button';
 import {TextDivider} from '../../../../components/shared/Divider';
 import RadioGroup from '../../../../components/shared/Radio';
-import Dropdown from '../../../../components/shared/Dropdown';
+import {ValidateDropdown} from '../../../../components/shared/Dropdown';
 
 // import constants
 import CITIES from '../../../../utils/constants/Cities';
@@ -384,7 +384,7 @@ const DoctorRegister = ({navigation}) => {
           />
 
           {/* cities dropdown */}
-          <Dropdown
+          <ValidateDropdown
             open={open}
             setOpen={setOpen}
             items={CITIES}
