@@ -96,7 +96,7 @@ export default function Reviews() {
   return (
     <View style={styles.container}>
       {openModal()}
-      <View>
+      <View style={styles.reviewCountContainer}>
         <Text style={styles.reviewCount}>674 Reviews</Text>
       </View>
       <ScrollView style={styles.contentContainer}>
@@ -126,6 +126,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     maxHeight: dimensions.Height / 1.8,
     flex: 1,
+  },
+
+  reviewCountContainer: {
+    width: '100%',
+  },
+
+  reviewCount: {
+    fontSize: fonts.size.font24,
+    fontWeight: fonts.weight.bold,
   },
 
   btnContainer: {

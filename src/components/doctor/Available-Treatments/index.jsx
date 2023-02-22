@@ -50,7 +50,6 @@ export default function AvailableTreatments() {
                 <ModalInputField
                   placeholder="Treatment name"
                   type="outlined"
-                  width={dimensions.Width / 1.2}
                   placeholderTextColor={colors.secondary1}
                   control={control}
                   name="name"

@@ -93,7 +93,7 @@ const Services = () => {
         type="center"
         backDropOpacity={0.5}
         padding={dimensions.Height / 50}
-        height={dimensions.Height / 1.12}
+        height={dimensions.Height / (!isOnline ? 1.12 : 1.4)}
         bgColor={'white'}
         borderColor={colors.primary1}>
         <View style={styles.modalContainer}>
@@ -108,7 +108,6 @@ const Services = () => {
               <ModalInputField
                 placeholder="Hospital/Clinic Name"
                 type="outlined"
-                width={dimensions.Width / 1.2}
                 placeholderTextColor={colors.secondary1}
                 control={control}
                 name="name"
@@ -147,7 +146,6 @@ const Services = () => {
               <ModalInputField
                 placeholder="Appointment Fee"
                 type="outlined"
-                width={dimensions.Width / 1.2}
                 placeholderTextColor={colors.secondary1}
                 control={control}
                 name="appointmentFee"
@@ -250,7 +248,6 @@ const Services = () => {
                   <ModalInputField
                     placeholder="Street Address"
                     type="outlined"
-                    width={dimensions.Width / 1.2}
                     placeholderTextColor={colors.secondary1}
                     control={control}
                     name="address"

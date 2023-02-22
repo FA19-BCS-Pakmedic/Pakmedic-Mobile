@@ -263,6 +263,9 @@ export const ModalInputField = ({
   type,
   placeholder,
   width,
+  height,
+  isMultiline,
+  numberOfLines,
   keyboardType,
   placeholderTextColor,
   text,
@@ -280,16 +283,21 @@ export const ModalInputField = ({
         fieldState: {error, isDirty, isTouched},
       }) => {
         return (
-          <View style={modalInputStyles().root}>
+          <View style={modalInputStyles(null, null, width, height).root}>
             {title ? (
               <Text style={modalInputStyles().title}>{title}</Text>
             ) : null}
-            <View style={modalInputStyles().inputContainer}>
+            <View
+              style={
+                modalInputStyles(null, null, width, height).inputContainer
+              }>
               <TextInput
-              editable={!isDisabled}
-                style={modalInputStyles(type, isDisabled).input}
+                editable={!isDisabled}
+                style={modalInputStyles(type, isDisabled, null, height).input}
                 placeholder={placeholder}
                 keyboardType={keyboardType || 'text'}
+                multiline={isMultiline}
+                numberOfLines={numberOfLines}
                 placeholderTextColor={
                   isDisabled
                     ? colors.gray2
@@ -321,11 +329,12 @@ export const ModalInputField = ({
   );
 };
 
-const modalInputStyles = (type, isDisabled) =>
+const modalInputStyles = (type, isDisabled, width, height) =>
   StyleSheet.create({
     root: {
-      width: '100%',
+      width: width ? width : '100%',
       // borderWidth: 1,
+      height: height ? height : 'auto',
     },
 
     title: {
@@ -334,7 +343,8 @@ const modalInputStyles = (type, isDisabled) =>
     },
 
     inputContainer: {
-      width: '100%',
+      width: width ? width : '100%',
+      height: height ? height : 'auto',
       paddingHorizontal: dimensions.Width / 40,
       height: dimensions.Height / 19,
       marginTop: dimensions.Height / 100,
@@ -353,5 +363,13 @@ const modalInputStyles = (type, isDisabled) =>
       color: colors.secondary1,
       borderRadius: 5,
       paddingHorizontal: dimensions.Width / 60,
+      height: height ? height : 'auto',
+      textAlignVertical: 'top',
+    },
+
+    iconContainer: {
+      width: 25,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });

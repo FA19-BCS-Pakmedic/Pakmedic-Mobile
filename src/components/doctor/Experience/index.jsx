@@ -98,7 +98,6 @@ const Experiences = () => {
               <ModalInputField
                 placeholder="Job Title"
                 type="outlined"
-                width={dimensions.Width / 1.2}
                 placeholderTextColor={colors.secondary1}
                 control={control}
                 name="title"
@@ -116,7 +115,6 @@ const Experiences = () => {
               <ModalInputField
                 placeholder="Hospital Name"
                 type="outlined"
-                width={dimensions.Width / 1.2}
                 placeholderTextColor={colors.secondary1}
                 control={control}
                 name="name"
@@ -133,7 +131,6 @@ const Experiences = () => {
               <ModalInputField
                 placeholder="Street Address"
                 type="outlined"
-                width={dimensions.Width / 1.2}
                 placeholderTextColor={colors.secondary1}
                 control={control}
                 name="address"
