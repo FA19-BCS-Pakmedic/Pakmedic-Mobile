@@ -352,6 +352,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     width: '100%',
     paddingBottom: dimensions.Height / 10,
+    paddingTop: dimensions.Height / 40,
   },
 
   btnContainer: {

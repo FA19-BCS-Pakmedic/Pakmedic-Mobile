@@ -9,6 +9,7 @@ import ProfileInformation from '../../../../components/shared/ProfileInformation
 import Services from '../../../../components/doctor/Services';
 import AvailableTreatments from '../../../../components/doctor/Available-Treatments';
 import Experiences from '../../../../components/doctor/Experience';
+import Reviews from '../../../../components/doctor/Reviews';
 
 const ProfileManagement = () => {
   return (
@@ -19,7 +20,8 @@ const ProfileManagement = () => {
         {/* <ProfileInformation /> */}
         {/* <Services /> */}
         {/* <AvailableTreatments /> */}
-        <Experiences />
+        {/* <Experiences /> */}
+        <Reviews />
       </View>
     </StaticContainer>
   );

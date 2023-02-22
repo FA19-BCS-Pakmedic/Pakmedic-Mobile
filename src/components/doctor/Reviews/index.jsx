@@ -2,16 +2,20 @@ import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import ModalContainer from '../../../containers/ModalContainer';
+import {REASONS} from '../../../utils/constants/Reasons';
 import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import AddMore from '../../shared/AddMore';
 import Button from '../../shared/Button';
+import {Dropdown} from '../../shared/Dropdown';
 import {ModalInputField} from '../../shared/Input';
-import AvailableTreatmentsCard from './Card';
+import ReviewCard from './Card';
 
-export default function AvailableTreatments() {
+export default function Reviews() {
   const [visible, setVisible] = useState(false);
+
+  const [reportOpen, setReportOpen] = useState(false);
 
   const {
     control,
@@ -24,7 +28,7 @@ export default function AvailableTreatments() {
     mode: 'all',
     revalidate: 'all',
     defaultValues: {
-      name: '',
+      reportReason: '',
     },
   });
 
@@ -43,24 +47,29 @@ export default function AvailableTreatments() {
           borderColor={colors.primary1}>
           <View style={styles.modalContainer}>
             <View style={styles.headingContainer}>
-              <Text style={styles.heading}>Add Treatment</Text>
+              <Text style={styles.heading}>Report Review</Text>
             </View>
             <View style={styles.infoContainer}>
-              <View style={styles.inputContainer}>
-                <ModalInputField
-                  placeholder="Treatment name"
-                  type="outlined"
-                  width={dimensions.Width / 1.2}
-                  placeholderTextColor={colors.secondary1}
+              <View style={styles.dropdownContainer}>
+                <Dropdown
+                  open={reportOpen}
+                  setOpen={setReportOpen}
+                  items={REASONS}
                   control={control}
-                  name="name"
-                  rules={{
-                    required: {
-                      value: true,
-                      message: 'Treatment Name is required',
-                    },
+                  title="Reason"
+                  setValue={callback => {
+                    setValue('reportReason', callback());
                   }}
-                  title="Treatment Name"
+                  value={watch('reportReason')}
+                  minHeight={dimensions.Height / 18}
+                  name="reportReason"
+                  placeholder="Reason"
+                  width={dimensions.Width / 1.2}
+                  rules={{
+                    required: 'Please select a reason',
+                    validate: value =>
+                      value !== null || 'Please select a reason',
+                  }}
                 />
               </View>
             </View>
@@ -73,7 +82,7 @@ export default function AvailableTreatments() {
               />
               <Button
                 type="filled"
-                label="Save"
+                label="Submit"
                 onPress={() => {}}
                 width={dimensions.Width / 2.6}
               />
@@ -87,25 +96,24 @@ export default function AvailableTreatments() {
   return (
     <View style={styles.container}>
       {openModal()}
-      {/* Add Services Button */}
-      <View style={styles.btnContainer}>
-        <AddMore
-          type={'outlined'}
-          label={'Add More'}
-          borderColor={colors.primary1}
-          onPress={() => {
-            setVisible(prevState => {
-              return !prevState;
-            });
-          }}
-        />
+      <View>
+        <Text style={styles.reviewCount}>674 Reviews</Text>
       </View>
       <ScrollView style={styles.contentContainer}>
-        <AvailableTreatmentsCard />
-        <AvailableTreatmentsCard />
-        <AvailableTreatmentsCard />
-        <AvailableTreatmentsCard />
-        <AvailableTreatmentsCard />
+        <ReviewCard setOpen={setVisible} />
+        <ReviewCard setOpen={setVisible} />
+        <ReviewCard setOpen={setVisible} />
+        <ReviewCard setOpen={setVisible} />
+        <ReviewCard setOpen={setVisible} />
+
+        <View style={styles.btnContainer}>
+          <Button
+            type="filled"
+            label="View All Reviews"
+            onPress={() => {}}
+            width={dimensions.Width / 2}
+          />
+        </View>
       </ScrollView>
     </View>
   );
@@ -122,8 +130,9 @@ const styles = StyleSheet.create({
 
   btnContainer: {
     width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: dimensions.Height / 20,
   },
 
   contentContainer: {
@@ -162,5 +171,11 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+
+  dropdownContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

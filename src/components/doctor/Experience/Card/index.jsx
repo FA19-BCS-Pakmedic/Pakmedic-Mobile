@@ -31,10 +31,9 @@ export default ExperienceCard;
 const styles = () =>
   StyleSheet.create({
     container: {
-      backgroundColor: '#fff',
       borderRadius: dimensions.Width / 50,
       padding: dimensions.Width / 20,
-      marginBottom: dimensions.Height / 50,
+      marginBottom: dimensions.Height / 40,
       borderWidth: 2,
       borderColor: colors.primary1,
     },

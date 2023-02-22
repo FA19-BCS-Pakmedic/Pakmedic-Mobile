@@ -87,10 +87,10 @@ export default function ServiceCard() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: dimensions.Height / 40,
-    borderWidth: 1,
+    borderRadius: dimensions.Width / 50,
+    marginBottom: dimensions.Height / 40,
+    borderWidth: 2,
     borderColor: colors.primary1,
-    borderRadius: 20,
   },
 
   header: {
