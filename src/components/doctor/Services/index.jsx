@@ -4,8 +4,9 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import colors from '../../../utils/styles/themes/colors';
 import fonts from '../../../utils/styles/themes/fonts';
@@ -26,27 +27,42 @@ import Chip from '../../shared/Chip';
 import {hours, minutes} from '../../../utils/constants/TIME';
 import {Dropdown, ValidateDropdown} from '../../shared/Dropdown';
 import Cities from '../../../utils/constants/Cities';
+import {STATES} from '../../../utils/constants/States';
 
-const Services = () => {
+import {
+  addService,
+  getServiceById,
+  getServices,
+  updateService,
+} from '../../../services/doctorServices';
+import {DAYS} from '../../../utils/constants/Days';
+
+const Services = ({services, updateUser}) => {
   const [visible, setVisible] = useState(false);
-  const [isOnline, setIsOnline] = useState(false);
+  // const [isOnline, setIsOnline] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
 
-  const [dayChips, setDayChips] = useState([
-    {value: 'Mon', isSelected: false},
-    {value: 'Tue', isSelected: false},
-    {value: 'Wed', isSelected: false},
-    {value: 'Thu', isSelected: false},
-    {value: 'Fri', isSelected: false},
-    {value: 'Sat', isSelected: false},
-    {value: 'Sun', isSelected: false},
-  ]);
+  // console.log('here', doctorID);
+
+  // const [services, setServices] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+
+  const [dayChips, setDayChips] = useState(DAYS);
+
+  const [isEdit, setIsEdit] = useState(false);
 
   const [dropdownFromHourOpen, setDropDownFromHourOpen] = useState(false);
   const [dropdownFromMinOpen, setDropDownFromMinOpen] = useState(false);
   const [dropdownToHourOpen, setDropDownToHourOpen] = useState(false);
   const [dropdownToMinOpen, setDropDownToMinOpen] = useState(false);
+  const [isTimeFromValid, setIsTimeFromValid] = useState(true);
+  const [isTimeToValid, setIsTimeToValid] = useState(true);
+  const [isDaysValid, setIsDaysValid] = useState(true);
   const [cityOpen, setCityOpen] = useState(false);
+  const [stateOpen, setStateOpen] = useState(false);
+
+  const [selectedService, setSelectedService] = useState(null);
 
   // useForm hook from react-hook-form
   const {
@@ -69,19 +85,158 @@ const Services = () => {
       availabilityTimeToMin: '',
       address: '',
       city: '',
-      zip: '',
+      state: '',
+      isOnline: false,
     },
   });
 
   const onChipPress = index => {
-    // console.log(index);
-    // let temp = dayChips;
-    // temp[index].isSelected = !temp[index].isSelected;
     setDayChips(prevState => {
-      let temp = prevState;
-      temp[index].isSelected = !temp[index].isSelected;
-      return temp;
+      return prevState.map(state => {
+        if (state.value === dayChips[index].value) {
+          return {
+            ...state,
+            isSelected: !state.isSelected,
+          };
+        } else {
+          return state;
+        }
+      });
     });
+  };
+
+  useEffect(() => {
+    setValue('availabilityDays', getSelectedDays(selectedDays));
+    setIsDaysValid(true);
+    console.log(dayChips);
+  }, [dayChips]);
+
+  const getSelectedDays = () => {
+    let selectedDays = [];
+    dayChips.forEach(item => {
+      if (item.isSelected) {
+        selectedDays.push(item.value);
+      }
+    });
+    return selectedDays;
+  };
+
+  const validateTime = () => {
+    setIsTimeFromValid(
+      !watch('availabilityTimeFromHour').length > 0 ||
+        !watch('availabilityTimeFromMin').length > 0
+        ? false
+        : true,
+    );
+
+    setIsTimeToValid(
+      !watch('availabilityTimeToHour') || !watch('availabilityTimeToMin')
+        ? false
+        : true,
+    );
+
+    return (
+      watch('availabilityTimeFromHour').length > 0 &&
+      watch('availabilityTimeFromMin').length > 0 &&
+      watch('availabilityTimeToHour').length > 0 &&
+      watch('availabilityTimeToMin').length > 0
+    );
+  };
+
+  useEffect(() => {
+    if (selectedService) {
+      console.log(selectedService);
+
+      setValue('name', selectedService?.hospital?.name);
+      setValue('address', selectedService?.hospital?.address?.address);
+      setValue('city', selectedService?.hospital?.address?.city);
+      setValue('state', selectedService?.hospital?.address?.state);
+      setValue('appointmentFee', selectedService.fee.toString());
+      setDayChips(prevState => {
+        return prevState.map(state => {
+          if (selectedService.days.includes(state.value)) {
+            return {
+              ...state,
+              isSelected: true,
+            };
+          } else {
+            return state;
+          }
+        });
+      });
+      setValue(
+        'availabilityTimeFromHour',
+        selectedService.availFrom.split(':')[0],
+      );
+      setValue(
+        'availabilityTimeFromMin',
+        selectedService.availFrom.split(':')[1],
+      );
+      setValue('availabilityTimeToHour', selectedService.availTo.split(':')[0]);
+      setValue('availabilityTimeToMin', selectedService.availTo.split(':')[1]);
+      setValue('isOnline', selectedService.isOnline);
+    }
+  }, [selectedService]);
+
+  const onPressEdit = async id => {
+    try {
+      const response = await getServiceById(id);
+
+      // console.log(response.data.data.service);
+
+      setSelectedService(response.data.data.service);
+
+      setIsEdit(true);
+      setVisible(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const validateDays = () => {
+    setIsDaysValid(watch('availabilityDays').length > 0);
+    return watch('availabilityDays').length > 0;
+  };
+
+  const onSubmit = async values => {
+    console.log(validateDays(), validateTime());
+
+    if ((validateTime() && validateDays()) || watch('isOnline')) {
+      const data = {
+        name: values.name,
+        fee: values.appointmentFee,
+        days: values.availabilityDays,
+        availFrom: `${values.availabilityTimeFromHour}:${values.availabilityTimeFromMin}`,
+        availTo: `${values.availabilityTimeToHour}:${values.availabilityTimeToMin}`,
+        address: values.address,
+        city: values.city,
+        state: values.state,
+        isOnline: values.isOnline,
+      };
+
+      setLoading(true);
+
+      let response;
+      try {
+        if (!isEdit) {
+          response = await addService(data);
+        } else {
+          response = await updateService(selectedService._id, data);
+        }
+
+        Alert.alert('Success', 'Service added successfully', [
+          {
+            text: 'OK',
+          },
+        ]);
+        console.log(response);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+        updateUser();
+      }
+    }
   };
 
   const openModal = () => {
@@ -93,213 +248,274 @@ const Services = () => {
         type="center"
         backDropOpacity={0.5}
         padding={dimensions.Height / 50}
-        height={dimensions.Height / (!isOnline ? 1.12 : 1.4)}
+        height={dimensions.Height / (!watch('isOnline') ? 1.13 : 1.3)}
         bgColor={'white'}
         borderColor={colors.primary1}>
-        <View style={styles.modalContainer}>
-          {/* Heading */}
-          <View style={styles.headingContainer}>
-            <Text style={styles.heading}>Add Service</Text>
-          </View>
+        <ScrollView
+          style={styles.scrollContainer}
+          showsVerticalScrollIndicator={true}>
+          <View style={styles.modalContainer}>
+            {/* Heading */}
+            <View style={styles.headingContainer}>
+              <Text style={styles.heading}>Add Service</Text>
+            </View>
 
-          {/* Hospital/Clinic Information */}
-          <View style={styles.infoContainer}>
-            <View style={styles.inputContainer}>
-              <ModalInputField
-                placeholder="Hospital/Clinic Name"
-                type="outlined"
-                placeholderTextColor={colors.secondary1}
-                control={control}
-                name="name"
-                isDisabled={isOnline}
-                rules={
-                  !isOnline && {
-                    required: 'Please enter a name',
-                  }
-                }
-                title="Hospital/Clinic Name"
-              />
-              <View style={styles.checkboxContainer}>
-                <TouchableOpacity onPress={() => setIsOnline(!isOnline)}>
-                  {isOnline ? (
-                    <CheckBoxIcon
-                      width={dimensions.Width / 20}
-                      height={dimensions.Height / 20}
+            {/* Hospital/Clinic Information */}
+            <View style={styles.infoContainer}>
+              <View style={styles.inputContainer}>
+                <ValidateInputField
+                  text={watch('name')}
+                  placeholder="Hospital/Clinic Name"
+                  type="outlined"
+                  width="93%"
+                  isErrorBoundary={false}
+                  placeholderTextColor={colors.secondary1}
+                  control={control}
+                  name="name"
+                  isDisabled={watch('isOnline')}
+                  rules={{
+                    required: {
+                      value: !watch('isOnline'),
+                      message: 'Hospital/Clinic name is required',
+                    },
+                  }}
+                  title="Hospital/Clinic Name"
+                />
+                <View style={styles.checkboxContainer}>
+                  <TouchableOpacity
+                    onPress={() => setValue('isOnline', !watch('isOnline'))}>
+                    {watch('isOnline') ? (
+                      <CheckBoxIcon
+                        width={dimensions.Width / 20}
+                        height={dimensions.Height / 20}
+                      />
+                    ) : (
+                      <UncheckBoxIcon
+                        width={dimensions.Width / 20}
+                        height={dimensions.Height / 20}
+                      />
+                    )}
+                  </TouchableOpacity>
+                  <Text style={styles.checkboxText}>
+                    Is this an online consultation?
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Appointment section */}
+            <View style={styles.infoContainer}>
+              <View style={styles.inputContainer}>
+                <ValidateInputField
+                  text={watch('appointmentFee')}
+                  placeholder="Appointment Fee"
+                  type="outlined"
+                  width="93%"
+                  isErrorBoundary={false}
+                  placeholderTextColor={colors.secondary1}
+                  control={control}
+                  name="appointmentFee"
+                  rules={{required: 'Please enter an appointment fee'}}
+                  title="Appointment Fee"
+                />
+              </View>
+            </View>
+
+            <View style={styles.infoContainer}>
+              <Text style={styles.text}>Availability Days</Text>
+              <View style={styles.chipContainer}>
+                {/* Day Chips */}
+                {dayChips.map((item, index) => {
+                  return (
+                    <Chip
+                      value={item.label}
+                      key={index}
+                      index={index}
+                      onPress={onChipPress}
+                      color={colors.white}
+                      background={
+                        item.isSelected ? colors.secondary1 : colors.primary1
+                      }
+                      error={!isDaysValid}
                     />
-                  ) : (
-                    <UncheckBoxIcon
-                      width={dimensions.Width / 20}
-                      height={dimensions.Height / 20}
-                    />
-                  )}
-                </TouchableOpacity>
-                <Text style={styles.checkboxText}>
-                  Is this an online consultation?
+                  );
+                })}
+              </View>
+              {isDaysValid ? null : (
+                <Text style={styles.errorText}>
+                  Please select at least one day
                 </Text>
-              </View>
+              )}
             </View>
-          </View>
 
-          {/* Appointment section */}
-          <View style={styles.infoContainer}>
-            <View style={styles.inputContainer}>
-              <ModalInputField
-                placeholder="Appointment Fee"
+            <View style={styles.infoContainer}>
+              <Text style={styles.text}>Availability Time</Text>
+              <View style={styles.timeContainer}>
+                <Text style={styles.timeLabel}>From: </Text>
+                <Dropdown
+                  width={'40%'}
+                  open={dropdownFromHourOpen}
+                  setOpen={setDropDownFromHourOpen}
+                  items={hours}
+                  minHeight={dimensions.Height / 30}
+                  placeholder="HH"
+                  setValue={callback => {
+                    console.log(callback());
+
+                    setValue('availabilityTimeFromHour', callback());
+                  }}
+                  value={watch('availabilityTimeFromHour')}
+                  error={!isTimeFromValid}
+                />
+                <Dropdown
+                  width={'40%'}
+                  open={dropdownFromMinOpen}
+                  setOpen={setDropDownFromMinOpen}
+                  minHeight={dimensions.Height / 30}
+                  items={minutes}
+                  placeholder="MM"
+                  setValue={callback => {
+                    console.log(callback());
+                    setValue('availabilityTimeFromMin', callback());
+                  }}
+                  value={watch('availabilityTimeFromMin')}
+                  error={!isTimeFromValid}
+                />
+              </View>
+
+              <View style={styles.timeContainer}>
+                <Text style={styles.timeLabel}>To: </Text>
+                <Dropdown
+                  width={'40%'}
+                  open={dropdownToHourOpen}
+                  setOpen={setDropDownToHourOpen}
+                  items={hours}
+                  placeholder="HH"
+                  minHeight={dimensions.Height / 30}
+                  setValue={callback => {
+                    console.log(callback());
+
+                    setValue('availabilityTimeToHour', callback());
+                  }}
+                  value={watch('availabilityTimeToHour')}
+                  error={!isTimeToValid}
+                />
+                <Dropdown
+                  width={'40%'}
+                  open={dropdownToMinOpen}
+                  setOpen={setDropDownToMinOpen}
+                  items={minutes}
+                  minHeight={dimensions.Height / 30}
+                  placeholder="MM"
+                  setValue={callback => {
+                    console.log(callback());
+                    setValue('availabilityTimeToMin', callback());
+                  }}
+                  value={watch('availabilityTimeToMin')}
+                  error={!isTimeToValid}
+                />
+              </View>
+              {isTimeFromValid && isTimeToValid ? null : (
+                <Text style={styles.errorText}>
+                  Please enter a valid time range
+                </Text>
+              )}
+            </View>
+
+            {!watch('isOnline') ? (
+              <>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.text}>City</Text>
+                  <View style={styles.dropdownContainer}>
+                    <ValidateDropdown
+                      open={cityOpen}
+                      setOpen={setCityOpen}
+                      items={Cities}
+                      control={control}
+                      title="City"
+                      setValue={callback => {
+                        setValue('city', callback());
+                      }}
+                      value={watch('city')}
+                      minHeight={dimensions.Height / 18}
+                      name="city"
+                      placeholder="City"
+                      width="100%"
+                      isErrorBoundary={false}
+                      rules={{
+                        required: 'Please select a city',
+                        validate: value =>
+                          value !== null || 'Please select a city',
+                      }}
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.infoContainer}>
+                  <Text style={styles.text}>State</Text>
+                  <View style={styles.dropdownContainer}>
+                    <ValidateDropdown
+                      open={stateOpen}
+                      setOpen={setStateOpen}
+                      items={STATES}
+                      control={control}
+                      title="State"
+                      setValue={callback => {
+                        setValue('state', callback());
+                      }}
+                      value={watch('state')}
+                      minHeight={dimensions.Height / 18}
+                      name="state"
+                      placeholder="State"
+                      width="100%"
+                      isErrorBoundary={false}
+                      rules={{
+                        required: 'Please select a state',
+                        validate: value =>
+                          value !== null || 'Please select a state',
+                      }}
+                    />
+                  </View>
+                </View>
+
+                <View style={[styles.infoContainer]}>
+                  <View style={styles.inputContainer}>
+                    <ValidateInputField
+                      text={watch('address')}
+                      placeholder="Street Address"
+                      type="outlined"
+                      placeholderTextColor={colors.secondary1}
+                      control={control}
+                      width="93%"
+                      isErrorBoundary={false}
+                      name="address"
+                      rules={{required: 'Please enter an appointment fee'}}
+                      title="Street Address"
+                      isDisabled={watch('isOnline')}
+                    />
+                  </View>
+                </View>
+              </>
+            ) : null}
+            <View style={styles.controls}>
+              <Button
                 type="outlined"
-                placeholderTextColor={colors.secondary1}
-                control={control}
-                name="appointmentFee"
-                rules={{required: 'Please enter an appointment fee'}}
-                title="Appointment Fee"
+                label="Cancel"
+                onPress={() => {
+                  setVisible(false);
+                }}
+                width={dimensions.Width / 2.6}
+              />
+              <Button
+                type="filled"
+                label="Save"
+                onPress={handleSubmit(onSubmit)}
+                isLoading={loading}
+                width={dimensions.Width / 2.6}
               />
             </View>
           </View>
-
-          <View style={styles.infoContainer}>
-            <Text style={styles.text}>Availability Days</Text>
-            <View style={styles.chipContainer}>
-              {/* Day Chips */}
-              {dayChips.map((item, index) => {
-                return (
-                  <Chip
-                    value={item.value}
-                    key={index}
-                    index={index}
-                    onPress={onChipPress}
-                    color={colors.white}
-                    background={
-                      item.isSelected ? colors.secondary1 : colors.primary1
-                    }
-                  />
-                );
-              })}
-            </View>
-          </View>
-
-          <View style={styles.infoContainer}>
-            <Text style={styles.text}>Availability Time</Text>
-            <View style={styles.timeContainer}>
-              <Text style={styles.timeLabel}>From: </Text>
-              <Dropdown
-                width={'40%'}
-                open={dropdownFromHourOpen}
-                setOpen={setDropDownFromHourOpen}
-                items={hours}
-                minHeight={dimensions.Height / 30}
-                placeholder="HH"
-                setValue={callback => {
-                  console.log(callback());
-
-                  setValue('availabilityTimeFromHour', callback());
-                }}
-                value={watch('availabilityTimeFromHour')}
-              />
-              <Dropdown
-                width={'40%'}
-                open={dropdownFromMinOpen}
-                setOpen={setDropDownFromMinOpen}
-                minHeight={dimensions.Height / 30}
-                items={minutes}
-                placeholder="MM"
-                setValue={callback => {
-                  console.log(callback());
-                  setValue('availabilityTimeFromMin', callback());
-                }}
-                value={watch('availabilityTimeFromMin')}
-              />
-            </View>
-
-            <View style={styles.timeContainer}>
-              <Text style={styles.timeLabel}>To: </Text>
-              <Dropdown
-                width={'40%'}
-                open={dropdownToHourOpen}
-                setOpen={setDropDownToHourOpen}
-                items={hours}
-                placeholder="HH"
-                minHeight={dimensions.Height / 30}
-                setValue={callback => {
-                  console.log(callback());
-
-                  setValue('availabilityTimeToHour', callback());
-                }}
-                value={watch('availabilityTimeToHour')}
-              />
-              <Dropdown
-                width={'40%'}
-                open={dropdownToMinOpen}
-                setOpen={setDropDownToMinOpen}
-                items={minutes}
-                minHeight={dimensions.Height / 30}
-                placeholder="MM"
-                setValue={callback => {
-                  console.log(callback());
-                  setValue('availabilityTimeToMin', callback());
-                }}
-                value={watch('availabilityTimeToMin')}
-              />
-            </View>
-          </View>
-
-          {!isOnline ? (
-            <>
-              <View style={[styles.infoContainer]}>
-                <View style={styles.inputContainer}>
-                  <ModalInputField
-                    placeholder="Street Address"
-                    type="outlined"
-                    placeholderTextColor={colors.secondary1}
-                    control={control}
-                    name="address"
-                    rules={{required: 'Please enter an appointment fee'}}
-                    title="Street Address"
-                    isDisabled={isOnline}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.infoContainer}>
-                <Text style={styles.text}>City</Text>
-                <View style={styles.dropdownContainer}>
-                  <Dropdown
-                    open={cityOpen}
-                    setOpen={setCityOpen}
-                    items={Cities}
-                    control={control}
-                    title="City"
-                    setValue={callback => {
-                      setValue('city', callback());
-                    }}
-                    value={watch('city')}
-                    minHeight={dimensions.Height / 18}
-                    name="city"
-                    placeholder="City"
-                    width={dimensions.Width / 1.2}
-                    rules={{
-                      required: 'Please select a city',
-                      validate: value =>
-                        value !== null || 'Please select a city',
-                    }}
-                  />
-                </View>
-              </View>
-            </>
-          ) : null}
-          <View style={styles.controls}>
-            <Button
-              type="outlined"
-              label="Cancel"
-              onPress={() => {}}
-              width={dimensions.Width / 2.6}
-            />
-            <Button
-              type="filled"
-              label="Save"
-              onPress={() => {}}
-              width={dimensions.Width / 2.6}
-            />
-          </View>
-        </View>
+        </ScrollView>
       </ModalContainer>
     );
   };
@@ -325,11 +541,16 @@ const Services = () => {
       <ScrollView style={styles.contentContainer}>
         {/* Services */}
         <View style={styles.serviceContainer}>
-          <ServiceCard />
-          <ServiceCard />
-          <ServiceCard />
-          <ServiceCard />
-          <ServiceCard />
+          {services.length > 0 &&
+            services.map((service, index) => {
+              return (
+                <ServiceCard
+                  service={service}
+                  key={index}
+                  onEdit={onPressEdit}
+                />
+              );
+            })}
         </View>
       </ScrollView>
     </View>
@@ -358,10 +579,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
 
+  scrollContainer: {
+    width: '100%',
+  },
+
   modalContainer: {
     width: '100%',
     paddingVertical: dimensions.Height / 50,
-    paddingHorizontal: dimensions.Width / 50,
+    paddingHorizontal: dimensions.Width / 30,
   },
 
   infoContainer: {
@@ -404,8 +629,14 @@ const styles = StyleSheet.create({
     marginLeft: dimensions.Width / 80,
   },
 
-  text: {
+  errorText: {
     fontSize: fonts.size.font14,
+    fontWeight: fonts.weight.regular,
+    color: colors.invalid,
+  },
+
+  text: {
+    fontSize: fonts.size.font16,
     fontWeight: fonts.weight.semi,
   },
 

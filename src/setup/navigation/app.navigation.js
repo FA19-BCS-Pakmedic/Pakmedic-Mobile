@@ -7,6 +7,7 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import {googleConfig} from '../../utils/helpers/googleConfig';
 import ProfileManagement from '../../screens/doctor/Profile-management/Home';
+import EditProfile from '../../screens/patient/Profile-management/Edit-Profile';
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -27,8 +28,9 @@ const AppNavigation = () => {
     //   logoHeight={200}
     //   logoWidth={200}>
     <NavigationContainer>
-      {/* <RootNavigation /> */}
-      <ProfileManagement />
+      <RootNavigation />
+      {/* <EditProfile /> */}
+      {/* <ProfileManagement /> */}
     </NavigationContainer>
     // </AnimatedSplash>
   );

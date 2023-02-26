@@ -33,8 +33,8 @@ const ProfileInfo = ({icon, label, value}) => {
         <View style={styles.iconContainer}>{icons[`${icon}`]}</View>
         {/* information */}
         <View style={styles.info}>
-          <Text style={styles.infoLabel}>key</Text>
-          <Text style={styles.infoValue}>value</Text>
+          <Text style={styles.infoLabel}>{label}</Text>
+          <Text style={styles.infoValue}>{value}</Text>
         </View>
       </View>
       <LineDivider color={colors.primary1} gap={50} />

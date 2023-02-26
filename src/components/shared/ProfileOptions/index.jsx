@@ -11,21 +11,14 @@ import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
 export default ProfileOptions = ({options, onClick}) => {
-  const dummyOptions = [
-    {label: 'General Info', isActive: false},
-    {label: 'Services', isActive: true},
-    {label: 'Treatments', isActive: false},
-    {label: 'Experience', isActive: false},
-    {label: 'Reviews', isActive: false},
-    {label: 'About', isActive: false},
-    {label: 'E-Signature', isActive: false},
-  ];
-
   return (
     <View style={styles().container}>
       <ScrollView horizontal contentContainerStyle={styles().contentContainer}>
-        {dummyOptions.map((option, index) => (
-          <TouchableOpacity style={styles(option.isActive).capsule} key={index}>
+        {options.map((option, index) => (
+          <TouchableOpacity
+            style={styles(option.isActive).capsule}
+            key={index}
+            onPress={() => onClick(index)}>
             <Text style={styles().capsuleText}>{option.label}</Text>
           </TouchableOpacity>
         ))}

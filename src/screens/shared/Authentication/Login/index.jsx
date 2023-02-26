@@ -179,7 +179,7 @@ const Login = ({navigation}) => {
           placeholderTextColor={colors.secondary1}
           keyboardType="email-address"
           control={control}
-          title={'Email'}
+          //title={'Email'}
           name="email"
           rules={{
             required: "Email can't be empty",
@@ -199,7 +199,7 @@ const Login = ({navigation}) => {
           keyboardType="password"
           control={control}
           name="password"
-          title={'Password'}
+          //title={'Password'}
           isPasswordField={true}
           isPasswordVisible={!isPasswordVisible}
           setIsPasswordVisible={setIsPasswordVisible}

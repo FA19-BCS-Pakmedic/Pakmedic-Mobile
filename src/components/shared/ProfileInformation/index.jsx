@@ -3,12 +3,20 @@ import React from 'react';
 
 import ProfileInfo from './ProfileInfo';
 
-const ProfileInformation = () => {
-  const icons = ['license', 'person', 'phone', 'email', 'id'];
+const ProfileInformation = props => {
+  // const icons = ['license', 'person', 'phone', 'email', 'id'];
+
+  console.log(props);
+
   return (
     <View style={styles.container}>
-      {icons.map((icon, index) => (
-        <ProfileInfo icon={icon} key={index} value="value" />
+      {props.information?.map((info, index) => (
+        <ProfileInfo
+          icon={info.icon}
+          key={index}
+          value={info.value}
+          label={info.label}
+        />
       ))}
     </View>
   );

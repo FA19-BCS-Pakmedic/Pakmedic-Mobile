@@ -10,8 +10,18 @@ import ClockIcon from '../../../../assets/svgs/material-symbols_nest-clock-farsi
 import MoneyIcon from '../../../../assets/svgs/fa6-regular_money-bill-1.svg';
 import AppointmentIcon from '../../../../assets/svgs/Appointment.svg';
 import OptionsIcon from '../../../../assets/svgs/Options.svg';
+import MenuDropdown from '../../../shared/MenuDropdown';
+import ConfirmationAlert from '../../../shared/ConfirmationAlert';
+import {useState} from 'react';
 
-export default function ServiceCard() {
+export default function ServiceCard({service, onEdit, onDelete}) {
+  const [visible, setVisible] = useState(false);
+
+  const menuDropDownOptions = [
+    {text: 'Edit', onSelect: () => onEdit(service._id)},
+    {text: 'Delete', onSelect: () => setVisible(true)},
+  ];
+
   const icons = {
     video: <VideoIcon />,
     physicalCheckup: <PhyscialCheckupIcon />,
@@ -36,20 +46,56 @@ export default function ServiceCard() {
     options: <OptionsIcon />,
   };
 
+  const getConfirmationModal = () => {
+    return (
+      <ConfirmationAlert
+        alertText={'Are you sure you want to delete this service?'}
+        cancelControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            setVisible(false);
+          },
+        }}
+        confirmControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            console.log('deleted');
+            setVisible(false);
+          },
+        }}
+        height={dimensions.Height / 5}
+        width={dimensions.Width / 1.2}
+        isModalVisible={visible}
+        setModalVisible={setVisible}
+        type="center"
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
+      {getConfirmationModal()}
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.left}>
-          <View style={styles.iconContainer}>{icons[`video`]}</View>
+          <View style={styles.iconContainer}>
+            {icons[`${service.isOnline ? 'video' : 'physicalCheckup'}`]}
+          </View>
 
           <View>
-            <Text style={styles.infoHospital}>Islamabad Diagnostic center</Text>
-            <Text>Blue area, Islamabad</Text>
+            {service.isOnline ? (
+              <Text style={styles.infoHospital}>Online Consultation</Text>
+            ) : (
+              <>
+                <Text style={styles.infoHospital}>{service.hospital.name}</Text>
+                <Text>{service.hospital.address.address}</Text>
+              </>
+            )}
           </View>
         </View>
-
-        <View style={styles.optionsIconContainer}>{icons[`options`]}</View>
+        <MenuDropdown options={menuDropDownOptions}>
+          <View style={styles.optionsIconContainer}>{icons[`options`]}</View>
+        </MenuDropdown>
       </View>
 
       {/* Fees */}
@@ -59,7 +105,7 @@ export default function ServiceCard() {
           <View style={styles.infoIconContainer}>{icons[`money`]}</View>
           <Text style={styles.infoLabel}>Fees</Text>
         </View>
-        <Text style={styles.infoValue}>Rs. 3500</Text>
+        <Text style={styles.infoValue}>Rs. {service.fee}</Text>
       </View>
 
       {/* Days */}
@@ -69,7 +115,11 @@ export default function ServiceCard() {
           <View style={styles.infoIconContainer}>{icons[`appointment`]}</View>
           <Text style={styles.infoLabel}>Days</Text>
         </View>
-        <Text style={styles.infoValue}>Mon-Tue-Wed-Thu</Text>
+        <Text style={styles.infoValue}>
+          {service.days.map((day, index) => {
+            return `${day}${index === service.days.length - 1 ? '' : '-'}`;
+          })}
+        </Text>
       </View>
 
       {/* Time */}
@@ -91,6 +141,7 @@ const styles = StyleSheet.create({
     marginBottom: dimensions.Height / 40,
     borderWidth: 2,
     borderColor: colors.primary1,
+    position: 'relative',
   },
 
   header: {
@@ -100,6 +151,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 2,
     borderBottomColor: colors.primary1,
+  },
+
+  optionsIconContainer: {
+    height: dimensions.Width / 10,
+    width: dimensions.Width / 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   left: {
@@ -138,5 +196,6 @@ const styles = StyleSheet.create({
   infoValue: {
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.semi,
+    maxWidth: dimensions.Width / 2,
   },
 });

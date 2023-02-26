@@ -1,5 +1,5 @@
 //nodemodules import
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Controller} from 'react-hook-form';
 
@@ -18,8 +18,10 @@ export const ValidateDropdown = ({
   setValue,
   control,
   placeholder,
+  width,
   name,
   rules,
+  isErrorBoundary = true,
 }) => {
   return (
     <Controller
@@ -28,7 +30,7 @@ export const ValidateDropdown = ({
       rules={rules}
       render={({field: {value}, fieldState: {error}}) => {
         return (
-          <View style={styles().validateRoot}>
+          <View style={styles(width).validateRoot}>
             <DropDownPicker
               dropDownDirection="BOTTOM"
               listMode="SCROLLVIEW"
@@ -42,7 +44,7 @@ export const ValidateDropdown = ({
               setOpen={setOpen}
               setValue={setValue}
               style={[
-                styles().select,
+                styles(width).validateSelect,
                 {
                   borderColor: error ? colors.invalid : colors.primary1,
                 },
@@ -54,9 +56,11 @@ export const ValidateDropdown = ({
               containerStyle={styles().containerStyle}
             />
             {/* error message */}
-            <View style={styles().errorMessageContainer}>
-              {error && <ErrorMessage error={error} />}
-            </View>
+            {isErrorBoundary || error ? (
+              <View style={styles().errorMessageContainer}>
+                {error && <ErrorMessage error={error} />}
+              </View>
+            ) : null}
           </View>
         );
       }}
@@ -73,6 +77,7 @@ export const Dropdown = ({
   placeholder,
   value,
   minHeight,
+  error = false,
 }) => {
   return (
     <View style={styles(width).root}>
@@ -92,7 +97,7 @@ export const Dropdown = ({
           styles().select,
 
           {
-            borderColor: colors.primary1,
+            borderColor: error ? colors.invalid : colors.primary1,
             minHeight: minHeight,
           },
         ]}
@@ -122,12 +127,22 @@ const styles = width =>
       fontWeight: fonts.weight.bold,
     },
 
+    validateSelect: {
+      borderColor: colors.primary1,
+      color: colors.secondary1,
+      paddingHorizontal: dimensions.Width / 30,
+      marginVertical: dimensions.Height / 100,
+      zIndex: -1,
+      width: width ? width : '100%',
+    },
+
     select: {
       borderColor: colors.primary1,
       color: colors.secondary1,
       paddingHorizontal: dimensions.Width / 30,
       marginVertical: dimensions.Height / 100,
       zIndex: -1,
+      width: '100%',
     },
 
     containerStyle: {
@@ -138,6 +153,7 @@ const styles = width =>
     listItemLabelStyle: {
       color: colors.secondary1,
     },
+
     dropDownContainerStyle: {
       backgroundColor: colors.primaryMonoChrome100,
       borderColor: colors.secondary1,

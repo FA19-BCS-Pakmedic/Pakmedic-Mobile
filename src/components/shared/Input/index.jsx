@@ -107,9 +107,12 @@ export const ValidateInputField = ({
   isPasswordField,
   placeholderTextColor,
   text,
+  title,
   isPasswordVisible,
   setIsPasswordVisible,
   onBlurEvent,
+  isDisabled,
+  isErrorBoundary = true,
 }) => {
   // setting the password eye icon name based on the visiblility status
   const passwordIconName = !isPasswordVisible
@@ -133,18 +136,26 @@ export const ValidateInputField = ({
       }) => {
         return (
           <View style={styles().root}>
-            {/* <Text style={styles().title}>{title}</Text> */}
+            {title ? <Text style={styles().title}>{title}</Text> : null}
             <View
               style={[
-                styles(type).container,
-                {borderColor: error ? colors.invalid : colors.primary1},
+                styles(type, null, isDisabled).container,
+                {
+                  borderColor: error
+                    ? colors.invalid
+                    : type === 'outlined' && isDisabled
+                    ? colors.white
+                    : colors.primary1,
+                },
               ]}>
               <TextInput
+                editable={!isDisabled}
                 style={styles(type, width).input}
                 placeholder={placeholder}
                 secureTextEntry={isPasswordVisible}
                 keyboardType={keyboardType || 'text'}
                 placeholderTextColor={placeholderTextColor || colors.secondary1}
+                value={text}
                 onChangeText={onChange}
                 onBlur={() => {
                   onBlur();
@@ -152,7 +163,6 @@ export const ValidateInputField = ({
                     onBlurEvent();
                   }
                 }}
-                value={text}
               />
               <View
                 style={
@@ -187,9 +197,11 @@ export const ValidateInputField = ({
               </View>
             </View>
             {/* error message */}
-            <View style={styles().errorMessageContainer}>
-              {error && <ErrorMessage error={error} />}
-            </View>
+            {isErrorBoundary || error ? (
+              <View style={styles().errorMessageContainer}>
+                {error && <ErrorMessage error={error} />}
+              </View>
+            ) : null}
           </View>
         );
       }}
@@ -197,21 +209,31 @@ export const ValidateInputField = ({
   );
 };
 
-const styles = (type, width) =>
+const styles = (type, width, isDisabled) =>
   StyleSheet.create({
     root: {
       width: '100%',
-      // borderWidth: 1,
       marginVertical: dimensions.Height / 200,
     },
     container: {
       width: '100%',
       height: dimensions.Height / 17,
-      backgroundColor:
-        type === 'filled' ? colors.secondaryMonochrome100 : colors.white,
+      // backgroundColor:
+      //   type === 'filled' ? colors.secondaryMonochrome100 : colors.white,
       borderWidth: type === 'filled' ? 0 : 1,
-      borderColor:
-        type === 'filled' ? colors.secondaryMonochrome100 : colors.primary1,
+      // borderColor:
+      //   type === 'filled' ? colors.secondaryMonochrome100 : colors.primary1,
+      // borderColor:
+      //   // type === 'outlined' && isDisabled ? colors.white : colors.white,
+      //   colors.black,
+      backgroundColor:
+        type === 'outlined'
+          ? isDisabled
+            ? colors.gray
+            : colors.white
+          : isDisabled
+          ? colors.gray
+          : colors.secondaryMonoChrome100,
       paddingHorizontal: dimensions.Width / 40,
       borderRadius: 5,
       flexDirection: 'row',
