@@ -46,7 +46,7 @@ export default function ServiceCard({service, onEdit, onDelete}) {
     options: <OptionsIcon />,
   };
 
-  const getConfirmationModal = () => {
+  const openConfirmationalModal = () => {
     return (
       <ConfirmationAlert
         alertText={'Are you sure you want to delete this service?'}
@@ -74,7 +74,7 @@ export default function ServiceCard({service, onEdit, onDelete}) {
 
   return (
     <View style={styles.container}>
-      {getConfirmationModal()}
+      {openConfirmationalModal()}
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.left}>

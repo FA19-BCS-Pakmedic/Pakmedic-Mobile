@@ -2,16 +2,19 @@ import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import ModalContainer from '../../../containers/ModalContainer';
+import {addTreatment, updateDoctor} from '../../../services/doctorServices';
 import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import AddMore from '../../shared/AddMore';
 import Button from '../../shared/Button';
-import {ModalInputField} from '../../shared/Input';
+import {ModalInputField, ValidateInputField} from '../../shared/Input';
 import AvailableTreatmentsCard from './Card';
 
-export default function AvailableTreatments() {
+export default function AvailableTreatments({setStoredUser, treatments, id}) {
   const [visible, setVisible] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [editIdx, setEditIdx] = useState(-1);
 
   const {
     control,
@@ -28,6 +31,53 @@ export default function AvailableTreatments() {
     },
   });
 
+  console.log(treatments);
+
+  const onSubmit = async values => {
+    console.log('here');
+
+    try {
+      let response;
+      if (!isEdit) {
+        response = await addTreatment({treatment: values.name});
+      } else {
+        treatments[editIdx] = values.name;
+        response = await updateDoctor({treatments});
+      }
+      setStoredUser(response.data.data.user);
+
+      setVisible(false);
+
+      setValue('name', '');
+
+      clearErrors();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onDeletePress = async idx => {
+    try {
+      treatments.splice(idx, 1);
+
+      response = await updateDoctor({treatments});
+      setStoredUser(response.data.data.user);
+
+      setVisible(false);
+
+      clearErrors();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onEditPress = idx => {
+    setIsEdit(true);
+    setEditIdx(idx);
+    setValue('name', treatments[idx]);
+    setVisible(true);
+  };
+
   const openModal = () => {
     return (
       <>
@@ -38,7 +88,7 @@ export default function AvailableTreatments() {
           type="center"
           backDropOpacity={0.5}
           padding={dimensions.Height / 50}
-          height={dimensions.Height / 3.2}
+          height={dimensions.Height / 3}
           bgColor={'white'}
           borderColor={colors.primary1}>
           <View style={styles.modalContainer}>
@@ -47,12 +97,15 @@ export default function AvailableTreatments() {
             </View>
             <View style={styles.infoContainer}>
               <View style={styles.inputContainer}>
-                <ModalInputField
+                <ValidateInputField
                   placeholder="Treatment name"
                   type="outlined"
                   placeholderTextColor={colors.secondary1}
                   control={control}
+                  width="93%"
+                  isErrorBoundary={false}
                   name="name"
+                  text={watch('name')}
                   rules={{
                     required: {
                       value: true,
@@ -67,13 +120,16 @@ export default function AvailableTreatments() {
               <Button
                 type="outlined"
                 label="Cancel"
-                onPress={() => {}}
+                onPress={() => {
+                  setVisible(false);
+                }}
                 width={dimensions.Width / 2.6}
               />
               <Button
                 type="filled"
                 label="Save"
-                onPress={() => {}}
+                onPress={handleSubmit(onSubmit)}
+                // isLoading={loading}
                 width={dimensions.Width / 2.6}
               />
             </View>
@@ -100,11 +156,21 @@ export default function AvailableTreatments() {
         />
       </View>
       <ScrollView style={styles.contentContainer}>
-        <AvailableTreatmentsCard />
-        <AvailableTreatmentsCard />
-        <AvailableTreatmentsCard />
-        <AvailableTreatmentsCard />
-        <AvailableTreatmentsCard />
+        {treatments.length > 0 ? (
+          treatments.map((treatment, index) => {
+            return (
+              <AvailableTreatmentsCard
+                key={index}
+                index={index}
+                treatment={treatment}
+                onEdit={onEditPress}
+                onDelete={onDeletePress}
+              />
+            );
+          })
+        ) : (
+          <Text>No treatments added</Text>
+        )}
       </ScrollView>
     </View>
   );

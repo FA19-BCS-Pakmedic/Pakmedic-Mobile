@@ -79,15 +79,21 @@ const ProfileManagement = () => {
   };
 
   const getActiveComponent = () => {
+    console.log(activeOption);
     switch (activeOption) {
       case 'ProfileInformation':
-        <ProfileInformation information={information} />;
+        return <ProfileInformation information={information} />;
       case 'Services':
         return (
           <Services services={storedUser.services} updateUser={updateUser} />
         );
       case 'AvailableTreatments':
-        return <AvailableTreatments />;
+        return (
+          <AvailableTreatments
+            setStoredUser={setStoredUser}
+            treatments={storedUser.treatments}
+          />
+        );
       case 'Experiences':
         return <Experiences />;
       case 'Reviews':

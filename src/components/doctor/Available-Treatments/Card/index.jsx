@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import Button from '../../../shared/Button';
@@ -6,11 +6,48 @@ import Button from '../../../shared/Button';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
+import ConfirmationAlert from '../../../shared/ConfirmationAlert';
 
-export default function AvailableTreatmentsCard() {
+export default function AvailableTreatmentsCard({
+  treatment,
+  onEdit,
+  onDelete,
+  index,
+}) {
+  console.log('HERE', treatment);
+
+  const [visible, setVisible] = useState(false);
+
+  const openConfirmationalModal = () => {
+    return (
+      <ConfirmationAlert
+        alertText={'Are you sure you want to delete this service?'}
+        cancelControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            setVisible(false);
+          },
+        }}
+        confirmControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            onDelete(index);
+            setVisible(false);
+          },
+        }}
+        height={dimensions.Height / 5}
+        width={dimensions.Width / 1.2}
+        isModalVisible={visible}
+        setModalVisible={setVisible}
+        type="center"
+      />
+    );
+  };
+
   return (
     <View style={styles().container}>
-      <Text style={styles().label}>Kidney stones</Text>
+      {openConfirmationalModal()}
+      <Text style={styles().label}>{treatment}</Text>
       <View style={styles().controls}>
         <Button
           type={'outlined'}
@@ -18,7 +55,9 @@ export default function AvailableTreatmentsCard() {
           width={dimensions.Width / 4}
           height={dimensions.Height / 20}
           borderColor={colors.primary1}
-          onPress={() => {}}
+          onPress={() => {
+            onEdit(index);
+          }}
         />
         <Button
           type={'filled'}
@@ -26,7 +65,9 @@ export default function AvailableTreatmentsCard() {
           width={dimensions.Width / 4}
           height={dimensions.Height / 20}
           borderColor={colors.primary1}
-          onPress={() => {}}
+          onPress={() => {
+            setVisible(true);
+          }}
         />
       </View>
     </View>
@@ -36,7 +77,6 @@ export default function AvailableTreatmentsCard() {
 const styles = () =>
   StyleSheet.create({
     container: {
-        
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-around',
@@ -49,6 +89,7 @@ const styles = () =>
 
     label: {
       maxWidth: '35%',
+      width: '35%',
       fontSize: fonts.size.font14,
       fontWeight: fonts.weight.semi,
     },

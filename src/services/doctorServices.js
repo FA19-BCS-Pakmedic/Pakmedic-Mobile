@@ -41,6 +41,9 @@ export const resetForgotPasswordDoctor = data =>
 //get doctor if he is logged in
 export const getDoctor = () => API.get('doctors');
 
+//update doctor data
+export const updateDoctor = data => API.patch(`doctors`, data);
+
 //add service
 export const addService = data => API.post('/services', data);
 
@@ -55,3 +58,6 @@ export const updateService = (id, data) => API.patch(`/services/${id}`, data);
 
 //delete service
 export const deleteService = id => API.delete(`/services/${id}`);
+
+//add treatment
+export const addTreatment = data => API.post('/doctors/treatments', data);
