@@ -52,3 +52,6 @@ export const getServiceById = id => API.get(`/services/${id}`);
 
 // update service
 export const updateService = (id, data) => API.patch(`/services/${id}`, data);
+
+//delete service
+export const deleteService = id => API.delete(`/services/${id}`);

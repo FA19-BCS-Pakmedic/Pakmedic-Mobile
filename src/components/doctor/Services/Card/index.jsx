@@ -59,7 +59,7 @@ export default function ServiceCard({service, onEdit, onDelete}) {
         confirmControl={{
           width: dimensions.Width / 3,
           onPress: () => {
-            console.log('deleted');
+            onDelete(service._id);
             setVisible(false);
           },
         }}

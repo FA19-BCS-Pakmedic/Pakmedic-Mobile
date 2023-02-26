@@ -31,6 +31,7 @@ import {STATES} from '../../../utils/constants/States';
 
 import {
   addService,
+  deleteService,
   getServiceById,
   getServices,
   updateService,
@@ -196,6 +197,24 @@ const Services = ({services, updateUser}) => {
   const validateDays = () => {
     setIsDaysValid(watch('availabilityDays').length > 0);
     return watch('availabilityDays').length > 0;
+  };
+
+  const onDeletePress = async id => {
+    try {
+      console.log(id);
+      const response = await deleteService(id);
+
+      Alert.alert('Success', 'Service deleted successfully', [
+        {
+          text: 'OK',
+        },
+      ]);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      updateUser();
+    }
   };
 
   const onSubmit = async values => {
@@ -548,6 +567,7 @@ const Services = ({services, updateUser}) => {
                   service={service}
                   key={index}
                   onEdit={onPressEdit}
+                  onDelete={onDeletePress}
                 />
               );
             })}
