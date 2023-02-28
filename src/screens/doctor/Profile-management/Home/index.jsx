@@ -98,11 +98,18 @@ const ProfileManagement = () => {
           />
         );
       case 'Experiences':
-        return <Experiences setStoredUser={setStoredUser} experiences={storedUser?.experiences}/>;
+        return (
+          <Experiences
+            setStoredUser={setStoredUser}
+            experiences={storedUser?.experiences}
+          />
+        );
       case 'Reviews':
         return <Reviews />;
       case 'About':
-        return <About />;
+        return (
+          <About about={storedUser?.about} setStoredUser={setStoredUser} />
+        );
       default:
         return <ProfileInformation information={information} />;
     }

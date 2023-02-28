@@ -7,9 +7,11 @@ import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import {useForm} from 'react-hook-form';
 import fonts from '../../../utils/styles/themes/fonts';
+import {updateDoctor} from '../../../services/doctorServices';
 
-const About = () => {
+const About = ({about, setStoredUser}) => {
   const [visible, setVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
@@ -25,6 +27,20 @@ const About = () => {
       about: '',
     },
   });
+
+  const onSubmit = async value => {
+    let response;
+    setIsLoading(true);
+    try {
+      response = await updateDoctor({about: value.about});
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setStoredUser(response.data.data.user);
+      setIsLoading(false);
+      setVisible(false);
+    }
+  };
 
   const openModal = () => {
     return (
@@ -54,12 +70,7 @@ const About = () => {
                   placeholderTextColor={colors.secondary1}
                   control={control}
                   name="about"
-                  rules={{
-                    required: {
-                      value: true,
-                      message: 'About details are required',
-                    },
-                  }}
+                  text={watch('about')}
                 />
               </View>
             </View>
@@ -67,13 +78,16 @@ const About = () => {
               <Button
                 type="outlined"
                 label="Cancel"
-                onPress={() => {}}
+                onPress={() => {
+                  setVisible(false);
+                }}
                 width={dimensions.Width / 2.6}
               />
               <Button
                 type="filled"
                 label="Save"
-                onPress={() => {}}
+                onPress={handleSubmit(onSubmit)}
+                isLoading={isLoading}
                 width={dimensions.Width / 2.6}
               />
             </View>
@@ -88,14 +102,21 @@ const About = () => {
       {openModal()}
 
       <View style={styles.mainContainer}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>About Me</Text>
-        </View>
+        {about !== '' && (
+          <View>
+            <Text style={styles.headerText}>About Me</Text>
+          </View>
+        )}
 
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <View style={styles.scrollContainer}>
-            <Text style={styles.text}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Commodo
+            {about === '' ? (
+              <Text style={[styles.headerText, {textAlign: 'center'}]}>
+                No About Added
+              </Text>
+            ) : (
+              <Text style={styles.text}>
+                {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Commodo
               arcu arcu duis quis tellus, eget. Ac et tristique egestas ac,
               ullamcorper nec sit egestas risus. Quam nunc tristique scelerisque
               blandit turpis sit aliquet sed. Nunc scelerisque orci sed id purus
@@ -107,16 +128,19 @@ const About = () => {
               Sit eu convallis maecenas Nunc scelerisque orci sed id purus
               dignissim. Placerat at pulvinar dignissim mauris purus netus.
               Morbi nulla pretium eu fringilla congue non faucibus eros, nunc.
-              Sit eu convallis maecenas
-            </Text>
+            Sit eu convallis maecenas */}
+                {about}
+              </Text>
+            )}
           </View>
         </ScrollView>
 
         <View style={styles.btnContainer}>
           <Button
             type="filled"
-            label="Edit About"
+            label={`${about === '' ? 'Add' : 'Edit'} About`}
             onPress={() => {
+              setValue('about', about);
               setVisible(prevState => !prevState);
             }}
             width={dimensions.Width / 2}

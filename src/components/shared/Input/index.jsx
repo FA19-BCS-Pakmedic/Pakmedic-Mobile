@@ -329,21 +329,6 @@ export const ModalInputField = ({
                 value={text}
               />
             </View>
-            {(isDirty || isTouched || error) && (
-              <Animatable.View
-                animation="fadeIn"
-                easing="ease-in-out"
-                style={modalInputStyles().iconContainer}>
-                {!error && <Icon name="checkmark-circle-outline" size={18} />}
-                {error && (
-                  <Icon
-                    name="close-circle-outline"
-                    size={18}
-                    color={colors.invalid}
-                  />
-                )}
-              </Animatable.View>
-            )}
           </View>
         );
       }}
