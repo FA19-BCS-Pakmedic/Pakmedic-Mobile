@@ -61,3 +61,17 @@ export const deleteService = id => API.delete(`/services/${id}`);
 
 //add treatment
 export const addTreatment = data => API.post('/doctors/treatments', data);
+
+// add experience
+export const addExperience = data => API.post('/experiences', data);
+
+//get experience based on id
+export const getExperienceByID = id => API.get(`/experiences/${id}`);
+
+//update experience based on id
+export const updateExperience = (id, data) =>
+  API.patch(`/experiences/${id}`, data);
+
+//delete experience based on id
+export const deleteExperience = id => API.delete(`/experiences/${id}`);
+

@@ -38,7 +38,21 @@ import {
 } from '../../../services/doctorServices';
 import {DAYS} from '../../../utils/constants/Days';
 
-const Services = ({services, updateUser}) => {
+const initialState = {
+  name: '',
+  appointmentFee: '',
+  availabilityDays: [],
+  availabilityTimeFromHour: '',
+  availabilityTimeFromMin: '',
+  availabilityTimeToHour: '',
+  availabilityTimeToMin: '',
+  address: '',
+  city: '',
+  state: '',
+  isOnline: false,
+};
+
+const Services = ({services, setStoredUser}) => {
   const [visible, setVisible] = useState(false);
   // const [isOnline, setIsOnline] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
@@ -72,22 +86,13 @@ const Services = ({services, updateUser}) => {
     formState: {errors, isValid},
     setValue,
     clearErrors,
+    reset,
     watch,
   } = useForm({
     mode: 'all',
     revalidate: 'all',
     defaultValues: {
-      name: '',
-      appointmentFee: '',
-      availabilityDays: [],
-      availabilityTimeFromHour: '',
-      availabilityTimeFromMin: '',
-      availabilityTimeToHour: '',
-      availabilityTimeToMin: '',
-      address: '',
-      city: '',
-      state: '',
-      isOnline: false,
+      ...initialState,
     },
   });
 
@@ -109,7 +114,6 @@ const Services = ({services, updateUser}) => {
   useEffect(() => {
     setValue('availabilityDays', getSelectedDays(selectedDays));
     setIsDaysValid(true);
-    console.log(dayChips);
   }, [dayChips]);
 
   const getSelectedDays = () => {
@@ -146,8 +150,6 @@ const Services = ({services, updateUser}) => {
 
   useEffect(() => {
     if (selectedService) {
-      console.log(selectedService);
-
       setValue('name', selectedService?.hospital?.name);
       setValue('address', selectedService?.hospital?.address?.address);
       setValue('city', selectedService?.hospital?.address?.city);
@@ -183,8 +185,6 @@ const Services = ({services, updateUser}) => {
     try {
       const response = await getServiceById(id);
 
-      // console.log(response.data.data.service);
-
       setSelectedService(response.data.data.service);
 
       setIsEdit(true);
@@ -200,9 +200,11 @@ const Services = ({services, updateUser}) => {
   };
 
   const onDeletePress = async id => {
+    let response;
     try {
-      console.log(id);
-      const response = await deleteService(id);
+      response = await deleteService(id);
+
+      console.log(response.data.data.user);
 
       Alert.alert('Success', 'Service deleted successfully', [
         {
@@ -213,7 +215,7 @@ const Services = ({services, updateUser}) => {
     } catch (err) {
       console.log(err);
     } finally {
-      updateUser();
+      setStoredUser(response.data.data.user);
     }
   };
 
@@ -243,19 +245,35 @@ const Services = ({services, updateUser}) => {
           response = await updateService(selectedService._id, data);
         }
 
+        console.log(response.data.data);
+
         Alert.alert('Success', 'Service added successfully', [
           {
             text: 'OK',
           },
         ]);
-        console.log(response);
       } catch (err) {
         console.log(err);
       } finally {
-        setLoading(false);
-        updateUser();
+        setStoredUser(response.data.data.user);
+        resetForm();
       }
     }
+  };
+
+  const resetForm = () => {
+    reset();
+    setVisible(false);
+    setLoading(false);
+    setIsEdit(false);
+    setDayChips(prevState => {
+      return prevState.map(state => {
+        return {
+          ...state,
+          isSelected: false,
+        };
+      });
+    });
   };
 
   const openModal = () => {

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 
 import OptionsIcon from '../../../../assets/svgs/Options.svg';
 
@@ -7,20 +7,63 @@ import colors from '../../../../utils/styles/themes/colors';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 import fonts from '../../../../utils/styles/themes/fonts';
 
-const ExperienceCard = () => {
+import {getDate} from '../../../../utils/helpers/getDate';
+import MenuDropDown from '../../../shared/MenuDropdown';
+import ConfirmationAlert from '../../../shared/ConfirmationAlert';
+
+const ExperienceCard = ({experience, onEdit, onDelete}) => {
+  const [visible, setVisible] = useState(false);
+
+  const menuDropDownOptions = [
+    {text: 'Edit', onSelect: () => onEdit(experience._id)},
+    {text: 'Delete', onSelect: () => setVisible(true)},
+  ];
+
+  const openConfirmationalModal = () => {
+    return (
+      <ConfirmationAlert
+        alertText={'Are you sure you want to delete this experience?'}
+        cancelControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            setVisible(false);
+          },
+        }}
+        confirmControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            onDelete(experience._id);
+            setVisible(false);
+          },
+        }}
+        height={dimensions.Height / 5}
+        width={dimensions.Width / 1.2}
+        isModalVisible={visible}
+        setModalVisible={setVisible}
+        type="center"
+      />
+    );
+  };
+
   return (
     <View style={styles().container}>
+      {openConfirmationalModal()}
       <View style={styles().headerContainer}>
-        <Text style={styles().headerText}>Dental Practitioner</Text>
-        <View style={styles().optionsIconContainer}>
-          <OptionsIcon />
-        </View>
+        <Text style={styles().headerText}>{experience.title}</Text>
+        <MenuDropDown options={menuDropDownOptions}>
+          <View style={styles().optionsIconContainer}>
+            <OptionsIcon />
+          </View>
+        </MenuDropDown>
       </View>
 
       <View style={styles().contentContainer}>
         <Text style={styles().text}>
-          Dental and maxillofacial Surgery center, Jail road, lahore
+          {`${experience.hospital.name}, (${experience.hospital.address.address}, ${experience.hospital.address.city})`}
         </Text>
+        <Text style={styles().subText}>{`${getDate(experience.from)}-${getDate(
+          experience.to,
+        )}`}</Text>
       </View>
     </View>
   );
@@ -36,6 +79,13 @@ const styles = () =>
       marginBottom: dimensions.Height / 40,
       borderWidth: 2,
       borderColor: colors.primary1,
+    },
+
+    optionsIconContainer: {
+      height: dimensions.Width / 10,
+      width: dimensions.Width / 10,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
 
     headerContainer: {
@@ -56,5 +106,10 @@ const styles = () =>
     text: {
       fontSize: fonts.size.font16,
       fontWeight: fonts.weight.regular,
+    },
+    subText: {
+      fontSize: fonts.size.font14,
+      fontWeight: fonts.weight.semi,
+      color: colors.secondary2,
     },
   });

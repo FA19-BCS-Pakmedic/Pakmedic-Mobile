@@ -74,9 +74,9 @@ const ProfileManagement = () => {
     });
   };
 
-  const updateUser = () => {
-    getUserData();
-  };
+  // useEffect(() => {
+  //   storedUser && console.log(storedUser.services);
+  // }, [setStoredUser]);
 
   const getActiveComponent = () => {
     console.log(activeOption);
@@ -85,7 +85,10 @@ const ProfileManagement = () => {
         return <ProfileInformation information={information} />;
       case 'Services':
         return (
-          <Services services={storedUser.services} updateUser={updateUser} />
+          <Services
+            services={storedUser.services}
+            setStoredUser={setStoredUser}
+          />
         );
       case 'AvailableTreatments':
         return (
@@ -95,7 +98,7 @@ const ProfileManagement = () => {
           />
         );
       case 'Experiences':
-        return <Experiences />;
+        return <Experiences setStoredUser={setStoredUser} experiences={storedUser?.experiences}/>;
       case 'Reviews':
         return <Reviews />;
       case 'About':

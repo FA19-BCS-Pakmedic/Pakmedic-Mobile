@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '100%',
     paddingVertical: dimensions.Height / 50,
-    paddingHorizontal: dimensions.Width / 50,
+    paddingHorizontal: dimensions.Width / 30,
   },
 
   infoContainer: {
