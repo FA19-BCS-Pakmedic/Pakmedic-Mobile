@@ -6,6 +6,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import Login from '../../screens/shared/Authentication/Login';
 import DoctorRegister from '../../screens/doctor/Authentication/Register';
 import PatientRegister from '../../screens/patient/Authentication/Register';
+import DoctorCompleteProfile from '../../screens/doctor/Authentication/Complete-profile';
+import PatientCompleteProfile from '../../screens/patient/Authentication/Complete-profile';
 import ForgotPassword from '../../screens/shared/Authentication/Forgot-password';
 import SetNewPassword from '../../screens/shared/Authentication/Set-new-password';
 import OtpVerification from '../../screens/shared/Authentication/OTP-verification';
@@ -55,7 +57,9 @@ const AuthNavigation = ({navigation}) => {
           );
 
           //navigate to user app if the user is logged in
-          navigation.navigate('App');
+
+          navigation.replace('App');
+
         } catch (err) {
           console.log(err);
         }
@@ -77,6 +81,19 @@ const AuthNavigation = ({navigation}) => {
       ) : (
         <authStack.Screen name="Register" component={PatientRegister} />
       )}
+
+      {role === ROLES.doctor ? (
+        <authStack.Screen
+          name="CompleteProfile"
+          component={DoctorCompleteProfile}
+        />
+      ) : (
+        <authStack.Screen
+          name="CompleteProfile"
+          component={PatientCompleteProfile}
+        />
+      )}
+
 
       <authStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <authStack.Screen name="OtpVerification" component={OtpVerification} />

@@ -105,14 +105,6 @@ const patientSide = () => {
 const OnboardingNavigation = () => {
   const role = useSelector(state => state.role.role);
 
-  // //useEffect to remove all the previous screens from the stack navigator
-  // useEffect(() => {
-  //   OnboardingStack.reset({
-  //     index: 0,
-  //     routes: [{name: 'Onboarding1'}],
-  //   });
-  // }, []);
-
   return role == ROLES.doctor ? doctorSide() : patientSide();
 };
 
