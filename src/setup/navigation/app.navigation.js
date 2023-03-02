@@ -9,6 +9,9 @@ import {googleConfig} from '../../utils/helpers/googleConfig';
 import ProfileManagement from '../../screens/doctor/Profile-management/Home';
 import EditProfile from '../../screens/patient/Profile-management/Edit-Profile';
 
+import {useSelector, useDispatch} from 'react-redux';
+
+
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,6 +24,7 @@ const AppNavigation = () => {
   }, []);
 
   return (
+
     // <AnimatedSplash
     //   isLoaded={!isLoading}
     //   logoImage={require('../../assets/images/Logo.png')}
@@ -33,6 +37,7 @@ const AppNavigation = () => {
       {/* <ProfileManagement /> */}
     </NavigationContainer>
     // </AnimatedSplash>
+
   );
 };
 

@@ -12,6 +12,7 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import deviceStorage from '../../../utils/helpers/deviceStorage';
 import ROLES from '../../../utils/constants/ROLES';
 
+
 //import actions
 import {authLogout} from '../../../setup/redux/actions';
 
@@ -20,8 +21,10 @@ import Logo from '../../../assets/svgs/main-logo.svg';
 import Notification from '../../../assets/svgs/notif-icon.svg';
 import MenuDropdown from '../MenuDropdown';
 
+
 const Header = ({color}) => {
   const navigation = useNavigation();
+
 
   const [visible, setVisible] = useState(false);
 
@@ -37,6 +40,7 @@ const Header = ({color}) => {
 
   const notif = true;
 
+
   const dispatch = useDispatch();
 
   const logout = async () => {
@@ -46,6 +50,7 @@ const Header = ({color}) => {
       screen: 'Login',
     });
   };
+
 
   const openMenu = () => {
     setVisible(true);
@@ -71,6 +76,7 @@ const Header = ({color}) => {
         <TouchableOpacity style={styles().notificationContainer}>
           <Notification width={30} height={30} />
           {notif && <View style={styles().notifIndicator}></View>}
+
         </TouchableOpacity>
         {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
@@ -92,7 +98,9 @@ const Header = ({color}) => {
 
 export default Header;
 
+
 const styles = (role, justifyContent) =>
+
   StyleSheet.create({
     root: {
       width: dimensions.Width,
@@ -101,8 +109,10 @@ const styles = (role, justifyContent) =>
         role === ROLES.doctor
           ? colors.secondaryMonoChrome300
           : colors.primaryMonoChrome300,
+
       flexDirection: 'row',
       justifyContent: justifyContent || 'space-between',
+
       alignItems: 'center',
       paddingHorizontal: 10,
     },

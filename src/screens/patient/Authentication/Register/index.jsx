@@ -45,6 +45,7 @@ import {
 import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
+
 import {
   loginPatient,
   registerPatient,
@@ -52,6 +53,7 @@ import {
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
+
 
 const PatientRegister = ({navigation}) => {
   const dispatch = useDispatch();
@@ -115,9 +117,11 @@ const PatientRegister = ({navigation}) => {
       const response = await registerPatient(patient);
       console.log('response', response.data);
       alert('Patient was successfully registered');
+
       onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
+
       alert(err.response.data.message);
       if (err.response.data.error.statusCode === 409) {
         setError('email', {
@@ -126,6 +130,7 @@ const PatientRegister = ({navigation}) => {
         });
       }
     }
+
   };
 
   //google login functionality
@@ -190,6 +195,7 @@ const PatientRegister = ({navigation}) => {
 
     // navigate to the app stack
     navigation.replace('App');
+
   };
 
   //function for setting the value of gender

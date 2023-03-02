@@ -10,5 +10,6 @@ export const store = configureStore({
     auth: authReducer,
     role: roleReducer,
     loading: loadingReducer,
+
   },
 });
