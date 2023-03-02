@@ -1,12 +1,22 @@
-//libraries App navigation
+// app entry point
 import AppNavigation from './src/setup/navigation/app.navigation';
 
-import DoctorNavigation from './src/setup/navigation/Doctor-Navigation/doctor.navigation';
-import PatientNavigation from './src/setup/navigation/Patient-Navigation/patient.navigation';
-import SplashScreen from 'react-native-splash-screen';
+
+// your entry point
+import {MenuProvider} from 'react-native-popup-menu';
+
+//redux toolkit store
+import {Provider} from 'react-redux';
+import {store} from './src/setup/redux/store';
+
 const App = () => {
-  SplashScreen.hide();
-  return <DoctorNavigation />;
+  return (
+    <Provider store={store}>
+      <MenuProvider>
+        <AppNavigation />
+      </MenuProvider>
+    </Provider>
+  );
 };
 
 export default App;

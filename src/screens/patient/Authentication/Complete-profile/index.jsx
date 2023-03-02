@@ -44,12 +44,15 @@ import {
   numberRegex,
 } from '../../../../utils/constants/Regex';
 import StaticContainer from '../../../../containers/StaticContainer';
+import {registerPatient} from '../../../../services/patientServices';
+import {useDispatch} from 'react-redux';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {authSuccess} from '../../../../setup/redux/actions';
 
-const CompleteProfile = () => {
-  //input refs
-  const inputRef1 = useRef('');
-  const inputRef2 = useRef('');
-  const inputRef3 = useRef('');
+const CompleteProfile = ({route, navigation}) => {
+  const {email} = route.params;
+
+  const dispatch = useDispatch();
 
   // useForm hook from react-hook-form
   const {
@@ -64,24 +67,11 @@ const CompleteProfile = () => {
     revalidate: 'all',
     defaultValues: {
       name: '',
-      password: '',
-      confirmPassword: '',
       phoneNumber: '',
       dob: new Date(),
       gender: '',
-      cnic1: '',
-      cnic2: '',
-      cnic3: '',
     },
   });
-
-  // for setting the password visibility
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
-
-  //cnic error
-  const [cnicError, setCnicError] = useState(false);
 
   // for date picker
   const [date, setDate] = useState(new Date());
@@ -90,10 +80,61 @@ const CompleteProfile = () => {
   const [openDate, setOpenDate] = useState(false);
 
   // form submit handler
-  const onSubmit = data => {
-    console.log(data, 'data');
-    console.log(isValid, 'isValid');
-    console.log('error', errors);
+  const onSubmit = async data => {
+    console.log(data);
+
+    //creating a patient object to send to the backend.
+    const patient = {
+      name: data?.name,
+      email: email,
+      password: data?.password,
+      phone: data?.phone,
+      dob: `${
+        data?.dob.getMonth().toString().length > 1
+          ? `${data?.dob.getMonth() + 1}`
+          : `0${data?.dob?.getMonth() + 1}`
+      }/${
+        data?.dob.getDate().toString().length > 1
+          ? `${data?.dob.getDate() + 1}`
+          : `0${data?.dob?.getDate() + 1}`
+      }/${data?.dob.getFullYear()}`,
+      gender: data?.gender,
+      // cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
+      role: ROLES.patient,
+      isThirdParty: true,
+    };
+
+    console.log(patient);
+
+    try {
+      const response = await registerPatient(patient);
+      console.log('response', response.data);
+      alert('Patient was successfully registered');
+      onSuccess(response);
+    } catch (err) {
+      dispatch(authLogout());
+      alert(err.response.data.message);
+      if (err.response.data.error.statusCode === 409) {
+        setError('email', {
+          type: 'conflict',
+          message: 'This email is already registered',
+        });
+      }
+    }
+  };
+
+  //on successfull registration
+  const onSuccess = async response => {
+    //storing jwt token to mobile storage
+    await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+    //initializing global state with jwt token and user object
+    dispatch(
+      authSuccess({user: response.data.user, token: response.data.token}),
+    );
+
+    // navigate to the app stack
+    navigation.replace('App');
   };
 
   //function for setting the value of gender
@@ -117,17 +158,6 @@ const CompleteProfile = () => {
   //   console.log(date);
   // }, [date]);
 
-  //navigate back to login screen
-  const navigateToLoginScreen = () => {
-    console.log('This function is being called');
-    navigation.navigate('Auth', {
-      screen: 'LoginNavigation',
-      params: {
-        screen: 'Login',
-      },
-    });
-  };
-
   return (
     <StaticContainer
       customHeaderEnable={true}
@@ -135,173 +165,72 @@ const CompleteProfile = () => {
       isBack={false}>
       <View style={styles.container}>
         {/* page image */}
-        <SVGImage
-          width={dimensions.Width / 2}
-          height={dimensions.Height / 6.5}
-        />
-        {/* name field */}
-        <ValidateInputField
-          placeholder="Name"
-          type="outlined"
-          width="93%"
-          placeholderTextColor={colors.secondary1}
-          keyboardType="text"
-          control={control}
-          title={'Name'}
-          name="name"
-          rules={{
-            required: "Name can't be empty",
-            minLength: {value: 3, message: 'Name must be atleast 3 characters'},
-            pattern: {value: stringRegex, message: 'Invalid Name'},
-          }}
-        />
+        <SVGImage width={dimensions.Width / 2} height={dimensions.Width / 2} />
+        <View style={styles.formContainer}>
+          {/* name field */}
+          <ValidateInputField
+            placeholder="Name"
+            type="outlined"
+            width="93%"
+            placeholderTextColor={colors.secondary1}
+            keyboardType="text"
+            control={control}
+            title={'Name'}
+            name="name"
+            rules={{
+              required: "Name can't be empty",
+              minLength: {
+                value: 3,
+                message: 'Name must be atleast 3 characters',
+              },
+              pattern: {value: stringRegex, message: 'Invalid Name'},
+            }}
+          />
 
-        {/* password field */}
-        <ValidateInputField
-          placeholder="Password"
-          type="outlined"
-          width="85.5%"
-          placeholderTextColor={colors.secondary1}
-          keyboardType="password"
-          control={control}
-          name="password"
-          isPasswordField={true}
-          title={'Password'}
-          isPasswordVisible={!isPasswordVisible}
-          setIsPasswordVisible={setIsPasswordVisible}
-          rules={{
-            required: "Password can't be empty",
-            pattern: {
-              value: passwordRegex,
-              message:
-                'Password must contain atleast 1 uppercase, 1 lowercase, and 1 number',
-            },
-            minLength: {
-              value: 8,
-              message: 'Password must be at least 8 characters',
-            },
-          }}
-        />
-        {/* confirm password field */}
-        <ValidateInputField
-          placeholder="Confirm Password"
-          type="outlined"
-          width="85.5%"
-          placeholderTextColor={colors.secondary1}
-          keyboardType="password"
-          control={control}
-          name="confirm-password"
-          title={'Confirm Password'}
-          isPasswordField={true}
-          isPasswordVisible={!isConfirmPasswordVisible}
-          setIsPasswordVisible={setIsConfirmPasswordVisible}
-          rules={{
-            required: "Confirm password can't be empty",
-            validate: value => {
-              return value === watch('password') || 'Passwords do not match';
-            },
-          }}
-        />
-        {/* contact field */}
-        <ContactInputField
-          type="outlined"
-          width="86%"
-          control={control}
-          name="contact"
-          title={'Phone number'}
-          rules={{
-            required: "Phone number can't be empty",
-            pattern: {
-              value: phoneNumberRegex,
-              message: 'Invalid phone number',
-            },
-          }}
-        />
-        {/* dob date picker */}
-        <CustomDatePicker
-          type="outlined"
-          open={openDate}
-          setOpen={setOpenDate}
-          onChangeDate={onChangeDate}
-          name="DOB"
-          date={date}
-          maximumDate={new Date()}
-          rules={{
-            required: "Date of birth can't be empty",
-            validate: value => {
-              return value < new Date() || "Date can't be in future";
-            },
-          }}
-          control={control}
-          title={'Date of birth'}
-        />
-        {/* genders radio buttons */}
-        {/* <View></View> */}
-        <Text style={styles.genderText}>Gender</Text>
-        <RadioGroup
-          values={GENDERS}
-          selected={watch('gender')}
-          setSelected={setGender}
-          title="Gender"
-          name="gender"
-          control={control}
-          rules={{required: 'Please select a gender'}}
-        />
-
-        {/* CNIC container */}
-        {/* <View style={styles.container}>
-          <Text style={styles.cnicText}>CNIC</Text>
-          <View style={styles.cnicContainer}>
-            <AutoNextInput
-              type="outlined"
-              width="28%"
-              maxLength={5}
-              ref={inputRef1}
-              name="cnic1"
-              customError={cnicError}
-              setCustomError={setCnicError}
-              control={control}
-              height={17}
-              rules={{minLength: {value: 5}, pattern: {value: numberRegex}}}
-              onChangeText={text => {
-                inputRef2.current.focus();
-                setValue('cnic1', text);
-              }}
-            />
-            <AutoNextInput
-              type="outlined"
-              width="48%"
-              maxLength={7}
-              ref={inputRef2}
-              name="cnic2"
-              customError={cnicError}
-              setCustomError={setCnicError}
-              control={control}
-              height={17}
-              rules={{minLength: {value: 7}, pattern: {value: numberRegex}}}
-              onChangeText={text => {
-                inputRef3.current.focus();
-                setValue('cnic2', text);
-              }}
-            />
-            <AutoNextInput
-              type="outlined"
-              width="18%"
-              maxLength={1}
-              ref={inputRef3}
-              name="cnic3"
-              customError={cnicError}
-              setCustomError={setCnicError}
-              control={control}
-              height={17}
-              rules={{minLength: {value: 1}, pattern: {value: numberRegex}}}
-              onChangeText={text => {
-                setValue('cnic3', text);
-              }}
-            />
-          </View>
-          {cnicError && <ErrorMessage message={'Invalid CNIC'} />}
-        </View> */}
+          {/* contact field */}
+          <ContactInputField
+            type="outlined"
+            width="86%"
+            control={control}
+            name="phone"
+            title={'Phone number'}
+            rules={{
+              required: "Phone number can't be empty",
+              pattern: {
+                value: phoneNumberRegex,
+                message: 'Invalid phone number',
+              },
+            }}
+          />
+          {/* dob date picker */}
+          <CustomDatePicker
+            type="outlined"
+            open={openDate}
+            setOpen={setOpenDate}
+            onChangeDate={onChangeDate}
+            name="dob"
+            date={date}
+            maximumDate={new Date()}
+            rules={{
+              required: "Date of birth can't be empty",
+              validate: value => {
+                return value < new Date() || "Date can't be in future";
+              },
+            }}
+            control={control}
+            title={'Date of birth'}
+          />
+          {/* genders radio buttons */}
+          <RadioGroup
+            values={GENDERS}
+            selected={watch('gender')}
+            setSelected={setGender}
+            title="Gender"
+            name="gender"
+            control={control}
+            rules={{required: 'Please select a gender'}}
+          />
+        </View>
 
         {/* Register button */}
         <Button
@@ -310,14 +239,6 @@ const CompleteProfile = () => {
           type="filled"
           width="100%"
         />
-
-        {/* register with text */}
-        <View style={styles.registerTextContainer}>
-          <Text style={styles.text}>Already have an account? </Text>
-          <TouchableOpacity onPress={navigateToLoginScreen}>
-            <Text style={styles.registerText}>Login Now</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </StaticContainer>
   );

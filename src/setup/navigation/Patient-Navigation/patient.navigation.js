@@ -11,19 +11,19 @@ import {NavigationContainer} from '@react-navigation/native';
 import PatientTabStack from './patient.tab.navigator';
 //Screens
 import Support from '../../../screens/shared/Support-communities/Home';
+import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
 
 const Stack = createNativeStackNavigator();
 
 const PatientNavigation = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{headerShown: false}}
-        initialRouteName="PatientTabStack">
-        <Stack.Screen name="PatientTabStack" component={PatientTabStack} />
-        <Stack.Screen name="Support Communities" component={Support} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName="PatientTabStack">
+      <Stack.Screen name="PatientTabStack" component={PatientTabStack} />
+      <Stack.Screen name="Support Communities" component={Support} />
+      <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
+    </Stack.Navigator>
   );
 };
 

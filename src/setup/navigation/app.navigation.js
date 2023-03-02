@@ -3,41 +3,41 @@ import {NavigationContainer} from '@react-navigation/native';
 import AnimatedSplash from 'react-native-animated-splash-screen';
 import SplashScreen from 'react-native-splash-screen';
 import RootNavigation from './root.navigation';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
+import {googleConfig} from '../../utils/helpers/googleConfig';
+import ProfileManagement from '../../screens/doctor/Profile-management/Home';
+import EditProfile from '../../screens/patient/Profile-management/Edit-Profile';
+
+import {useSelector, useDispatch} from 'react-redux';
+
 
 const AppNavigation = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
+    GoogleSignin.configure({...googleConfig});
     SplashScreen.hide();
     setTimeout(() => {
-      setIsLoaded(true);
+      setIsLoading(false);
     }, 1000);
-  });
-
-  // return isLoaded ? (
-  //   <NavigationContainer>
-  //     <RootNavigation />
-  //   </NavigationContainer>
-  // ) : (
-  //   <AnimatedSplash
-  //     translucent={true}
-  //     isLoaded={isLoaded}
-  //     logoImage={require('../../assets/images/Logo.png')}
-  //     backgroundColor={'#FFFFFF'}
-  //     logoHeight={200}
-  //     logoWidth={200}></AnimatedSplash>
-  // );
+  }, []);
 
   return (
-    <AnimatedSplash
-      isLoaded={isLoaded}
-      logoImage={require('../../assets/images/Logo.png')}
-      backgroundColor={'#FFFFFF'}
-      logoHeight={200}
-      logoWidth={200}>
-      <NavigationContainer>
-        <RootNavigation />
-      </NavigationContainer>
-    </AnimatedSplash>
+
+    // <AnimatedSplash
+    //   isLoaded={!isLoading}
+    //   logoImage={require('../../assets/images/Logo.png')}
+    //   backgroundColor={'#FFFFFF'}
+    //   logoHeight={200}
+    //   logoWidth={200}>
+    <NavigationContainer>
+      <RootNavigation />
+      {/* <EditProfile /> */}
+      {/* <ProfileManagement /> */}
+    </NavigationContainer>
+    // </AnimatedSplash>
+
   );
 };
 
