@@ -18,6 +18,7 @@ const ModalContainer = props => {
     backDropOpacity,
     bgColor,
     padding,
+    borderColor,
   } = props;
   return (
     <Modal
@@ -34,7 +35,7 @@ const ModalContainer = props => {
       }}>
       <View
         style={[
-          styles(bgColor, height, width, padding).modal,
+          styles(bgColor, height, width, padding, borderColor).modal,
           type == 'bottom'
             ? {borderTopLeftRadius: 30, borderTopRightRadius: 30}
             : {borderRadius: 30},
@@ -45,7 +46,7 @@ const ModalContainer = props => {
   );
 };
 
-const styles = (bgColor, height, width, padding) =>
+const styles = (bgColor, height, width, padding, borderColor) =>
   StyleSheet.create({
     container: {
       justifyContent: 'center',
@@ -58,6 +59,8 @@ const styles = (bgColor, height, width, padding) =>
       backgroundColor: bgColor ? bgColor : 'white',
       height: height ? height : 600,
       width: width ? width : '100%',
+      borderColor: borderColor ? borderColor : 'white',
+      borderWidth: borderColor ? 2 : 0,
     },
     bottom: {
       justifyContent: 'flex-end',

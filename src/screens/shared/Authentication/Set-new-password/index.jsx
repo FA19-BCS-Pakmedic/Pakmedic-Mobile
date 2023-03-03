@@ -62,7 +62,7 @@ const SetNewPassword = ({route, navigation}) => {
     getData();
   }, []);
 
-  onSubmit = async data => {
+  const onSubmit = async data => {
     try {
       let response;
       if (role === ROLES.patient) {
@@ -84,7 +84,7 @@ const SetNewPassword = ({route, navigation}) => {
       alert(response.data.message);
 
       //navigate to login screen
-      navigation.navigate('Auth', {
+      navigation.replace('Auth', {
         screen: 'Login',
       });
     } catch (err) {
@@ -117,7 +117,6 @@ const SetNewPassword = ({route, navigation}) => {
             placeholderTextColor={colors.secondary1}
             keyboardType="password"
             control={control}
-            title="New Password"
             name="password"
             isPasswordField={true}
             isPasswordVisible={!isPasswordVisible}
@@ -139,7 +138,6 @@ const SetNewPassword = ({route, navigation}) => {
             placeholderTextColor={colors.secondary1}
             keyboardType="password"
             control={control}
-            title={'Confirm Password'}
             name="confirmPassword"
             isPasswordField={true}
             isPasswordVisible={!isConfirmPasswordVisible}

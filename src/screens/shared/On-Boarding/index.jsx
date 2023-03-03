@@ -21,24 +21,30 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import Button from '../../../components/shared/Button';
 import ModalContainer from '../../../containers/ModalContainer';
 import PopupAlerts from '../../../components/shared/PopupAlerts';
+import deviceStorage from '../../../utils/helpers/deviceStorage';
 
 const OnBoarding = props => {
   const {screenName, text, pagination} = props;
   const [isModalVisible, setModalVisible] = useState(false);
-  const navigateToNext = () => {
+  const navigateToNext = async () => {
     if (screenName !== 'DocOnboarding3' && screenName !== 'PatOnboarding3') {
       props.navigation.navigate(
         'Onboarding'.concat(parseInt(screenName.slice(-1)) + 1),
       );
     } else {
-      props.navigation.navigate('Auth', {
-        screen: 'Login',
-      });
+      await deviceStorage.saveItem('isFirstTime', 'false');
+
+      navigateToLogin();
     }
   };
 
-  const skipOboarding = () => {
-    props.navigation.navigate('Auth', {
+  const skipOboarding = async () => {
+    await deviceStorage.saveItem('isFirstTime', 'false');
+    navigateToLogin();
+  };
+
+  const navigateToLogin = () => {
+    props.navigation.replace('Auth', {
       screen: 'Login',
     });
   };

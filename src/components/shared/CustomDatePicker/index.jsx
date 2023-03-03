@@ -20,6 +20,9 @@ const CustomDatePicker = ({
   rules,
   type,
   title,
+  width,
+  padding,
+  height,
   control,
   maximumDate,
 }) => {
@@ -31,11 +34,11 @@ const CustomDatePicker = ({
       render={({field: {value}, fieldState: {error}}) => {
         return (
           <>
-            <View style={[styles().root]}>
+            <View style={[styles(null, width, height).root]}>
               {/* <Text style={styles().title}>{title}</Text> */}
               <TouchableOpacity
                 style={[
-                  styles(type).container,
+                  styles(type, null, height, padding).container,
                   {
                     borderColor: error ? colors.invalid : colors.primary1,
                   },
@@ -60,7 +63,7 @@ const CustomDatePicker = ({
               mode="date"
               open={open}
               date={date}
-              onConfirm={date => onChangeDate(date)}
+              onConfirm={date => onChangeDate(date, name)}
               onCancel={() => {
                 setOpen(false);
               }}
@@ -75,22 +78,25 @@ const CustomDatePicker = ({
 
 export default CustomDatePicker;
 
-const styles = type =>
+const styles = (type, width, height, padding) =>
   StyleSheet.create({
     root: {
-      width: '100%',
+      width: width ? width : '100%',
       // borderWidth: 1,
+      height: height ? height : dimensions.Height / 17,
+      marginBottom: dimensions.Height / 40,
+
     },
 
     container: {
       width: '100%',
-      height: dimensions.Height / 17,
+      height: height ? height : dimensions.Height / 17,
       backgroundColor:
         type === 'filled' ? colors.secondaryMonoChrome100 : colors.white,
       borderWidth: type === 'filled' ? 0 : 1,
       borderColor:
         type === 'filled' ? colors.secondaryMonoChrome100 : colors.primary1,
-      paddingHorizontal: dimensions.Width / 17,
+      paddingHorizontal: padding ? padding : dimensions.Width / 17,
       borderRadius: 5,
       flexDirection: 'row',
       alignItems: 'center',

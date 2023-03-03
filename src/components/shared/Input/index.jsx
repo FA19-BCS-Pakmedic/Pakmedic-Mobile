@@ -39,7 +39,7 @@ export const ContactInputField = ({
         fieldState: {error, isDirty, isTouched},
       }) => (
         <View style={[styles().root]}>
-          {/* <Text style={styles().title}>{title}</Text> */}
+          {title ? <Text style={styles().title}>{title}</Text> : null}
           <View
             style={[
               styles(type, width).container,
@@ -52,8 +52,11 @@ export const ContactInputField = ({
             <IntlPhoneInput
               onChangeText={e => {
                 onChange(
-                  `${e.dialCode}-${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
+
+                  // `${e.dialCode}-${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
+                  `0${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
                 );
+
               }}
               placeholder="Phone Number"
               placeholderTextColor={colors.secondary1}
@@ -105,10 +108,13 @@ export const ValidateInputField = ({
   keyboardType,
   isPasswordField,
   placeholderTextColor,
+  text,
   title,
   isPasswordVisible,
   setIsPasswordVisible,
   onBlurEvent,
+  isDisabled,
+  isErrorBoundary = true,
 }) => {
   // setting the password eye icon name based on the visiblility status
   const passwordIconName = !isPasswordVisible
@@ -132,18 +138,26 @@ export const ValidateInputField = ({
       }) => {
         return (
           <View style={styles().root}>
-            {/* <Text style={styles().title}>{title}</Text> */}
+            {title ? <Text style={styles().title}>{title}</Text> : null}
             <View
               style={[
-                styles(type).container,
-                {borderColor: error ? colors.invalid : colors.primary1},
+                styles(type, null, isDisabled).container,
+                {
+                  borderColor: error
+                    ? colors.invalid
+                    : type === 'outlined' && isDisabled
+                    ? colors.white
+                    : colors.primary1,
+                },
               ]}>
               <TextInput
+                editable={!isDisabled}
                 style={styles(type, width).input}
                 placeholder={placeholder}
                 secureTextEntry={isPasswordVisible}
                 keyboardType={keyboardType || 'text'}
                 placeholderTextColor={placeholderTextColor || colors.secondary1}
+                value={text}
                 onChangeText={onChange}
                 onBlur={() => {
                   onBlur();
@@ -185,9 +199,11 @@ export const ValidateInputField = ({
               </View>
             </View>
             {/* error message */}
-            <View style={styles().errorMessageContainer}>
-              {error && <ErrorMessage error={error} />}
-            </View>
+            {isErrorBoundary || error ? (
+              <View style={styles().errorMessageContainer}>
+                {error && <ErrorMessage error={error} />}
+              </View>
+            ) : null}
           </View>
         );
       }}
@@ -195,21 +211,31 @@ export const ValidateInputField = ({
   );
 };
 
-const styles = (type, width) =>
+const styles = (type, width, isDisabled) =>
   StyleSheet.create({
     root: {
       width: '100%',
-      // borderWidth: 1,
       marginVertical: dimensions.Height / 200,
     },
     container: {
       width: '100%',
       height: dimensions.Height / 17,
-      backgroundColor:
-        type === 'filled' ? colors.secondaryMonochrome100 : colors.white,
+      // backgroundColor:
+      //   type === 'filled' ? colors.secondaryMonochrome100 : colors.white,
       borderWidth: type === 'filled' ? 0 : 1,
-      borderColor:
-        type === 'filled' ? colors.secondaryMonochrome100 : colors.primary1,
+      // borderColor:
+      //   type === 'filled' ? colors.secondaryMonochrome100 : colors.primary1,
+      // borderColor:
+      //   // type === 'outlined' && isDisabled ? colors.white : colors.white,
+      //   colors.black,
+      backgroundColor:
+        type === 'outlined'
+          ? isDisabled
+            ? colors.gray
+            : colors.white
+          : isDisabled
+          ? colors.gray
+          : colors.secondaryMonoChrome100,
       paddingHorizontal: dimensions.Width / 40,
       borderRadius: 5,
       flexDirection: 'row',
@@ -245,6 +271,109 @@ const styles = (type, width) =>
       flexDirection: 'row',
       justifyContent: 'flex-end',
       alignItems: 'center',
+    },
+
+    iconContainer: {
+      width: 25,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
+
+export const ModalInputField = ({
+  control,
+  name,
+  rules = {},
+  type,
+  placeholder,
+  width,
+  height,
+  isMultiline,
+  numberOfLines,
+  keyboardType,
+  placeholderTextColor,
+  text,
+  title,
+  isDisabled,
+}) => {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      rules={rules}
+      key={name}
+      render={({
+        field: {onChange},
+        fieldState: {error, isDirty, isTouched},
+      }) => {
+        return (
+          <View style={modalInputStyles(null, null, width, height).root}>
+            {title ? (
+              <Text style={modalInputStyles().title}>{title}</Text>
+            ) : null}
+            <View
+              style={
+                modalInputStyles(null, null, width, height).inputContainer
+              }>
+              <TextInput
+                editable={!isDisabled}
+                style={modalInputStyles(type, isDisabled, null, height).input}
+                placeholder={placeholder}
+                keyboardType={keyboardType || 'text'}
+                multiline={isMultiline}
+                numberOfLines={numberOfLines}
+                placeholderTextColor={
+                  isDisabled
+                    ? colors.gray2
+                    : placeholderTextColor || colors.secondary1
+                }
+                onChangeText={onChange}
+                value={text}
+              />
+            </View>
+          </View>
+        );
+      }}
+    />
+  );
+};
+
+const modalInputStyles = (type, isDisabled, width, height) =>
+  StyleSheet.create({
+    root: {
+      width: width ? width : '100%',
+      // borderWidth: 1,
+      height: height ? height : 'auto',
+    },
+
+    title: {
+      fontSize: fonts.size.font14,
+      fontWeight: fonts.weight.semi,
+    },
+
+    inputContainer: {
+      width: width ? width : '100%',
+      height: height ? height : 'auto',
+      paddingHorizontal: dimensions.Width / 40,
+      height: dimensions.Height / 19,
+      marginTop: dimensions.Height / 100,
+    },
+
+    input: {
+      borderWidth: type === 'outlined' ? 1 : 0,
+      borderColor:
+        type === 'outlined' && !isDisabled ? colors.primary1 : colors.white,
+      backgroundColor:
+        type === 'outlined'
+          ? isDisabled
+            ? colors.gray
+            : colors.white
+          : colors.secondaryMonoChrome100,
+      color: colors.secondary1,
+      borderRadius: 5,
+      paddingHorizontal: dimensions.Width / 60,
+      height: height ? height : 'auto',
+      textAlignVertical: 'top',
     },
 
     iconContainer: {

@@ -1,4 +1,9 @@
-import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 
 import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
@@ -11,33 +16,40 @@ export default Button = ({
   label,
   onPress,
   borderColor,
+  height,
+  isLoading,
 }) => {
+  console.log('button is loading', isLoading);
   return (
     <TouchableOpacity
       style={
         isDisabled
-          ? styles(type, width).disabled
-          : styles(type, width, borderColor).button
+          ? styles(type, width, height).disabled
+          : styles(type, width, borderColor, height).button
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
-        !isDisabled && onPress ? onPress() : () => {};
+        !isLoading && !isDisabled && onPress ? onPress() : () => {};
       }}>
-      <Text
-        style={
-          isDisabled ? styles().buttonLabelDisabled : styles().buttonLabel
-        }>
-        {label}
-      </Text>
+      {isLoading ? (
+        <ActivityIndicator size="small" color={colors.white} />
+      ) : (
+        <Text
+          style={
+            isDisabled ? styles().buttonLabelDisabled : styles().buttonLabel
+          }>
+          {label}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
 
-const styles = (type, width, borderColor) =>
+const styles = (type, width, borderColor, height) =>
   StyleSheet.create({
     button: {
       marginTop: dimensions.Height / 50, //remove if it there is unneseccary space
-      height: dimensions.Height / 17,
+      height: height ? height : dimensions.Height / 17,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 50,

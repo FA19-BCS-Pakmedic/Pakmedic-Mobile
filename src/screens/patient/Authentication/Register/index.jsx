@@ -1,6 +1,7 @@
 import {TouchableOpacity, Text, View} from 'react-native';
 import {useState, useEffect, useRef} from 'react';
 import {useForm} from 'react-hook-form';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 // import container
 import StaticContainer from '../../../../containers/StaticContainer';
@@ -44,34 +45,34 @@ import {
 import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
-import {registerPatient} from '../../../../services/patientServices';
+
+import {
+  loginPatient,
+  registerPatient,
+} from '../../../../services/patientServices';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {useDispatch} from 'react-redux';
+import {authLogout, authSuccess} from '../../../../setup/redux/actions';
+
 
 const PatientRegister = ({navigation}) => {
+  const dispatch = useDispatch();
+
   // useForm hook from react-hook-form
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-    setValue,
-    clearErrors,
-    setError,
-    watch,
-  } = useForm({
-    mode: 'all',
-    revalidate: 'all',
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      phoneNumber: '',
-      dob: new Date(),
-      gender: '',
-      // cnic1: '',
-      // cnic2: '',
-      // cnic3: '',
-    },
-  });
+  const {control, handleSubmit, setValue, clearErrors, setError, watch} =
+    useForm({
+      mode: 'all',
+      revalidate: 'all',
+      defaultValues: {
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        dob: new Date(),
+        gender: '',
+      },
+    });
 
   // for setting the password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -79,7 +80,6 @@ const PatientRegister = ({navigation}) => {
     useState(false);
 
   //cnic error
-  const [cnicError, setCnicError] = useState(false);
 
   // for date picker
   const [date, setDate] = useState(new Date());
@@ -96,7 +96,7 @@ const PatientRegister = ({navigation}) => {
       name: data?.name,
       email: data?.email,
       password: data?.password,
-      phone: `0${data?.contact.split('-')[1]}`,
+      phone: data?.phone,
       dob: `${
         data?.dob.getMonth().toString().length > 1
           ? `${data?.dob.getMonth() + 1}`
@@ -114,11 +114,14 @@ const PatientRegister = ({navigation}) => {
     console.log(patient);
 
     try {
-      const res = await registerPatient(patient);
-      console.log(res.data);
+      const response = await registerPatient(patient);
+      console.log('response', response.data);
       alert('Patient was successfully registered');
+
+      onSuccess(response);
     } catch (err) {
-      console.log(err.response.data.message);
+      dispatch(authLogout());
+
       alert(err.response.data.message);
       if (err.response.data.error.statusCode === 409) {
         setError('email', {
@@ -128,9 +131,71 @@ const PatientRegister = ({navigation}) => {
       }
     }
 
-    // console.log(data, 'data');
-    // console.log(isValid, 'isValid');
-    // console.log('error', errors);
+  };
+
+  //google login functionality
+  const onPressGoogleLogin = async () => {
+    const email = 'awanmoeed2121@gmail.com';
+
+    try {
+      const response = await GoogleSignin.signIn();
+      console.log(response);
+      // TODO: Send the request to the backend api endpoint to check if the user exists and if they do log them in and if they don't redirect them to the complete profile page
+      // try {
+      //   const response = await loginDoctor({email, isThirdParty: true});
+      //   onSuccess(response);
+      // } catch (err) {
+      //   dispatch(authLogout());
+      //   console.log(err.response.data);
+      //   // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
+      //   navigation.navigate('Auth', {
+      //     screen: 'CompleteProfile',
+      // params: {
+      //   email,
+      //   // avatar
+      // }
+      //   });
+      // }
+    } catch (err) {
+      console.log(err);
+      await GoogleSignin.signOut();
+    }
+
+    // REMOVE THE ENTIRE CODE BELOW THIS COMMENT AFTER GOOGLE API WORKS
+    try {
+      const response = await loginPatient({email, isThirdParty: true});
+      console.log(response);
+      onSuccess(response);
+    } catch (err) {
+      dispatch(authLogout());
+      console.log(err.response.data);
+      // alert(err.response.data.message);
+      // setIsLoading(false);
+      // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
+      navigation.navigate('Auth', {
+        screen: 'CompleteProfile',
+        params: {
+          email,
+        },
+      });
+    }
+
+    // onLogin({email, isThirdParty: true});
+  };
+
+  //function if the registration was successful
+  const onSuccess = async response => {
+    //store jwt in local storage
+    await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+    //initializing global state with jwt token and user object
+    dispatch(
+      authSuccess({user: response.data.user, token: response.data.token}),
+    );
+
+    // navigate to the app stack
+    navigation.replace('App');
+
   };
 
   //function for setting the value of gender
@@ -162,6 +227,19 @@ const PatientRegister = ({navigation}) => {
     });
   };
 
+  // //google login functionality
+  // onPressGoogleLogin = async () => {
+  //   try {
+  //     const response = await GoogleSignin.signIn();
+  //     console.log(response);
+  //     await GoogleSignin.signOut(); //remove this line of code
+  //     // TODO: Send the request to the backend api endpoint to check if the user exists and redirect them to dashboard if they have completed their profile
+  //   } catch (err) {
+  //     console.log(err);
+  //     await GoogleSignin.signOut();
+  //   }
+  // };
+
   return (
     <StaticContainer>
       <View style={styles.container}>
@@ -173,7 +251,6 @@ const PatientRegister = ({navigation}) => {
           placeholderTextColor={colors.secondary1}
           keyboardType="text"
           control={control}
-          title={'Name'}
           name="name"
           rules={{
             required: "Name can't be empty",
@@ -189,7 +266,6 @@ const PatientRegister = ({navigation}) => {
           placeholderTextColor={colors.secondary1}
           keyboardType="email-address"
           control={control}
-          title={'Email'}
           name="email"
           rules={{
             required: "Email can't be empty",
@@ -206,7 +282,6 @@ const PatientRegister = ({navigation}) => {
           control={control}
           name="password"
           isPasswordField={true}
-          title={'Password'}
           isPasswordVisible={!isPasswordVisible}
           setIsPasswordVisible={setIsPasswordVisible}
           rules={{
@@ -231,7 +306,6 @@ const PatientRegister = ({navigation}) => {
           keyboardType="password"
           control={control}
           name="confirm-password"
-          title={'Confirm Password'}
           isPasswordField={true}
           isPasswordVisible={!isConfirmPasswordVisible}
           setIsPasswordVisible={setIsConfirmPasswordVisible}
@@ -247,8 +321,7 @@ const PatientRegister = ({navigation}) => {
           type="outlined"
           width="86%"
           control={control}
-          name="contact"
-          title={'Phone number'}
+          name="phone"
           rules={{
             required: "Phone number can't be empty",
             pattern: {
@@ -270,10 +343,8 @@ const PatientRegister = ({navigation}) => {
           }}
           maximumDate={new Date()}
           control={control}
-          title={'Date of birth'}
         />
         {/* genders radio buttons */}
-        <Text style={styles.radioText}>Gender</Text>
         <RadioGroup
           values={GENDERS}
           selected={watch('gender')}
@@ -366,7 +437,9 @@ const PatientRegister = ({navigation}) => {
               height={dimensions.Height / 22}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={onPressGoogleLogin}>
             <GoogleLogo
               width={dimensions.Width / 12}
               height={dimensions.Height / 22}

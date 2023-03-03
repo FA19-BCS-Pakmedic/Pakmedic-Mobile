@@ -1,6 +1,7 @@
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 // custom styles import
 import styles from './styles';
@@ -21,7 +22,7 @@ import {
 import Button from '../../../../components/shared/Button';
 import {TextDivider} from '../../../../components/shared/Divider';
 import RadioGroup from '../../../../components/shared/Radio';
-import Dropdown from '../../../../components/shared/Dropdown';
+import {ValidateDropdown} from '../../../../components/shared/Dropdown';
 
 // import constants
 import CITIES from '../../../../utils/constants/Cities';
@@ -35,45 +36,43 @@ import {
 import ROLES from '../../../../utils/constants/ROLES';
 
 //importing container
-import ScrollContainer from '../../../../containers/ScrollContainer';
 import StaticContainer from '../../../../containers/StaticContainer';
 
 //importing doctors service to call end points
 import {
+  loginDoctor,
   pmcIdVerifyDoctor,
   registerDoctor,
 } from '../../../../services/doctorServices';
+import deviceStorage from '../../../../utils/helpers/deviceStorage';
+import {useDispatch} from 'react-redux';
+import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
   const [pmcData, setPmcData] = useState(null);
+
+  const dispatch = useDispatch();
 
   //error hook to prevent form submission if pmc id is not verified
   const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
   const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
 
   // useForm hook from react-hook-form
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-    setValue,
-    clearErrors,
-    watch,
-    setError,
-  } = useForm({
-    mode: 'all',
-    revalidate: 'all',
-    defaultValues: {
-      pmcId: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      phone: '',
-      location: '',
-      gender: '',
-    },
-  });
+  const {control, handleSubmit, setValue, clearErrors, watch, setError} =
+    useForm({
+      mode: 'all',
+      revalidate: 'all',
+      defaultValues: {
+        pmcId: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        location: '',
+        gender: '',
+      },
+    });
 
   // for setting the password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -93,7 +92,7 @@ const DoctorRegister = ({navigation}) => {
 
       const data = {
         ...formData,
-        phone: `0${formData?.phone?.split('-')[1]}`,
+        phone: formData?.phone,
         role: ROLES.doctor,
         name: pmcData?.Name?.toLowerCase(),
         qualifications: pmcData?.Qualifications,
@@ -106,9 +105,22 @@ const DoctorRegister = ({navigation}) => {
       // console.log(data);
       try {
         const response = await registerDoctor(data);
-        console.log(response.data);
-        alert(response.data.message);
+        alert('User registered successfully');
+
+        // //storing jwt token to mobile storage
+        // await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+        // //initializing global state with jwt token and user object
+        // dispatch(
+        //   authSuccess({user: response.data.user, token: response.data.token}),
+        // );
+
+        // // navigate to the app stack
+        // navigation.replace('App');
+        onSuccess(response);
+
       } catch (err) {
+        dispatch(authLogout());
         console.log(err.response.data);
         alert(err.response.data.message);
         if (err.response.data.error.statusCode === 409) {
@@ -119,11 +131,26 @@ const DoctorRegister = ({navigation}) => {
         }
       }
     } else {
+      dispatch(authLogout());
       setError('pmcId', {
         type: 'duplicate ID',
         message: pmcIdErrorMessage,
       });
     }
+  };
+
+  //on successfull registration
+  const onSuccess = async response => {
+    //storing jwt token to mobile storage
+    await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+    //initializing global state with jwt token and user object
+    dispatch(
+      authSuccess({user: response.data.user, token: response.data.token}),
+    );
+
+    // navigate to the app stack
+    navigation.replace('App');
   };
 
   //function for setting the value of city
@@ -141,7 +168,7 @@ const DoctorRegister = ({navigation}) => {
   //function to send the pmc id to the backend to retrieve data from the pmc endpoint
   const getPmcData = async () => {
     try {
-      const response = await pmcIdVerifyDoctor({pmcID: watch('pmcId')});
+      const response = await pmcIdVerifyDoctor({pmcId: watch('pmcId')});
       const data = response?.data?.data;
       setPmcData(data);
       setIsPmcIdVerified(true);
@@ -172,6 +199,91 @@ const DoctorRegister = ({navigation}) => {
     });
   };
 
+  //google login functionality
+  const onPressGoogleLogin = async () => {
+
+    const email = 'test4@gmail.com';
+
+
+    try {
+      const response = await GoogleSignin.signIn();
+      console.log(response);
+      // TODO: Send the request to the backend api endpoint to check if the user exists and if they do log them in and if they don't redirect them to the complete profile page
+      // try {
+      //   const response = await loginDoctor({email, isThirdParty: true});
+      //   onSuccess(response);
+      // } catch (err) {
+      //   dispatch(authLogout());
+      //   console.log(err.response.data);
+      //   // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
+      //   navigation.navigate('Auth', {
+      //     screen: 'CompleteProfile',
+      // params: {
+      //   email,
+      //   // avatar
+      // }
+      //   });
+      // }
+    } catch (err) {
+      console.log(err);
+      await GoogleSignin.signOut();
+    }
+
+    // REMOVE THE ENTIRE CODE BELOW THIS COMMENT AFTER GOOGLE API WORKS
+    try {
+      const response = await loginDoctor({email, isThirdParty: true});
+      onSuccess(response);
+    } catch (err) {
+      dispatch(authLogout());
+      console.log(err.response.data);
+      // alert(err.response.data.message);
+      // setIsLoading(false);
+      // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
+      navigation.navigate('Auth', {
+        screen: 'CompleteProfile',
+        params: {
+          email,
+        },
+      });
+    }
+
+    // onLogin({email, isThirdParty: true});
+  };
+
+  // //function to check if the user with the following email already exists and log them in if they do
+  // const onLogin = async data => {
+  //   try {
+  //     const response = await loginDoctor({...data});
+
+  //     console.log(response?.data);
+
+  //     // preserving jwt token in async storage
+  //     await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
+  //     // setting the global state with the jwt and user information received in the response
+  //     dispatch(
+  //       authSuccess({
+  //         user: response?.data?.user,
+  //         token: response?.data?.token,
+  //       }),
+  //     );
+
+  //     alert('Login Successful');
+
+  //     //navigate to the app stack
+  //     navigation.replace('App');
+  //   } catch (err) {
+  //     dispatch(authLogout());
+  //     console.log(err.response.data);
+  //     // alert(err.response.data.message);
+  //     // setIsLoading(false);
+  //     // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
+  //     navigation.navigate('Auth', {
+  //       screen: 'CompleteProfile',
+  //     });
+  //   }
+  // };
+
   return (
     <StaticContainer>
       <View style={styles.container}>
@@ -186,7 +298,7 @@ const DoctorRegister = ({navigation}) => {
             onBlurEvent={getPmcData}
             control={control}
             name="pmcId"
-            title={'PMC ID'}
+            //title={'PMC ID'}
             rules={{
               required: "PMC ID can't be empty",
               minLength: {
@@ -205,7 +317,7 @@ const DoctorRegister = ({navigation}) => {
             placeholderTextColor={colors.secondary1}
             keyboardType="email-address"
             control={control}
-            title={'Email'}
+            //title={'Email'}
             name="email"
             rules={{
               required: "Email can't be empty",
@@ -222,7 +334,7 @@ const DoctorRegister = ({navigation}) => {
             control={control}
             name="password"
             isPasswordField={true}
-            title={'Password'}
+            //title={'Password'}
             isPasswordVisible={!isPasswordVisible}
             setIsPasswordVisible={setIsPasswordVisible}
             rules={{
@@ -247,7 +359,7 @@ const DoctorRegister = ({navigation}) => {
             keyboardType="password"
             control={control}
             name="confirmPassword"
-            title={'Confirm Password'}
+            //title={'Confirm Password'}
             isPasswordField={true}
             isPasswordVisible={!isConfirmPasswordVisible}
             setIsPasswordVisible={setIsConfirmPasswordVisible}
@@ -264,7 +376,7 @@ const DoctorRegister = ({navigation}) => {
             width="86%"
             control={control}
             name="phone"
-            title={'Phone number'}
+            //title={'Phone number'}
             rules={{
               required: "Phone number can't be empty",
               pattern: {
@@ -275,12 +387,12 @@ const DoctorRegister = ({navigation}) => {
           />
 
           {/* cities dropdown */}
-          <Dropdown
+          <ValidateDropdown
             open={open}
             setOpen={setOpen}
             items={CITIES}
             control={control}
-            title="City"
+            //title="City"
             setValue={setCity}
             name="location"
             placeholder="Please select your city"
@@ -296,7 +408,7 @@ const DoctorRegister = ({navigation}) => {
             values={GENDERS}
             selected={watch('gender')}
             setSelected={setGender}
-            title="Gender"
+            //title="Gender"
             name="gender"
             control={control}
             rules={{required: 'Please select a gender'}}
@@ -328,7 +440,9 @@ const DoctorRegister = ({navigation}) => {
               height={dimensions.Height / 20}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={onPressGoogleLogin}>
             <GoogleLogo
               width={dimensions.Width / 10}
               height={dimensions.Height / 20}
