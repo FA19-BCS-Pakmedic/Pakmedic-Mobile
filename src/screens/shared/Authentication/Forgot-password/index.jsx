@@ -103,7 +103,6 @@ const ForgotPassword = ({navigation}) => {
             placeholder="Enter your email"
             type="outlined"
             width="93%"
-            title={`Enter your email`}
             placeholderTextColor={colors.secondary1}
             keyboardType="email-address"
             control={control}

@@ -110,6 +110,8 @@ const ProfileManagement = () => {
         return (
           <About about={storedUser?.about} setStoredUser={setStoredUser} />
         );
+      case 'Signature':
+        return <Signature />;
       default:
         return <ProfileInformation information={information} />;
     }
@@ -118,7 +120,7 @@ const ProfileManagement = () => {
   return (
     <StaticContainer>
       <View style={styles.root}>
-        <ProfileCard />
+        <ProfileCard user={storedUser} />
         <ProfileOptions options={profileOptions} onClick={onOptionClick} />
         {getActiveComponent()}
       </View>

@@ -38,6 +38,7 @@ import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 
 //import google config
 import {googleConfig} from '../../../../utils/helpers/googleConfig';
+import {getFile} from '../../../../services/fileServices';
 
 const Login = ({navigation}) => {
   // states
@@ -134,6 +135,7 @@ const Login = ({navigation}) => {
       // preserving jwt token in async storage
       await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
+
       // setting the global state with the jwt and user information received in the response
       dispatch(
         authSuccess({
@@ -153,8 +155,9 @@ const Login = ({navigation}) => {
       navigation.replace('App');
     } catch (err) {
       dispatch(authLogout());
-      console.log(err.response.data);
-      alert(err.response.data.message);
+      console.log(err);
+      // console.log(err.response.data);
+      // alert(err.response.data.message);
       setIsLoading(false);
     }
   };

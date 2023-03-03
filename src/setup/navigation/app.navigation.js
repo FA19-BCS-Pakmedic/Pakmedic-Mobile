@@ -21,18 +21,16 @@ const AppNavigation = () => {
   }, []);
 
   return (
-    // <AnimatedSplash
-    //   isLoaded={!isLoading}
-    //   logoImage={require('../../assets/images/Logo.png')}
-    //   backgroundColor={'#FFFFFF'}
-    //   logoHeight={200}
-    //   logoWidth={200}>
-    <NavigationContainer>
-      <RootNavigation />
-      {/* <EditProfile /> */}
-      {/* <ProfileManagement /> */}
-    </NavigationContainer>
-    // </AnimatedSplash>
+    <AnimatedSplash
+      isLoaded={!isLoading}
+      logoImage={require('../../assets/images/Logo.png')}
+      backgroundColor={'#FFFFFF'}
+      logoHeight={200}
+      logoWidth={200}>
+      <NavigationContainer>
+        <RootNavigation />
+      </NavigationContainer>
+    </AnimatedSplash>
   );
 };
 

@@ -31,10 +31,14 @@ import ProfileImage from '../../../../assets/images/default-avatar.png';
 import EditIcon from '../../../../assets/svgs/Edit.svg';
 import Button from '../../../../components/shared/Button';
 import ModalContainer from '../../../../containers/ModalContainer';
+import {addAvatar} from '../../../../services/doctorServices';
+import {useSelector} from 'react-redux';
 
 const EditProfile = () => {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
+
+  const user = useSelector(state => state.auth.user);
 
   const {
     control,
@@ -47,17 +51,40 @@ const EditProfile = () => {
     mode: 'all',
     revalidate: 'all',
     defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      location: '',
+      name: user?.name || '',
+      email: user?.email || '',
+      phone: user?.phone || '',
+      location: user?.location || '',
     },
   });
 
   const [profileImage, setProfileImage] = useState(null);
 
+  const uploadImage = async formData => {
+    try {
+      const response = await addAvatar(formData);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     console.log(JSON.stringify(profileImage, null, 2));
+
+    if (profileImage) {
+      const formData = new FormData();
+
+      formData.append('file', {
+        uri: profileImage[0].uri,
+        type: profileImage[0].type,
+        name: profileImage[0].name,
+      });
+
+      console.log(formData);
+
+      uploadImage(formData);
+    }
   }, [profileImage]);
 
   const handleError = err => {
@@ -149,7 +176,9 @@ const EditProfile = () => {
         {openModal()}
         <View style={styles.avatarContainer}>
           <Image
-            source={profileImage ? profileImage : ProfileImage}
+            source={{
+              uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`,
+            }}
             style={styles.avatar}
           />
 
@@ -171,7 +200,6 @@ const EditProfile = () => {
             width="93%"
             placeholderTextColor={colors.secondary1}
             control={control}
-            title={'Name'}
             text={watch('name')}
             name="name"
             rules={{
@@ -191,7 +219,6 @@ const EditProfile = () => {
             placeholderTextColor={colors.secondary1}
             keyboardType="email-address"
             control={control}
-            title={'Email'}
             isDisabled={true}
             text={watch('email')}
             name="email"
@@ -209,7 +236,6 @@ const EditProfile = () => {
             placeholderTextColor={colors.secondary1}
             keyboardType="phone-pad"
             control={control}
-            title={'Phone'}
             text={watch('phone')}
             name="phone"
             rules={{

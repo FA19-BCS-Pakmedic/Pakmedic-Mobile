@@ -25,6 +25,8 @@ const styles = StyleSheet.create({
     width: dimensions.Width / 3,
     height: dimensions.Width / 3,
     borderRadius: dimensions.Width / 5,
+    borderWidth: 2,
+    borderColor: colors.primaryMonoChrome700,
   },
 
   iconContainer: {

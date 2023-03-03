@@ -1,5 +1,13 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
+import React, {useEffect} from 'react';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import Signature from 'react-native-signature-canvas';
 import {useState} from 'react';
@@ -8,14 +16,59 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import colors from '../../../utils/styles/themes/colors';
 import Button from '../../shared/Button';
 
+import {addSignature} from '../../../services/doctorServices';
+
 const SignatureScreen = () => {
   const [signature, setSign] = useState(null);
   const [visible, setVisible] = useState(false);
 
-  const handleOK = signature => {
-    console.log(signature);
+  const signatureRef = React.useRef();
+
+  const uploadSignature = async formData => {
+    try {
+      const response = await addSignature(formData);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleOK = async signature => {
     setSign(signature);
-    setVisible(false);
+
+    if (Platform.OS === 'android') {
+      const isReadGranted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
+      if (isReadGranted === PermissionsAndroid.RESULTS.GRANTED) {
+        const dirs = RNFetchBlob.fs.dirs;
+        const fileName = 'signture' + new Date().getMilliseconds() + '.png';
+        const filePath = dirs.DownloadDir + '/' + fileName;
+        console.log(filePath);
+        RNFetchBlob.fs
+          .writeFile(filePath, signature.split(',')[1], 'base64')
+          .then(async () => {
+            await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            );
+            console.log('Successfuly saved to' + filePath);
+            const formData = new FormData();
+
+            formData.append('file', {
+              uri: `file:/${filePath}`,
+              type: 'image/png',
+              name: fileName,
+            });
+
+            console.log(formData);
+
+            uploadSignature(formData);
+          })
+          .catch(errorMessage => {
+            console.log(errorMessage);
+          });
+      }
+    }
   };
 
   const handleEmpty = () => {
@@ -40,6 +93,7 @@ const SignatureScreen = () => {
               onOK={handleOK}
               onEmpty={handleEmpty}
               descriptionText="Draw Your Sign"
+              ref={signatureRef}
               clearText="Clear"
               confirmText="Save"
               webStyle={style}

@@ -13,6 +13,7 @@ import DoctorTabStack from './doctor.tab.navigator';
 import Support from '../../../screens/shared/Support-communities/Home';
 import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
+import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ const DoctorNavigation = () => {
       <Stack.Screen name="Support Communities" component={Support} />
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
       <Stack.Screen name="ProfileManagement" component={ProfileManagement} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 };
