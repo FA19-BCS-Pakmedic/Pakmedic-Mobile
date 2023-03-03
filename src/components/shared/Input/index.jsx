@@ -39,7 +39,7 @@ export const ContactInputField = ({
         fieldState: {error, isDirty, isTouched},
       }) => (
         <View style={[styles().root]}>
-          {/* <Text style={styles().title}>{title}</Text> */}
+          {title ? <Text style={styles().title}>{title}</Text> : null}
           <View
             style={[
               styles(type, width).container,

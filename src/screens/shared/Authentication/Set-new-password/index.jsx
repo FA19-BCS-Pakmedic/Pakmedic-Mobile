@@ -117,7 +117,6 @@ const SetNewPassword = ({route, navigation}) => {
             placeholderTextColor={colors.secondary1}
             keyboardType="password"
             control={control}
-            title="New Password"
             name="password"
             isPasswordField={true}
             isPasswordVisible={!isPasswordVisible}
@@ -139,7 +138,6 @@ const SetNewPassword = ({route, navigation}) => {
             placeholderTextColor={colors.secondary1}
             keyboardType="password"
             control={control}
-            title={'Confirm Password'}
             name="confirmPassword"
             isPasswordField={true}
             isPasswordVisible={!isConfirmPasswordVisible}

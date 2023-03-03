@@ -251,7 +251,6 @@ const PatientRegister = ({navigation}) => {
           placeholderTextColor={colors.secondary1}
           keyboardType="text"
           control={control}
-          title={'Name'}
           name="name"
           rules={{
             required: "Name can't be empty",
@@ -267,7 +266,6 @@ const PatientRegister = ({navigation}) => {
           placeholderTextColor={colors.secondary1}
           keyboardType="email-address"
           control={control}
-          title={'Email'}
           name="email"
           rules={{
             required: "Email can't be empty",
@@ -284,7 +282,6 @@ const PatientRegister = ({navigation}) => {
           control={control}
           name="password"
           isPasswordField={true}
-          title={'Password'}
           isPasswordVisible={!isPasswordVisible}
           setIsPasswordVisible={setIsPasswordVisible}
           rules={{
@@ -309,7 +306,6 @@ const PatientRegister = ({navigation}) => {
           keyboardType="password"
           control={control}
           name="confirm-password"
-          title={'Confirm Password'}
           isPasswordField={true}
           isPasswordVisible={!isConfirmPasswordVisible}
           setIsPasswordVisible={setIsConfirmPasswordVisible}
@@ -326,7 +322,6 @@ const PatientRegister = ({navigation}) => {
           width="86%"
           control={control}
           name="phone"
-          title={'Phone number'}
           rules={{
             required: "Phone number can't be empty",
             pattern: {
@@ -348,10 +343,8 @@ const PatientRegister = ({navigation}) => {
           }}
           maximumDate={new Date()}
           control={control}
-          title={'Date of birth'}
         />
         {/* genders radio buttons */}
-        <Text style={styles.radioText}>Gender</Text>
         <RadioGroup
           values={GENDERS}
           selected={watch('gender')}

@@ -24,4 +24,9 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
   },
+
+  title: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.semi,
+  }
 });
