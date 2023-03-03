@@ -118,6 +118,7 @@ const DoctorRegister = ({navigation}) => {
         // // navigate to the app stack
         // navigation.replace('App');
         onSuccess(response);
+
       } catch (err) {
         dispatch(authLogout());
         console.log(err.response.data);

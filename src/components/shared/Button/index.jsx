@@ -19,6 +19,7 @@ export default Button = ({
   height,
   isLoading,
 }) => {
+  console.log('button is loading', isLoading);
   return (
     <TouchableOpacity
       style={

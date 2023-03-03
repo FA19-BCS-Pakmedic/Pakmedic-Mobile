@@ -57,7 +57,9 @@ const AuthNavigation = ({navigation}) => {
           );
 
           //navigate to user app if the user is logged in
+
           navigation.replace('App');
+
         } catch (err) {
           console.log(err);
         }
@@ -79,6 +81,7 @@ const AuthNavigation = ({navigation}) => {
       ) : (
         <authStack.Screen name="Register" component={PatientRegister} />
       )}
+
       {role === ROLES.doctor ? (
         <authStack.Screen
           name="CompleteProfile"
@@ -90,6 +93,7 @@ const AuthNavigation = ({navigation}) => {
           component={PatientCompleteProfile}
         />
       )}
+
 
       <authStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <authStack.Screen name="OtpVerification" component={OtpVerification} />

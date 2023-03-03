@@ -1,6 +1,7 @@
 // app entry point
 import AppNavigation from './src/setup/navigation/app.navigation';
 
+
 // your entry point
 import {MenuProvider} from 'react-native-popup-menu';
 

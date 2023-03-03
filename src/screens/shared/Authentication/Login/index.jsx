@@ -2,7 +2,9 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {useSelector, useDispatch} from 'react-redux';
+
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
 
 //importing images
 import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
@@ -34,11 +36,13 @@ import {getDoctor, loginDoctor} from '../../../../services/doctorServices';
 
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
+
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 
 //import google config
 import {googleConfig} from '../../../../utils/helpers/googleConfig';
 import {getFile} from '../../../../services/fileServices';
+
 
 const Login = ({navigation}) => {
   // states
@@ -60,6 +64,7 @@ const Login = ({navigation}) => {
   //on submit of sign up form
   const onSubmit = async data => {
     setIsLoading(true);
+
     onLogin({email: data?.email, password: data?.password});
     // console.log('after setting button loading', isLoading);
     // try {
@@ -68,8 +73,10 @@ const Login = ({navigation}) => {
     //       ? await loginDoctor({email: data?.email, password: data?.password})
     //       : await loginPatient({email: data?.email, password: data?.password});
 
+
     //   // preserving jwt token in async storage
     //   await deviceStorage.saveItem('jwtToken', response?.data?.token);
+
 
     //   // setting the global state with the jwt and user information received in the response
     //   dispatch(
@@ -94,6 +101,7 @@ const Login = ({navigation}) => {
     //   alert(err.response.data.message);
     //   setIsLoading(false);
     // }
+
   };
 
   //navigate to signup screen

@@ -13,7 +13,9 @@ const getToken = async () => {
 // axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
 
 const API = axios.create({
+
   baseURL: `${apiEndpoint}`,
+
   withCredentials: true,
 });
 
@@ -36,6 +38,7 @@ export const verifyOtpDoctor = data =>
 
 //send reset forgot password
 export const resetForgotPasswordDoctor = data =>
+
   API.patch('doctors/reset-forgotten-password', data);
 
 //get doctor if he is logged in
