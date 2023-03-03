@@ -22,7 +22,7 @@ import {
 import Button from '../../../../components/shared/Button';
 import {TextDivider} from '../../../../components/shared/Divider';
 import RadioGroup from '../../../../components/shared/Radio';
-import Dropdown from '../../../../components/shared/Dropdown';
+import {ValidateDropdown} from '../../../../components/shared/Dropdown';
 
 // import constants
 import CITIES from '../../../../utils/constants/Cities';
@@ -200,7 +200,9 @@ const DoctorRegister = ({navigation}) => {
 
   //google login functionality
   const onPressGoogleLogin = async () => {
-    const email = 'test2@gmail.com';
+
+    const email = 'test4@gmail.com';
+
 
     try {
       const response = await GoogleSignin.signIn();
@@ -295,7 +297,7 @@ const DoctorRegister = ({navigation}) => {
             onBlurEvent={getPmcData}
             control={control}
             name="pmcId"
-            title={'PMC ID'}
+            //title={'PMC ID'}
             rules={{
               required: "PMC ID can't be empty",
               minLength: {
@@ -314,7 +316,7 @@ const DoctorRegister = ({navigation}) => {
             placeholderTextColor={colors.secondary1}
             keyboardType="email-address"
             control={control}
-            title={'Email'}
+            //title={'Email'}
             name="email"
             rules={{
               required: "Email can't be empty",
@@ -331,7 +333,7 @@ const DoctorRegister = ({navigation}) => {
             control={control}
             name="password"
             isPasswordField={true}
-            title={'Password'}
+            //title={'Password'}
             isPasswordVisible={!isPasswordVisible}
             setIsPasswordVisible={setIsPasswordVisible}
             rules={{
@@ -356,7 +358,7 @@ const DoctorRegister = ({navigation}) => {
             keyboardType="password"
             control={control}
             name="confirmPassword"
-            title={'Confirm Password'}
+            //title={'Confirm Password'}
             isPasswordField={true}
             isPasswordVisible={!isConfirmPasswordVisible}
             setIsPasswordVisible={setIsConfirmPasswordVisible}
@@ -373,7 +375,7 @@ const DoctorRegister = ({navigation}) => {
             width="86%"
             control={control}
             name="phone"
-            title={'Phone number'}
+            //title={'Phone number'}
             rules={{
               required: "Phone number can't be empty",
               pattern: {
@@ -384,12 +386,12 @@ const DoctorRegister = ({navigation}) => {
           />
 
           {/* cities dropdown */}
-          <Dropdown
+          <ValidateDropdown
             open={open}
             setOpen={setOpen}
             items={CITIES}
             control={control}
-            title="City"
+            //title="City"
             setValue={setCity}
             name="location"
             placeholder="Please select your city"
@@ -405,7 +407,7 @@ const DoctorRegister = ({navigation}) => {
             values={GENDERS}
             selected={watch('gender')}
             setSelected={setGender}
-            title="Gender"
+            //title="Gender"
             name="gender"
             control={control}
             rules={{required: 'Please select a gender'}}

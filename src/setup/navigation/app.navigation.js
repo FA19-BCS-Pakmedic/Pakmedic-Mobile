@@ -6,6 +6,11 @@ import RootNavigation from './root.navigation';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import {googleConfig} from '../../utils/helpers/googleConfig';
+import ProfileManagement from '../../screens/doctor/Profile-management/Home';
+import EditProfile from '../../screens/patient/Profile-management/Edit-Profile';
+
+import {useSelector, useDispatch} from 'react-redux';
+
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);

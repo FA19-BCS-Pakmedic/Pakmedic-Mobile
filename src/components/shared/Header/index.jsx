@@ -35,6 +35,8 @@ const Header = ({color}) => {
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user) || null;
 
+  console.log(role);
+
   const notif = true;
 
   const dispatch = useDispatch();
@@ -74,9 +76,19 @@ const Header = ({color}) => {
         </TouchableOpacity>
         {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
-        <TouchableOpacity onPress={logout}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('App', {
+              screen: 'ProfileManagement',
+            });
+          }}
+          // onPress={logout}
+        >
           <Image
-            source={require('../../../assets/images/default-avatar.png')}
+            // source={require('../../../assets/images/default-avatar.png')}
+            source={{
+              uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`,
+            }}
             style={styles().avatar}
           />
         </TouchableOpacity>
@@ -96,8 +108,10 @@ const styles = (role, justifyContent) =>
         role === ROLES.doctor
           ? colors.secondaryMonoChrome300
           : colors.primaryMonoChrome300,
+
       flexDirection: 'row',
       justifyContent: justifyContent || 'space-between',
+
       alignItems: 'center',
       paddingHorizontal: 10,
     },
@@ -138,5 +152,8 @@ const styles = (role, justifyContent) =>
       width: dimensions.Width / 11,
       height: dimensions.Height / 21,
       marginLeft: dimensions.Width / 60,
+      borderRadius: 100,
+      borderWidth: 2,
+      borderColor: colors.primaryMonoChrome700,
     },
   });
