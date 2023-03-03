@@ -87,6 +87,7 @@ const Header = ({color}) => {
             navigation.navigate('App', {
               screen: 'ProfileManagement',
             });
+
           }}
           // onPress={logout}
         >
@@ -163,5 +164,6 @@ const styles = (role, justifyContent) =>
       borderRadius: 100,
       borderWidth: 2,
       borderColor: colors.primaryMonoChrome700,
+
     },
   });

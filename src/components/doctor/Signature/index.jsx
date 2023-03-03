@@ -1,3 +1,4 @@
+
 import {
   StyleSheet,
   Text,
@@ -9,12 +10,14 @@ import {
 import React, {useEffect} from 'react';
 import RNFetchBlob from 'rn-fetch-blob';
 
+
 import Signature from 'react-native-signature-canvas';
 import {useState} from 'react';
 import ModalContainer from '../../../containers/ModalContainer';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import colors from '../../../utils/styles/themes/colors';
 import Button from '../../shared/Button';
+
 
 import {addSignature} from '../../../services/doctorServices';
 
@@ -69,6 +72,7 @@ const SignatureScreen = () => {
           });
       }
     }
+
   };
 
   const handleEmpty = () => {
@@ -93,6 +97,7 @@ const SignatureScreen = () => {
               onOK={handleOK}
               onEmpty={handleEmpty}
               descriptionText="Draw Your Sign"
+
               ref={signatureRef}
               clearText="Clear"
               confirmText="Save"

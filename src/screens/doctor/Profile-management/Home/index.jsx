@@ -112,6 +112,7 @@ const ProfileManagement = () => {
         );
       case 'Signature':
         return <Signature />;
+
       default:
         return <ProfileInformation information={information} />;
     }
@@ -120,7 +121,9 @@ const ProfileManagement = () => {
   return (
     <StaticContainer>
       <View style={styles.root}>
+
         <ProfileCard user={storedUser} />
+
         <ProfileOptions options={profileOptions} onClick={onOptionClick} />
         {getActiveComponent()}
       </View>

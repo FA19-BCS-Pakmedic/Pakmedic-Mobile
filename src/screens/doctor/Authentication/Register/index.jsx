@@ -201,7 +201,9 @@ const DoctorRegister = ({navigation}) => {
 
   //google login functionality
   const onPressGoogleLogin = async () => {
+
     const email = 'test4@gmail.com';
+
 
     try {
       const response = await GoogleSignin.signIn();

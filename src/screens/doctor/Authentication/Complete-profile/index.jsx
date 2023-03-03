@@ -218,6 +218,7 @@ const CompleteProfile = ({route, navigation}) => {
           />
 
           {/* cities dropdown */}
+
           <View>
             <Text style={styles.title}>Location</Text>
             <ValidateDropdown
@@ -236,6 +237,7 @@ const CompleteProfile = ({route, navigation}) => {
               }}
             />
           </View>
+
 
           {/* genders radio buttons */}
           <RadioGroup

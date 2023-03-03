@@ -1,5 +1,7 @@
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+
 import {useNavigation} from '@react-navigation/native';
+
 
 import Button from '../Button';
 import colors from '../../../utils/styles/themes/colors';
@@ -37,6 +39,7 @@ const ProfileCard = ({user}) => {
         <View style={styles().iconTextContainer}>
           <SpecialistSvg width={dimensions.Width / 20} />
           <Text style={styles().otherInfo}>{user?.speciality}</Text>
+
         </View>
         <View style={styles().iconTextContainer}>
           <StarSvg width={dimensions.Width / 20} />
@@ -57,7 +60,9 @@ const ProfileCard = ({user}) => {
           label="Edit Profile"
           width={dimensions.Width / 3}
           type="filled"
+
           onPress={navigateToEditProfile}
+
           height={dimensions.Height / 20}
         />
       </View>
@@ -87,9 +92,11 @@ const styles = role =>
       position: 'absolute',
       top: -(dimensions.Height / 20),
       left: dimensions.Width / 20,
+
       borderRadius: 100,
       borderWidth: 2,
       borderColor: colors.primaryMonoChrome700,
+
     },
 
     profileInfoContainer: {

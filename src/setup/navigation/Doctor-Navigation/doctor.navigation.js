@@ -15,6 +15,7 @@ import CommunityDetails from '../../../screens/shared/Support-communities/Commun
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
 import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
 
+
 const Stack = createNativeStackNavigator();
 
 const DoctorNavigation = () => {
