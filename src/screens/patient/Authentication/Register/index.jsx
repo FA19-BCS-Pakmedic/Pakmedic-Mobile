@@ -54,7 +54,6 @@ import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 
-
 const PatientRegister = ({navigation}) => {
   const dispatch = useDispatch();
 
@@ -130,7 +129,6 @@ const PatientRegister = ({navigation}) => {
         });
       }
     }
-
   };
 
   //google login functionality
@@ -195,7 +193,6 @@ const PatientRegister = ({navigation}) => {
 
     // navigate to the app stack
     navigation.replace('App');
-
   };
 
   //function for setting the value of gender

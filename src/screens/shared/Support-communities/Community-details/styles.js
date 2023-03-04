@@ -31,9 +31,10 @@ export const styles = StyleSheet.create({
   },
   icon: {
     alignSelf: 'flex-end',
+    marginBottom: dimensions.Height / 100,
   },
   flatList: {
     flex: 1,
-    height: '100%',
+    //paddingHorizontal: dimensions.Width / 100,
   },
 });

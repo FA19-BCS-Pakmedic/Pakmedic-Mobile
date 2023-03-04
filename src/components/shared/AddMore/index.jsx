@@ -32,8 +32,8 @@ export default Button = ({
       </Text>
       <AddMore
         style={styles().icon}
-        width={dimensions.Width / 14}
-        height={dimensions.Height / 16}
+        width={dimensions.Width / 15}
+        height={dimensions.Height / 17}
       />
     </TouchableOpacity>
   );
@@ -65,7 +65,7 @@ const styles = (type, width, borderColor) =>
     },
 
     buttonLabel: {
-      fontSize: fonts.size.font16,
+      fontSize: fonts.size.font14,
       fontWeight: fonts.weight.bold,
     },
 

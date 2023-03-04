@@ -52,11 +52,9 @@ export const ContactInputField = ({
             <IntlPhoneInput
               onChangeText={e => {
                 onChange(
-
                   // `${e.dialCode}-${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
                   `0${e.phoneNumber.replace(/\s|(|)/gi, '')}`,
                 );
-
               }}
               placeholder="Phone Number"
               placeholderTextColor={colors.secondary1}
@@ -104,7 +102,7 @@ export const ValidateInputField = ({
   rules = {},
   type,
   placeholder,
-  width,
+  width = '92%',
   keyboardType,
   isPasswordField,
   placeholderTextColor,
@@ -115,6 +113,11 @@ export const ValidateInputField = ({
   onBlurEvent,
   isDisabled,
   isErrorBoundary = true,
+  containerWidth = '100%',
+  fontColor = colors.secondary1,
+  fontSize = fonts.size.font14,
+  multiline = false,
+  inputHeight = dimensions.Height / 17,
 }) => {
   // setting the password eye icon name based on the visiblility status
   const passwordIconName = !isPasswordVisible
@@ -137,11 +140,19 @@ export const ValidateInputField = ({
         fieldState: {error, isDirty, isTouched},
       }) => {
         return (
-          <View style={styles().root}>
-            {title ? <Text style={styles().title}>{title}</Text> : null}
+          <View style={styles(null, null, null, containerWidth).root}>
+            {title ? (
+              <Text
+                style={
+                  styles(null, null, null, null, fontColor, fontSize).title
+                }>
+                {title}
+              </Text>
+            ) : null}
             <View
               style={[
-                styles(type, null, isDisabled).container,
+                styles(type, null, isDisabled, null, null, null, inputHeight)
+                  .container,
                 {
                   borderColor: error
                     ? colors.invalid
@@ -159,6 +170,7 @@ export const ValidateInputField = ({
                 placeholderTextColor={placeholderTextColor || colors.secondary1}
                 value={text}
                 onChangeText={onChange}
+                multiline={multiline}
                 onBlur={() => {
                   onBlur();
                   if (onBlurEvent) {
@@ -211,15 +223,23 @@ export const ValidateInputField = ({
   );
 };
 
-const styles = (type, width, isDisabled) =>
+const styles = (
+  type,
+  width,
+  isDisabled,
+  containerWidth,
+  fontColor,
+  fontSize,
+  inputHeight,
+) =>
   StyleSheet.create({
     root: {
-      width: '100%',
+      width: containerWidth,
       marginVertical: dimensions.Height / 200,
     },
     container: {
       width: '100%',
-      height: dimensions.Height / 17,
+      height: inputHeight,
       // backgroundColor:
       //   type === 'filled' ? colors.secondaryMonochrome100 : colors.white,
       borderWidth: type === 'filled' ? 0 : 1,
@@ -240,7 +260,7 @@ const styles = (type, width, isDisabled) =>
       borderRadius: 5,
       flexDirection: 'row',
       justifyContent: 'space-around',
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
 
     flagContainer: {
@@ -250,12 +270,14 @@ const styles = (type, width, isDisabled) =>
     },
 
     title: {
-      fontSize: fonts.size.font16,
+      fontSize: fontSize,
+      color: fontColor,
       fontWeight: fonts.weight.bold,
       marginBottom: dimensions.Height / 100,
     },
 
     input: {
+      //textAlignVertical: 'center',
       color: colors.secondary1,
       width: width,
     },
@@ -274,6 +296,7 @@ const styles = (type, width, isDisabled) =>
     },
 
     iconContainer: {
+      marginTop: dimensions.Height * 0.015,
       width: 25,
       justifyContent: 'center',
       alignItems: 'center',
