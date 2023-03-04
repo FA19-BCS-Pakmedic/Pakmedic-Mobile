@@ -10,6 +10,8 @@ import AddMore from '../../../../components/shared/AddMore';
 import CommunityPostCard from '../../../../components/shared/CommunityPostCard';
 import CommunityPostImage from '../../../../assets/images/CommunityPostImage.png';
 
+import CommunityPostAdd from '../../../../components/shared/CommunityPostAdd';
+
 const CommunityDetails = ({route}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -59,6 +61,7 @@ const CommunityDetails = ({route}) => {
   ];
 
   const {communityName, item} = route.params;
+  const [isModalVisible, setModalVisible] = React.useState(false);
   return (
     <StaticContainer customHeaderEnable={true} customHeaderName={communityName}>
       <View style={styles.container}>
@@ -83,7 +86,11 @@ const CommunityDetails = ({route}) => {
           <Search />
         </View>
         <View style={styles.icon}>
-          <AddMore type={'filled'} label={'Add More'} />
+          <AddMore
+            type={'filled'}
+            label={'Add More'}
+            onPress={() => setModalVisible(true)}
+          />
         </View>
         <FlatList
           data={communityCards}
@@ -92,6 +99,10 @@ const CommunityDetails = ({route}) => {
           renderItem={({item}) => <CommunityPostCard item={item} />}
         />
       </View>
+      <CommunityPostAdd
+        Visible={isModalVisible}
+        setModalVisible={setModalVisible}
+      />
     </StaticContainer>
   );
 };

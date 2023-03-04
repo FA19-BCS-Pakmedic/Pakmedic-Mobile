@@ -18,8 +18,9 @@ export default Button = ({
   borderColor,
   height,
   isLoading,
+  fontSize = fonts.size.font16,
+  fontColor = colors.white,
 }) => {
-  console.log('button is loading', isLoading);
   return (
     <TouchableOpacity
       style={
@@ -36,7 +37,9 @@ export default Button = ({
       ) : (
         <Text
           style={
-            isDisabled ? styles().buttonLabelDisabled : styles().buttonLabel
+            isDisabled
+              ? styles().buttonLabelDisabled
+              : styles(null, null, null, null, fontSize).buttonLabel
           }>
           {label}
         </Text>
@@ -45,7 +48,7 @@ export default Button = ({
   );
 };
 
-const styles = (type, width, borderColor, height) =>
+const styles = (type, width, borderColor, height, fontSize) =>
   StyleSheet.create({
     button: {
       marginTop: dimensions.Height / 50, //remove if it there is unneseccary space
@@ -71,7 +74,7 @@ const styles = (type, width, borderColor, height) =>
     },
 
     buttonLabel: {
-      fontSize: fonts.size.font16,
+      fontSize: fontSize,
       fontWeight: fonts.weight.bold,
     },
 

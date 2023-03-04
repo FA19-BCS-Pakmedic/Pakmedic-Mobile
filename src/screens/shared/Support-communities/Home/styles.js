@@ -39,14 +39,14 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     borderRadius: 10,
-    backgroundColor: '#F0F8FF',
+    backgroundColor: colors.secondaryMonoChrome100,
   },
   joinedCommunity: {
-    height: dimensions.Height / 3,
+    height: dimensions.Height / 2.7,
     backgroundColor: colors.secondaryMonoChrome100,
   },
   otherCommunity: {
-    height: dimensions.Height / 3,
+    height: dimensions.Height / 2.7,
     backgroundColor: colors.secondaryMonoChrome100,
   },
   communityText: {

@@ -12,7 +12,6 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import deviceStorage from '../../../utils/helpers/deviceStorage';
 import ROLES from '../../../utils/constants/ROLES';
 
-
 //import actions
 import {authLogout} from '../../../setup/redux/actions';
 
@@ -21,10 +20,8 @@ import Logo from '../../../assets/svgs/main-logo.svg';
 import Notification from '../../../assets/svgs/notif-icon.svg';
 import MenuDropdown from '../MenuDropdown';
 
-
 const Header = ({color}) => {
   const navigation = useNavigation();
-
 
   const [visible, setVisible] = useState(false);
 
@@ -42,7 +39,6 @@ const Header = ({color}) => {
 
   const notif = true;
 
-
   const dispatch = useDispatch();
 
   const logout = async () => {
@@ -52,7 +48,6 @@ const Header = ({color}) => {
       screen: 'Login',
     });
   };
-
 
   const openMenu = () => {
     setVisible(true);
@@ -78,24 +73,25 @@ const Header = ({color}) => {
         <TouchableOpacity style={styles().notificationContainer}>
           <Notification width={30} height={30} />
           {notif && <View style={styles().notifIndicator}></View>}
-
         </TouchableOpacity>
         {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('App', {
-              screen: 'ProfileManagement',
-            });
-
-          }}
-          // onPress={logout}
-        >
+          // onPress={() => {
+          //   navigation.navigate('App', {
+          //     screen: 'ProfileManagement',
+          //   });
+          // }}
+          onPress={logout}>
           <Image
-            // source={require('../../../assets/images/default-avatar.png')}
-            source={{
-              uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`,
-            }}
+            //if user has no avatar then use default avatar
+            width={dimensions.Width / 10}
+            height={dimensions.Width / 10}
+            source={
+              user.avatar
+                ? {uri: user.avatar}
+                : require('../../../assets/images/default-avatar.png')
+            }
             style={styles().avatar}
           />
         </TouchableOpacity>
@@ -106,9 +102,7 @@ const Header = ({color}) => {
 
 export default Header;
 
-
 const styles = (role, justifyContent) =>
-
   StyleSheet.create({
     root: {
       width: dimensions.Width,
@@ -158,12 +152,11 @@ const styles = (role, justifyContent) =>
     },
 
     avatar: {
-      width: dimensions.Width / 11,
-      height: dimensions.Height / 21,
+      width: dimensions.Width / 10,
+      height: dimensions.Width / 10,
       marginLeft: dimensions.Width / 60,
       borderRadius: 100,
       borderWidth: 2,
       borderColor: colors.primaryMonoChrome700,
-
     },
   });
