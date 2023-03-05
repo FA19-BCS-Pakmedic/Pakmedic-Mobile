@@ -49,18 +49,19 @@ const AuthNavigation = ({navigation}) => {
               ? await getDoctor(token)
               : await getPatient(token);
 
-          await loginVox('jimmy');
+          if (response.data.data.user) {
+            await loginVox('jimmy'); //TODO: replace the value passed with name of the logged in user
+            // setting the global state with the jwt and user information received in the response
+            dispatch(
+              authSuccess({
+                user: response?.data?.data?.user,
+                token: token,
+              }),
+            );
 
-          // setting the global state with the jwt and user information received in the response
-          dispatch(
-            authSuccess({
-              user: response?.data?.data?.user,
-              token: token,
-            }),
-          );
-
-          //navigate to user app if the user is logged in
-          navigation.replace('App');
+            //navigate to user app if the user is logged in
+            navigation.replace('App');
+          }
         } catch (err) {
           console.log(err);
         }

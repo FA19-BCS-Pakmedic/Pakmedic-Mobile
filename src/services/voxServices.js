@@ -50,6 +50,9 @@ export const loginVox = async (user, password) => {
   );
   try {
     let clientState = await voximplant.getClientState();
+
+    console.log(clientState);
+
     if (clientState === Voximplant.ClientState.DISCONNECTED) {
       await voximplant.connect();
       await login(
@@ -68,9 +71,6 @@ export const loginVox = async (user, password) => {
       case Voximplant.ClientEvents.ConnectionFailed:
         message = 'Connection error, check your internet connection';
         break;
-      case Voximplant.ClientEvents.AuthResult:
-        message = convertCodeMessage(e.code);
-        break;
       default:
         message = 'Unknown error. Try again';
     }
@@ -82,19 +82,16 @@ const login = async user => {
   const token = await deviceStorage.loadItem('voxToken');
   const password = 'test1234'; //TODO: this should be taken out of the local storage or env variable
   try {
-    if (token) {
-      // console.log('logged in with token', token, user);
-      await voximplant.loginWithToken(user, token);
-    } else {
-      await voximplant.login(user, password);
-    }
+    // if (token) {
+    //   // console.log('logged in with token', token, user);
+    //   await voximplant.loginWithToken(user, token);
+    // } else {
+    await voximplant.login(user, password);
+    // }
   } catch (e) {
     console.log(e);
     let message;
     switch (e.name) {
-      case Voximplant.ClientEvents.ConnectionFailed:
-        message = 'Connection error, check your internet connection';
-        break;
       case Voximplant.ClientEvents.AuthResult:
         message = convertCodeMessage(e.code);
         break;
@@ -103,7 +100,7 @@ const login = async user => {
     }
     showError(message);
   }
-}; 
+};
 
 /**
  *
@@ -149,18 +146,31 @@ export async function declineCall(callId) {
 }
 
 //function to convert the error code into a message
-export function convertCodeMessage(code) {
+export async function convertCodeMessage(code) {
   switch (code) {
     case 401:
       return 'Invalid password';
     case 404:
       return 'Invalid user';
     case 491:
+      deleteToken();
       return 'Invalid state';
+    case 701:
+      return 'refresh token is expired';
     default:
       return 'Try again later';
   }
 }
+
+const deleteToken = async () => {
+  try {
+    await deviceStorage.deleteItem('voxToken');
+  } catch (err) {
+    console.log(err);
+  } finally {
+    login();
+  }
+};
 
 // function to show the error on mobile
 export function showError(message, navigation, user) {

@@ -5,7 +5,6 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-
 //importing images
 import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
 import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
@@ -42,7 +41,7 @@ import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 import {googleConfig} from '../../../../utils/helpers/googleConfig';
 import {getFile} from '../../../../services/fileServices';
 
-
+import {loginVox} from '../../../../services/voxServices';
 
 const Login = ({navigation}) => {
   // states
@@ -53,7 +52,7 @@ const Login = ({navigation}) => {
   const dispatch = useDispatch();
 
   //hook for react hook forms
-  const {control, handleSubmit, setValue, watch} = useForm({
+  const {control, handleSubmit, setValue, watch, reset} = useForm({
     mode: 'all',
     defaultValues: {
       email: '',
@@ -73,10 +72,8 @@ const Login = ({navigation}) => {
     //       ? await loginDoctor({email: data?.email, password: data?.password})
     //       : await loginPatient({email: data?.email, password: data?.password});
 
-
     //   // preserving jwt token in async storage
     //   await deviceStorage.saveItem('jwtToken', response?.data?.token);
-
 
     //   // setting the global state with the jwt and user information received in the response
     //   dispatch(
@@ -101,7 +98,6 @@ const Login = ({navigation}) => {
     //   alert(err.response.data.message);
     //   setIsLoading(false);
     // }
-
   };
 
   //navigate to signup screen
@@ -143,6 +139,9 @@ const Login = ({navigation}) => {
       // preserving jwt token in async storage
       await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
+      console.log('calling vox login');
+      await loginVox('john');
+
       // setting the global state with the jwt and user information received in the response
       dispatch(
         authSuccess({
@@ -155,8 +154,9 @@ const Login = ({navigation}) => {
       setIsLoading(false);
 
       //clear all inputs
-      setValue('email', '');
-      setValue('password', '');
+      // setValue('email', '');
+      // setValue('password', '');
+      reset();
 
       //navigate to the app stack
       navigation.replace('App');

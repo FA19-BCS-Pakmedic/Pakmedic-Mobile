@@ -20,10 +20,25 @@ import Logo from '../../../assets/svgs/main-logo.svg';
 import Notification from '../../../assets/svgs/notif-icon.svg';
 import MenuDropdown from '../MenuDropdown';
 
+import DefaultImage from '../../../assets/images/default-avatar.png';
+import MenuDropDown from '../MenuDropdown';
+
 const Header = ({color}) => {
   const navigation = useNavigation();
 
   const [visible, setVisible] = useState(false);
+
+  const menuDropDownOptions = [
+    {
+      text: 'View Profile',
+      onSelect: () => {
+        navigation.navigate('App', {
+          screen: 'ProfileManagement',
+        });
+      },
+    },
+    {text: 'Logout', onSelect: () => logout()},
+  ];
 
   const links = [
     {
@@ -76,22 +91,26 @@ const Header = ({color}) => {
         </TouchableOpacity>
         {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('App', {
-              screen: 'ProfileManagement',
-            });
-          }}
-          // onPress={logout}
-        >
-          <Image
-            // source={require('../../../assets/images/default-avatar.png')}
-            source={{
-              uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`,
-            }}
-            style={styles().avatar}
-          />
-        </TouchableOpacity>
+        <MenuDropdown options={menuDropDownOptions}>
+          <TouchableOpacity
+            // onPress={() => {
+            //   navigation.navigate('App', {
+            //     screen: 'ProfileManagement',
+            //   });
+            // }}
+            onPress={logout}>
+            <Image
+              // source={require('../../../assets/images/default-avatar.png')}
+              // source={{
+
+              // uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
+              // }}
+
+              source={DefaultImage}
+              style={styles().avatar}
+            />
+          </TouchableOpacity>
+        </MenuDropdown>
       </View>
     </View>
   );
