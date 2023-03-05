@@ -25,44 +25,20 @@ const StackNavigate = createNativeStackNavigator();
 const App = () => {
   SplashScreen.hide();
 
-
-  useEffect(() => {
-    // voximplant.on(Voximplant.ClientEvents.IncomingCall, incomingCallEvent => {
-    //   calls.set(incomingCallEvent.call.callId, incomingCallEvent.call);
-    //   navigation.navigate('IncomingCall', {
-    //     callId: incomingCallEvent.call.callId,
-    //   });
-    // });
-
-    voximplant.on(Voximplant.ClientEvents.ConnectionEstablished, event => {
-      console.log('Connection established');
-    });
-
-    voximplant.on(Voximplant.ClientEvents.AuthResult, event => {
-      console.log('Auth result');
-      console.log(event);
-    });
-
-    return () => {
-      voximplant.off(Voximplant.ClientEvents.AuthResult);
-      voximplant.off(Voximplant.ClientEvents.ConnectionEstablished);
-    };
-  });
-
   https: return (
-    // <Provider store={store}>
-    //   <MenuProvider>
-    //     <AppNavigation />
-    //   </MenuProvider>
-    // </Provider>
-    <NavigationContainer>
-      <StackNavigate.Navigator initialRouteName="Home">
-        <StackNavigate.Screen name="Home" component={CallHome} />
-        <StackNavigate.Screen name="History" component={History} />
-        <StackNavigate.Screen name="IncomingCall" component={IncomingCall} />
-        <StackNavigate.Screen name="OnCall" component={OngoingCall} />
-      </StackNavigate.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <MenuProvider>
+        <AppNavigation />
+      </MenuProvider>
+    </Provider>
+    // <NavigationContainer>
+    //   <StackNavigate.Navigator initialRouteName="Home">
+    //     <StackNavigate.Screen name="Home" component={CallHome} />
+    //     <StackNavigate.Screen name="History" component={History} />
+    //     <StackNavigate.Screen name="IncomingCall" component={IncomingCall} />
+    //     <StackNavigate.Screen name="OngoingCall" component={OngoingCall} />
+    //   </StackNavigate.Navigator>
+    // </NavigationContainer>
   );
 };
 

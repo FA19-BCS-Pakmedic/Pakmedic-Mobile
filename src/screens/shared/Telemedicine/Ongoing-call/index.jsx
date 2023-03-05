@@ -140,83 +140,63 @@ import styles from './styles';
 import {Voximplant} from 'react-native-voximplant';
 import calls from '../../../../utils/helpers/Store';
 
+import {
+  getCallSettings,
+  onHangupPress,
+  subscribeToCallEvents,
+  subscribeToEndpointEvent,
+  unsubscribeFromCallEvents,
+  voximplant,
+} from '../../../../services/voxServices';
+
 const CallScreen = ({route}) => {
   const navigation = useNavigation();
+
+  /**
+   * @param {boolean} isIncomingCall - true if the call is incoming, false if the call is outgoing
+   * @param {boolean} isVideoCall - true if the call is video, false if the call is audio
+   * @param {string} callee - callee is the person we are calling aka the receiver;
+   */
   const {isIncomingCall, isVideoCall, callee} = route.params;
   const [callState, setCallState] = useState('Connecting');
-  const callId = useRef(route.params.callId);
+
+  const callId = useRef(route.params?.callId); //callId is the id of the call received by the receiver
+
   const [localVideoStreamId, setLocalVideoStreamId] = useState('');
   const [remoteVideoStreamId, setRemoteVideoStreamId] = useState('');
-  const voximplant = Voximplant.getInstance();
+
+  //call will store the value of the ongoing call object
+  const call = useRef(null);
+  const endpoint = useRef(null);
 
   useEffect(() => {
-    let callSettings = {
-      video: {
-        sendVideo: isVideoCall,
-        receiveVideo: isVideoCall,
-      },
-    };
-
-    let call;
-    let endpoint;
     async function makeCall() {
-      call = await voximplant.call(callee, callSettings);
-      subscribeToCallEvents();
-      callId.current = call.callId;
-      calls.set(call.callId, call);
+      call.current = await voximplant.call(
+        callee,
+        getCallSettings(isVideoCall),
+      );
+
+      //this will subscribe to call events
+      onSubscribe();
+      callId.current = call.current.callId;
+      //calls object is a map that contains call id as a key and call object as a value
+      calls.set(call.current.callId, call.current);
     }
 
     async function answerCall() {
-      call = calls.get(callId.current);
-      subscribeToCallEvents();
-      endpoint = call.getEndpoints()[0];
-      subscribeToEndpointEvents();
-      await call.answer(callSettings);
-    }
+      // get the call object that was set in the incoming call screen when the scenario of incoming call occurs
+      call.current = calls.get(callId.current);
 
-    function subscribeToCallEvents() {
-      call.on(Voximplant.CallEvents.Connected, callEvent => {
-        setCallState('Call connected');
-      });
-      call.on(Voximplant.CallEvents.Disconnected, callEvent => {
-        calls.delete(callEvent.call.callId);
-        navigation.navigate('Main');
-      });
-      call.on(Voximplant.CallEvents.Failed, callEvent => {
-        showCallError(callEvent.reason);
-      });
-      call.on(Voximplant.CallEvents.ProgressToneStart, callEvent => {
-        setCallState('Ringing...');
-      });
-      call.on(Voximplant.CallEvents.LocalVideoStreamAdded, callEvent => {
-        setLocalVideoStreamId(callEvent.videoStream.id);
-      });
-      call.on(Voximplant.CallEvents.EndpointAdded, callEvent => {
-        console.log('endpoint added');
-        endpoint = callEvent.endpoint;
-        subscribeToEndpointEvents();
-      });
-    }
+      onSubscribe();
 
-    function subscribeToEndpointEvents() {
-      endpoint.on(
-        Voximplant.EndpointEvents.RemoteVideoStreamAdded,
-        endpointEvent => {
-          setRemoteVideoStreamId(endpointEvent.videoStream.id);
-        },
-      );
-    }
+      //set the endpoint of the other user i.e. the caller to be used for event subscriptions
+      endpoint.current = call.current.getEndpoints()[0];
+      subscribeToEndpointEvent(endpoint, setRemoteVideoStreamId); //subscribe to the endpoint events
 
-    function showCallError(reason) {
-      Alert.alert('Call failed', `Reason: ${reason}`, [
-        {
-          text: 'OK',
-          onPress: () => {
-            calls.delete(callId.current);
-            navigation.navigate('Main');
-          },
-        },
-      ]);
+      // answer the incoming call
+      await call.current.answer(getCallSettings(true));
+
+      console.log(remoteVideoStreamId);
     }
 
     if (isIncomingCall) {
@@ -226,20 +206,33 @@ const CallScreen = ({route}) => {
     }
 
     return function cleanup() {
-      call.off(Voximplant.CallEvents.Connected);
-      call.off(Voximplant.CallEvents.Disconnected);
-      call.off(Voximplant.CallEvents.Failed);
-      call.off(Voximplant.CallEvents.ProgressToneStart);
-      call.off(Voximplant.CallEvents.LocalVideoStreamAdded);
-      call.off(Voximplant.CallEvents.EndpointAdded);
+      unsubscribeFromCallEvents(call);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVideoCall]);
 
-  const endCall = useCallback(() => {
-    let call = calls.get(callId.current);
-    call.hangup();
-  }, []);
+  function onSubscribe() {
+    subscribeToCallEvents(
+      call,
+      navigation,
+      setCallState,
+      setLocalVideoStreamId,
+      endpoint,
+      setRemoteVideoStreamId,
+      showCallError,
+    );
+  }
+
+  function showCallError(reason) {
+    Alert.alert('Call failed', `Reason: ${reason}`, [
+      {
+        text: 'OK',
+        onPress: () => {
+          calls.delete(callId.current);
+          navigation.navigate('History');
+        },
+      },
+    ]);
+  }
 
   return (
     <>
@@ -260,7 +253,9 @@ const CallScreen = ({route}) => {
         </View>
         <View style={styles.callControlsVideo}>
           <Text style={styles.callConnectingLabel}>{callState}</Text>
-          <TouchableOpacity onPress={() => endCall()} style={styles.button}>
+          <TouchableOpacity
+            onPress={() => onHangupPress(call)}
+            style={styles.button}>
             <Text style={styles.textButton}>END CALL</Text>
           </TouchableOpacity>
         </View>

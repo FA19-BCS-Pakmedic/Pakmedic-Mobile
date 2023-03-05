@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   PermissionsAndroid,
   Platform,
@@ -12,63 +12,38 @@ import {
 import styles from './styles';
 import calls from '../../../../utils/helpers/Store';
 import {Voximplant} from 'react-native-voximplant';
+import {
+  declineCall,
+  requestPermissions,
+} from '../../../../services/voxServices';
 
 const IncomingCall = ({route, navigation}) => {
-  const {callId} = route.params;
+  const {callId, isVideoCall} = route.params;
   const [caller, setCaller] = useState('Unknown');
+  const call = useRef(null);
 
   useEffect(() => {
-    let call = calls.get(callId);
-    setCaller(call.getEndpoints()[0].displayName);
-    call.on(Voximplant.CallEvents.Disconnected, callEvent => {
+    call.current = calls.get(callId);
+    setCaller(call.current.getEndpoints()[0].displayName);
+    call.current.on(Voximplant.CallEvents.Disconnected, callEvent => {
       calls.delete(callEvent.call.callId);
       navigation.navigate('History');
     });
     return function cleanup() {
       call.off(Voximplant.CallEvents.Disconnected);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callId]);
 
-  async function answerCall(isVideoCall) {
-    try {
-      if (Platform.OS === 'android') {
-        let permissions = [PermissionsAndroid.PERMISSIONS.RECORD_AUDIO];
-        if (isVideoCall) {
-          permissions.push(PermissionsAndroid.PERMISSIONS.CAMERA);
-        }
-        const granted = await PermissionsAndroid.requestMultiple(permissions);
-        const recordAudioGranted =
-          granted[PermissionsAndroid.PERMISSIONS.RECORD_AUDIO] === 'granted';
-        const cameraGranted =
-          granted[PermissionsAndroid.PERMISSIONS.CAMERA] === 'granted';
-        if (recordAudioGranted) {
-          if (isVideoCall && !cameraGranted) {
-            console.warn(
-              'MainScreen: makeCall: camera permission is not granted',
-            );
-            return;
-          }
-        } else {
-          console.warn(
-            'MainScreen: makeCall: record audio permission is not granted',
-          );
-          return;
-        }
-      }
-      navigation.navigate('OnCall', {
-        isVideoCall: false,
+  async function answerCall() {
+    const permissionsGranted = await requestPermissions(isVideoCall);
+
+    if (permissionsGranted) {
+      navigation.navigate('OngoingCall', {
+        isVideoCall: isVideoCall,
         callId: callId,
         isIncomingCall: true,
       });
-    } catch (e) {
-      console.warn(`MainScreen: makeCall failed: ${e}`);
     }
-  }
-
-  async function declineCall() {
-    let call = calls.get(callId);
-    call.decline();
   }
 
   return (
@@ -80,12 +55,12 @@ const IncomingCall = ({route, navigation}) => {
           <Text style={styles.incomingCallText}>{caller}</Text>
           <View style={styles.incomingCallButtons}>
             <TouchableOpacity
-              onPress={() => answerCall(true)}
+              onPress={() => answerCall()}
               style={styles.button}>
               <Text style={styles.textButton}>ANSWER</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => declineCall()}
+              onPress={() => declineCall(callId)}
               style={styles.button}>
               <Text style={styles.textButton}>DECLINE</Text>
             </TouchableOpacity>

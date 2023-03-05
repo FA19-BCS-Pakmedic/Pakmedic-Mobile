@@ -26,6 +26,7 @@ const CallHome = ({route, navigation}) => {
       calls.set(incomingCallEvent.call.callId, incomingCallEvent.call);
       navigation.navigate('IncomingCall', {
         callId: incomingCallEvent.call.callId,
+        isVideoCall: incomingCallEvent.call.isVideoCall,
       });
     });
 

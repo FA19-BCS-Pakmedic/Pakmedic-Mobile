@@ -21,6 +21,7 @@ import {useEffect} from 'react';
 import {getDoctor} from '../../services/doctorServices';
 import {getPatient} from '../../services/patientServices';
 import {authSuccess} from '../redux/actions';
+import {loginVox} from '../../services/voxServices';
 
 // create stacks
 const authStack = createNativeStackNavigator();
@@ -47,6 +48,8 @@ const AuthNavigation = ({navigation}) => {
             role === ROLES.doctor
               ? await getDoctor(token)
               : await getPatient(token);
+
+          await loginVox('jimmy');
 
           // setting the global state with the jwt and user information received in the response
           dispatch(

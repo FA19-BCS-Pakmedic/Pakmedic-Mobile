@@ -5,17 +5,17 @@ import {Voximplant} from 'react-native-voximplant';
 
 const History = ({navigation, route}) => {
   const otherUser = 'jimmy';
-  const loggedUser = route.params.loggedUser;
+  // const loggedUser = route.params.loggedUser;
 
   const call = async () => {
-    const permissionsGranted = await requestPermissions(false);
+    const permissionsGranted = await requestPermissions(true);
 
     if (permissionsGranted) {
-      navigation.navigate('OnCall', {
+      navigation.navigate('OngoingCall', {
         // loggedUser: loggedUser,
         callee: otherUser,
         isIncomingCall: false,
-        isVideoCall: false,
+        isVideoCall: true,
       });
     }
   };
