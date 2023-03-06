@@ -139,8 +139,11 @@ const Login = ({navigation}) => {
       // preserving jwt token in async storage
       await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
-      console.log('calling vox login');
-      await loginVox('john');
+      const user = response.data.user;
+      // console.log('calling vox login');
+      if (user) {
+        await loginVox(user.name.replace(' ', '_'), user._id.toString());
+      }
 
       // setting the global state with the jwt and user information received in the response
       dispatch(

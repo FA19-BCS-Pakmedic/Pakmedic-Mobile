@@ -22,6 +22,7 @@ import MenuDropdown from '../MenuDropdown';
 
 import DefaultImage from '../../../assets/images/default-avatar.png';
 import MenuDropDown from '../MenuDropdown';
+import {voximplant} from '../../../services/voxServices';
 
 const Header = ({color}) => {
   const navigation = useNavigation();
@@ -58,6 +59,7 @@ const Header = ({color}) => {
 
   const logout = async () => {
     await deviceStorage.deleteItem('jwtToken');
+    await voximplant.disconnect();
     dispatch(authLogout());
     navigation.navigate('Auth', {
       screen: 'Login',

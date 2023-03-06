@@ -47,6 +47,7 @@ import {
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
+import {loginVox} from '../../../../services/voxServices';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
@@ -143,6 +144,16 @@ const DoctorRegister = ({navigation}) => {
     //storing jwt token to mobile storage
     await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
+    const user = response.data.user;
+
+    if (user) {
+      try {
+        await loginVox(user.name.replace(' ', '_'), user._id.toString());
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     //initializing global state with jwt token and user object
     dispatch(
       authSuccess({user: response.data.user, token: response.data.token}),
@@ -200,9 +211,7 @@ const DoctorRegister = ({navigation}) => {
 
   //google login functionality
   const onPressGoogleLogin = async () => {
-
     const email = 'test4@gmail.com';
-
 
     try {
       const response = await GoogleSignin.signIn();

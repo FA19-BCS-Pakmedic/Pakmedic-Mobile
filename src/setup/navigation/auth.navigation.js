@@ -49,8 +49,9 @@ const AuthNavigation = ({navigation}) => {
               ? await getDoctor(token)
               : await getPatient(token);
 
-          if (response.data.data.user) {
-            await loginVox('jimmy'); //TODO: replace the value passed with name of the logged in user
+          const user = response.data.data.user;
+          if (user) {
+            await loginVox(user.name.replace(' ', '_'), user._id.toString());
             // setting the global state with the jwt and user information received in the response
             dispatch(
               authSuccess({
