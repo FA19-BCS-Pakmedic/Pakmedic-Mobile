@@ -51,7 +51,7 @@ const AuthNavigation = ({navigation}) => {
 
           const user = response.data.data.user;
           if (user) {
-            await loginVox(user.name.replace(' ', '_'), user._id.toString());
+            await loginVox(user);
             // setting the global state with the jwt and user information received in the response
             dispatch(
               authSuccess({

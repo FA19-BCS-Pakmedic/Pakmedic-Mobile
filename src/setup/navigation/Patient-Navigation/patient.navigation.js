@@ -12,6 +12,7 @@ import PatientTabStack from './patient.tab.navigator';
 //Screens
 import Support from '../../../screens/shared/Support-communities/Home';
 import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
+import UsersList from '../../../screens/shared/Telemedicine/Upcoming-appointments';
 
 const Stack = createNativeStackNavigator();
 

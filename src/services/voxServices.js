@@ -42,39 +42,41 @@ export const getCallSettings = isVideo => {
  * @param {*} password logged in user's password
  * function to login to voximplant
  */
-export const loginVox = async (user, password) => {
-  console.log(
-    `${user}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`,
-    password,
-  );
-  try {
-    let clientState = await voximplant.getClientState();
-    if (clientState === Voximplant.ClientState.DISCONNECTED) {
-      await voximplant.connect();
-      await voximplant.login(
-        `${user}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`,
-        password,
-      );
+export const loginVox = async user => {
+  // console.log(
+  //   `${user}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`,
+  //   password,
+  // );
+  if (user) {
+    const username = `${user.name.replace(' ', '_')}-${user._id
+      .toString()
+      .slice(0, 5)}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`;
+    const password = user._id.toString();
+    try {
+      let clientState = await voximplant.getClientState();
+      if (clientState === Voximplant.ClientState.DISCONNECTED) {
+        await voximplant.connect();
+        await voximplant.login(username, password);
+      }
+      if (clientState === Voximplant.ClientState.CONNECTED) {
+        await voximplant.login(username, password);
+      }
+    } catch (e) {
+      let message;
+      switch (e.name) {
+        case Voximplant.ClientEvents.ConnectionFailed:
+          message = 'Connection error, check your internet connection';
+          break;
+        case Voximplant.ClientEvents.AuthResult:
+          message = convertCodeMessage(e.code);
+          break;
+        default:
+          message = 'Unknown error. Try again';
+      }
+      showError(message);
     }
-    if (clientState === Voximplant.ClientState.CONNECTED) {
-      await voximplant.login(
-        `${user}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`,
-        password,
-      );
-    }
-  } catch (e) {
-    let message;
-    switch (e.name) {
-      case Voximplant.ClientEvents.ConnectionFailed:
-        message = 'Connection error, check your internet connection';
-        break;
-      case Voximplant.ClientEvents.AuthResult:
-        message = convertCodeMessage(e.code);
-        break;
-      default:
-        message = 'Unknown error. Try again';
-    }
-    showError(message);
+  } else {
+    console.log('no user');
   }
 };
 

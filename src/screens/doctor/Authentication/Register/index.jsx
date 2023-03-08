@@ -148,7 +148,7 @@ const DoctorRegister = ({navigation}) => {
 
     if (user) {
       try {
-        await loginVox(user.name.replace(' ', '_'), user._id.toString());
+        await loginVox(user);
       } catch (err) {
         console.log(err);
       }
