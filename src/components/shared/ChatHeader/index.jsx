@@ -11,7 +11,7 @@ import VideoIcon from '../../../assets/svgs/Video-on.svg';
 
 import ROLES from '../../../utils/constants/ROLES';
 
-const ChatHeader = ({role, navigation, user}) => {
+const ChatHeader = ({role, user, onPressCall, callee}) => {
   return (
     <View style={styles().container}>
       <TouchableOpacity style={styles().backIconContainer}>
@@ -19,10 +19,18 @@ const ChatHeader = ({role, navigation, user}) => {
       </TouchableOpacity>
       <Text style={styles().text}>{user ? user.name : 'Abdul Moeed'}</Text>
       <View style={styles().optionsContainer}>
-        <TouchableOpacity style={styles().option}>
+        <TouchableOpacity
+          style={styles().option}
+          onPress={() => {
+            onPressCall(callee, false);
+          }}>
           <CallIcon />
         </TouchableOpacity>
-        <TouchableOpacity style={styles().option}>
+        <TouchableOpacity
+          style={styles().option}
+          onPress={() => {
+            onPressCall(callee, true);
+          }}>
           <VideoIcon />
         </TouchableOpacity>
       </View>

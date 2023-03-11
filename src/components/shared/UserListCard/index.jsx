@@ -7,27 +7,13 @@ import colors from '../../../utils/styles/themes/colors';
 import DefaultImage from '../../../assets/images/default-avatar.png';
 import fonts from '../../../utils/styles/themes/fonts';
 import Button from '../Button';
+import {getDate} from '../../../utils/helpers/getDate';
 
-const AppointmentCard = ({role, appointment, user, navigation}) => {
-  const navigateToChat = () => {
-    navigation.navigate('App', {
-      screen: 'Chat',
-      params: {
-        callee: user,
-        receiverId: '640c5bb6251b6cef993abe1d', //TODO: remove this id as it is only used for testing purpose
-      },
-    });
-  };
+const UserListCard = ({role, appointment, onPressContact}) => {
+  const receiver =
+    role === ROLES.doctor ? appointment?.patient : appointment?.doctor;
 
-  const navigateToChatDoctor = () => {
-    navigation.navigate('App', {
-      screen: 'Chat',
-      params: {
-        callee: user,
-        receiverId: '6406be4cb43f4b2d0663bf8c',
-      },
-    });
-  };
+  console.log(receiver);
 
   const getControls = () => {
     switch (role) {
@@ -45,7 +31,9 @@ const AppointmentCard = ({role, appointment, user, navigation}) => {
               />
               <Button
                 label="Contact"
-                onPress={navigateToChat}
+                onPress={() => {
+                  onPressContact(receiver);
+                }}
                 type="filled"
                 width="48%"
                 height={dimensions.Height / 20}
@@ -71,7 +59,7 @@ const AppointmentCard = ({role, appointment, user, navigation}) => {
               <View style={styles().controls}>
                 <Button
                   label="Contact"
-                  onPress={navigateToChatDoctor}
+                  onPress={() => onPressContact(receiver)}
                   type="filled"
                   width="48%"
                   height={dimensions.Height / 20}
@@ -118,20 +106,20 @@ const AppointmentCard = ({role, appointment, user, navigation}) => {
           <View style={styles().information}>
             <Text style={styles().label}>Name:</Text>
             <Text style={styles().value}>
-              {user?.name ? user.name : 'Abdul Moeed'}
+              {receiver?.name ? receiver.name : 'Abdul Moeed'}
             </Text>
           </View>
           <View style={styles().information}>
             <Text style={styles().label}>Appointment Date:</Text>
             <Text style={styles().value}>
-              {appointment?.date ? appointment.date : '02/02/2021'}
+              {appointment?.date ? getDate(appointment.date) : '02/02/2021'}
             </Text>
           </View>
           {role === ROLES.patient && (
             <View style={styles().information}>
               <Text style={styles().label}>Speciality:</Text>
               <Text style={styles().value}>
-                {user?.speciality ? user.speciality : 'Dentist'}
+                {/* {receiver?.speciality ? receiver.speciality : 'Dentist'} */}
               </Text>
             </View>
           )}
@@ -145,7 +133,7 @@ const AppointmentCard = ({role, appointment, user, navigation}) => {
   );
 };
 
-export default AppointmentCard;
+export default UserListCard;
 
 const styles = role =>
   StyleSheet.create({

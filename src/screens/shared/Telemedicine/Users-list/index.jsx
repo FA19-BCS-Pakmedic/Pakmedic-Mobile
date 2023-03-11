@@ -1,15 +1,49 @@
 import {View, Text, ScrollView} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import StaticContainer from '../../../../containers/StaticContainer';
 
 import styles from './styles';
 import SearchFilterBar from '../../../../components/shared/SearchFilterBar';
-import AppointmentCard from '../../../../components/shared/AppointmentCard';
+import UserListCard from '../../../../components/shared/UserListCard';
+
+import {getAppointmentsByUserId} from '../../../../services/appointmentServices';
 
 const UsersList = ({navigation}) => {
   const role = useSelector(state => state.role.role);
+  const user = useSelector(state => state.auth.user);
+
+  const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    const getAppointments = async () => {
+      try {
+        const response = await getAppointmentsByUserId({
+          [role.toLowerCase()]: user._id,
+        });
+
+        console.log(response.data.data);
+
+        setAppointments(response.data.data.appointments);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (user && role) {
+      getAppointments();
+    }
+  }, [user, role]);
+
+  const navigateToChat = receiver => {
+    navigation.navigate('App', {
+      screen: 'Chat',
+      params: {
+        receiver: receiver, //TODO: remove this id as it is only used for testing purpose
+      },
+    });
+  };
 
   return (
     <StaticContainer
@@ -18,34 +52,24 @@ const UsersList = ({navigation}) => {
       customHeaderEnable={true}
       isHorizontalPadding={false}>
       <View style={styles.container}>
-        {/* filter and search option */}
         <View style={styles.filterSearchContainer}>
           <SearchFilterBar role={role} />
         </View>
 
-        {/* Upcoming appointments section */}
         <ScrollView
           contentContainerStyle={styles.scrollContainerContent}
           style={styles.scrollContainer}>
           <View style={styles.appointmentsContainer}>
-            <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} navigation={navigation} />
-            </View>
-            <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} navigation={navigation} />
-            </View>
-            <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} navigation={navigation} />
-            </View>
-            <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} navigation={navigation} />
-            </View>
-            <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} navigation={navigation} />
-            </View>
-            <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} navigation={navigation} />
-            </View>
+            {appointments.length > 0 &&
+              appointments.map(appointment => (
+                <View style={styles.appointmentContainer} key={appointment._id}>
+                  <UserListCard
+                    role={role}
+                    appointment={appointment}
+                    onPressContact={navigateToChat}
+                  />
+                </View>
+              ))}
           </View>
         </ScrollView>
       </View>

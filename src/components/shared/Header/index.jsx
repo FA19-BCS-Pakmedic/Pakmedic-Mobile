@@ -93,26 +93,24 @@ const Header = ({color}) => {
         </TouchableOpacity>
         {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
-        <MenuDropdown options={menuDropDownOptions}>
-          <TouchableOpacity
-            // onPress={() => {
-            //   navigation.navigate('App', {
-            //     screen: 'ProfileManagement',
-            //   });
-            // }}
-            onPress={logout}>
-            <Image
-              // source={require('../../../assets/images/default-avatar.png')}
-              // source={{
-
-              // uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
-              // }}
-
-              source={DefaultImage}
-              style={styles().avatar}
-            />
-          </TouchableOpacity>
-        </MenuDropdown>
+        {/* <MenuDropdown options={menuDropDownOptions}> */}
+        <TouchableOpacity
+          // onPress={() => {
+          //   navigation.navigate('App', {
+          //     screen: 'ProfileManagement',
+          //   });
+          // }}
+          onPress={logout}>
+          <Image
+            // source={require('../../../assets/images/default-avatar.png')}
+            source={{
+              uri: `http://192.168.0.109:8000/api/v1/files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
+            }}
+            // source={DefaultImage}
+            style={styles().avatar}
+          />
+        </TouchableOpacity>
+        {/* </MenuDropdown> */}
       </View>
     </View>
   );

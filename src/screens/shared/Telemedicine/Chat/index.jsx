@@ -15,17 +15,19 @@ import GiftedChatSend from '../../../../components/shared/GiftedChatSend';
 import GiftedChatInput from '../../../../components/shared/GiftedChatInput';
 import ROLES from '../../../../utils/constants/ROLES';
 import {getPatientById} from '../../../../services/patientServices';
+import getVoxUsername from '../../../../utils/helpers/getVoxUsername';
+import {requestPermissions} from '../../../../services/voxServices';
 
-const Chat = ({navigation, route}) => {
+const Chat = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
   const [socket, setSocket] = useState();
 
   // console.log(route.params);
-  const receiverId = route.params.receiverId;
+  const receiverId = route.params.receiver._id;
 
-  const [receiver, setReceiver] = useState(null);
+  const [receiver] = useState(route.params.receiver);
 
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user);
@@ -54,7 +56,7 @@ const Chat = ({navigation, route}) => {
   });
 
   useEffect(() => {
-    const socket = io('http://192.168.0.109:8000');
+    const socket = io('http://192.168.0.109:8000'); //TODO: REPLACE THIS WITH THE CONSTANT
     setSocket(socket);
 
     return () => {
@@ -65,27 +67,6 @@ const Chat = ({navigation, route}) => {
       setSocket(null);
     };
   }, []);
-
-  //useEffect to find the receiver from the database and fetch.
-  useEffect(() => {
-    const getReceiver = async () => {
-      try {
-        let response;
-        if (role === ROLES.patient) {
-          response = await getDoctorById(receiverId);
-          setReceiver(response.data.data.user);
-        } else {
-          response = await getPatientById(receiverId);
-          setReceiver(response.data.data.user);
-        }
-      } catch (err) {
-        console.log(err);
-        Alert.alert('Error', err.message);
-      }
-    };
-
-    getReceiver();
-  }, [receiverId]);
 
   useEffect(() => {
     if (receiver && socket) {
@@ -148,9 +129,25 @@ const Chat = ({navigation, route}) => {
       : setIsTyping(false);
   };
 
+  const onPressCall = async (callee, isVideoCall) => {
+    const permissionsGranted = await requestPermissions(true);
+
+    if (permissionsGranted) {
+      navigation.navigate('App', {
+        screen: 'OngoingCall',
+        params: {callee, isVideoCall, isIncomingCall: false},
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <ChatHeader role={role} />
+      <ChatHeader
+        role={role}
+        receiver={receiver}
+        onPressCall={onPressCall}
+        callee={getVoxUsername(receiver)}
+      />
       <GiftedChat
         messages={messages}
         onInputTextChanged={text => userTyping(text)}

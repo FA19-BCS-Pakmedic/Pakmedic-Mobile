@@ -5,6 +5,7 @@ import {
   VOXIMPLANT_ACCOUNT,
 } from '../utils/constants/Voximplant';
 import calls from '../utils/helpers/Store';
+import getVoxUsername from '../utils/helpers/getVoxUsername';
 
 // getting the voximplant instance
 export const voximplant = Voximplant.getInstance();
@@ -48,9 +49,9 @@ export const loginVox = async user => {
   //   password,
   // );
   if (user) {
-    const username = `${user.name.replace(' ', '_')}-${user._id
-      .toString()
-      .slice(0, 5)}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`;
+    const username = `${getVoxUsername(
+      user,
+    )}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`;
     const password = user._id.toString();
     try {
       let clientState = await voximplant.getClientState();
