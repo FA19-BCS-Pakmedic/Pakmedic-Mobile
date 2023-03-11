@@ -15,6 +15,11 @@ import CommunityDetails from '../../../screens/shared/Support-communities/Commun
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
 import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
 
+import Retinopathy from '../../../screens/doctor/Assistant/Retinopathy';
+import Xray from '../../../screens/doctor/Assistant/Xray';
+import RiskOfDeath from '../../../screens/doctor/Assistant/RiskOfDeath';
+import CompoundRecommendation from '../../../screens/doctor/Assistant/CompoundRecommendation';
+import BrainMri from '../../../screens/doctor/Assistant/BrainMri';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +33,14 @@ const DoctorNavigation = () => {
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
       <Stack.Screen name="ProfileManagement" component={ProfileManagement} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Retinopathy" component={Retinopathy} />
+      <Stack.Screen name="Xray" component={Xray} />
+      <Stack.Screen name="RiskOfDeath" component={RiskOfDeath} />
+      <Stack.Screen
+        name="CompoundRecommendation"
+        component={CompoundRecommendation}
+      />
+      <Stack.Screen name="BrainMri" component={BrainMri} />
     </Stack.Navigator>
   );
 };

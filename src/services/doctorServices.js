@@ -13,7 +13,6 @@ const getToken = async () => {
 // axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
 
 const API = axios.create({
-
   baseURL: `${apiEndpoint}`,
 
   withCredentials: true,
@@ -38,7 +37,6 @@ export const verifyOtpDoctor = data =>
 
 //send reset forgot password
 export const resetForgotPasswordDoctor = data =>
-
   API.patch('doctors/reset-forgotten-password', data);
 
 //get doctor if he is logged in
@@ -78,7 +76,6 @@ export const updateExperience = (id, data) =>
 //delete experience based on id
 export const deleteExperience = id => API.delete(`/experiences/${id}`);
 
-
 //add avatar
 export const addAvatar = data => {
   return API.post('/doctors/avatar', data, {
@@ -90,12 +87,15 @@ export const addAvatar = data => {
 
 //add signature
 export const addSignature = data => {
-  
   return API.post('/doctors/signatures', data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+};
 
-}
+export const retinopathy = data => {
+  user = {user: Object.values(data).map(value => parseFloat(value))};
 
+  return API.post('ML/retinopathy', user);
+};
