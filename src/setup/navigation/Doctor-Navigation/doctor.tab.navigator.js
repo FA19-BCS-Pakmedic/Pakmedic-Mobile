@@ -25,6 +25,7 @@ import PopupAlerts from '../../../components/shared/PopupAlerts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import Colors from '../../../utils/styles/themes/colors';
+import UsersList from '../../../screens/shared/Telemedicine/Users-list';
 
 const Tab = createBottomTabNavigator();
 
@@ -140,7 +141,7 @@ const DoctorTabStack = props => {
         <Tab.Screen name="HomeScreen" component={Home} />
         <Tab.Screen name="AssistantScreen" component={Assistant} />
         <Tab.Screen name="AppointmentScreen" component={Appointment} />
-        <Tab.Screen name="TelemedicineScreen" component={Telemedicine} />
+        <Tab.Screen name="TelemedicineScreen" component={UsersList} />
         <Tab.Screen
           name="MenuScreen"
           component={Home}

@@ -8,7 +8,27 @@ import DefaultImage from '../../../assets/images/default-avatar.png';
 import fonts from '../../../utils/styles/themes/fonts';
 import Button from '../Button';
 
-const AppointmentCard = ({role, appointment, user}) => {
+const AppointmentCard = ({role, appointment, user, navigation}) => {
+  const navigateToChat = () => {
+    navigation.navigate('App', {
+      screen: 'Chat',
+      params: {
+        callee: user,
+        receiverId: '640c5bb6251b6cef993abe1d', //TODO: remove this id as it is only used for testing purpose
+      },
+    });
+  };
+
+  const navigateToChatDoctor = () => {
+    navigation.navigate('App', {
+      screen: 'Chat',
+      params: {
+        callee: user,
+        receiverId: '6406be4cb43f4b2d0663bf8c',
+      },
+    });
+  };
+
   const getControls = () => {
     switch (role) {
       case ROLES.patient:
@@ -25,7 +45,7 @@ const AppointmentCard = ({role, appointment, user}) => {
               />
               <Button
                 label="Contact"
-                onPress={() => {}}
+                onPress={navigateToChat}
                 type="filled"
                 width="48%"
                 height={dimensions.Height / 20}
@@ -51,7 +71,7 @@ const AppointmentCard = ({role, appointment, user}) => {
               <View style={styles().controls}>
                 <Button
                   label="Contact"
-                  onPress={() => {}}
+                  onPress={navigateToChatDoctor}
                   type="filled"
                   width="48%"
                   height={dimensions.Height / 20}

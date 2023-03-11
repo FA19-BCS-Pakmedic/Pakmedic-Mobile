@@ -24,7 +24,7 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import Colors from '../../../utils/styles/themes/colors';
 import {useNavigation} from '@react-navigation/native';
-import UpcomingAppointments from '../../../screens/shared/Telemedicine/Upcoming-appointments';
+import UsersList from '../../../screens/shared/Telemedicine/Users-list';
 
 const Tab = createBottomTabNavigator();
 
@@ -152,10 +152,7 @@ const PatientTabStack = props => {
         <Tab.Screen name="HomeScreen" component={Home} />
         <Tab.Screen name="ChatbotScreen" component={Chatbot} />
         <Tab.Screen name="AppointmentScreen" component={Appointment} />
-        <Tab.Screen
-          name="TelemedicineScreen"
-          component={UpcomingAppointments}
-        />
+        <Tab.Screen name="TelemedicineScreen" component={UsersList} />
         <Tab.Screen
           name="MenuScreen"
           component={Home}

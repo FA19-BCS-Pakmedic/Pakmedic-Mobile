@@ -8,7 +8,7 @@ import styles from './styles';
 import SearchFilterBar from '../../../../components/shared/SearchFilterBar';
 import AppointmentCard from '../../../../components/shared/AppointmentCard';
 
-const UpcomingAppointments = () => {
+const UsersList = ({navigation}) => {
   const role = useSelector(state => state.role.role);
 
   return (
@@ -29,22 +29,22 @@ const UpcomingAppointments = () => {
           style={styles.scrollContainer}>
           <View style={styles.appointmentsContainer}>
             <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} />
+              <AppointmentCard role={role} navigation={navigation} />
             </View>
             <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} />
+              <AppointmentCard role={role} navigation={navigation} />
             </View>
             <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} />
+              <AppointmentCard role={role} navigation={navigation} />
             </View>
             <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} />
+              <AppointmentCard role={role} navigation={navigation} />
             </View>
             <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} />
+              <AppointmentCard role={role} navigation={navigation} />
             </View>
             <View style={styles.appointmentContainer}>
-              <AppointmentCard role={role} />
+              <AppointmentCard role={role} navigation={navigation} />
             </View>
           </View>
         </ScrollView>
@@ -53,4 +53,4 @@ const UpcomingAppointments = () => {
   );
 };
 
-export default UpcomingAppointments;
+export default UsersList;

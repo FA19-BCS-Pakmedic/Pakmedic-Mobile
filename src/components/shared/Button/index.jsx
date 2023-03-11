@@ -20,7 +20,6 @@ export default Button = ({
   isLoading,
   marginVertical,
 }) => {
-  console.log('button is loading', isLoading);
   return (
     <TouchableOpacity
       style={
