@@ -63,6 +63,7 @@ export default CommunityPostCard = props => {
           type="filled"
           width={dimensions.Width / 4}
           height={dimensions.Height / 20}
+          onPress={() => navigation.navigate('Post', item)}
         />
       </View>
     </TouchableOpacity>
