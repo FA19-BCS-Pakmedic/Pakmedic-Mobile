@@ -68,6 +68,7 @@ const CustomDatePicker = ({
                 setOpen(false);
               }}
               maximumDate={maximumDate}
+              textColor={colors.black}
             />
           </>
         );
@@ -84,6 +85,7 @@ const styles = (type, width, height, padding) =>
       width: width ? width : '100%',
       // borderWidth: 1,
       height: height ? height : dimensions.Height / 17,
+      marginBottom: dimensions.Height / 40,
     },
 
     container: {

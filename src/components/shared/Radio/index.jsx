@@ -39,6 +39,7 @@ const RadioGroup = ({
       render={({fieldState: {error}}) => {
         return (
           <View style={styles.root}>
+            {title ? <Text style={styles.title}>{title}</Text> : null}
             <View style={styles.options}>
               {options.map((option, index) => {
                 return (
@@ -82,8 +83,9 @@ const styles = StyleSheet.create({
     // marginVertical: dimensions.Height / 100,
   },
   title: {
+    marginBottom: dimensions.Height / 100,
     fontSize: fonts.size.font16,
-    fontWeight: fonts.weight.bold,
+    fontWeight: fonts.weight.semi,
   },
   option: {
     flexDirection: 'row',

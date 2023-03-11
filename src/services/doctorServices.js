@@ -79,3 +79,23 @@ export const updateExperience = (id, data) =>
 export const deleteExperience = id => API.delete(`/experiences/${id}`);
 
 
+//add avatar
+export const addAvatar = data => {
+  return API.post('/doctors/avatar', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+//add signature
+export const addSignature = data => {
+  
+  return API.post('/doctors/signatures', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+}
+
