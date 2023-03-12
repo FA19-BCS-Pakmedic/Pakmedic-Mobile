@@ -14,6 +14,9 @@ import Support from '../../../screens/shared/Support-communities/Home';
 import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
 import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
+import Chat from '../../../screens/shared/Telemedicine/Chat';
+import OngoingCall from '../../../screens/shared/Telemedicine/Ongoing-call';
+import IncomingCall from '../../../screens/shared/Telemedicine/Incoming-call';
 
 import Retinopathy from '../../../screens/doctor/Assistant/Retinopathy';
 import Xray from '../../../screens/doctor/Assistant/Xray';
@@ -41,6 +44,9 @@ const DoctorNavigation = () => {
         component={CompoundRecommendation}
       />
       <Stack.Screen name="BrainMri" component={BrainMri} />
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="OngoingCall" component={OngoingCall} />
+      <Stack.Screen name="IncomingCall" component={IncomingCall} />
     </Stack.Navigator>
   );
 };

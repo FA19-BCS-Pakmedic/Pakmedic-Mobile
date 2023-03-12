@@ -20,10 +20,26 @@ import Logo from '../../../assets/svgs/main-logo.svg';
 import Notification from '../../../assets/svgs/notif-icon.svg';
 import MenuDropdown from '../MenuDropdown';
 
+import DefaultImage from '../../../assets/images/default-avatar.png';
+import MenuDropDown from '../MenuDropdown';
+import {voximplant} from '../../../services/voxServices';
+
 const Header = ({color}) => {
   const navigation = useNavigation();
 
   const [visible, setVisible] = useState(false);
+
+  const menuDropDownOptions = [
+    {
+      text: 'View Profile',
+      onSelect: () => {
+        navigation.navigate('App', {
+          screen: 'ProfileManagement',
+        });
+      },
+    },
+    {text: 'Logout', onSelect: () => logout()},
+  ];
 
   const links = [
     {
@@ -43,6 +59,7 @@ const Header = ({color}) => {
 
   const logout = async () => {
     await deviceStorage.deleteItem('jwtToken');
+    await voximplant.disconnect();
     dispatch(authLogout());
     navigation.navigate('Auth', {
       screen: 'Login',
@@ -76,6 +93,7 @@ const Header = ({color}) => {
         </TouchableOpacity>
         {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
+        {/* <MenuDropdown options={menuDropDownOptions}> */}
         <TouchableOpacity
           // onPress={() => {
           //   navigation.navigate('App', {
@@ -87,14 +105,13 @@ const Header = ({color}) => {
             //if user has no avatar then use default avatar
             width={dimensions.Width / 10}
             height={dimensions.Width / 10}
-            source={
-              user.avatar
-                ? {uri: user.avatar}
-                : require('../../../assets/images/default-avatar.png')
-            }
+            source={{
+              uri: `http://192.168.0.109:8000/api/v1/files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
+            }}
             style={styles().avatar}
           />
         </TouchableOpacity>
+        {/* </MenuDropdown> */}
       </View>
     </View>
   );

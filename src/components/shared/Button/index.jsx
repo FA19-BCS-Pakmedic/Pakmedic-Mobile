@@ -18,6 +18,7 @@ export default Button = ({
   borderColor,
   height,
   isLoading,
+  marginVertical,
   fontSize = fonts.size.font16,
   fontColor = colors.white,
 }) => {
@@ -25,8 +26,8 @@ export default Button = ({
     <TouchableOpacity
       style={
         isDisabled
-          ? styles(type, width, height).disabled
-          : styles(type, width, borderColor, height).button
+          ? styles(type, width, null, height, null,marginVertical).disabled
+          : styles(type, width, borderColor, height, null ,marginVertical).button
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
@@ -48,7 +49,7 @@ export default Button = ({
   );
 };
 
-const styles = (type, width, borderColor, height, fontSize) =>
+const styles = (type, width, borderColor, height, fontSize, marginVertical) =>
   StyleSheet.create({
     button: {
       marginTop: dimensions.Height / 50, //remove if it there is unneseccary space
@@ -56,7 +57,7 @@ const styles = (type, width, borderColor, height, fontSize) =>
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 50,
-      marginVertical: dimensions.Height / 60,
+      marginVertical: marginVertical ? marginVertical : dimensions.Height / 60,
       backgroundColor: type === 'filled' ? colors.primary1 : colors.white,
       borderWidth: 2,
       borderColor: borderColor ? borderColor : colors.primary1,

@@ -42,6 +42,9 @@ export const resetForgotPasswordDoctor = data =>
 //get doctor if he is logged in
 export const getDoctor = () => API.get('doctors');
 
+//get doctor by id
+export const getDoctorById = id => API.get(`doctors/${id}`);
+
 //update doctor data
 export const updateDoctor = data => API.patch(`doctors`, data);
 
@@ -99,3 +102,4 @@ export const retinopathy = data => {
 
   return API.post('ML/retinopathy', user);
 };
+
