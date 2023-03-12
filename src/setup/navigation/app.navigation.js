@@ -36,8 +36,6 @@ const AppNavigation = () => {
         <RootNavigation />
         {/* <EditProfile /> */}
         {/* <ProfileManagement /> */}
-      <NavigationContainer>
-        <RootNavigation />
       </NavigationContainer>
     </AnimatedSplash>
   );

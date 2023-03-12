@@ -103,3 +103,9 @@ export const retinopathy = data => {
   return API.post('ML/retinopathy', user);
 };
 
+export const RecommendCompounds = data => {
+  // user = {user: Object.values(data).map(value => parseFloat(value))};
+
+  console.log({conditions: data});
+  return API.post('ML/recommendcompound', {conditions: data});
+};
