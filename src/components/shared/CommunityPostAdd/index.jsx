@@ -21,9 +21,11 @@ import UncheckBoxIcon from '../../../assets/svgs/Checkbox-unchecked.svg';
 import {ValidateInputField} from '../Input';
 import {useForm} from 'react-hook-form';
 
+import {addPost} from '../../../services/postServices';
+
 export default CommunityPostAdd = props => {
   const {Visible, setModalVisible, navigation} = props;
-  const {control, handleSubmit, errors} = useForm({
+  const {control, handleSubmit, watch} = useForm({
     mode: 'onChange',
     initialValues: {
       title: '',
@@ -32,6 +34,26 @@ export default CommunityPostAdd = props => {
   });
 
   const [isCheck, setIsCheck] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
+  const onSubmit = async data => {
+    setLoading(true);
+    Post({title: data?.title, content: data?.post, authorType: 'Patient'});
+  };
+
+  const Post = async data => {
+    try {
+      console.log('data', data);
+      const response = await addPost(data);
+      if (response?.status === 201) {
+        setLoading(false);
+        setModalVisible(false);
+      }
+    } catch (error) {
+      console.log('error', error);
+      setLoading(false);
+    }
+  };
 
   return (
     <ModalContainer
@@ -63,6 +85,7 @@ export default CommunityPostAdd = props => {
             fontSize={fonts.size.font14}
             title="Title"
             type="outlined"
+            watch={watch('title')}
           />
 
           <ValidateInputField
@@ -82,6 +105,7 @@ export default CommunityPostAdd = props => {
             multiline={true}
             inputHeight={dimensions.Height / 6.5}
             type="outlined"
+            watch={watch('post')}
           />
         </View>
         <View style={styles.fileContainer}>
@@ -134,6 +158,8 @@ export default CommunityPostAdd = props => {
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
+            isLoading={loading}
+            onPress={handleSubmit(onSubmit)}
           />
         </View>
       </View>
