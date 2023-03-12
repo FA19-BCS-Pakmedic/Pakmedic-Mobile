@@ -26,6 +26,16 @@ const AppNavigation = () => {
       backgroundColor={'#FFFFFF'}
       logoHeight={200}
       logoWidth={200}>
+      <NavigationContainer
+        theme={{
+          colors: {
+            background: '#FFFFFF',
+          },
+        }}
+        style={{backgroundColor: '#FFFFFF'}}>
+        <RootNavigation />
+        {/* <EditProfile /> */}
+        {/* <ProfileManagement /> */}
       <NavigationContainer>
         <RootNavigation />
       </NavigationContainer>
