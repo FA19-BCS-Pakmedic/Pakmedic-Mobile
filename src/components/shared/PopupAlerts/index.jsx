@@ -5,6 +5,8 @@ import {useEffect} from 'react';
 import ModalContainer from '../../../containers/ModalContainer';
 import dimensions from '../../../utils/styles/themes/dimensions';
 
+import {useNavigation} from '@react-navigation/native';
+
 import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
 
@@ -23,6 +25,7 @@ const PopupAlerts = props => {
     backDropOpacity,
     backDropColor,
     bgColor,
+    timer,
   } = props;
 
   const alertsList = {
@@ -32,14 +35,21 @@ const PopupAlerts = props => {
     RegisterFailure: VectorFailure,
   };
 
-  const Alert = alertsList[props.alertName];
+  const Alert = alertsList[props?.alertName];
+
+  const navigation = useNavigation();
 
   useEffect(() => {
-    setTimeout(() => {
-      //props.navigation.navigate(props.redirect);
-      setModalVisible(false);
-    }, 1000);
-  }, []);
+    if (!isModalVisible) return;
+    setTimeout(
+      () => {
+        console.log(props.redirect);
+        navigation.navigate('App', props.redirect);
+        setModalVisible(false);
+      },
+      timer ? timer : 1000,
+    );
+  }, [isModalVisible]);
 
   return (
     <ModalContainer
@@ -52,7 +62,7 @@ const PopupAlerts = props => {
       <Alert />
       <Text style={styles()?.font}>{props.message}</Text>
       <Text style={styles()?.message}>{`You will be redirected to ${
-        !props?.redirect ? '' : props?.redirect
+        !props?.redirect?.screen ? '' : props?.redirect?.screen
       } Page in a Few Seconds`}</Text>
       <ActivityIndicator
         size="large"
