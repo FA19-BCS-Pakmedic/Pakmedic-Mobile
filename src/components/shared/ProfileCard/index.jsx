@@ -2,7 +2,6 @@ import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 
-
 import Button from '../Button';
 import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
@@ -27,7 +26,7 @@ const ProfileCard = ({user}) => {
   return (
     <View style={styles(role).container}>
       <Image
-        source={{uri: `http://192.168.0.118:8000/api/v1/files/${user?.avatar}`}}
+        source={{uri: `http://192.168.0.109:8000/api/v1/files/${user?.avatar}`}}
         style={styles().avatar}
       />
       <View style={styles().profileInfoContainer}>
@@ -39,7 +38,6 @@ const ProfileCard = ({user}) => {
         <View style={styles().iconTextContainer}>
           <SpecialistSvg width={dimensions.Width / 20} />
           <Text style={styles().otherInfo}>{user?.speciality}</Text>
-
         </View>
         <View style={styles().iconTextContainer}>
           <StarSvg width={dimensions.Width / 20} />
@@ -60,9 +58,7 @@ const ProfileCard = ({user}) => {
           label="Edit Profile"
           width={dimensions.Width / 3}
           type="filled"
-
           onPress={navigateToEditProfile}
-
           height={dimensions.Height / 20}
         />
       </View>
@@ -96,7 +92,6 @@ const styles = role =>
       borderRadius: 100,
       borderWidth: 2,
       borderColor: colors.primaryMonoChrome700,
-
     },
 
     profileInfoContainer: {

@@ -14,6 +14,9 @@ import Support from '../../../screens/shared/Support-communities/Home';
 import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
 import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
+import Chat from '../../../screens/shared/Telemedicine/Chat';
+import OngoingCall from '../../../screens/shared/Telemedicine/Ongoing-call';
+import IncomingCall from '../../../screens/shared/Telemedicine/Incoming-call';
 
 
 const Stack = createNativeStackNavigator();
@@ -28,6 +31,9 @@ const DoctorNavigation = () => {
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
       <Stack.Screen name="ProfileManagement" component={ProfileManagement} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="OngoingCall" component={OngoingCall} />
+      <Stack.Screen name="IncomingCall" component={IncomingCall} />
     </Stack.Navigator>
   );
 };

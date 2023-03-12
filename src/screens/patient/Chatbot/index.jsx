@@ -23,6 +23,7 @@ import SendIcon from '../../../assets/svgs/Send.svg';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import GiftedChatSend from '../../../components/shared/GiftedChatSend';
 import GiftedChatInput from '../../../components/shared/GiftedChatInput';
+import {useSelector} from 'react-redux';
 
 const Chatbot = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
@@ -30,12 +31,13 @@ const Chatbot = ({route, navigation}) => {
 
   const [isTyping, setIsTyping] = useState(false);
 
+  const user = useSelector(state => state.auth.user);
 
   // TODO: REPLACE THIS WITH A DYNAMIC SESSION ID
-  const sessionId = '123456';
+  const sessionId = '123456789';
 
   // TODO: REPLACE THIS WITH DYNAMIC USER ID
-  const userId = '6969';
+  const userId = user?._id;
 
   useEffect(() => {
     // navigation.getParent()?.setOptions({
@@ -43,7 +45,7 @@ const Chatbot = ({route, navigation}) => {
     //     display: 'none',
     //   },
     // });
-    console.log(navigation.getParent());
+    console.log(userId);
     navigation.getParent().setOptions({
       tabBarStyle: {display: 'none'},
       tabBarVisible: false,
@@ -96,7 +98,6 @@ const Chatbot = ({route, navigation}) => {
       GiftedChat.append(previousMessages, messages),
     );
 
-
     setIsTyping(true);
 
     const data = await chatWithBot({
@@ -104,10 +105,8 @@ const Chatbot = ({route, navigation}) => {
       sessionId: sessionId,
     });
 
-
     setData(data.data.data);
     setIsTyping(false);
-
   }, []);
 
   //render bubble with custom styling
@@ -123,7 +122,6 @@ const Chatbot = ({route, navigation}) => {
     return <GiftedChatInput {...props} />;
   };
 
-
   return (
     <View style={styles.container}>
       <ChatbotHeader />
@@ -137,7 +135,6 @@ const Chatbot = ({route, navigation}) => {
         renderInputToolbar={renderInputToolbar}
         renderSend={renderSend}
         alwaysShowSend={true}
-
         isTyping={isTyping}
 
         // minimumInputToolbarHeight={dimensions.Height * 0.1}

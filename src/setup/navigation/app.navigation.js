@@ -11,6 +11,7 @@ import EditProfile from '../../screens/patient/Profile-management/Edit-Profile';
 
 import {useSelector, useDispatch} from 'react-redux';
 
+
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,27 +23,18 @@ const AppNavigation = () => {
     }, 1000);
   }, []);
 
+
   return (
-    // <AnimatedSplash
-    //   isLoaded={!isLoading}
-    //   logoImage={require('../../assets/images/Logo.png')}
-    //   backgroundColor={'#FFFFFF'}
-    //   logoHeight={200}
-    //   logoWidth={200}>
-
-    <NavigationContainer
-      theme={{
-        colors: {
-          background: '#FFFFFF',
-        },
-      }}
-      style={{backgroundColor: '#FFFFFF'}}>
-      <RootNavigation />
-      {/* <EditProfile /> */}
-      {/* <ProfileManagement /> */}
-    </NavigationContainer>
-
-    // </AnimatedSplash>
+    <AnimatedSplash
+      isLoaded={!isLoading}
+      logoImage={require('../../assets/images/Logo.png')}
+      backgroundColor={'#FFFFFF'}
+      logoHeight={200}
+      logoWidth={200}>
+      <NavigationContainer>
+        <RootNavigation />
+      </NavigationContainer>
+    </AnimatedSplash>
   );
 };
 
