@@ -12,7 +12,12 @@ import CommunityPostImage from '../../../../assets/images/CommunityPostImage.png
 
 import CommunityPostAdd from '../../../../components/shared/CommunityPostAdd';
 
+import {getCommunityPosts} from '../../../../services/postServices';
+import {useEffect} from 'react';
+
 const CommunityDetails = ({route}) => {
+  const {communityName, item} = route.params;
+  const [isModalVisible, setModalVisible] = React.useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -21,6 +26,18 @@ const CommunityDetails = ({route}) => {
     {label: 'C/Dermatologist', value: 'moeed'},
     {label: 'C/Dermatologist', value: 'ali'},
   ]);
+
+  //get community posts
+
+  const [posts, setPosts] = useState([]);
+  const getPosts = async () => {
+    const res = await getCommunityPosts();
+    setPosts(res.data.data.posts);
+  };
+  useEffect(() => {
+    getPosts();
+  }, [isModalVisible]);
+
   const communityCards = [
     {
       id: 1,
@@ -60,8 +77,6 @@ const CommunityDetails = ({route}) => {
     },
   ];
 
-  const {communityName, item} = route.params;
-  const [isModalVisible, setModalVisible] = React.useState(false);
   return (
     <StaticContainer customHeaderEnable={true} customHeaderName={communityName}>
       <View style={styles.container}>
@@ -93,9 +108,9 @@ const CommunityDetails = ({route}) => {
           />
         </View>
         <FlatList
-          data={communityCards}
+          data={posts}
           style={styles.flatList}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.author.id}
           renderItem={({item}) => <CommunityPostCard item={item} />}
         />
       </View>

@@ -7,6 +7,8 @@ import ScrollContainer from '../../../../containers/ScrollContainer';
 import Logo from '../../../../assets/svgs/community-logo';
 import Button from '../../../../components/shared/Button';
 import {ValidateInputField} from '../../../../components/shared/Input';
+import CommunityPostImage from '../../../../assets/images/CommunityPostImage.png';
+
 import {useForm} from 'react-hook-form';
 
 import dimensions from '../../../../utils/styles/themes/dimensions';
@@ -14,7 +16,7 @@ import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
 
 const Post = props => {
-  const {control, handleSubmit, errors} = useForm({
+  const {control, handleSubmit, watch} = useForm({
     mode: 'onChange',
     initialValues: {
       title: '',
@@ -112,7 +114,7 @@ const Post = props => {
   return (
     <ScrollContainer
       customHeaderEnable
-      customHeaderName={item.label}
+      customHeaderName={item.title}
       nestedScrollEnabled>
       <View style={styles.container}>
         <View style={styles.header}>
@@ -122,8 +124,10 @@ const Post = props => {
               height={dimensions.Height / 16}
             />
             <View style={{marginLeft: dimensions.Width * 0.02}}>
-              <Text style={styles.communityName}>{item.label}</Text>
-              <Text style={styles.communityMembers}>{`u/${item.user}`}</Text>
+              <Text
+                style={styles.communityName}>{`C/${item.community.name}`}</Text>
+              <Text
+                style={styles.communityMembers}>{`u/${item.author.name}`}</Text>
             </View>
           </View>
           <Button
@@ -137,12 +141,12 @@ const Post = props => {
         <View style={styles.body}>
           <Text style={styles.title}>{item.title}</Text>
           <Image
-            source={item.image}
+            source={CommunityPostImage}
             style={styles.image}
             width={dimensions.Width * 0.9}
             height={dimensions.Height / 3}
           />
-          <Text style={styles.description}>{item.description}</Text>
+          <Text style={styles.description}>{item.content}</Text>
         </View>
         <View style={styles.footer}>
           <ValidateInputField

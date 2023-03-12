@@ -9,7 +9,6 @@ import EditProfile from '../../screens/patient/Profile-management/Edit-Profile';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -19,7 +18,6 @@ const AppNavigation = () => {
       setIsLoading(false);
     }, 1000);
   }, []);
-
 
   return (
     <AnimatedSplash
@@ -38,8 +36,6 @@ const AppNavigation = () => {
         <RootNavigation />
         {/* <EditProfile /> */}
         {/* <ProfileManagement /> */}
-      <NavigationContainer>
-        <RootNavigation />
       </NavigationContainer>
     </AnimatedSplash>
   );
