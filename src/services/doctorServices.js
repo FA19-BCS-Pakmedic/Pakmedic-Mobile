@@ -42,6 +42,9 @@ export const resetForgotPasswordDoctor = data =>
 //get doctor if he is logged in
 export const getDoctor = () => API.get('doctors');
 
+//get doctor by id
+export const getDoctorById = id => API.get(`doctors/${id}`);
+
 //update doctor data
 export const updateDoctor = data => API.patch(`doctors`, data);
 
@@ -92,10 +95,4 @@ export const addSignature = data => {
       'Content-Type': 'multipart/form-data',
     },
   });
-};
-
-export const retinopathy = data => {
-  user = {user: Object.values(data).map(value => parseFloat(value))};
-
-  return API.post('ML/retinopathy', user);
 };
