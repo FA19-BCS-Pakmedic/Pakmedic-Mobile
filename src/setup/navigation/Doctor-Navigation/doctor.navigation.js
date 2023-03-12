@@ -14,7 +14,15 @@ import Support from '../../../screens/shared/Support-communities/Home';
 import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
 import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
+import Chat from '../../../screens/shared/Telemedicine/Chat';
+import OngoingCall from '../../../screens/shared/Telemedicine/Ongoing-call';
+import IncomingCall from '../../../screens/shared/Telemedicine/Incoming-call';
 
+import Retinopathy from '../../../screens/doctor/Assistant/Retinopathy';
+import Xray from '../../../screens/doctor/Assistant/Xray';
+import RiskOfDeath from '../../../screens/doctor/Assistant/RiskOfDeath';
+import CompoundRecommendation from '../../../screens/doctor/Assistant/CompoundRecommendation';
+import BrainMri from '../../../screens/doctor/Assistant/BrainMri';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +36,17 @@ const DoctorNavigation = () => {
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
       <Stack.Screen name="ProfileManagement" component={ProfileManagement} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Retinopathy" component={Retinopathy} />
+      <Stack.Screen name="Xray" component={Xray} />
+      <Stack.Screen name="RiskOfDeath" component={RiskOfDeath} />
+      <Stack.Screen
+        name="CompoundRecommendation"
+        component={CompoundRecommendation}
+      />
+      <Stack.Screen name="BrainMri" component={BrainMri} />
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="OngoingCall" component={OngoingCall} />
+      <Stack.Screen name="IncomingCall" component={IncomingCall} />
     </Stack.Navigator>
   );
 };

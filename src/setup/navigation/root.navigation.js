@@ -21,6 +21,10 @@ import deviceStorage from '../../utils/helpers/deviceStorage';
 import ROLES from '../../utils/constants/ROLES';
 import DoctorNavigation from './Doctor-Navigation/doctor.navigation';
 import PatientNavigation from './Patient-Navigation/patient.navigation';
+import { voximplant } from '../../services/voxServices';
+import { Voximplant } from 'react-native-voximplant';
+import calls from '../../utils/helpers/Store';
+import { useNavigation } from '@react-navigation/native';
 
 //create stacks
 const rootStack = createNativeStackNavigator();
@@ -30,6 +34,9 @@ export default RootNavigation = () => {
   const [userRole, setUserRole] = useState();
   const [isFirstTime, setIsFirstTime] = useState(true);
   const dispatch = useDispatch();
+
+  const navigation = useNavigation();
+
 
   // use effect to check if user has selected a role
   useEffect(() => {
@@ -51,6 +58,30 @@ export default RootNavigation = () => {
     };
 
     getIsFirstTime();
+  });
+
+  useEffect(() => {
+    voximplant.on(Voximplant.ClientEvents.IncomingCall, incomingCallEvent => {
+      calls.set(incomingCallEvent.call.callId, incomingCallEvent.call);
+      navigation.navigate('IncomingCall', {
+        callId: incomingCallEvent.call.callId,
+      });
+    });
+
+    voximplant.on(Voximplant.ClientEvents.ConnectionEstablished, event => {
+      console.log('Connection established');
+    });
+
+    voximplant.on(Voximplant.ClientEvents.AuthResult, event => {
+      console.log('Auth result');
+      console.log(event);
+    });
+
+    return () => {
+      voximplant.off(Voximplant.ClientEvents.AuthResult);
+      voximplant.off(Voximplant.ClientEvents.ConnectionEstablished);
+      voximplant.off(Voximplant.ClientEvents.IncomingCall);
+    };
   });
 
   return (

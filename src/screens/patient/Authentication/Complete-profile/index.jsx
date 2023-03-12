@@ -128,6 +128,16 @@ const CompleteProfile = ({route, navigation}) => {
     //storing jwt token to mobile storage
     await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
+    const user = response.data.user;
+
+    if (user) {
+      try {
+        await loginVox(user);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     //initializing global state with jwt token and user object
     dispatch(
       authSuccess({user: response.data.user, token: response.data.token}),
