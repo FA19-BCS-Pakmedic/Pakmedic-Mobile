@@ -96,3 +96,10 @@ export const addSignature = data => {
     },
   });
 };
+
+export const retinopathy = data => {
+  user = {user: Object.values(data).map(value => parseFloat(value))};
+
+  return API.post('ML/retinopathy', user);
+};
+
