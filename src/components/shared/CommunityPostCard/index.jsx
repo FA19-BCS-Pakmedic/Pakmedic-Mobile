@@ -21,15 +21,17 @@ export default CommunityPostCard = props => {
         <View style={[styles.flexRow, {width: 'auto'}]}>
           <Logo width={dimensions.Width / 10} height={dimensions.Height / 16} />
           <View style={{marginLeft: dimensions.Width / 100}}>
-            <Text style={styles.communityName}>{item.label}</Text>
-            <Text style={styles.communityMembers}>{`u/${item.user}`}</Text>
+            <Text
+              style={styles.communityName}>{`C/${item.community.name}`}</Text>
+            <Text
+              style={styles.communityMembers}>{`u/${item.author.name}`}</Text>
           </View>
         </View>
       </View>
-      <Image source={item.image} style={styles.image} />
+      <Image source={CommunityPostImage} style={styles.image} />
       <Text style={[styles.communityName, styles.text]}>{item.title}</Text>
       <Text style={[styles.communityMembers, styles.text, {width: 'auto'}]}>
-        {item.description}
+        {item.content}
       </Text>
       <Text
         style={[
@@ -42,7 +44,7 @@ export default CommunityPostCard = props => {
             alignSelf: 'flex-start',
           },
         ]}>
-        2 days Ago
+        {item.date}
       </Text>
       <View
         style={[
@@ -63,6 +65,7 @@ export default CommunityPostCard = props => {
           type="filled"
           width={dimensions.Width / 4}
           height={dimensions.Height / 20}
+          onPress={() => navigation.navigate('Post', item)}
         />
       </View>
     </TouchableOpacity>
@@ -89,6 +92,7 @@ const styles = StyleSheet.create({
     width: dimensions.Width / 2,
     alignSelf: 'flex-start',
     paddingHorizontal: dimensions.Width / 20,
+    paddingVertical: dimensions.Height / 200,
   },
   communityName: {
     fontSize: fonts.size.font16,
