@@ -11,17 +11,9 @@ import EditProfile from '../../screens/patient/Profile-management/Edit-Profile';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import {voximplant} from '../../services/voxServices';
-import {Voximplant} from 'react-native-voximplant';
-import deviceStorage from '../../utils/helpers/deviceStorage';
-import calls from '../../utils/helpers/Store';
-
-import {useNavigation} from '@react-navigation/native';
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
-
-  // const navigation = useNavigation();
 
   useEffect(() => {
     GoogleSignin.configure({...googleConfig});
@@ -31,30 +23,6 @@ const AppNavigation = () => {
     }, 1000);
   }, []);
 
-  // useEffect(() => {
-  //   voximplant.on(Voximplant.ClientEvents.IncomingCall, incomingCallEvent => {
-  //     calls.set(incomingCallEvent.call.callId, incomingCallEvent.call);
-  //     navigation.navigate('IncomingCall', {
-  //       callId: incomingCallEvent.call.callId,
-  //     });
-  //   });
-
-  //   voximplant.on(Voximplant.ClientEvents.ConnectionEstablished, event => {
-  //     console.log('Connection established');
-  //   });
-
-  //   voximplant.on(Voximplant.ClientEvents.AuthResult, event => {
-  //     console.log('Auth result');
-  //     console.log(event);
-
-  //   });
-
-  //   return () => {
-  //     voximplant.off(Voximplant.ClientEvents.AuthResult);
-  //     voximplant.off(Voximplant.ClientEvents.ConnectionEstablished);
-  //     voximplant.off(Voximplant.ClientEvents.IncomingCall);
-  //   };
-  // });
 
   return (
     <AnimatedSplash

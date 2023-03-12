@@ -102,11 +102,12 @@ const Header = ({color}) => {
           // }}
           onPress={logout}>
           <Image
-            // source={require('../../../assets/images/default-avatar.png')}
+            //if user has no avatar then use default avatar
+            width={dimensions.Width / 10}
+            height={dimensions.Width / 10}
             source={{
               uri: `http://192.168.0.109:8000/api/v1/files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
             }}
-            // source={DefaultImage}
             style={styles().avatar}
           />
         </TouchableOpacity>
@@ -168,8 +169,8 @@ const styles = (role, justifyContent) =>
     },
 
     avatar: {
-      width: dimensions.Width / 11,
-      height: dimensions.Height / 21,
+      width: dimensions.Width / 10,
+      height: dimensions.Width / 10,
       marginLeft: dimensions.Width / 60,
       borderRadius: 100,
       borderWidth: 2,

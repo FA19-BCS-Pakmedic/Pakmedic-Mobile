@@ -7,11 +7,16 @@ import Logo from '../../../assets/svgs/community-logo';
 import CommunityPostImage from '../../../assets/images/CommunityPostImage.png';
 import Button from '../../../components/shared/Button';
 
+import {useNavigation} from '@react-navigation/native';
+
 export default CommunityPostCard = props => {
+  const navigation = useNavigation();
   const item = props.item;
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('Post', item)}>
       <View style={[styles.flexRow, {width: dimensions.Width / 1.2}]}>
         <View style={[styles.flexRow, {width: 'auto'}]}>
           <Logo width={dimensions.Width / 10} height={dimensions.Height / 16} />

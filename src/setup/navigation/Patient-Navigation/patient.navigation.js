@@ -15,6 +15,7 @@ import CommunityDetails from '../../../screens/shared/Support-communities/Commun
 import Chat from '../../../screens/shared/Telemedicine/Chat';
 import OngoingCall from '../../../screens/shared/Telemedicine/Ongoing-call';
 import IncomingCall from '../../../screens/shared/Telemedicine/Incoming-call';
+import Post from '../../../screens/shared/Support-communities/Post';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ const PatientNavigation = () => {
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="OngoingCall" component={OngoingCall} />
       <Stack.Screen name="IncomingCall" component={IncomingCall} />
+      <Stack.Screen name="Post" component={Post} />
     </Stack.Navigator>
   );
 };
