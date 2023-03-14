@@ -179,7 +179,7 @@ const EditProfile = () => {
         <View style={styles.avatarContainer}>
           <Image
             source={{
-              uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`,
+              uri: `http://192.168.0.109:8000/api/v1/files/${user.avatar}`,
             }}
 
             style={styles.avatar}

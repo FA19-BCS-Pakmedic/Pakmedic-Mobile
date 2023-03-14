@@ -16,6 +16,7 @@ import Chat from '../../../screens/shared/Telemedicine/Chat';
 import OngoingCall from '../../../screens/shared/Telemedicine/Ongoing-call';
 import IncomingCall from '../../../screens/shared/Telemedicine/Incoming-call';
 import Post from '../../../screens/shared/Support-communities/Post';
+import ElectronicHealthRecords from '../../../screens/shared/E-health-records/Home';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ const PatientNavigation = () => {
       <Stack.Screen name="OngoingCall" component={OngoingCall} />
       <Stack.Screen name="IncomingCall" component={IncomingCall} />
       <Stack.Screen name="Post" component={Post} />
+      <Stack.Screen name="EHR" component={ElectronicHealthRecords} />
     </Stack.Navigator>
   );
 };

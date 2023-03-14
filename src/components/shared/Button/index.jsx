@@ -26,8 +26,9 @@ export default Button = ({
     <TouchableOpacity
       style={
         isDisabled
-          ? styles(type, width, null, height, null,marginVertical).disabled
-          : styles(type, width, borderColor, height, null ,marginVertical).button
+          ? styles(type, width, null, height, null, marginVertical).disabled
+          : styles(type, width, borderColor, height, null, marginVertical)
+              .button
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
@@ -39,7 +40,7 @@ export default Button = ({
         <Text
           style={
             isDisabled
-              ? styles().buttonLabelDisabled
+              ? styles(null, null, null, null, fontSize).buttonLabelDisabled
               : styles(null, null, null, null, fontSize).buttonLabel
           }>
           {label}
@@ -65,7 +66,7 @@ const styles = (type, width, borderColor, height, fontSize, marginVertical) =>
     },
 
     disabled: {
-      height: dimensions.Height / 15,
+      height: height ? height : dimensions.Height / 17,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 50,

@@ -17,6 +17,7 @@
     "@react-navigation/native-stack": "^6.9.1",
     "@reduxjs/toolkit": "^1.9.1",
     "axios": "^1.2.0",
+    "babel-plugin-module-resolver": "^5.0.0",
     "react": "18.1.0",
     "react-hook-form": "^7.40.0",
     "react-native": "0.70.0",
@@ -54,7 +55,7 @@
     "babel-jest": "^26.6.3",
     "eslint": "^7.32.0",
     "jest": "^26.6.3",
-    "metro-react-native-babel-preset": "^0.72.1",
+    "metro-react-native-babel-preset": "^0.76.0",
     "react-test-renderer": "18.1.0"
   },
   "jest": {

@@ -56,6 +56,15 @@ const PatientModalNavigator = props => {
         <TouchableOpacity style={styles.button}>
           <Text style={styles.text}>Finance</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setModalVisible(false);
+            navigation.navigate('EHR');
+          }}>
+          <Text style={styles.text}>EHR</Text>
+        </TouchableOpacity>
       </View>
     </ModalContainer>
   );

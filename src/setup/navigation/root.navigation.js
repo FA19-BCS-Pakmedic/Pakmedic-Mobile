@@ -21,10 +21,11 @@ import deviceStorage from '../../utils/helpers/deviceStorage';
 import ROLES from '../../utils/constants/ROLES';
 import DoctorNavigation from './Doctor-Navigation/doctor.navigation';
 import PatientNavigation from './Patient-Navigation/patient.navigation';
-import { voximplant } from '../../services/voxServices';
-import { Voximplant } from 'react-native-voximplant';
+import {voximplant} from '../../services/voxServices';
+import {Voximplant} from 'react-native-voximplant';
 import calls from '../../utils/helpers/Store';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import ElectronicHealthRecords from '../../screens/shared/E-health-records/Home';
 
 //create stacks
 const rootStack = createNativeStackNavigator();
@@ -36,7 +37,6 @@ export default RootNavigation = () => {
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
-
 
   // use effect to check if user has selected a role
   useEffect(() => {
@@ -103,6 +103,7 @@ export default RootNavigation = () => {
       ) : (
         <rootStack.Screen name="App" component={PatientNavigation} />
       )}
+      
     </rootStack.Navigator>
   );
 };

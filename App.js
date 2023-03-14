@@ -19,6 +19,7 @@ import {useEffect} from 'react';
 import IncomingCall from './src/screens/shared/Telemedicine/Incoming-call';
 import OngoingCall from './src/screens/shared/Telemedicine/Ongoing-call';
 import calls from './src/utils/helpers/Store';
+import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home';
 
 const StackNavigate = createNativeStackNavigator();
 
