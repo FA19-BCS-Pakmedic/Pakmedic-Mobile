@@ -43,6 +43,8 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
       title: '',
       date: new Date(),
       file: null,
+      isFamilyReport: false,
+      familyMemberId: '',
     },
   });
 
@@ -87,6 +89,8 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
       formData = new FormData();
       formData.append('title', JSON.stringify(data.title));
       formData.append('date', JSON.stringify(new Date(data.date)));
+      formData.append('isFamilyReport', JSON.stringify(data.isFamilyReport));
+      formData.append('familyMemberId', JSON.stringify(data.familyMemberId));
       formData.append('file', {
         uri: scanImage[0].uri,
         type: scanImage[0].type,
@@ -114,6 +118,7 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
     setValue('file', selectedScan.image);
     setValue('title', selectedScan.title);
     setValue('date', new Date(selectedScan.date));
+    setValue('isFamilyReport', selectedScan.isFamilyReport);
     setVisible(true);
   };
 

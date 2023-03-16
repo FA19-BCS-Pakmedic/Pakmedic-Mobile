@@ -3,13 +3,11 @@ import React from 'react';
 
 import dimensions from '@/utils/styles/themes/dimensions';
 import colors from '@/utils/styles/themes/colors';
-import fonts from '@/utils/styles/themes/colors';
 
 import Button from '../../../../components/shared/Button';
 
-import MRI from '@/assets/images/mri.png';
-
 import {getDate} from '@/utils/helpers/getDate';
+import fonts from '../../../../utils/styles/themes/fonts';
 
 const ScanCard = ({scan, setOpenOptions, setSelectedScan}) => {
   console.log(scan);
@@ -96,6 +94,10 @@ const styles = () =>
       width: '100%',
       paddingHorizontal: dimensions.Width / 30,
       paddingVertical: dimensions.Height / 100,
+    },
+
+    label: {
+      fontWeight: fonts.weight.semi,
     },
     info: {
       flexDirection: 'row',

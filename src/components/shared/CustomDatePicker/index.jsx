@@ -97,7 +97,7 @@ const styles = (type, width, height, padding) =>
       borderWidth: type === 'filled' ? 0 : 1,
       borderColor:
         type === 'filled' ? colors.secondaryMonoChrome100 : colors.primary1,
-      paddingHorizontal: padding ? padding : dimensions.Width / 17,
+      paddingHorizontal: padding ? padding : dimensions.Width / 30,
       borderRadius: 5,
       flexDirection: 'row',
       alignItems: 'center',
