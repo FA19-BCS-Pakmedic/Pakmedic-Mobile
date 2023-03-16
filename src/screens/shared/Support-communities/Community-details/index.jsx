@@ -110,7 +110,7 @@ const CommunityDetails = ({route}) => {
         <FlatList
           data={posts}
           style={styles.flatList}
-          keyExtractor={item => item.author.id}
+          keyExtractor={item => item._id}
           renderItem={({item}) => <CommunityPostCard item={item} />}
         />
       </View>
