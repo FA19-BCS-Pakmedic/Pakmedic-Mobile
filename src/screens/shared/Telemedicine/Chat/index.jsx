@@ -17,6 +17,7 @@ import ROLES from '../../../../utils/constants/ROLES';
 import {getPatientById} from '../../../../services/patientServices';
 import getVoxUsername from '../../../../utils/helpers/getVoxUsername';
 import {requestPermissions} from '../../../../services/voxServices';
+import {baseUrl} from '../../../../utils/constants/APIendpoint';
 
 const Chat = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
@@ -56,7 +57,7 @@ const Chat = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    const socket = io('http://192.168.0.109:8000'); //TODO: REPLACE THIS WITH THE CONSTANT
+    const socket = io(baseUrl); //TODO: REPLACE THIS WITH THE CONSTANT
     setSocket(socket);
 
     return () => {

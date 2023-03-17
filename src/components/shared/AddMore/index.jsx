@@ -1,9 +1,10 @@
 import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 
-import fonts from '../../../utils/styles/themes/fonts';
-import colors from '../../../utils/styles/themes/colors';
-import dimensions from '../../../utils/styles/themes/dimensions';
-import AddMore from '../../../assets/svgs/Add-More.svg';
+import fonts from '@/utils/styles/themes/fonts';
+import colors from '@/utils/styles/themes/colors';
+import dimensions from '@/utils/styles/themes/dimensions';
+import AddMore from '@/assets/svgs/Add-More.svg';
+import ROLES from '@/utils/constants/ROLES';
 
 export default Button = ({
   isDisabled,
@@ -12,13 +13,14 @@ export default Button = ({
   label,
   onPress,
   borderColor,
+  role,
 }) => {
   return (
     <TouchableOpacity
       style={[
         isDisabled
           ? styles(type, width).disabled
-          : styles(type, width, borderColor).button,
+          : styles(type, width, borderColor, role).button,
       ]}
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
@@ -39,7 +41,7 @@ export default Button = ({
   );
 };
 
-const styles = (type, width, borderColor) =>
+const styles = (type, width, borderColor, role) =>
   StyleSheet.create({
     button: {
       flexDirection: 'row',
@@ -48,7 +50,11 @@ const styles = (type, width, borderColor) =>
       alignItems: 'center',
       borderRadius: 15,
       backgroundColor:
-        type === 'filled' ? colors.secondaryMonoChrome100 : colors.white,
+        type === 'filled'
+          ? role === ROLES.doctor
+            ? colors.secondaryMonoChrome100
+            : colors.primaryMonoChrome100
+          : colors.white,
       borderWidth: borderColor ? 2 : 0,
       borderColor: borderColor ? borderColor : colors.primary1,
       width: dimensions.Width / 2.6,
@@ -65,7 +71,7 @@ const styles = (type, width, borderColor) =>
     },
 
     buttonLabel: {
-      fontSize: fonts.size.font14,
+      fontSize: fonts.size.font16,
       fontWeight: fonts.weight.bold,
     },
 

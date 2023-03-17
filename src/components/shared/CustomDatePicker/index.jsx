@@ -35,7 +35,7 @@ const CustomDatePicker = ({
         return (
           <>
             <View style={[styles(null, width, height).root]}>
-              {/* <Text style={styles().title}>{title}</Text> */}
+              {title && <Text style={styles().title}>{title}</Text>}
               <TouchableOpacity
                 style={[
                   styles(type, null, height, padding).container,
@@ -53,6 +53,7 @@ const CustomDatePicker = ({
               </TouchableOpacity>
 
               {/* error message */}
+
               <View style={styles().errorMessageContainer}>
                 {error && <ErrorMessage error={error} />}
               </View>
@@ -84,8 +85,8 @@ const styles = (type, width, height, padding) =>
     root: {
       width: width ? width : '100%',
       // borderWidth: 1,
-      height: height ? height : dimensions.Height / 17,
-      marginBottom: dimensions.Height / 40,
+      height: height ? height : 'auto',
+      marginVertical: dimensions.Height / 200,
     },
 
     container: {
@@ -96,7 +97,7 @@ const styles = (type, width, height, padding) =>
       borderWidth: type === 'filled' ? 0 : 1,
       borderColor:
         type === 'filled' ? colors.secondaryMonoChrome100 : colors.primary1,
-      paddingHorizontal: padding ? padding : dimensions.Width / 17,
+      paddingHorizontal: padding ? padding : dimensions.Width / 30,
       borderRadius: 5,
       flexDirection: 'row',
       alignItems: 'center',
@@ -104,8 +105,8 @@ const styles = (type, width, height, padding) =>
     },
 
     title: {
-      fontSize: fonts.size.font16,
-      fontWeight: fonts.weight.bold,
+      fontSize: fonts.size.font14,
+      fontWeight: fonts.weight.semi,
       marginBottom: dimensions.Height / 100,
     },
 
