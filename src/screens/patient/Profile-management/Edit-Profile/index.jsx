@@ -34,7 +34,6 @@ import ModalContainer from '../../../../containers/ModalContainer';
 import {addAvatar} from '../../../../services/doctorServices';
 import {useSelector} from 'react-redux';
 
-
 const EditProfile = () => {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -55,7 +54,6 @@ const EditProfile = () => {
       email: user?.email || '',
       phone: user?.phone || '',
       location: user?.location || '',
-
     },
   });
 
@@ -86,7 +84,6 @@ const EditProfile = () => {
 
       uploadImage(formData);
     }
-
   }, [profileImage]);
 
   const handleError = err => {
@@ -179,9 +176,8 @@ const EditProfile = () => {
         <View style={styles.avatarContainer}>
           <Image
             source={{
-              uri: `http://192.168.0.109:8000/api/v1/files/${user.avatar}`,
+              uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`,
             }}
-
             style={styles.avatar}
           />
 

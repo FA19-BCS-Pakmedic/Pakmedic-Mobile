@@ -13,6 +13,8 @@ import DocumentPicker, {
   types,
 } from 'react-native-document-picker';
 
+import {addFile} from '../../../services/fileServices';
+
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
@@ -29,6 +31,7 @@ import {
   deleteReport,
   updateReport,
 } from '../../../services/ehrServices';
+import ConfirmationAlert from '../ConfirmationAlert';
 
 const Reports = ({
   reports,
@@ -43,6 +46,8 @@ const Reports = ({
   const [selectedReport, setSelectedReport] = useState(null);
   const [openOptions, setOpenOptions] = useState(false);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
 
   const {control, handleSubmit, watch, reset, setValue} = useForm({
     mode: 'onChange',
@@ -65,8 +70,25 @@ const Reports = ({
   };
 
   useEffect(() => {
+    const uploadFile = async () => {
+      const formData = new FormData();
+      setIsUploading(true);
+      formData.append('file', {
+        uri: reportFile[0].uri,
+        type: reportFile[0].type,
+        name: reportFile[0].name,
+      });
+      try {
+        const response = await addFile(formData);
+        setValue('file', response.data.data.filename);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsUploading(false);
+      }
+    };
     if (reportFile) {
-      setValue('file', reportFile[0].name);
+      uploadFile();
     }
   }, [reportFile]);
 
@@ -90,35 +112,16 @@ const Reports = ({
     } catch (err) {
       console.log(err);
     } finally {
-      setOpenOptions(false);
+      setConfirmationVisible(false);
     }
   };
 
   const onSubmit = async data => {
-    console.log('on submit called');
-
-    console.log(data);
-
-    let formData;
-    if (!isEdit) {
-      formData = new FormData();
-      formData.append('title', JSON.stringify(data.title));
-      formData.append('date', JSON.stringify(new Date(data.date)));
-      formData.append('lab', JSON.stringify(data.lab));
-      formData.append('symptoms', JSON.stringify(data.symptoms));
-      formData.append('isFamilyReport', data.isFamilyReport);
-      formData.append('familyMemberId', JSON.stringify(data.familyMemberId));
-      formData.append('file', {
-        uri: reportFile[0].uri,
-        type: reportFile[0].type,
-        name: reportFile[0].name,
-      });
-    }
-
     try {
       setIsBtnLoading(true);
-      if (!isEdit) await addReport(formData);
-      else await updateReport(selectedReport._id, data);
+      isEdit
+        ? await updateReport(selectedReport._id, data)
+        : await addReport(data);
       updateUser();
       reset();
     } catch (err) {
@@ -188,7 +191,8 @@ const Reports = ({
                 activeOpacity={1}
                 style={styles.option}
                 onPress={() => {
-                  onPressDelete();
+                  setConfirmationVisible(true);
+                  setOpenOptions(false);
                 }}>
                 <Text style={styles.optionText}>Delete</Text>
               </TouchableHighlight>
@@ -196,6 +200,29 @@ const Reports = ({
           </View>
         </ModalContainer>
       </>
+    );
+  };
+
+  const openConfirmationalModal = () => {
+    return (
+      <ConfirmationAlert
+        alertText={'Are you sure you want to delete this scan?'}
+        cancelControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            setConfirmationVisible(false);
+          },
+        }}
+        confirmControl={{
+          width: dimensions.Width / 3,
+          onPress: onPressDelete,
+        }}
+        height={dimensions.Height / 5}
+        width={dimensions.Width / 1.2}
+        isModalVisible={confirmationVisible}
+        setModalVisible={setConfirmationVisible}
+        type="center"
+      />
     );
   };
 
@@ -279,7 +306,7 @@ const Reports = ({
               rules={{
                 required: 'File is required',
               }}
-              isDisabled={isEdit}
+              isLoading={isUploading}
               text={watch('file')}
               onPress={async () => {
                 try {
@@ -319,6 +346,7 @@ const Reports = ({
     <>
       {openModal()}
       {openOptionsModal()}
+      {openConfirmationalModal()}
       <ScrollView
         style={styles.scrollContainer}
         contentContainer={styles.scrollContentContainer}>

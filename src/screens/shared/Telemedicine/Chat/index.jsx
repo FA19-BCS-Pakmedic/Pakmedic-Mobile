@@ -56,7 +56,7 @@ const Chat = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    const socket = io('http://192.168.0.109:8000'); //TODO: REPLACE THIS WITH THE CONSTANT
+    const socket = io('http://192.168.100.138:8000'); //TODO: REPLACE THIS WITH THE CONSTANT
     setSocket(socket);
 
     return () => {

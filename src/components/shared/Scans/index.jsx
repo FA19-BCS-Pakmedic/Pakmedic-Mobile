@@ -23,12 +23,16 @@ import {ValidateInputField} from '@/components/shared/Input';
 import CustomDatePicker from '@/components/shared/CustomDatePicker';
 import FilePicker from '../FilePicker';
 import Button from '../Button';
+import ConfirmationAlert from '../ConfirmationAlert';
 
 import {addScan, deleteScan, updateScan} from '../../../services/ehrServices';
+import {addFile} from '../../../services/fileServices';
 
 const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
   const [scanImage, setScanImage] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
 
   const [selectedScan, setSelectedScan] = useState(null);
 
@@ -36,13 +40,15 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
 
   const [isBtnLoading, setIsBtnLoading] = useState(false);
 
+  const [isUploading, setIsUploading] = useState(false);
+
   const {control, handleSubmit, watch, reset, setValue} = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: {
       title: '',
       date: new Date(),
-      file: null,
+      image: null,
       isFamilyReport: false,
       familyMemberId: '',
     },
@@ -55,8 +61,29 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
   };
 
   useEffect(() => {
+    const uploadFile = async () => {
+      const formData = new FormData();
+      formData.append('file', {
+        uri: scanImage[0].uri,
+        type: scanImage[0].type,
+        name: scanImage[0].name,
+      });
+
+      try {
+        setIsUploading(true);
+
+        const response = await addFile(formData);
+
+        setValue('image', response.data.data.filename);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsUploading(false);
+      }
+    };
+
     if (scanImage) {
-      setValue('file', scanImage[0].name);
+      uploadFile();
     }
   }, [scanImage]);
 
@@ -77,30 +104,14 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
     if (selectedScan) {
       await deleteScan(selectedScan._id);
       updateUser();
-      setOpenOptions(false);
+      setConfirmationVisible(false);
     }
   };
 
   const onSubmit = async data => {
-    console.log('on submit called');
-
-    let formData;
-    if (!isEdit) {
-      formData = new FormData();
-      formData.append('title', JSON.stringify(data.title));
-      formData.append('date', JSON.stringify(new Date(data.date)));
-      formData.append('isFamilyReport', JSON.stringify(data.isFamilyReport));
-      formData.append('familyMemberId', JSON.stringify(data.familyMemberId));
-      formData.append('file', {
-        uri: scanImage[0].uri,
-        type: scanImage[0].type,
-        name: scanImage[0].name,
-      });
-    }
     try {
       setIsBtnLoading(true);
-      if (!isEdit) await addScan(formData);
-      else await updateScan(selectedScan._id, data);
+      isEdit ? await updateScan(selectedScan._id, data) : await addScan(data);
       updateUser();
       setVisible(false);
       reset();
@@ -115,15 +126,37 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
   const onPressEdit = () => {
     setIsEdit(true);
     setOpenOptions(false);
-    setValue('file', selectedScan.image);
+    setValue('image', selectedScan.image);
     setValue('title', selectedScan.title);
     setValue('date', new Date(selectedScan.date));
     setValue('isFamilyReport', selectedScan.isFamilyReport);
     setVisible(true);
   };
 
+  const openConfirmationalModal = () => {
+    return (
+      <ConfirmationAlert
+        alertText={'Are you sure you want to delete this scan?'}
+        cancelControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            setConfirmationVisible(false);
+          },
+        }}
+        confirmControl={{
+          width: dimensions.Width / 3,
+          onPress: onPressDelete,
+        }}
+        height={dimensions.Height / 5}
+        width={dimensions.Width / 1.2}
+        isModalVisible={confirmationVisible}
+        setModalVisible={setConfirmationVisible}
+        type="center"
+      />
+    );
+  };
+
   const openOptionsModal = () => {
-    console.log(openOptions);
     return (
       <>
         <ModalContainer
@@ -168,7 +201,8 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
                 activeOpacity={1}
                 style={styles.option}
                 onPress={() => {
-                  onPressDelete();
+                  setConfirmationVisible(true);
+                  setOpenOptions(false);
                 }}>
                 <Text style={styles.optionText}>Delete</Text>
               </TouchableHighlight>
@@ -223,7 +257,7 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
           <View style={styles.inputContainer}>
             <FilePicker
               control={control}
-              name="file"
+              name="image"
               title={'Scan File'}
               type="outlined"
               width="100%"
@@ -232,8 +266,8 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
               rules={{
                 required: 'File is required',
               }}
-              isDisabled={isEdit}
-              text={watch('file')}
+              isLoading={isUploading}
+              text={watch('image')}
               onPress={async () => {
                 try {
                   const pickerResult = await DocumentPicker.pickSingle({
@@ -259,8 +293,8 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
               label="Save"
               type="filled"
               onPress={() => handleSubmit(onSubmit)()}
-              width={'48%'}
               isLoading={isBtnLoading}
+              width={'48%'}
             />
           </View>
         </View>
@@ -272,6 +306,7 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
     <>
       {openModal()}
       {openOptionsModal()}
+      {openConfirmationalModal()}
       <ScrollView
         style={styles.scrollContainer}
         contentContainer={styles.scrollContentContainer}>

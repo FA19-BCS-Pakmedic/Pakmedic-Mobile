@@ -10,11 +10,8 @@ import {getDate} from '@/utils/helpers/getDate';
 import fonts from '../../../../utils/styles/themes/fonts';
 
 const ScanCard = ({scan, setOpenOptions, setSelectedScan}) => {
-  console.log(scan);
+  const imageURI = `http://192.168.100.138:8000/api/v1/files/${scan.image}`; //TODO: replace the link with a variable that fetches images from the backend
 
-  const imageURI = `http://192.168.0.109:8000/api/v1/files/${scan.image}`; //TODO: replace the link with a variable that fetches images from the backend
-
-  console.log(imageURI);
   return (
     <View style={styles().container}>
       <View style={styles().imageContainer}>

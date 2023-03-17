@@ -16,6 +16,7 @@ const FilePicker = ({
   onPress,
   text,
   isDisabled = false,
+  isLoading = false,
 }) => {
   console.log(text);
   return (
@@ -32,7 +33,7 @@ const FilePicker = ({
               label="Choose File"
               type="filled"
               onPress={onPress}
-              isDisabled={isDisabled}
+              isLoading={isLoading}
             />
             <Text style={styles().fileName}>{text ? text : 'File Name'}</Text>
           </View>
