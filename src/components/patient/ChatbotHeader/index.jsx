@@ -2,13 +2,14 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 
 // import theme
-import colors from '../../../utils/styles/themes/colors';
-import dimensions from '../../../utils/styles/themes/dimensions';
-import fonts from '../../../utils/styles/themes/fonts';
+// import colors from '../../../utils/styles/themes/colors';
+import colors from '@/utils/styles/themes/colors';
+import dimensions from '@/utils/styles/themes/dimensions';
+import fonts from '@/utils/styles/themes/fonts';
 
 //import bot svg
-import RobotSVG from '../../../assets/svgs/bot.svg';
-import BackSVG from '../../../assets/svgs/Backicon.svg';
+import RobotSVG from '@/assets/svgs/bot.svg';
+import BackSVG from '@/assets/svgs/Backicon.svg';
 
 import {useNavigation} from '@react-navigation/native';
 
