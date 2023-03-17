@@ -26,7 +26,6 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import {RecommendCompounds} from '../../../../services/doctorServices';
 
 import {useNavigation} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 const CompoundRecommendationScreen = () => {
   const navigation = useNavigation();
@@ -39,11 +38,6 @@ const CompoundRecommendationScreen = () => {
   const handleTagPress = tag => {
     setTags(tags.filter(item => item !== tag));
     setSuggestions([tag, ...suggestions]);
-  };
-
-  const handleSuggestionPress = suggestion => {
-    setTags([...tags, suggestion]);
-    setSuggestions(suggestions.filter(item => item !== suggestion));
   };
 
   const renderTagComponent = tag => {
