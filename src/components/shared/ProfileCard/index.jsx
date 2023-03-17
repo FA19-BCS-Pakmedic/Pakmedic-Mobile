@@ -11,6 +11,7 @@ import StarSvg from '../../../assets/svgs/FullStarIcon.svg';
 import fonts from '../../../utils/styles/themes/fonts';
 import {useSelector} from 'react-redux';
 import ROLES from '../../../utils/constants/ROLES';
+import { apiEndpoint } from '../../../utils/constants/APIendpoint';
 
 const ProfileCard = ({user}) => {
   const role = useSelector(state => state.role.role);
@@ -26,7 +27,9 @@ const ProfileCard = ({user}) => {
   return (
     <View style={styles(role).container}>
       <Image
-        source={{uri: `http://192.168.0.109:8000/api/v1/files/${user?.avatar}`}}
+        source={{
+          uri: `${apiEndpoint}files/${user?.avatar}`,
+        }}
         style={styles().avatar}
       />
       <View style={styles().profileInfoContainer}>

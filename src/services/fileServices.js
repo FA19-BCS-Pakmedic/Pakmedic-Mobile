@@ -16,6 +16,24 @@ const API = axios.create({
 });
 
 //get file from the backend
-export const getFile = async filename => {
-  return await API.get(`/files/${filename}`);
+export const getFile = filename => {
+  return API.get(`/files/${filename}`);
+};
+
+//add file to the backend
+export const addFile = data => {
+  return API.post(`/files/`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress,
+  });
+};
+
+const onUploadProgress = progressEvent => {
+  const {loaded, total} = progressEvent;
+  let percent = Math.floor((loaded * 100) / total);
+  if (percent < 100) {
+    console.log(`${loaded} bytes of ${total} bytes. ${percent}%`);
+  }
 };
