@@ -1,1 +1,4 @@
-export const apiEndpoint = 'http://192.168.100.138:8000/api/v1/'; //TODO: Replace this with link fetched from env vairable
+import {BASE_ADDRESS_DEV, BASE_URL, PORT} from '@env';
+
+export const apiEndpoint = BASE_ADDRESS_DEV; //TODO: Replace this with link fetched from env vairable
+export const baseUrl = `${BASE_URL}:${PORT}`;

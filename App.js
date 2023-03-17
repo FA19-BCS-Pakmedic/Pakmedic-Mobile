@@ -24,7 +24,7 @@ import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home'
 const StackNavigate = createNativeStackNavigator();
 
 const App = () => {
-  SplashScreen.hide();
+
 
   https: return (
     <Provider store={store}>

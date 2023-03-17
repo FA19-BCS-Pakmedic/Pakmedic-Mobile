@@ -8,9 +8,10 @@ import Button from '../../../../components/shared/Button';
 
 import {getDate} from '@/utils/helpers/getDate';
 import fonts from '../../../../utils/styles/themes/fonts';
+import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 
 const ScanCard = ({scan, setOpenOptions, setSelectedScan}) => {
-  const imageURI = `http://192.168.100.138:8000/api/v1/files/${scan.image}`; //TODO: replace the link with a variable that fetches images from the backend
+  const imageURI = `${apiEndpoint}/files/${scan.image}`; //TODO: replace the link with a variable that fetches images from the backend
 
   return (
     <View style={styles().container}>

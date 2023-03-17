@@ -23,6 +23,7 @@ import MenuDropdown from '../MenuDropdown';
 import DefaultImage from '../../../assets/images/default-avatar.png';
 import MenuDropDown from '../MenuDropdown';
 import {voximplant} from '../../../services/voxServices';
+import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 const Header = ({color}) => {
   const navigation = useNavigation();
@@ -106,7 +107,7 @@ const Header = ({color}) => {
             width={dimensions.Width / 10}
             height={dimensions.Width / 10}
             source={{
-              uri: `http://192.168.100.138:8000/api/v1/files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
+              uri: `${apiEndpoint}/files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
             }}
             style={styles().avatar}
           />
