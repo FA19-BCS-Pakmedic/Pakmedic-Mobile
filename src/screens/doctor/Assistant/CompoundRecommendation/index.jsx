@@ -3,10 +3,13 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
 import {React, useState} from 'react';
 import StaticContainer from '../../../../containers/StaticContainer';
+
+import ScrollContainer from '../../../../containers/ScrollContainer';
 
 import {styles} from './styles';
 import dimensions from '../../../../utils/styles/themes/dimensions';
@@ -22,7 +25,12 @@ import fonts from '../../../../utils/styles/themes/fonts';
 
 import {RecommendCompounds} from '../../../../services/doctorServices';
 
-const CompoundRecommendationScreen = navigation => {
+import {useNavigation} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
+const CompoundRecommendationScreen = () => {
+  const navigation = useNavigation();
+
   const [suggestions, setSuggestions] = useState([...conditions]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,7 +80,23 @@ const CompoundRecommendationScreen = navigation => {
     const response = await RecommendCompounds(tags);
     setIsLoading(false);
 
-    console.log(response?.data?.data?.result);
+    navigation.navigate('App', {
+      screen: 'CompoundResults',
+      params: {results: response?.data?.data?.result},
+    });
+  };
+
+  const VirtualizedList = ({children}) => {
+    return (
+      <FlatList
+        keyboardShouldPersistTaps="handled"
+        style={{marginBottom: 20}}
+        data={[]}
+        keyExtractor={() => 'key'}
+        renderItem={null}
+        ListHeaderComponent={<>{children}</>}
+      />
+    );
   };
 
   return (
@@ -110,23 +134,26 @@ const CompoundRecommendationScreen = navigation => {
             Disclaimer: The result from the AI recommendation system may not be
             100% accurate
           </Text>
-          <AutocompleteTags
-            tags={tags}
-            suggestions={suggestions}
-            onChangeTags={setTags}
-            labelExtractor={labelExtractor}
-            containerStyle={styles.autocompleteContainer}
-            tagContainerStyle={styles.tagContainer}
-            allowCustomTags={false}
-            onSuggestionPress={onSuggestionPress}
-            inputProps={{
-              onKeyPress: handleKeyDown,
-              placeholder: 'Write the patient’s condition',
-            }}
-            flatListStyle={styles.flatListStyle}
-            flatListContainerStyle={styles.flatListContainerStyle}
-            renderTag={renderTagComponent}
-          />
+          <VirtualizedList>
+            <AutocompleteTags
+              tags={tags}
+              suggestions={suggestions}
+              onChangeTags={setTags}
+              labelExtractor={labelExtractor}
+              containerStyle={styles.autocompleteContainer}
+              allowCustomTags={false}
+              onSuggestionPress={onSuggestionPress}
+              inputProps={{
+                onKeyPress: handleKeyDown,
+                placeholder: 'Write the patient’s condition',
+                multiline: true,
+              }}
+              flatListStyle={styles.flatListStyle}
+              flatListContainerStyle={styles.flatListContainerStyle}
+              renderTag={renderTagComponent}
+              flatListProps={{scrollEnabled: true}}
+            />
+          </VirtualizedList>
 
           <Button
             onPress={onSubmit}

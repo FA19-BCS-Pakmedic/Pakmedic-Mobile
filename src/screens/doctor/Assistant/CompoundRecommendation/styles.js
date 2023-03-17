@@ -19,7 +19,9 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.primary1,
     borderRadius: 10,
-    height: dimensions.Height / 4,
+    minHeight: dimensions.Height / 3.5,
+    minWidth: dimensions.Width / 1.11,
+    marginBottom: 155,
   },
   flatListStyle: {
     maxHeight: 194,
