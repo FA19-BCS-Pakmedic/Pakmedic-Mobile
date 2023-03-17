@@ -9,15 +9,22 @@ import EhrSwitch from '@/components/shared/EhrSwitch';
 import EhrOptions from '@/utils/constants/EhrOptions';
 import AddFilterBar from '@/components/shared/AddFilterBar';
 import Scans from '../../../../components/shared/Scans';
-import {getPatient} from '../../../../services/patientServices';
+import {getPatient, getPatientById} from '../../../../services/patientServices';
 import {authSuccess} from '../../../../setup/redux/actions';
 import Reports from '../../../../components/shared/Reports';
+import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
+import Prescription from '../../../../components/shared/Prescriptions';
+import Prescriptions from '../../../../components/shared/Prescriptions';
 
-const ElectronicHealthRecords = () => {
+const ElectronicHealthRecords = ({route}) => {
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user);
 
-  const [storedUser, setStoredUser] = useState(user);
+  const [loading, setLoading] = useState(false);
+
+  const patientId = route.params.id;
+
+  const [storedUser, setStoredUser] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -26,6 +33,25 @@ const ElectronicHealthRecords = () => {
 
   const [options, setOptions] = useState(EhrOptions);
   const [activeOption, setActiveOption] = useState(EhrOptions[0].label);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      setLoading(true);
+      try {
+        const response = await getPatientById(patientId);
+        console.log(response.data.data.user);
+        setStoredUser(response.data.data.user);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (patientId) {
+      loadUser();
+    }
+  }, [patientId]);
 
   useEffect(() => {
     setActiveOption(options.find(option => option.isActive).label);
@@ -45,11 +71,10 @@ const ElectronicHealthRecords = () => {
 
   const updateUser = async () => {
     try {
-      const response = await getPatient();
+      const response = await getPatientById(patientId);
       dispatch(
-        authSuccess({
+        authUpdate({
           user: response.data.data.user,
-          token: response.data.data.token,
         }),
       );
       setStoredUser(response.data.data.user);
@@ -83,7 +108,7 @@ const ElectronicHealthRecords = () => {
           />
         );
       case 'Prescriptions':
-        return <Text>Prescriptions</Text>;
+        return <Prescriptions />;
       default:
         return null;
     }
@@ -106,10 +131,14 @@ const ElectronicHealthRecords = () => {
         </View>
         {/* add filter bar container */}
         <View style={styles.section}>
-          <AddFilterBar setVisible={setVisible} setIsEdit={setIsEdit} />
+          <AddFilterBar
+            setVisible={setVisible}
+            setIsEdit={setIsEdit}
+            activeOption={activeOption}
+          />
         </View>
         {/* main content container */}
-        <View style={styles.section}>{getEHR()}</View>
+        <View style={styles.section}>{!storedUser ? null : getEHR()}</View>
       </View>
     </StaticContainer>
   );

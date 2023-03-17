@@ -107,7 +107,7 @@ const Header = ({color}) => {
             width={dimensions.Width / 10}
             height={dimensions.Width / 10}
             source={{
-              uri: `${apiEndpoint}/files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
+              uri: `${apiEndpoint}files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
             }}
             style={styles().avatar}
           />

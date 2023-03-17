@@ -33,7 +33,7 @@ import Button from '../../../../components/shared/Button';
 import ModalContainer from '../../../../containers/ModalContainer';
 import {addAvatar} from '../../../../services/doctorServices';
 import {useSelector} from 'react-redux';
-import { apiEndpoint } from '../../../../utils/constants/APIendpoint';
+import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 
 const EditProfile = () => {
   const [open, setOpen] = useState(false);
@@ -177,7 +177,7 @@ const EditProfile = () => {
         <View style={styles.avatarContainer}>
           <Image
             source={{
-              uri: `${apiEndpoint}/files/${user.avatar}`,
+              uri: `${apiEndpoint}files/${user.avatar}`,
             }}
             style={styles.avatar}
           />

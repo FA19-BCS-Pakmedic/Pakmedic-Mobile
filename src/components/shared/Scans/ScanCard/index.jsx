@@ -11,7 +11,7 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 
 const ScanCard = ({scan, setOpenOptions, setSelectedScan}) => {
-  const imageURI = `${apiEndpoint}/files/${scan.image}`; //TODO: replace the link with a variable that fetches images from the backend
+  const imageURI = `${apiEndpoint}files/${scan.image}`; //TODO: replace the link with a variable that fetches images from the backend
 
   return (
     <View style={styles().container}>

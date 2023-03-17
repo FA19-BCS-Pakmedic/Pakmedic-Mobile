@@ -28,7 +28,7 @@ const ProfileCard = ({user}) => {
     <View style={styles(role).container}>
       <Image
         source={{
-          uri: `${apiEndpoint}/files/${user?.avatar}`,
+          uri: `${apiEndpoint}files/${user?.avatar}`,
         }}
         style={styles().avatar}
       />

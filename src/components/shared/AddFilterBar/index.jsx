@@ -8,7 +8,7 @@ import fonts from '@/utils/styles/themes/fonts';
 import FilterIcon from '@/assets/svgs/FilterIcon.svg';
 import AddMore from '@/components/shared/AddMore';
 
-const AddFilterBar = ({setVisible, setIsEdit}) => {
+const AddFilterBar = ({setVisible, setIsEdit, activeOption}) => {
   return (
     <View style={styles().container}>
       <TouchableOpacity style={styles().filterContainer}>
@@ -17,14 +17,16 @@ const AddFilterBar = ({setVisible, setIsEdit}) => {
       </TouchableOpacity>
 
       {/* Search input */}
-      <AddMore
-        label="Add"
-        type="filled"
-        onPress={() => {
-          setVisible(true);
-          setIsEdit(false);
-        }}
-      />
+      {activeOption !== 'Prescriptions' && (
+        <AddMore
+          label="Add"
+          type="filled"
+          onPress={() => {
+            setVisible(true);
+            setIsEdit(false);
+          }}
+        />
+      )}
     </View>
   );
 };

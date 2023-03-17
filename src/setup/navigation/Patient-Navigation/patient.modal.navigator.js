@@ -8,8 +8,11 @@ import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
 
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 const PatientModalNavigator = props => {
+  const user = useSelector(state => state.auth.user);
+
   const {Visible, setModalVisible, navigation} = props;
   //const navigation = useNavigation();
   return (
@@ -61,7 +64,7 @@ const PatientModalNavigator = props => {
           style={styles.button}
           onPress={() => {
             setModalVisible(false);
-            navigation.navigate('EHR');
+            navigation.navigate('EHR', {id: user._id});
           }}>
           <Text style={styles.text}>EHR</Text>
         </TouchableOpacity>
