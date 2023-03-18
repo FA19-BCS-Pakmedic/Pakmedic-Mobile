@@ -118,6 +118,7 @@ export const ValidateInputField = ({
   fontSize = fonts.size.font14,
   multiline = false,
   inputHeight = dimensions.Height / 17,
+  useRef,
 }) => {
   // setting the password eye icon name based on the visiblility status
   const passwordIconName = !isPasswordVisible
@@ -177,6 +178,7 @@ export const ValidateInputField = ({
                     onBlurEvent();
                   }
                 }}
+                ref={useRef}
               />
               <View
                 style={

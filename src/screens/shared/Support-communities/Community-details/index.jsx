@@ -1,4 +1,4 @@
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, ActivityIndicator} from 'react-native';
 import React, {useState} from 'react';
 import StaticContainer from '../../../../containers/StaticContainer';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -12,34 +12,32 @@ import CommunityPostImage from '../../../../assets/images/CommunityPostImage.png
 
 import CommunityPostAdd from '../../../../components/shared/CommunityPostAdd';
 
-import {getPosts, getPostById} from '../../../../services/communityServices';
+import {getPosts} from '../../../../services/communityServices';
 import {useEffect} from 'react';
+
+import colors from '../../../../utils/styles/themes/colors';
 
 const CommunityDetails = ({route}) => {
   const {item} = route.params;
-  console.log('item', item);
   const [isModalVisible, setModalVisible] = React.useState(false);
+  const [checkDelete, setCheckDelete] = React.useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'C/Dermatologist', value: 'home'},
-    {label: 'C/Dermatologist', value: 'haris'},
-    {label: 'C/Dermatologist', value: 'moeed'},
-    {label: 'C/Dermatologist', value: 'ali'},
-  ]);
-
-  //get community posts
-  const res = getPostById(item.posts[0]);
+  const [items, setItems] = useState([]);
 
   const [posts, setPosts] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+
   const getPost = async () => {
+    setLoading(true);
     const res = await getPosts(`community=${item._id}`);
-    setPosts(res.data.data.posts);
-    console.log(res.data.data.posts);
+    setPosts(res.data.data.data);
+    setLoading(false);
   };
   useEffect(() => {
     getPost();
-  }, [isModalVisible]);
+  }, [isModalVisible, checkDelete]);
 
   // const communityCards = [
   //   {
@@ -94,7 +92,7 @@ const CommunityDetails = ({route}) => {
               setItems={setItems}
               style={styles.dropDown}
               dropDownContainerStyle={styles.dropDownContainer}
-              placeholder="Home"
+              placeholder={item.name}
               textStyle={{
                 fontSize: 12,
               }}
@@ -110,16 +108,33 @@ const CommunityDetails = ({route}) => {
             onPress={() => setModalVisible(true)}
           />
         </View>
-        <FlatList
-          data={posts}
-          style={styles.flatList}
-          keyExtractor={item => item._id}
-          renderItem={({item}) => <CommunityPostCard item={item} />}
-        />
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.secondary1}
+            style={{
+              flex: 1,
+            }}
+          />
+        ) : (
+          <FlatList
+            data={posts}
+            style={styles.flatList}
+            keyExtractor={item => item._id}
+            renderItem={({item}) => (
+              <CommunityPostCard
+                item={item}
+                Delete={checkDelete}
+                setDelete={setCheckDelete}
+              />
+            )}
+          />
+        )}
       </View>
       <CommunityPostAdd
         Visible={isModalVisible}
         setModalVisible={setModalVisible}
+        item={item}
       />
     </StaticContainer>
   );

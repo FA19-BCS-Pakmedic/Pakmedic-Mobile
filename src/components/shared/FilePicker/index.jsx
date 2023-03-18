@@ -18,7 +18,6 @@ const FilePicker = ({
   isDisabled = false,
   isLoading = false,
 }) => {
-  console.log(text);
   return (
     <Controller
       control={control}
@@ -31,6 +30,7 @@ const FilePicker = ({
               height={height / 1.5}
               width={dimensions.Width / 4}
               label="Choose File"
+              fontSize={fonts.size.font14}
               type="filled"
               onPress={onPress}
               isLoading={isLoading}
