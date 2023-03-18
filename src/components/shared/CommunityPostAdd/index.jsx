@@ -20,31 +20,69 @@ import CheckBoxIcon from '../../../assets/svgs/Checkbox.svg';
 import UncheckBoxIcon from '../../../assets/svgs/Checkbox-unchecked.svg';
 import {ValidateInputField} from '../Input';
 import {useForm} from 'react-hook-form';
+import DocumentPicker, {
+  isInProgress,
+  types,
+} from 'react-native-document-picker';
 
 import {addPost} from '../../../services/communityServices';
+import {addFile} from '../../../services/fileServices';
+import FilePicker from '../FilePicker';
+import {useSelector} from 'react-redux';
 
 export default CommunityPostAdd = props => {
-  const {Visible, setModalVisible, navigation} = props;
-  const {control, handleSubmit, watch} = useForm({
+  const {Visible, setModalVisible, navigation, item} = props;
+  const {control, handleSubmit, watch, setValue, reset} = useForm({
     mode: 'onChange',
-    initialValues: {
+    defaultValues: {
       title: '',
       post: '',
+      file: null,
     },
   });
 
+  const [file, setFile] = React.useState(null);
+
   const [isCheck, setIsCheck] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
+
+  React.useEffect(() => {
+    const uploadFile = async () => {
+      const formData = new FormData();
+      setIsUploading(true);
+      formData.append('file', {
+        uri: file[0].uri,
+        type: file[0].type,
+        name: file[0].name,
+      });
+      try {
+        const response = await addFile(formData);
+        setValue('file', response.data.data.filename);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsUploading(false);
+      }
+    };
+    if (file) {
+      uploadFile();
+    }
+  }, [file]);
 
   const onSubmit = async data => {
     setLoading(true);
-    Post({title: data?.title, content: data?.post, authorType: 'Patient'});
+    Post({
+      title: data?.title,
+      content: data?.post,
+      isAnonymous: isCheck,
+      file: data?.file,
+    });
   };
 
   const Post = async data => {
     try {
-      console.log('data', data);
-      const response = await addPost(data);
+      const response = await addPost(item._id, data);
       if (response?.status === 201) {
         setLoading(false);
         setModalVisible(false);
@@ -55,11 +93,24 @@ export default CommunityPostAdd = props => {
     }
   };
 
+  const handleError = err => {
+    if (DocumentPicker.isCancel(err)) {
+      console.warn('cancelled');
+      // User cancelled the picker, exit any dialogs or menus and move on
+    } else if (isInProgress(err)) {
+      console.warn(
+        'multiple pickers were opened, only the last will be considered',
+      );
+    } else {
+      throw err;
+    }
+  };
+
   return (
     <ModalContainer
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
-      height={dimensions.Height / 1.7}
+      height={dimensions.Height / 1.6}
       width={dimensions.Width * 0.9}
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
@@ -109,17 +160,32 @@ export default CommunityPostAdd = props => {
           />
         </View>
         <View style={styles.fileContainer}>
-          <Text style={styles.title}>Attach Files:</Text>
-          <View style={styles.file}>
-            <Button
-              label="Choose file"
-              type="filled"
-              width={dimensions.Width / 3.5}
-              height={dimensions.Height / 25}
-              fontSize={fonts.size.font14}
-            />
-            <Text style={styles.fileText}>File Name</Text>
-          </View>
+          <FilePicker
+            control={control}
+            name="file"
+            title={'Attach Files'}
+            type="outlined"
+            width="100%"
+            height={dimensions.Height / 15}
+            placeholder="Choose File"
+            rules={{
+              required: 'File is required',
+            }}
+            isLoading={isUploading}
+            text={watch('file')}
+            onPress={async () => {
+              try {
+                const pickerResult = await DocumentPicker.pickSingle({
+                  presentationStyle: 'fullScreen',
+                  copyTo: 'cachesDirectory',
+                  type: [types.images, types.pdf],
+                });
+                setFile([pickerResult]);
+              } catch (e) {
+                handleError(e);
+              }
+            }}
+          />
         </View>
         <View style={styles.checkContainer}>
           {/* on Button click it switches between check and uncheck */}
@@ -150,7 +216,12 @@ export default CommunityPostAdd = props => {
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              setIsCheck(false);
+              setLoading(false);
+              reset();
+              setModalVisible(false);
+            }}
           />
           <Button
             label="Post"
@@ -160,6 +231,7 @@ export default CommunityPostAdd = props => {
             fontSize={fonts.size.font14}
             isLoading={loading}
             onPress={handleSubmit(onSubmit)}
+            isDisabled={loading || isUploading}
           />
         </View>
       </View>
@@ -170,7 +242,7 @@ export default CommunityPostAdd = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
   },
   header: {
     justifyContent: 'center',

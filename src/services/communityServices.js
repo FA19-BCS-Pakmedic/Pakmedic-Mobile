@@ -2,7 +2,6 @@ import axios from 'axios';
 
 //import api end point
 import {apiEndpoint} from '../utils/constants/APIendpoint';
-import deviceStorage from '../utils/helpers/deviceStorage';
 
 const API = axios.create({
   baseURL: `${apiEndpoint}`,
@@ -23,8 +22,9 @@ export const leaveCommunity = id => API.patch(`communities/leave/${id}`);
 //get community by id
 export const getCommunityById = id => API.get(`communities/${id}`);
 
-//add post
+//POSTS API
 
+//add post
 export const addPost = (id, data) => API.post(`posts/${id}`, data);
 
 //get posts
@@ -32,3 +32,12 @@ export const getPosts = data => API.get(`posts/?${data}`);
 
 //get post by id
 export const getPostById = id => API.get(`posts/${id}`);
+
+//delete post
+export const deletePost = id => API.delete(`posts/${id}`);
+
+//Comments API
+
+//add comment
+export const addComment = (pid, cid, data) =>
+  API.post(`comments/${pid}/${cid}`, data);

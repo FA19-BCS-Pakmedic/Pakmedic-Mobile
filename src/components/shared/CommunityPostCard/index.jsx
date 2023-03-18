@@ -5,14 +5,20 @@ import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import Logo from '../../../assets/svgs/community-logo';
 import CommunityPostImage from '../../../assets/images/CommunityPostImage.png';
+import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 import Button from '../../../components/shared/Button';
+
+import {deletePost} from '../../../services/communityServices';
 
 import {useNavigation} from '@react-navigation/native';
 
+import {formatDate} from '../../../utils/helpers/formatDate';
+import {useSelector} from 'react-redux';
+
 export default CommunityPostCard = props => {
   const navigation = useNavigation();
-  const item = props.item;
-  console.log('post', item);
+  const {item, Delete, setDelete} = props;
+  const user = useSelector(state => state.auth.user);
 
   return (
     <TouchableOpacity
@@ -24,12 +30,22 @@ export default CommunityPostCard = props => {
           <View style={{marginLeft: dimensions.Width / 100}}>
             <Text
               style={styles.communityName}>{`C/${item.community.name}`}</Text>
-            <Text
-              style={styles.communityMembers}>{`u/${item.author.name}`}</Text>
+            <Text style={styles.communityMembers}>{`u/${
+              item.isAnonymous ? 'Anonymous' : item.author.name
+            }`}</Text>
           </View>
         </View>
       </View>
-      <Image source={CommunityPostImage} style={styles.image} />
+      <Image
+        source={
+          item.file?.length > 0
+            ? {uri: `${apiEndpoint}files/${item.file}`}
+            : CommunityPostImage
+        }
+        style={styles.image}
+        width={dimensions.Width / 2.6}
+        height={dimensions.Height / 8.1}
+      />
       <Text style={[styles.communityName, styles.text]}>{item.title}</Text>
       <Text style={[styles.communityMembers, styles.text, {width: 'auto'}]}>
         {item.content}
@@ -45,7 +61,7 @@ export default CommunityPostCard = props => {
             alignSelf: 'flex-start',
           },
         ]}>
-        {item.date}
+        {formatDate(item.date)}
       </Text>
       <View
         style={[
@@ -55,12 +71,26 @@ export default CommunityPostCard = props => {
             height: dimensions.Height / 15,
           },
         ]}>
-        <Button
-          label="Delete"
-          type="empty"
-          width={dimensions.Width / 4}
-          height={dimensions.Height / 20}
-        />
+        {user._id === item.author._id ? (
+          <Button
+            label="Delete"
+            type="empty"
+            width={dimensions.Width / 4}
+            height={dimensions.Height / 20}
+            onPress={() => {
+              const res = deletePost(item._id);
+              setDelete(!Delete);
+            }}
+          />
+        ) : (
+          <Button
+            label="Report"
+            type="empty"
+            width={dimensions.Width / 4}
+            height={dimensions.Height / 20}
+            onPress={() => {}}
+          />
+        )}
         <Button
           label="View"
           type="filled"
@@ -96,6 +126,7 @@ const styles = StyleSheet.create({
     paddingVertical: dimensions.Height / 200,
   },
   communityName: {
+    width: dimensions.Width / 3.5,
     fontSize: fonts.size.font16,
     fontWeight: 'bold',
     color: colors.secondary1,
@@ -108,6 +139,7 @@ const styles = StyleSheet.create({
   image: {
     position: 'absolute',
     top: dimensions.Height / 100,
-    right: dimensions.Width / 20,
+    right: dimensions.Width / 30,
+    borderRadius: 5,
   },
 });

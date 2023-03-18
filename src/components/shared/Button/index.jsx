@@ -20,14 +20,15 @@ export default Button = ({
   isLoading,
   marginVertical,
   fontSize = fonts.size.font16,
-  fontColor = colors.white,
+  fontColor = colors.secondary1,
 }) => {
   return (
     <TouchableOpacity
       style={
         isDisabled
-          ? styles(type, width, null, height, null, marginVertical).disabled
-          : styles(type, width, borderColor, height, null, marginVertical)
+          ? styles(type, width, null, height, null, null, marginVertical)
+              .disabled
+          : styles(type, width, borderColor, height, null, null, marginVertical)
               .button
       }
       activeOpacity={isDisabled ? 1 : 0.2}
@@ -40,8 +41,9 @@ export default Button = ({
         <Text
           style={
             isDisabled
-              ? styles(null, null, null, null, fontSize).buttonLabelDisabled
-              : styles(null, null, null, null, fontSize).buttonLabel
+              ? styles(null, null, null, null, fontSize, fontColor)
+                  .buttonLabelDisabled
+              : styles(null, null, null, null, fontSize, fontColor).buttonLabel
           }>
           {label}
         </Text>
@@ -50,7 +52,15 @@ export default Button = ({
   );
 };
 
-const styles = (type, width, borderColor, height, fontSize, marginVertical) =>
+const styles = (
+  type,
+  width,
+  borderColor,
+  height,
+  fontSize,
+  fontColor,
+  marginVertical,
+) =>
   StyleSheet.create({
     button: {
       marginTop: dimensions.Height / 50, //remove if it there is unneseccary space
@@ -78,6 +88,7 @@ const styles = (type, width, borderColor, height, fontSize, marginVertical) =>
     buttonLabel: {
       fontSize: fontSize,
       fontWeight: fonts.weight.bold,
+      color: fontColor,
     },
 
     buttonLabelDisabled: {
