@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 export default CommunityPostCard = props => {
   const navigation = useNavigation();
   const item = props.item;
+  console.log('post', item);
 
   return (
     <TouchableOpacity
