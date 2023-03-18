@@ -35,7 +35,7 @@ import {
 } from '../../../services/ehrServices';
 import ConfirmationAlert from '../ConfirmationAlert';
 import {ValidateDropdown} from '../Dropdown';
-import {checkPermission} from '../../../utils/helpers/downloadFile';
+import {downloadFile} from '../../../utils/helpers/downloadFile';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 const Reports = ({
@@ -179,7 +179,10 @@ const Reports = ({
                 activeOpacity={1}
                 style={styles.option}
                 onPress={() => {
-                  checkPermission(`${apiEndpoint}files${selectedReport.file}`);
+                  downloadFile(
+                    `${apiEndpoint}files/${selectedReport.file}`,
+                    selectedReport.file,
+                  );
                   // console.log(`${apiEndpoint}files/${selectedReport.file}`);
                 }}>
                 <Text style={styles.optionText}>Download</Text>

@@ -27,6 +27,8 @@ import ConfirmationAlert from '../ConfirmationAlert';
 
 import {addScan, deleteScan, updateScan} from '../../../services/ehrServices';
 import {addFile} from '../../../services/fileServices';
+import {downloadFile} from '../../../utils/helpers/downloadFile';
+import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
   const [scanImage, setScanImage] = useState(null);
@@ -178,7 +180,12 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
                 underlayColor="#f4f4f4"
                 activeOpacity={1}
                 style={styles.option}
-                onPress={() => {}}>
+                onPress={() => {
+                  downloadFile(
+                    `${apiEndpoint}files/${selectedScan.image}`,
+                    selectedScan.image,
+                  );
+                }}>
                 <Text style={styles.optionText}>Download</Text>
               </TouchableHighlight>
             </View>
