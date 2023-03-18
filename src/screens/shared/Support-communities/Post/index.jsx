@@ -18,7 +18,7 @@ import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 
 import {set, useForm} from 'react-hook-form';
 
-import {getPostById} from '../../../../services/communityServices';
+import {addComment, getPostById} from '../../../../services/communityServices';
 
 import {formatDate} from '../../../../utils/helpers/formatDate';
 
@@ -159,8 +159,7 @@ const Post = props => {
 
   const Comment = async data => {
     try {
-      //await addComment(item._id, cid, data);
-
+      await addComment(item._id, cid, data);
       setLoading(false);
       isReply(false);
     } catch (error) {
@@ -240,7 +239,6 @@ const Post = props => {
             inputHeight={dimensions.Height / 10}
             type="outlined"
             useRef={inputRef}
-            //onBlurEvent={() => isReply(false)}
             watch={watch('content')}
           />
 

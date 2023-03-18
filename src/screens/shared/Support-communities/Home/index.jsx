@@ -47,7 +47,6 @@ const Home = ({navigation}) => {
   const getCommunities = async () => {
     setLoading(true);
     const res = await getCommunity();
-    console.log('res', res.data.data.data);
     //join communities
     const joinedCommunities = res.data.data.data.filter(community => {
       return userCommunities.includes(community._id);
