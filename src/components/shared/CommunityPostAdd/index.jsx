@@ -21,7 +21,7 @@ import UncheckBoxIcon from '../../../assets/svgs/Checkbox-unchecked.svg';
 import {ValidateInputField} from '../Input';
 import {useForm} from 'react-hook-form';
 
-import {addPost} from '../../../services/postServices';
+import {addPost} from '../../../services/communityServices';
 
 export default CommunityPostAdd = props => {
   const {Visible, setModalVisible, navigation} = props;
