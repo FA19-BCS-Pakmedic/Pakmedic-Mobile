@@ -252,6 +252,12 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
               open={open}
               setOpen={setOpen}
               onChangeDate={onChangeDate}
+              rules={{
+                // date cannot exceed today
+                validate: value => {
+                  return value < new Date() || "Date can't be in the future";
+                },
+              }}
             />
           </View>
           <View style={styles.inputContainer}>

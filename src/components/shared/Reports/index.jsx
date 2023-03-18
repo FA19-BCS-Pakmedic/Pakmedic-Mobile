@@ -26,12 +26,17 @@ import CustomDatePicker from '@/components/shared/CustomDatePicker';
 import FilePicker from '../FilePicker';
 import Button from '../Button';
 
+import {LABS, TESTS} from '@/utils/constants/Labs';
+
 import {
   addReport,
   deleteReport,
   updateReport,
 } from '../../../services/ehrServices';
 import ConfirmationAlert from '../ConfirmationAlert';
+import {ValidateDropdown} from '../Dropdown';
+import {checkPermission} from '../../../utils/helpers/downloadFile';
+import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 const Reports = ({
   reports,
@@ -48,18 +53,21 @@ const Reports = ({
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const [isTestsOpen, setIsTestsOpen] = useState(false);
+  const [isLabsOpen, setIsLabsOpen] = useState(false);
 
-  const {control, handleSubmit, watch, reset, setValue} = useForm({
+  const {control, handleSubmit, watch, reset, setValue, clearErrors} = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: {
       title: '',
-      symptoms: [],
+      symptoms: '',
       date: new Date(),
       file: null,
       isFamilyReport: false,
       familyMemberId: '',
       lab: '',
+      type: '',
     },
   });
 
@@ -117,6 +125,7 @@ const Reports = ({
   };
 
   const onSubmit = async data => {
+    console.log(data);
     try {
       setIsBtnLoading(true);
       isEdit
@@ -141,6 +150,7 @@ const Reports = ({
     setValue('isFamilyReport', selectedReport.isFamilyReport);
     setValue('familyMemberId', selectedReport.familyMemberId);
     setValue('lab', selectedReport.lab);
+    setValue('type', selectedReport?.type);
     setValue('symptoms', selectedReport.symptoms);
     setVisible(true);
   };
@@ -168,7 +178,10 @@ const Reports = ({
                 underlayColor="#f4f4f4"
                 activeOpacity={1}
                 style={styles.option}
-                onPress={() => {}}>
+                onPress={() => {
+                  checkPermission(`${apiEndpoint}files${selectedReport.file}`);
+                  // console.log(`${apiEndpoint}files/${selectedReport.file}`);
+                }}>
                 <Text style={styles.optionText}>Download</Text>
               </TouchableHighlight>
             </View>
@@ -238,106 +251,146 @@ const Reports = ({
         height={dimensions.Height / 1.25}
         bgColor={'white'}
         borderColor={colors.primary1}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Reports</Text>
-          <View style={styles.inputContainer}>
-            <ValidateInputField
-              control={control}
-              name="title"
-              placeholder="Enter title"
-              rules={{
-                required: 'Title is required',
-              }}
-              type="outlined"
-              width="100%"
-              height={dimensions.Height / 20}
-              title={'Report Title'}
-              text={watch('title')}
-            />
-          </View>
+        <ScrollView style={styles.scrollContainer}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Reports</Text>
+            <View style={styles.inputContainer}>
+              <ValidateInputField
+                control={control}
+                name="title"
+                placeholder="Enter title"
+                rules={{
+                  required: 'Title is required',
+                }}
+                type="outlined"
+                width="100%"
+                height={dimensions.Height / 20}
+                title={'Report Title'}
+                text={watch('title')}
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <ValidateInputField
-              control={control}
-              name="symptoms"
-              placeholder="Enter symptoms"
-              type="outlined"
-              width="100%"
-              height={dimensions.Height / 20}
-              title={'Symptoms'}
-              text={watch('symptoms')}
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <ValidateInputField
+                control={control}
+                name="symptoms"
+                placeholder="Enter symptoms"
+                type="outlined"
+                width="100%"
+                height={dimensions.Height / 20}
+                title={'Symptoms'}
+                text={watch('symptoms')}
+                rules={{required: 'Enter atleast one symptom'}}
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            <ValidateInputField
-              control={control}
-              name="lab"
-              placeholder="Enter lab name"
-              type="outlined"
-              width="100%"
-              height={dimensions.Height / 20}
-              title={'Lab Name'}
-              text={watch('lab')}
-            />
-          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.text}>Lab Name</Text>
+              <ValidateDropdown
+                control={control}
+                name="lab"
+                placeholder="Select the lab name"
+                items={LABS}
+                setOpen={setIsLabsOpen}
+                open={isLabsOpen}
+                setValue={callback => {
+                  setValue('lab', callback());
+                  clearErrors('lab');
+                }}
+                value={watch('lab')}
+                minHeight={dimensions.Height / 18}
+                rules={{
+                  required: 'Please select a lab name',
+                  validate: value => value !== null || 'Please select a city',
+                }}
+              />
+            </View>
 
-          <View style={styles.inputContainer}>
-            {/* <Text style={styles.text}>Scan Date</Text> */}
-            <CustomDatePicker
-              control={control}
-              name="date"
-              date={watch('date')}
-              title={'Scan Date'}
-              open={open}
-              setOpen={setOpen}
-              onChangeDate={onChangeDate}
-            />
+            <View style={styles.inputContainer}>
+              <Text style={styles.text}>Test type</Text>
+              <ValidateDropdown
+                control={control}
+                name="type"
+                placeholder="Select the test type"
+                items={TESTS}
+                setOpen={setIsTestsOpen}
+                open={isTestsOpen}
+                setValue={callback => {
+                  setValue('type', callback());
+                  clearErrors('type');
+                }}
+                value={watch('type')}
+                minHeight={dimensions.Height / 18}
+                rules={{
+                  required: 'Please select a test type',
+                  validate: value => value !== null || 'Please select a city',
+                }}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              {/* <Text style={styles.text}>Scan Date</Text> */}
+              <CustomDatePicker
+                control={control}
+                name="date"
+                date={watch('date')}
+                title={'Scan Date'}
+                open={open}
+                setOpen={setOpen}
+                onChangeDate={onChangeDate}
+                rules={{
+                  // date cannot exceed today
+                  validate: value => {
+                    return value < new Date() || "Date can't be in the future";
+                  },
+                }}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <FilePicker
+                control={control}
+                name="file"
+                title={'Report File'}
+                type="outlined"
+                width="100%"
+                height={dimensions.Height / 15}
+                placeholder="Choose File"
+                rules={{
+                  required: 'File is required',
+                }}
+                isLoading={isUploading}
+                text={watch('file')}
+                onPress={async () => {
+                  try {
+                    const pickerResult = await DocumentPicker.pickSingle({
+                      presentationStyle: 'fullScreen',
+                      copyTo: 'cachesDirectory',
+                      type: [types.images, types.pdf],
+                    });
+                    setReportFile([pickerResult]);
+                  } catch (e) {
+                    handleError(e);
+                  }
+                }}
+              />
+            </View>
+            <View style={styles.controls}>
+              <Button
+                label="Cancel"
+                type="outlined"
+                onPress={() => setVisible(false)}
+                width={'48%'}
+              />
+              <Button
+                label="Save"
+                type="filled"
+                onPress={() => handleSubmit(onSubmit)()}
+                width={'48%'}
+                isLoading={isBtnLoading}
+              />
+            </View>
           </View>
-          <View style={styles.inputContainer}>
-            <FilePicker
-              control={control}
-              name="file"
-              title={'Report File'}
-              type="outlined"
-              width="100%"
-              height={dimensions.Height / 15}
-              placeholder="Choose File"
-              rules={{
-                required: 'File is required',
-              }}
-              isLoading={isUploading}
-              text={watch('file')}
-              onPress={async () => {
-                try {
-                  const pickerResult = await DocumentPicker.pickSingle({
-                    presentationStyle: 'fullScreen',
-                    copyTo: 'cachesDirectory',
-                    type: [types.images, types.pdf],
-                  });
-                  setReportFile([pickerResult]);
-                } catch (e) {
-                  handleError(e);
-                }
-              }}
-            />
-          </View>
-          <View style={styles.controls}>
-            <Button
-              label="Cancel"
-              type="outlined"
-              onPress={() => setVisible(false)}
-              width={'48%'}
-            />
-            <Button
-              label="Save"
-              type="filled"
-              onPress={() => handleSubmit(onSubmit)()}
-              width={'48%'}
-              isLoading={isBtnLoading}
-            />
-          </View>
-        </View>
+        </ScrollView>
       </ModalContainer>
     );
   };
@@ -353,12 +406,13 @@ const Reports = ({
         <View style={styles.contentContainer}>
           {reports.length
             ? reports.map((report, index) => (
-                <ReportCard
-                  key={index}
-                  setOpenOptions={setOpenOptions}
-                  setSelectedReport={setSelectedReport}
-                  report={report}
-                />
+                <View style={styles.reportContainer} key={index}>
+                  <ReportCard
+                    setOpenOptions={setOpenOptions}
+                    setSelectedReport={setSelectedReport}
+                    report={report}
+                  />
+                </View>
               ))
             : null}
         </View>
@@ -391,7 +445,7 @@ const styles = StyleSheet.create({
     paddingBottom: dimensions.Height / 7,
   },
 
-  scanContainer: {
+  reportContainer: {
     marginVertical: dimensions.Height / 40,
   },
 
