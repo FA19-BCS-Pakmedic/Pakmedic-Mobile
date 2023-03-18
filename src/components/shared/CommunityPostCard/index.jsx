@@ -20,8 +20,6 @@ export default CommunityPostCard = props => {
   const {item, Delete, setDelete} = props;
   const user = useSelector(state => state.auth.user);
 
-  console.log(item);
-
   return (
     <TouchableOpacity
       style={styles.container}

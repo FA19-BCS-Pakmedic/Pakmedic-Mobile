@@ -23,6 +23,8 @@ import Retinopathy from '../../../screens/doctor/Assistant/Retinopathy';
 import Xray from '../../../screens/doctor/Assistant/Xray';
 import RiskOfDeath from '../../../screens/doctor/Assistant/RiskOfDeath';
 import CompoundRecommendation from '../../../screens/doctor/Assistant/CompoundRecommendation';
+import CompoundResults from '../../../screens/doctor/Assistant/CompoundRecommendation/CompoundResults';
+
 import BrainMri from '../../../screens/doctor/Assistant/BrainMri';
 
 const Stack = createNativeStackNavigator();
@@ -44,6 +46,7 @@ const DoctorNavigation = () => {
         name="CompoundRecommendation"
         component={CompoundRecommendation}
       />
+      <Stack.Screen name="CompoundResults" component={CompoundResults} />
       <Stack.Screen name="BrainMri" component={BrainMri} />
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="OngoingCall" component={OngoingCall} />
