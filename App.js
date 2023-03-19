@@ -25,16 +25,19 @@ import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home'
 import notifee, {EventType} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 
+// import {register} from './src/services/notificationService';
+import deviceStorage from './src/utils/helpers/deviceStorage';
+
 const StackNavigate = createNativeStackNavigator();
 
-let token = null;
 const registerDeviceForMessaging = async () => {
   await messaging().registerDeviceForRemoteMessages();
-  token = await messaging().getToken();
-  console.log(token);
+  const token = await messaging().getToken();
 
-  // Save the token
-  // await postToApi('/users/1234/tokens', { token });
+  await deviceStorage.saveItem('FCMToken', token);
+
+  // Register the token
+  // await register(token);
 };
 
 const App = () => {

@@ -32,6 +32,7 @@ import messaging from '@react-native-firebase/messaging';
 import {useEffect} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
+import ResultsScreen from '../../../screens/doctor/Assistant/ResultsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,9 +40,7 @@ const onMessageReceived = async message => {
   notifee.createChannel({
     id: 'default',
     name: 'Default Channel',
-    importance: AndroidImportance.HIGH,
   });
-
   await notifee.displayNotification(JSON.parse(message.data.notifee));
 };
 
@@ -56,9 +55,12 @@ const onBackgroundMessage = navigation => {
       // Update external API
       console.log('Pressed Notification');
 
-      navigation.navigate('App', {
-        screen: 'Xray',
-      });
+      if (notification?.data?.navigate) {
+        navigation.navigate('App', {
+          screen: notification?.data?.navigate,
+          params: {image: notification?.data?.image},
+        });
+      }
 
       // Remove the notification
       await notifee.cancelNotification(notification.id);
@@ -91,6 +93,7 @@ const DoctorNavigation = () => {
         component={CompoundRecommendation}
       />
       <Stack.Screen name="CompoundResults" component={CompoundResults} />
+      <Stack.Screen name="ResultsScreen" component={ResultsScreen} />
       <Stack.Screen name="BrainMri" component={BrainMri} />
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="OngoingCall" component={OngoingCall} />

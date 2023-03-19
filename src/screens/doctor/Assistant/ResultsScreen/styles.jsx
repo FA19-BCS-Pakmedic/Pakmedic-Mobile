@@ -9,6 +9,14 @@ export const styles = StyleSheet.create({
     marginTop: dimensions.Height / 25,
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: dimensions.Height / 1.33,
+    // height: dimensions.Height / 1.33,
+  },
+  fileContainer: {
+    justifyContent: 'space-evenly',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
 });

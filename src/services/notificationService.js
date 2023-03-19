@@ -2,6 +2,11 @@ import API from '@/utils/helpers/axios';
 
 //add a scan
 export const register = async data => {
-  console.log(data);
-  return API.post(`notifications/register`, {token: data});
+  return API.post(`notifications/register`, data);
+};
+
+export const update = async data => {
+  return API.post(`notifications/update?userid=${data?.userId}`, {
+    tokenID: data?.token,
+  });
 };

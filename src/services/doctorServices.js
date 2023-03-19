@@ -134,3 +134,10 @@ export const riskOfDeath = data => {
 export const RecommendCompounds = data => {
   return API.post('ML/recommendcompound', {conditions: data});
 };
+
+export const Xray = data => {
+  const image = data?.file;
+  delete data?.file;
+
+  return API.post(`ML/chestXray?name=${image}`, data);
+};
