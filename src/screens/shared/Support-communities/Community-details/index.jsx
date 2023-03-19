@@ -16,6 +16,7 @@ import {getPosts} from '../../../../services/communityServices';
 import {useEffect} from 'react';
 
 import colors from '../../../../utils/styles/themes/colors';
+import {useSelector} from 'react-redux';
 
 const CommunityDetails = ({route}) => {
   const {item} = route.params;
@@ -24,6 +25,8 @@ const CommunityDetails = ({route}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
+
+  const role = useSelector(state => state.role.role);
 
   const [posts, setPosts] = useState([]);
 
@@ -105,6 +108,7 @@ const CommunityDetails = ({route}) => {
           <AddMore
             type={'filled'}
             label={'Add More'}
+            role={role}
             onPress={() => setModalVisible(true)}
           />
         </View>

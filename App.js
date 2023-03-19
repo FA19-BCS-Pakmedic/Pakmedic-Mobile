@@ -21,16 +21,18 @@ import OngoingCall from './src/screens/shared/Telemedicine/Ongoing-call';
 import calls from './src/utils/helpers/Store';
 import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home';
 
+import {Provider as PaperProvider, MD2LightTheme} from 'react-native-paper';
+
 const StackNavigate = createNativeStackNavigator();
 
 const App = () => {
-
-
   https: return (
     <Provider store={store}>
-      <MenuProvider>
-        <AppNavigation />
-      </MenuProvider>
+      <PaperProvider theme={MD2LightTheme}>
+        <MenuProvider>
+          <AppNavigation />
+        </MenuProvider>
+      </PaperProvider>
     </Provider>
     // <NavigationContainer>
     //   <StackNavigate.Navigator initialRouteName="Home">

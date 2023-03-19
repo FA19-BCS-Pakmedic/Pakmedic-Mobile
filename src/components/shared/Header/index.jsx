@@ -1,4 +1,12 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  BackHandler,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,6 +32,8 @@ import DefaultImage from '../../../assets/images/default-avatar.png';
 import MenuDropDown from '../MenuDropdown';
 import {voximplant} from '../../../services/voxServices';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
+
+import {DefaultTheme, Menu, Divider, Provider} from 'react-native-paper';
 
 const Header = ({color}) => {
   const navigation = useNavigation();
@@ -77,23 +87,24 @@ const Header = ({color}) => {
       <Text style={styles().text}>Pakmedic</Text>
     </View>
   ) : (
-    <View style={styles(role).root}>
-      {/* Logo Container */}
-      <View style={styles().logoContainer}>
-        <Logo width={dimensions.Width / 10} />
-        <Text style={styles().text}>Pakmedic</Text>
-      </View>
+    <View style={styles().root}>
+      <View style={styles(role).innerView}>
+        {/* Logo Container */}
+        <View style={styles().logoContainer}>
+          <Logo width={dimensions.Width / 10} />
+          <Text style={styles().text}>Pakmedic</Text>
+        </View>
 
-      {/* User avatar and notification bell */}
-      <View style={styles().actionsContainer}>
-        <TouchableOpacity style={styles().notificationContainer}>
-          <Notification width={30} height={30} />
-          {notif && <View style={styles().notifIndicator}></View>}
-        </TouchableOpacity>
-        {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
+        {/* User avatar and notification bell */}
+        <View style={styles().actionsContainer}>
+          <TouchableOpacity style={styles().notificationContainer}>
+            <Notification width={30} height={30} />
+            {notif && <View style={styles().notifIndicator}></View>}
+          </TouchableOpacity>
+          {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
-        {/* <MenuDropdown options={menuDropDownOptions}> */}
-        <TouchableOpacity
+          {/* <MenuDropdown options={menuDropDownOptions}> */}
+          {/* <TouchableOpacity
           // onPress={() => {
           //   navigation.navigate('App', {
           //     screen: 'ProfileManagement',
@@ -109,8 +120,46 @@ const Header = ({color}) => {
             }}
             style={styles().avatar}
           />
-        </TouchableOpacity>
-        {/* </MenuDropdown> */}
+        </TouchableOpacity> */}
+          {/* </MenuDropdown> */}
+
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            contentStyle={styles().menu}
+            anchor={
+              <TouchableOpacity onPress={openMenu}>
+                <Image
+                  //if user has no avatar then use default avatar
+                  width={dimensions.Width / 10}
+                  height={dimensions.Width / 10}
+                  source={{
+                    uri: `${apiEndpoint}files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
+                  }}
+                  style={styles().avatar}
+                />
+              </TouchableOpacity>
+            }>
+            <Menu.Item
+              onPress={() => {
+                navigation.navigate('App', {
+                  screen: 'ProfileManagement',
+                });
+                closeMenu();
+              }}
+              title="Profile"
+            />
+            <Divider />
+            <Menu.Item onPress={logout} title="Logout" />
+            <Divider />
+            <Menu.Item
+              onPress={() => {
+                BackHandler.exitApp();
+              }}
+              title="Exit"
+            />
+          </Menu>
+        </View>
       </View>
     </View>
   );
@@ -121,6 +170,10 @@ export default Header;
 const styles = (role, justifyContent) =>
   StyleSheet.create({
     root: {
+      width: dimensions.Width,
+      height: dimensions.Height / 15,
+    },
+    innerView: {
       width: dimensions.Width,
       height: dimensions.Height / 15,
       backgroundColor:
@@ -174,5 +227,6 @@ const styles = (role, justifyContent) =>
       borderRadius: 100,
       borderWidth: 2,
       borderColor: colors.primaryMonoChrome700,
+      resizeMode: 'cover',
     },
   });

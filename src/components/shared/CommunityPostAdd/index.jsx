@@ -90,6 +90,9 @@ export default CommunityPostAdd = props => {
     } catch (error) {
       console.log('error', error);
       setLoading(false);
+    } finally {
+      reset();
+      setIsCheck(false);
     }
   };
 

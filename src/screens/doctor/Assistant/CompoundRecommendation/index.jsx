@@ -74,9 +74,11 @@ const CompoundRecommendationScreen = () => {
     const response = await RecommendCompounds(tags);
     setIsLoading(false);
 
+    console.log(response.data);
+
     navigation.navigate('App', {
       screen: 'CompoundResults',
-      params: {results: response?.data?.data?.result},
+      params: {results: response?.data},
     });
   };
 
