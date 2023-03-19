@@ -125,7 +125,6 @@ const Reports = ({
   };
 
   const onSubmit = async data => {
-    console.log(data);
     try {
       setIsBtnLoading(true);
       isEdit

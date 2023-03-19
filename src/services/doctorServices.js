@@ -103,3 +103,34 @@ export const retinopathy = data => {
   return API.post('ML/retinopathy', user);
 };
 
+export const riskOfDeath = data => {
+  const keys = [
+    'Age',
+    'DiastolicBP',
+    'PovertyIndex',
+    'Race',
+    'RedBloodCells',
+    'SedimentationRate',
+    'SerumAlbumin',
+    'SerumCholesterol',
+    'SerumIron',
+    'SerumMagnesium',
+    'SerumProtein',
+    'Sex',
+    'SystolicBP',
+    'TIBC',
+    'TransferrinSaturation',
+    'WhiteBloodCells',
+    'BMI',
+    'PulsePressure',
+  ];
+
+  const userValues = keys.map(key => parseFloat(data[key]));
+  const user = {user: userValues};
+
+  return API.post('ML/riskOfDeath', user);
+};
+
+export const RecommendCompounds = data => {
+  return API.post('ML/recommendcompound', {conditions: data});
+};
