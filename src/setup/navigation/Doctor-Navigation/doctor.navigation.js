@@ -26,9 +26,53 @@ import CompoundResults from '../../../screens/doctor/Assistant/CompoundRecommend
 
 import BrainMri from '../../../screens/doctor/Assistant/BrainMri';
 
+import notifee, {EventType, AndroidImportance} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+import {useEffect} from 'react';
+
+import {useNavigation} from '@react-navigation/native';
+
 const Stack = createNativeStackNavigator();
 
+const onMessageReceived = async message => {
+  notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+    importance: AndroidImportance.HIGH,
+  });
+
+  await notifee.displayNotification(JSON.parse(message.data.notifee));
+};
+
+const onBackgroundMessage = navigation => {
+  notifee.onBackgroundEvent(async ({type, detail}) => {
+    const {notification, pressAction} = detail;
+
+    // Check if the user pressed the "Mark as read" action
+
+    console.log('Inside onBackgroundEvent');
+    if (type === EventType.PRESS) {
+      // Update external API
+      console.log('Pressed Notification');
+
+      navigation.navigate('App', {
+        screen: 'Xray',
+      });
+
+      // Remove the notification
+      await notifee.cancelNotification(notification.id);
+    }
+  });
+};
+
 const DoctorNavigation = () => {
+  const navigation = useNavigation();
+  useEffect(() => {
+    messaging().onMessage(onMessageReceived);
+    messaging().setBackgroundMessageHandler(onMessageReceived);
+    onBackgroundMessage(navigation);
+  }, []);
+
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}

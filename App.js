@@ -1,4 +1,5 @@
 // app entry point
+
 import AppNavigation from './src/setup/navigation/app.navigation';
 
 // your entry point
@@ -21,10 +22,25 @@ import OngoingCall from './src/screens/shared/Telemedicine/Ongoing-call';
 import calls from './src/utils/helpers/Store';
 import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home';
 
+import notifee, {EventType} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+
 const StackNavigate = createNativeStackNavigator();
 
-const App = () => {
+let token = null;
+const registerDeviceForMessaging = async () => {
+  await messaging().registerDeviceForRemoteMessages();
+  token = await messaging().getToken();
+  console.log(token);
 
+  // Save the token
+  // await postToApi('/users/1234/tokens', { token });
+};
+
+const App = () => {
+  useEffect(() => {
+    registerDeviceForMessaging();
+  }, []);
 
   https: return (
     <Provider store={store}>
