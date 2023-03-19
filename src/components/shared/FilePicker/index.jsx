@@ -22,7 +22,10 @@ const FilePicker = ({
     <Controller
       control={control}
       name={name}
-      render={({value}) => (
+      render={({
+        field: {onChange, onBlur},
+        fieldState: {error, isDirty, isTouched},
+      }) => (
         <View style={styles(width, null, type).container}>
           <Text style={styles().title}>{title}</Text>
           <View style={styles(null, height, type).filePickerContainer}>
@@ -36,6 +39,9 @@ const FilePicker = ({
               isLoading={isLoading}
             />
             <Text style={styles().fileName}>{text ? text : 'File Name'}</Text>
+          </View>
+          <View style={styles().errorMessageContainer}>
+            {error && <ErrorMessage error={error} />}
           </View>
         </View>
       )}
@@ -77,5 +83,12 @@ const styles = (width, height, type) =>
       fontWeight: fonts.weight.semi,
       marginLeft: dimensions.Width / 50,
       maxWidth: dimensions.Width / 2,
+    },
+
+    errorMessageContainer: {
+      width: '100%',
+      height: dimensions.Height / 40,
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
     },
   });
