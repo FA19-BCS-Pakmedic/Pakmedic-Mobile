@@ -21,20 +21,13 @@ export const permissions = [
  * @param {boolean} isVideo boolean to check if the call is a video call or not
  * @returns object containing the call settings
  */
-export const getCallSettings = isVideo => {
-  const voiceCallSettings = {
+export const getCallSettings = () => {
+  return {
     video: {
       sendVideo: false,
-      receiveVideo: false,
-    },
-  };
-  const videoCallSettings = {
-    video: {
-      sendVideo: true,
       receiveVideo: true,
     },
   };
-  return isVideo ? videoCallSettings : voiceCallSettings;
 };
 
 /**
@@ -146,8 +139,7 @@ export function showError(message, navigation, user) {
       text: 'OK',
       onPress: () => {
         if (navigation) {
-          // navigation.navigate('History', {uID: user.id});
-          navigation.navigate('History');
+          navigation.navigate('App', {screen: 'Dashboard'});
         }
       },
     },
@@ -172,6 +164,7 @@ export const subscribeToCallEvents = (
   endpoint,
   setRemoteVideoStreamId,
   showCallError,
+  setIsInitiated,
 ) => {
   call.current.on(Voximplant.CallEvents.Failed, callEvent => {
     showCallError(callEvent.reason);
@@ -182,13 +175,18 @@ export const subscribeToCallEvents = (
   });
   call.current.on(Voximplant.CallEvents.Connected, callEvent => {
     setCallStatus('Connected');
+    setIsInitiated(true);
   });
   call.current.on(Voximplant.CallEvents.Disconnected, callEvent => {
     calls.delete(callEvent.call.callId);
-    navigation.navigate('History');
+    onHangupPress(call);
+    navigation.pop();
   });
   call.current.on(Voximplant.CallEvents.LocalVideoStreamAdded, callEvent => {
     setLocalVideoStreamId(callEvent.videoStream.id);
+  });
+  call.current.on(Voximplant.CallEvents.LocalVideoStreamRemoved, callEvent => {
+    setLocalVideoStreamId('');
   });
   call.current.on(Voximplant.CallEvents.EndpointAdded, callEvent => {
     endpoint.current = callEvent.endpoint;
@@ -219,6 +217,12 @@ export const subscribeToEndpointEvent = async (
     Voximplant.EndpointEvents.RemoteVideoStreamAdded,
     endpointEvent => {
       setRemoteVideoStreamId(endpointEvent.videoStream.id);
+    },
+  );
+  endpoint.current.on(
+    Voximplant.EndpointEvents.RemoteVideoStreamRemoved,
+    endpointEvent => {
+      setRemoteVideoStreamId('');
     },
   );
 };

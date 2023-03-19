@@ -1,10 +1,95 @@
 import {StyleSheet} from 'react-native';
+import colors from '../../../../utils/styles/themes/colors';
+import dimensions from '../../../../utils/styles/themes/dimensions';
+import fonts from '../../../../utils/styles/themes/fonts';
 import COLOR from './Color';
+
+// export default StyleSheet.create({
+//   safearea: {
+//     flex: 1,
+//     backgroundColor: COLOR.WHITE,
+//   },
+//   container: {
+//     flex: 1,
+//     width: '100%',
+//     position: 'relative',
+//   },
+
+//   videoPanel: {
+//     flex: 1,
+//     width: '100%',
+//     position: 'absolute',
+//   },
+
+//   remotevideo: {
+//     flex: 1,
+//     width: '100%',
+//     position: 'relative',
+//   },
+
+//   selfview: {
+//     position: 'absolute',
+//     width: dimensions.Width / 4,
+//     height: dimensions.Width / 4,
+//     right: dimensions.Width / 20,
+//     top: dimensions.Height / 20,
+//     borderRadius: dimensions.Width / 30,
+//     borderWidth: 2,
+//     borderColor: colors.secondary1,
+//   },
+
+//   outgoingPanel: {
+//     position: 'absolute',
+//     width: '100%',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     top: dimensions.Height / 3,
+//   },
+
+//   userName: {
+//     fontSize: fonts.size.font24,
+//     fontWeight: fonts.weight.bold,
+//     marginBottom: dimensions.Height / 100,
+//   },
+
+//   state: {
+//     fontSize: fonts.size.font16,
+//     fontWeight: fonts.weight.semi,
+//     color: colors.accent1,
+//   },
+
+//   callControlsVideo: {
+//     position: 'absolute',
+//     flexDirection: 'row',
+//     width: '100%',
+//     top: dimensions.Height / 1.2,
+//     justifyContent: 'space-around',
+//     alignItems: 'center',
+//   },
+
+//   button: {
+//     width: dimensions.Width / 6,
+//     height: dimensions.Width / 6,
+//     backgroundColor: colors.invalid,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     borderRadius: dimensions.Width,
+//   },
+
+//   featureBtn: {
+//     width: dimensions.Width / 8,
+//     height: dimensions.Width / 8,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     borderRadius: dimensions.Width,
+//     backgroundColor: colors.primaryMonoChrome300,
+//   },
+// });
 
 export default StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: COLOR.WHITE,
+    backgroundColor: colors.primaryMonoChrome100,
   },
   container: {
     flex: 1,
@@ -12,30 +97,61 @@ export default StyleSheet.create({
     alignItems: 'stretch',
     paddingHorizontal: 20,
   },
-  textButton: {
-    color: COLOR.BUTTON,
-    fontSize: 16,
-    alignSelf: 'center',
-    paddingTop: 20,
-    textAlign: 'center',
+
+  outgoingPanel: {
+    position: 'absolute',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: dimensions.Height / 3,
   },
+
+  userName: {
+    fontSize: fonts.size.font24,
+    fontWeight: fonts.weight.bold,
+    marginBottom: dimensions.Height / 100,
+  },
+
+  state: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.semi,
+    color: colors.accent1,
+  },
+
+  callControlsVideo: {
+    position: 'absolute',
+    flexDirection: 'row',
+    width: '100%',
+    top: dimensions.Height / 1.17,
+    paddingVertical: dimensions.Height / 100,
+    backgroundColor: colors.primaryMonoChrome100,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderTopEndRadius: dimensions.Width / 10,
+    borderTopStartRadius: dimensions.Width / 10,
+  },
+
+  featureBtn: {
+    width: dimensions.Width / 8,
+    height: dimensions.Width / 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: dimensions.Width,
+    backgroundColor: colors.primaryMonoChrome300,
+  },
+
   button: {
-    width: 220,
-    alignSelf: 'center',
-  },
-  forminput: {
-    padding: 5,
-    marginBottom: 10,
-    color: COLOR.ACCENT,
-    height: 40,
-    borderColor: COLOR.ACCENT,
-    borderWidth: 1,
-    borderRadius: 4,
+    width: dimensions.Width / 6,
+    height: dimensions.Width / 6,
+    backgroundColor: colors.invalid,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: dimensions.Width,
   },
   selfview: {
     position: 'absolute',
-    right: 20,
-    bottom: 20,
+    right: dimensions.Width / 20,
+    top: dimensions.Width / 20,
     width: 100,
     height: 120,
   },
@@ -45,30 +161,5 @@ export default StyleSheet.create({
   videoPanel: {
     flex: 1,
     position: 'relative',
-  },
-  margin: {
-    margin: 10,
-  },
-  callConnectingLabel: {
-    fontSize: 18,
-    alignSelf: 'center',
-  },
-  callControls: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-  },
-  callControlsVideo: {
-    height: 100,
-  },
-  incomingCallText: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    fontSize: 22,
-  },
-  incomingCallButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    height: 90,
   },
 });
