@@ -9,8 +9,6 @@ const Dashboard = () => {
   const [isModalVisible, setModalVisible] = React.useState(false);
 
   const user = useSelector(state => state.auth.user);
-
-  console.log(user);
   return (
     <StaticContainer>
       <View>

@@ -36,10 +36,12 @@ export const styles = StyleSheet.create({
     color: colors.secondary1,
   },
   image: {
-    width: dimensions.Width * 0.9,
+    width: dimensions.Width * 0.8,
     height: dimensions.Height / 3,
     alignSelf: 'center',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
+    marginVertical: dimensions.Height * 0.01,
+    borderRadius: 10,
   },
   description: {
     fontSize: fonts.size.font14,
@@ -55,6 +57,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: dimensions.Width * 0.02,
+    marginTop: -dimensions.Height * 0.02,
   },
   comments: {
     //marginVertical: 10,
@@ -67,7 +70,7 @@ export const styles = StyleSheet.create({
     borderColor: colors.primary1,
     paddingHorizontal: dimensions.Width * 0.02,
     paddingTop: dimensions.Height * 0.02,
-    marginVertical: dimensions.Height * 0.02,
+    marginVertical: dimensions.Height * 0.01,
   },
   commentHeader: {
     flexDirection: 'row',
@@ -78,6 +81,17 @@ export const styles = StyleSheet.create({
   commentUser: {
     fontSize: fonts.size.font14,
     fontWeight: 'bold',
+    color: colors.secondary1,
+  },
+  doctorBadge: {
+    marginHorizontal: dimensions.Width * 0.02,
+    paddingVertical: dimensions.Height * 0.005,
+    borderBottomWidth: 1.5,
+    width: dimensions.Width * 0.8,
+    borderColor: colors.primary1,
+  },
+  doctorBadgeText: {
+    fontSize: fonts.size.font12,
     color: colors.secondary1,
   },
   commentTime: {
@@ -100,7 +114,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: dimensions.Width * 0.02,
     paddingTop: dimensions.Height * 0.01,
-    marginVertical: dimensions.Height * 0.01,
+    marginVertical: dimensions.Height * 0.005,
     width: dimensions.Width * 0.85,
     alignSelf: 'center',
   },
@@ -110,7 +124,7 @@ export const styles = StyleSheet.create({
   replyUser: {
     fontSize: fonts.size.font12,
     fontWeight: fonts.weight.normal,
-    color: colors.secondary2,
+    color: colors.secondary1,
   },
   replyTime: {
     fontSize: fonts.size.font12,
