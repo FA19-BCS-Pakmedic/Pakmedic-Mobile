@@ -63,8 +63,12 @@ export default RootNavigation = () => {
   useEffect(() => {
     voximplant.on(Voximplant.ClientEvents.IncomingCall, incomingCallEvent => {
       calls.set(incomingCallEvent.call.callId, incomingCallEvent.call);
+
+      console.log(incomingCallEvent.call.isVideo);
+
       navigation.navigate('IncomingCall', {
         callId: incomingCallEvent.call.callId,
+        isVideoCall: incomingCallEvent.call.isVideo,
       });
     });
 
