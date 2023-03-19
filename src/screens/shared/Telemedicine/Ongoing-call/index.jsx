@@ -1,5 +1,3 @@
-
-
 import {useNavigation} from '@react-navigation/native';
 import React, {useState, useRef, useCallback, useEffect} from 'react';
 import {
@@ -23,18 +21,23 @@ import {
   voximplant,
 } from '../../../../services/voxServices';
 
+import CallDropIcon from '../../../../assets/svgs/CallDrop.svg';
+import MicOffIcon from '../../../../assets/svgs/MicOff.svg';
+import MicOnIcon from '../../../../assets/svgs/MicOn.svg';
+import VideoOnIcon from '../../../../assets/svgs/VideoOn.svg';
+import VideoOffIcon from '../../../../assets/svgs/VideoOff.svg';
+
 const OngoingCall = ({route}) => {
   const navigation = useNavigation();
 
   /**
    * @param {boolean} isIncomingCall - true if the call is incoming, false if the call is outgoing
-   * @param {boolean} isVideoCall - true if the call is video, false if the call is audio
    * @param {string} callee - callee is the person we are calling aka the receiver;
    */
 
   console.log(route.params);
 
-  const {isIncomingCall, isVideoCall, callee} = route.params;
+  const {isIncomingCall, callee, otherUsername} = route.params;
   const [callState, setCallState] = useState('Connecting');
 
   const callId = useRef(route.params?.callId); //callId is the id of the call received by the receiver
@@ -46,12 +49,13 @@ const OngoingCall = ({route}) => {
   const call = useRef(null);
   const endpoint = useRef(null);
 
+  const [isMuted, setIsMuted] = useState(false);
+  const [isVideo, setIsVideo] = useState(false);
+  const [isInitiated, setIsInitiated] = useState(false);
+
   useEffect(() => {
     async function makeCall() {
-      call.current = await voximplant.call(
-        callee,
-        getCallSettings(isVideoCall),
-      );
+      call.current = await voximplant.call(callee, getCallSettings());
 
       //this will subscribe to call events
       onSubscribe();
@@ -71,9 +75,7 @@ const OngoingCall = ({route}) => {
       subscribeToEndpointEvent(endpoint, setRemoteVideoStreamId); //subscribe to the endpoint events
 
       // answer the incoming call
-      await call.current.answer(getCallSettings(true));
-
-      console.log(remoteVideoStreamId);
+      await call.current.answer(getCallSettings(false));
     }
 
     if (isIncomingCall) {
@@ -85,7 +87,7 @@ const OngoingCall = ({route}) => {
     return function cleanup() {
       unsubscribeFromCallEvents(call);
     };
-  }, [isVideoCall]);
+  }, [isIncomingCall, callee, otherUsername]);
 
   function onSubscribe() {
     subscribeToCallEvents(
@@ -96,6 +98,7 @@ const OngoingCall = ({route}) => {
       endpoint,
       setRemoteVideoStreamId,
       showCallError,
+      setIsInitiated,
     );
   }
 
@@ -105,36 +108,65 @@ const OngoingCall = ({route}) => {
         text: 'OK',
         onPress: () => {
           calls.delete(callId.current);
-          navigation.navigate('History');
+          navigation.pop();
         },
       },
     ]);
   }
 
+  useEffect(() => {
+    if (call.current && isInitiated) call.current.sendAudio(!isMuted);
+  }, [isMuted]);
+
+  useEffect(() => {
+    console.log(isInitiated, isVideo);
+    if (call.current && isInitiated) call.current.sendVideo(isVideo);
+  }, [isVideo]);
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safearea}>
-        <View style={styles.videoPanel}>
-          <Voximplant.VideoView
-            style={styles.remotevideo}
-            videoStreamId={remoteVideoStreamId}
-            scaleType={Voximplant.RenderScaleType.SCALE_FIT}
-          />
-          <Voximplant.VideoView
-            style={styles.selfview}
-            videoStreamId={localVideoStreamId}
-            scaleType={Voximplant.RenderScaleType.SCALE_FIT}
-            showOnTop={true}
-          />
+        {callState === 'Connected' && (
+          <View style={styles.videoPanel}>
+            <Voximplant.VideoView
+              style={styles.remotevideo}
+              videoStreamId={remoteVideoStreamId}
+              scaleType={Voximplant.RenderScaleType.SCALE_FIT}
+            />
+            <Voximplant.VideoView
+              style={styles.selfview}
+              videoStreamId={localVideoStreamId}
+              scaleType={Voximplant.RenderScaleType.SCALE_FIT}
+              showOnTop={true}
+            />
+          </View>
+        )}
+        <View style={styles.outgoingPanel}>
+          <Text style={styles.userName}>{otherUsername}</Text>
+          <Text style={styles.state}>{callState}</Text>
         </View>
+
         <View style={styles.callControlsVideo}>
-          <Text style={styles.callConnectingLabel}>{callState}</Text>
+          {callState === 'Connected' && (
+            <TouchableOpacity
+              onPress={() => setIsMuted(prevState => !prevState)}
+              style={styles.featureBtn}>
+              {isMuted ? <MicOnIcon /> : <MicOffIcon />}
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             onPress={() => onHangupPress(call)}
             style={styles.button}>
-            <Text style={styles.textButton}>END CALL</Text>
+            <CallDropIcon />
           </TouchableOpacity>
+          {callState === 'Connected' && (
+            <TouchableOpacity
+              onPress={() => setIsVideo(prevState => !prevState)}
+              style={styles.featureBtn}>
+              {isVideo ? <VideoOffIcon /> : <VideoOnIcon />}
+            </TouchableOpacity>
+          )}
         </View>
       </SafeAreaView>
     </>

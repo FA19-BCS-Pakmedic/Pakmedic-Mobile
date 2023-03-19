@@ -136,7 +136,12 @@ const Chat = ({route, navigation}) => {
     if (permissionsGranted) {
       navigation.navigate('App', {
         screen: 'OngoingCall',
-        params: {callee, isVideoCall, isIncomingCall: false},
+        params: {
+          callee,
+          isVideoCall,
+          isIncomingCall: false,
+          otherUsername: receiver.name,
+        },
       });
     }
   };

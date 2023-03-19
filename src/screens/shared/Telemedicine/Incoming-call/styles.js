@@ -1,74 +1,54 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import COLOR from './Color';
 
+import dimensions from '../../../../utils/styles/themes/dimensions';
+import colors from '../../../../utils/styles/themes/colors';
+import fonts from '../../../../utils/styles/themes/fonts';
+
 export default StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: COLOR.WHITE,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    paddingHorizontal: 20,
-  },
-  textButton: {
-    color: COLOR.BUTTON,
-    fontSize: 16,
-    alignSelf: 'center',
-    paddingTop: 20,
-    textAlign: 'center',
-  },
-  button: {
-    width: 220,
-    alignSelf: 'center',
-  },
-  forminput: {
-    padding: 5,
-    marginBottom: 10,
-    color: COLOR.ACCENT,
-    height: 40,
-    borderColor: COLOR.ACCENT,
-    borderWidth: 1,
-    borderRadius: 4,
-  },
-  selfview: {
-    position: 'absolute',
-    right: 20,
-    bottom: 20,
-    width: 100,
-    height: 120,
-  },
-  remotevideo: {
-    flex: 1,
-  },
-  videoPanel: {
-    flex: 1,
-    position: 'relative',
-  },
-  margin: {
-    margin: 10,
-  },
-  callConnectingLabel: {
-    fontSize: 18,
-    alignSelf: 'center',
-  },
-  callControls: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-  },
-  callControlsVideo: {
-    height: 100,
-  },
   incomingCallText: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    fontSize: 22,
+    fontSize: fonts.size.font24,
+    fontWeight: fonts.weight.bold,
+    width: '100%',
+    textAlign: 'center',
+    position: 'absolute',
+    top: dimensions.Height / 3,
+    paddingVertical: dimensions.Height / 30,
   },
+  incomingCallState: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.semi,
+    color: colors.accent1,
+    width: '100%',
+    textAlign: 'center',
+    position: 'absolute',
+    top: dimensions.Height / 2.4,
+  },
+
   incomingCallButtons: {
+    position: 'absolute',
     flexDirection: 'row',
+    width: '100%',
+    top: dimensions.Height / 1.2,
     justifyContent: 'space-around',
-    height: 90,
+    alignItems: 'center',
+  },
+
+  button: {
+    width: dimensions.Width / 6,
+    height: dimensions.Width / 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: dimensions.Width,
+  },
+
+  callBtnContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  btnLabel: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.semi,
   },
 });
