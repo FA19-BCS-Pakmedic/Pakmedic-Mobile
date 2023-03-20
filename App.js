@@ -38,6 +38,7 @@ const registerDeviceForMessaging = async () => {
 
   await deviceStorage.saveItem('FCMToken', token);
 
+  console.log('FCM Token: ', token);
   // Register the token
   // await register(token);
 };
