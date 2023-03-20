@@ -78,7 +78,7 @@ const CompoundRecommendationScreen = () => {
 
     navigation.navigate('App', {
       screen: 'CompoundResults',
-      params: {results: response?.data},
+      params: {results: response?.data?.data?.result},
     });
   };
 
