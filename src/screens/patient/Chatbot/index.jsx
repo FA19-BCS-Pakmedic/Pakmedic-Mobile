@@ -1,7 +1,9 @@
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
 import {GiftedChat} from 'react-native-gifted-chat';
-import SplashScreen from 'react-native-splash-screen';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
+// import SplashScreen from 'react-native-splash-screen';
 
 import BotSvg from '../../../assets/svgs/bot.svg';
 
@@ -24,28 +26,22 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import GiftedChatSend from '../../../components/shared/GiftedChatSend';
 import GiftedChatInput from '../../../components/shared/GiftedChatInput';
 import {useSelector} from 'react-redux';
+import {specialistNames} from '../../../utils/constants/Specialists';
 
 const Chatbot = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
 
   const [isTyping, setIsTyping] = useState(false);
+  const [specialist, setSpecialist] = useState('');
 
   const user = useSelector(state => state.auth.user);
 
-  // TODO: REPLACE THIS WITH A DYNAMIC SESSION ID
-  const sessionId = '123456789';
+  const sessionId = uuidv4();
 
-  // TODO: REPLACE THIS WITH DYNAMIC USER ID
   const userId = user?._id;
 
   useEffect(() => {
-    // navigation.getParent()?.setOptions({
-    //   tabBarStyle: {
-    //     display: 'none',
-    //   },
-    // });
-    console.log(userId);
     navigation.getParent().setOptions({
       tabBarStyle: {display: 'none'},
       tabBarVisible: false,
@@ -59,7 +55,6 @@ const Chatbot = ({route, navigation}) => {
 
   // useEffect to run when ever there is data from the backend
   useEffect(() => {
-    console.log(data);
     if (data) {
       const messages = [
         {
@@ -74,15 +69,15 @@ const Chatbot = ({route, navigation}) => {
         },
       ];
 
-      console.log(messages);
-
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
       );
     }
   }, [data]);
 
-  const onSend = useCallback(async (messages = []) => {
+  useEffect(() => console.log(specialist), [specialist]);
+
+  const onSend = async (messages = []) => {
     messages[0] = {
       ...messages[0],
       user: {
@@ -92,7 +87,7 @@ const Chatbot = ({route, navigation}) => {
       },
     };
 
-    console.log(messages[0]);
+    // console.log(messages[0]);
 
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages),
@@ -100,14 +95,35 @@ const Chatbot = ({route, navigation}) => {
 
     setIsTyping(true);
 
-    const data = await chatWithBot({
+    const response = await chatWithBot({
       message: messages[0].text,
       sessionId: sessionId,
     });
 
-    setData(data.data.data);
+    const findSpeciality = specialistNames.find(
+      item => item.label === response.data.data.intent,
+    );
+
+    if (findSpeciality) {
+      console.log(findSpeciality);
+      setSpecialist(findSpeciality.value);
+    } else if (response.data.data.intent === 'searchSpecialist' && specialist) {
+      navigateToSpecialists();
+    }
+
+    setData(response.data.data);
     setIsTyping(false);
-  }, []);
+  };
+
+  const navigateToSpecialists = () => {
+    // console.log('navigating', specialist, user.location);
+    setTimeout(() => {
+      navigation.navigate('App', {
+        screen: 'DoctorsList',
+        params: {speciality: specialist, location: user.location},
+      });
+    }, 2000);
+  };
 
   //render bubble with custom styling
   const renderBubble = props => {

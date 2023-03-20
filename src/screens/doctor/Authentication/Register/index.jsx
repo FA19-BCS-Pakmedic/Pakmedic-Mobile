@@ -49,6 +49,8 @@ import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 import {loginVox} from '../../../../services/voxServices';
 
+import {specialistNames} from '../../../../utils/constants/Specialists';
+
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
   const [pmcData, setPmcData] = useState(null);
@@ -72,6 +74,7 @@ const DoctorRegister = ({navigation}) => {
         phone: '',
         location: '',
         gender: '',
+        speciality: '',
       },
     });
 
@@ -395,6 +398,21 @@ const DoctorRegister = ({navigation}) => {
           />
 
           {/* cities dropdown */}
+          <ValidateDropdown
+            open={open}
+            setOpen={setOpen}
+            items={CITIES}
+            control={control}
+            //title="City"
+            setValue={setCity}
+            name="location"
+            placeholder="Please select your city"
+            rules={{
+              required: 'Please select a city',
+              validate: value => value !== null || 'Please select a city',
+            }}
+          />
+
           <ValidateDropdown
             open={open}
             setOpen={setOpen}

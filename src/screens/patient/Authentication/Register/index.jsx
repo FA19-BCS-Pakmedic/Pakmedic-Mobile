@@ -52,10 +52,13 @@ import {
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
-import { loginVox } from '../../../../services/voxServices';
+import {loginVox} from '../../../../services/voxServices';
+import {ValidateDropdown} from '../../../../components/shared/Dropdown';
+import Cities from '../../../../utils/constants/Cities';
 
 const PatientRegister = ({navigation}) => {
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
 
   // useForm hook from react-hook-form
   const {control, handleSubmit, setValue, clearErrors, setError, watch} =
@@ -70,6 +73,7 @@ const PatientRegister = ({navigation}) => {
         phone: '',
         dob: new Date(),
         gender: '',
+        location: '',
       },
     });
 
@@ -108,6 +112,7 @@ const PatientRegister = ({navigation}) => {
       gender: data?.gender,
       // cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
       role: ROLES.patient,
+      location: data?.location,
     };
 
     console.log(patient);
@@ -321,6 +326,23 @@ const PatientRegister = ({navigation}) => {
             },
           }}
         />
+
+        {/* cities dropdown */}
+        <ValidateDropdown
+          open={open}
+          setOpen={setOpen}
+          items={Cities}
+          control={control}
+          //title="City"
+          setValue={callback => setValue('location', callback())}
+          name="location"
+          placeholder="Select your location"
+          rules={{
+            required: 'Please select a location',
+            validate: value => value !== null || 'Please select a location',
+          }}
+        />
+
         {/* contact field */}
         <ContactInputField
           type="outlined"

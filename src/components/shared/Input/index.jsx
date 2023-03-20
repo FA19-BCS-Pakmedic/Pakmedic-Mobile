@@ -180,37 +180,45 @@ export const ValidateInputField = ({
                 }}
                 ref={useRef}
               />
-              <View
+              {/* <View
                 style={
                   isPasswordField &&
                   (isDirty || isTouched || error) &&
                   styles().iconsContainer
-                }>
-                {isPasswordField && (
-                  <TouchableOpacity
-                    onPress={togglePasswordView}
-                    style={styles().iconContainer}>
-                    <Icon name={passwordIconName} size={18} />
-                  </TouchableOpacity>
-                )}
-                {(isDirty || isTouched || error) && (
-                  <Animatable.View
-                    animation="fadeIn"
-                    easing="ease-in-out"
-                    style={styles().iconContainer}>
-                    {!error && (
-                      <Icon name="checkmark-circle-outline" size={18} />
-                    )}
-                    {error && (
-                      <Icon
-                        name="close-circle-outline"
-                        size={18}
-                        color={colors.invalid}
-                      />
-                    )}
-                  </Animatable.View>
-                )}
-              </View>
+                }> */}
+              {isPasswordField && (
+                <TouchableOpacity
+                  onPress={togglePasswordView}
+                  style={styles().iconContainer}>
+                  <Icon name={passwordIconName} size={18} />
+                </TouchableOpacity>
+              )}
+              {(isDirty || isTouched || error) && (
+                <Animatable.View
+                  animation="fadeIn"
+                  easing="ease-in-out"
+                  style={
+                    styles(
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      inputHeight
+                    ).iconContainer
+                  }>
+                  {!error && <Icon name="checkmark-circle-outline" size={18} />}
+                  {error && (
+                    <Icon
+                      name="close-circle-outline"
+                      size={18}
+                      color={colors.invalid}
+                    />
+                  )}
+                </Animatable.View>
+              )}
+              {/* </View> */}
             </View>
             {/* error message */}
             {isErrorBoundary || error ? (
@@ -262,7 +270,7 @@ const styles = (
       borderRadius: 5,
       flexDirection: 'row',
       justifyContent: 'space-around',
-      alignItems: 'flex-start',
+      alignItems: 'center',
     },
 
     flagContainer: {
@@ -280,6 +288,7 @@ const styles = (
 
     input: {
       //textAlignVertical: 'center',
+      height: inputHeight ? inputHeight : dimensions.Height / 20,
       color: colors.secondary1,
       width: width,
     },
@@ -293,15 +302,17 @@ const styles = (
 
     iconsContainer: {
       flexDirection: 'row',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       alignItems: 'center',
+      borderWidth: 1,
     },
 
     iconContainer: {
-      marginTop: dimensions.Height * 0.015,
+      // marginTop: dimensions.Height * 0.015,
       width: 25,
       justifyContent: 'center',
       alignItems: 'center',
+      height: inputHeight ? inputHeight : dimensions.Height / 20,
     },
   });
 

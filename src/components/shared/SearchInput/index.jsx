@@ -1,4 +1,10 @@
-import {StyleSheet, Text, View, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 
 import SearchIcon from '../../../assets/svgs/SearchIcon.svg';
@@ -11,6 +17,7 @@ const SearchInput = ({
   onChange,
   type,
   placeholderColor,
+  onPress,
 }) => {
   return (
     <View style={styles(type).container}>
@@ -18,12 +25,17 @@ const SearchInput = ({
         style={styles().input}
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
+        onChangeText={onChange}
         placeholderTextColor={
           placeholderColor ? placeholderColor : colors.secondary1
         }
       />
-      <SearchIcon style={styles().icon} />
+      <TouchableOpacity onPress={onPress}>
+        <SearchIcon
+          width={dimensions.Width / 30}
+          height={dimensions.Width / 30}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -55,7 +67,7 @@ const styles = (type, paddingHorizontal) =>
     },
 
     icon: {
-      width: dimensions.Width / 20,
-      height: dimensions.Width / 20,
+      width: dimensions.Width / 10,
+      height: dimensions.Width / 10,
     },
   });
