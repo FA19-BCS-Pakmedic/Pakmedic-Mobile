@@ -52,13 +52,13 @@ const App = () => {
 
   https: return (
     <Provider store={store}>
-      <PaperProvider theme={MD2LightTheme}>
-        <ToastProvider>
-          <MenuProvider>
+      <MenuProvider>
+        <PaperProvider theme={MD2LightTheme}>
+          <ToastProvider>
             <AppNavigation />
-          </MenuProvider>
-        </ToastProvider>
-      </PaperProvider>
+          </ToastProvider>
+        </PaperProvider>
+      </MenuProvider>
     </Provider>
     // <NavigationContainer>
     //   <StackNavigate.Navigator initialRouteName="Home">

@@ -143,6 +143,7 @@ const Header = ({color}) => {
             onPress={() => {
               navigation.navigate('App', {
                 screen: 'ProfileManagement',
+                params: {userId: user._id},
               });
               closeMenu();
             }}

@@ -71,7 +71,6 @@ export const ContactInputField = ({
                 // borderWidth: 1,
               }}
               flagStyle={styles().flagContainer}
-              
             />
             <View>
               {(isDirty || isTouched || error) && (
@@ -123,7 +122,7 @@ export const ValidateInputField = ({
   fontColor = colors.secondary1,
   fontSize = fonts.size.font14,
   multiline = false,
-  inputHeight = dimensions.Height / 20,
+  inputHeight = dimensions.Height / 17,
   useRef,
   isFlexStart = false,
 }) => {
@@ -320,7 +319,7 @@ const styles = (
 
     input: {
       textAlignVertical: isFlexStart ? 'top' : 'center',
-      height: inputHeight ? inputHeight : dimensions.Height / 20,
+      height: inputHeight,
       color: colors.secondary1,
       width: width,
     },
