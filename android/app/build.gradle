@@ -138,6 +138,7 @@ android {
         applicationId "com.pakmobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+    
         versionCode 1
         versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
@@ -249,6 +250,11 @@ android {
 }
 
 dependencies {
+    // Import the Firebase BoM
+    // implementation platform('com.google.firebase:firebase-bom:31.2.3')
+
+    // implementation 'com.google.firebase:firebase-core:16.0.0'
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion
@@ -316,3 +322,5 @@ def isNewArchitectureEnabled() {
 
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
+apply plugin: 'com.google.gms.google-services'

@@ -32,8 +32,8 @@ export default CITIES = [
     label: 'Saidu Sharif',
   },
   {
-    value: 'Hyderabad label',
-    label: 'Hyderabad label',
+    value: 'Hyderabad',
+    label: 'Hyderabad',
   },
   {
     value: 'Islamabad',

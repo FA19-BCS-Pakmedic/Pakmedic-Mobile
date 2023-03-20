@@ -1,4 +1,5 @@
 // app entry point
+
 import AppNavigation from './src/setup/navigation/app.navigation';
 
 // your entry point
@@ -23,9 +24,29 @@ import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home'
 
 import {Provider as PaperProvider, MD2LightTheme} from 'react-native-paper';
 
+import notifee, {EventType} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+
+// import {register} from './src/services/notificationService';
+import deviceStorage from './src/utils/helpers/deviceStorage';
+
 const StackNavigate = createNativeStackNavigator();
 
+const registerDeviceForMessaging = async () => {
+  await messaging().registerDeviceForRemoteMessages();
+  const token = await messaging().getToken();
+
+  await deviceStorage.saveItem('FCMToken', token);
+
+  // Register the token
+  // await register(token);
+};
+
 const App = () => {
+  useEffect(() => {
+    registerDeviceForMessaging();
+  }, []);
+
   https: return (
     <Provider store={store}>
       <PaperProvider theme={MD2LightTheme}>

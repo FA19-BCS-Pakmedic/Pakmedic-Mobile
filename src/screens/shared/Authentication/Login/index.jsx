@@ -32,6 +32,7 @@ import StaticContainer from '../../../../containers/StaticContainer';
 //import API call for login
 import {getPatient, loginPatient} from '../../../../services/patientServices';
 import {getDoctor, loginDoctor} from '../../../../services/doctorServices';
+import {update} from '../../../../services/notificationService';
 
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
@@ -135,6 +136,12 @@ const Login = ({navigation}) => {
         role === ROLES.doctor
           ? await loginDoctor({...data})
           : await loginPatient({...data});
+
+      const fcm = await deviceStorage.loadItem('FCMToken');
+      await update({
+        userId: response?.data?.user?._id,
+        token: fcm,
+      });
 
       // preserving jwt token in async storage
       await deviceStorage.saveItem('jwtToken', response?.data?.token);

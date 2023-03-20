@@ -49,6 +49,9 @@ import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 import {loginVox} from '../../../../services/voxServices';
 
+import {specialistNames} from '../../../../utils/constants/Specialists';
+import {register} from '../../../../services/notificationService';
+
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
   const [pmcData, setPmcData] = useState(null);
@@ -72,6 +75,7 @@ const DoctorRegister = ({navigation}) => {
         phone: '',
         location: '',
         gender: '',
+        speciality: '',
       },
     });
 
@@ -141,10 +145,20 @@ const DoctorRegister = ({navigation}) => {
 
   //on successfull registration
   const onSuccess = async response => {
+    // Register the token
+    // await register(token);
+
+    const fcm = await deviceStorage.loadItem('FCMToken');
+
+    console.log(response?.data?.user._id);
+
+    await register({tokenID: fcm, user: response?.data?.user._id});
+
     //storing jwt token to mobile storage
+
     await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
-    const user = response.data.user;
+    const user = response?.data?.user;
 
     if (user) {
       try {
@@ -395,6 +409,21 @@ const DoctorRegister = ({navigation}) => {
           />
 
           {/* cities dropdown */}
+          <ValidateDropdown
+            open={open}
+            setOpen={setOpen}
+            items={CITIES}
+            control={control}
+            //title="City"
+            setValue={setCity}
+            name="location"
+            placeholder="Please select your city"
+            rules={{
+              required: 'Please select a city',
+              validate: value => value !== null || 'Please select a city',
+            }}
+          />
+
           <ValidateDropdown
             open={open}
             setOpen={setOpen}

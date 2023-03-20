@@ -97,6 +97,11 @@ export const addSignature = data => {
   });
 };
 
+//filter doctors
+export const filterDoctors = query => {
+  return API.get(`/doctors/filter/?${query}`);
+};
+
 export const retinopathy = data => {
   user = {user: Object.values(data).map(value => parseFloat(value))};
 
@@ -133,4 +138,11 @@ export const riskOfDeath = data => {
 
 export const RecommendCompounds = data => {
   return API.post('ML/recommendcompound', {conditions: data});
+};
+
+export const Xray = data => {
+  const image = data?.file;
+  delete data?.file;
+
+  return API.post(`ML/chestXray?name=${image}`, data);
 };
