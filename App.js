@@ -23,6 +23,8 @@ import OngoingCall from './src/screens/shared/Telemedicine/Ongoing-call';
 import calls from './src/utils/helpers/Store';
 import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home';
 
+import {Provider as PaperProvider, MD2LightTheme} from 'react-native-paper';
+
 import notifee, {EventType} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 
@@ -38,6 +40,7 @@ const registerDeviceForMessaging = async () => {
 
   await deviceStorage.saveItem('FCMToken', token);
 
+  console.log('FCM Token: ', token);
   // Register the token
   // await register(token);
 };
@@ -49,11 +52,13 @@ const App = () => {
 
   https: return (
     <Provider store={store}>
-      <ToastProvider>
-        <MenuProvider>
-          <AppNavigation />
-        </MenuProvider>
-      </ToastProvider>
+      <PaperProvider theme={MD2LightTheme}>
+        <ToastProvider>
+          <MenuProvider>
+            <AppNavigation />
+          </MenuProvider>
+        </ToastProvider>
+      </PaperProvider>
     </Provider>
     // <NavigationContainer>
     //   <StackNavigate.Navigator initialRouteName="Home">

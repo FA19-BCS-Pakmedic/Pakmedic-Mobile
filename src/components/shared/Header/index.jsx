@@ -1,4 +1,12 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  BackHandler,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,6 +32,8 @@ import DefaultImage from '../../../assets/images/default-avatar.png';
 import MenuDropDown from '../MenuDropdown';
 import {voximplant} from '../../../services/voxServices';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
+
+import {DefaultTheme, Menu, Divider, Provider} from 'react-native-paper';
 
 const Header = ({color}) => {
   const navigation = useNavigation();
@@ -93,15 +103,13 @@ const Header = ({color}) => {
         {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
         {/* <MenuDropdown options={menuDropDownOptions}> */}
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('App', {
-              screen: 'ProfileManagement',
-              params: {userId: user._id},
-            });
-          }}
-          // onPress={logout}
-        >
+        {/* <TouchableOpacity
+          // onPress={() => {
+          //   navigation.navigate('App', {
+          //     screen: 'ProfileManagement',
+          //   });
+          // }}
+          onPress={logout}>
           <Image
             //if user has no avatar then use default avatar
             width={dimensions.Width / 10}
@@ -111,8 +119,45 @@ const Header = ({color}) => {
             }}
             style={styles().avatar}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {/* </MenuDropdown> */}
+
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          contentStyle={styles().menu}
+          anchor={
+            <TouchableOpacity onPress={openMenu}>
+              <Image
+                //if user has no avatar then use default avatar
+                width={dimensions.Width / 10}
+                height={dimensions.Width / 10}
+                source={{
+                  uri: `${apiEndpoint}files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
+                }}
+                style={styles().avatar}
+              />
+            </TouchableOpacity>
+          }>
+          <Menu.Item
+            onPress={() => {
+              navigation.navigate('App', {
+                screen: 'ProfileManagement',
+              });
+              closeMenu();
+            }}
+            title="Profile"
+          />
+          <Divider />
+          <Menu.Item onPress={logout} title="Logout" />
+          <Divider />
+          <Menu.Item
+            onPress={() => {
+              BackHandler.exitApp();
+            }}
+            title="Exit"
+          />
+        </Menu>
       </View>
     </View>
   );
@@ -125,6 +170,7 @@ const styles = (role, justifyContent) =>
     root: {
       width: dimensions.Width,
       height: dimensions.Height / 15,
+
       backgroundColor:
         role === ROLES.doctor
           ? colors.secondaryMonoChrome300
@@ -176,5 +222,6 @@ const styles = (role, justifyContent) =>
       borderRadius: 100,
       borderWidth: 2,
       borderColor: colors.primaryMonoChrome700,
+      resizeMode: 'cover',
     },
   });

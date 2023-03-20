@@ -185,7 +185,8 @@ const styles = StyleSheet.create({
     width: dimensions.Width / 6,
     height: dimensions.Height / 13,
     backgroundColor: Colors.primaryMonoChrome300,
-    borderRadius: 23,
+    borderRadius: 5,
+    elevation: 5,
     padding: dimensions.Height / 200,
   },
   inactiveStyle: {

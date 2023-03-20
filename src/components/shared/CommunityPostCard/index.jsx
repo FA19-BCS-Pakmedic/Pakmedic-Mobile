@@ -31,7 +31,7 @@ export default CommunityPostCard = props => {
             <Text
               style={styles.communityName}>{`C/${item.community.name}`}</Text>
             <Text style={styles.communityMembers}>{`u/${
-              item.isAnonymous ? 'Anonymous' : item.author.name
+              item.isAnonymous ? 'Anonymous' : item.author?.name
             }`}</Text>
           </View>
         </View>
@@ -71,7 +71,7 @@ export default CommunityPostCard = props => {
             height: dimensions.Height / 15,
           },
         ]}>
-        {user._id === item.author._id ? (
+        {user._id === item.author?._id ? (
           <Button
             label="Delete"
             type="empty"

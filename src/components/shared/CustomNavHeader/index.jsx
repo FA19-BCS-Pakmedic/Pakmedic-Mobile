@@ -53,6 +53,8 @@ const styles = StyleSheet.create({
     fontSize: fonts.size.font20,
     fontWeight: fonts.weight.bold,
     alignContent: 'center',
+    maxWidth: dimensions.Width / 1.5,
+    textAlign: 'center',
   },
 });
 
