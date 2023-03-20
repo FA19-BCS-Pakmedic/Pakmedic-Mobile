@@ -28,6 +28,7 @@ export const ContactInputField = ({
   type,
   width,
   title,
+  inputHeight,
 }) => {
   return (
     <Controller
@@ -42,7 +43,8 @@ export const ContactInputField = ({
           {title ? <Text style={styles().title}>{title}</Text> : null}
           <View
             style={[
-              styles(type, width).container,
+              styles(type, width, null, null, null, null, inputHeight)
+                .container,
 
               {
                 borderColor: error ? colors.invalid : colors.primary1,
@@ -60,12 +62,15 @@ export const ContactInputField = ({
               placeholderTextColor={colors.secondary1}
               onBlur={onBlur}
               defaultCountry="PK"
-              phoneInputStyle={styles(type, width).input}
+              phoneInputStyle={
+                styles(type, width, null, null, null, null, inputHeight).input
+              }
               containerStyle={{
                 width: '93.5%',
                 // borderWidth: 1,
               }}
               flagStyle={styles().flagContainer}
+              
             />
             <View>
               {(isDirty || isTouched || error) && (
@@ -198,15 +203,8 @@ export const ValidateInputField = ({
                   animation="fadeIn"
                   easing="ease-in-out"
                   style={
-                    styles(
-                      null,
-                      null,
-                      null,
-                      null,
-                      null,
-                      null,
-                      inputHeight
-                    ).iconContainer
+                    styles(null, null, null, null, null, null, inputHeight)
+                      .iconContainer
                   }>
                   {!error && <Icon name="checkmark-circle-outline" size={18} />}
                   {error && (

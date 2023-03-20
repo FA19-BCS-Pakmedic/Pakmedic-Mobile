@@ -143,8 +143,12 @@ const OngoingCall = ({route}) => {
           </View>
         )}
         <View style={styles.outgoingPanel}>
-          <Text style={styles.userName}>{otherUsername}</Text>
-          <Text style={styles.state}>{callState}</Text>
+          {!isVideo && (
+            <>
+              <Text style={styles.userName}>{otherUsername}</Text>
+              <Text style={styles.state}>{callState}</Text>
+            </>
+          )}
         </View>
 
         <View style={styles.callControlsVideo}>

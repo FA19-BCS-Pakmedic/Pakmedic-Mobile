@@ -406,7 +406,7 @@ const Reports = ({
         style={styles.scrollContainer}
         contentContainer={styles.scrollContentContainer}>
         <View style={styles.contentContainer}>
-          {reports.length
+          {reports.length > 0
             ? reports.map((report, index) => (
                 <View style={styles.reportContainer} key={index}>
                   <ReportCard

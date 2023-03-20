@@ -30,6 +30,8 @@ import AutoNextInput from '../../../../components/shared/AutoNextInput';
 import CustomDatePicker from '../../../../components/shared/CustomDatePicker';
 import ErrorMessage from '../../../../components/shared/ErrorMessage';
 
+import {useCustomToast} from '../../../../hooks/useCustomHook';
+
 // import constants
 import CITIES from '../../../../utils/constants/Cities';
 import GENDERS from '../../../../utils/constants/Genders';
@@ -55,6 +57,7 @@ import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 import {loginVox} from '../../../../services/voxServices';
 import {ValidateDropdown} from '../../../../components/shared/Dropdown';
 import Cities from '../../../../utils/constants/Cities';
+import {register} from '../../../../services/notificationService';
 
 const PatientRegister = ({navigation}) => {
   const dispatch = useDispatch();
@@ -83,6 +86,7 @@ const PatientRegister = ({navigation}) => {
     useState(false);
 
   //cnic error
+  const {showToast} = useCustomToast();
 
   // for date picker
   const [date, setDate] = useState(new Date());
@@ -101,11 +105,11 @@ const PatientRegister = ({navigation}) => {
       password: data?.password,
       phone: data?.phone,
       dob: `${
-        data?.dob.getMonth().toString().length > 1
+        data?.dob.getMonth() > 9
           ? `${data?.dob.getMonth() + 1}`
           : `0${data?.dob?.getMonth() + 1}`
       }/${
-        data?.dob.getDate().toString().length > 1
+        data?.dob.getDate() > 9
           ? `${data?.dob.getDate() + 1}`
           : `0${data?.dob?.getDate() + 1}`
       }/${data?.dob.getFullYear()}`,
@@ -120,13 +124,13 @@ const PatientRegister = ({navigation}) => {
     try {
       const response = await registerPatient(patient);
       console.log('response', response.data);
-      alert('Patient was successfully registered');
+      showToast('Patient was successfully registered', 'success');
 
       onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
 
-      alert(err.response.data.message);
+      showToast(err.response.data.message, 'danger');
       if (err.response.data.error.statusCode === 409) {
         setError('email', {
           type: 'conflict',
@@ -168,6 +172,7 @@ const PatientRegister = ({navigation}) => {
     try {
       const response = await loginPatient({email, isThirdParty: true});
       console.log(response);
+
       onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
@@ -188,6 +193,12 @@ const PatientRegister = ({navigation}) => {
 
   //function if the registration was successful
   const onSuccess = async response => {
+    const fcm = await deviceStorage.loadItem('FCMToken');
+
+    console.log(response?.data?.user._id);
+
+    await register({tokenID: fcm, user: response?.data?.user._id});
+
     //store jwt in local storage
     await deviceStorage.saveItem('jwtToken', response?.data?.token);
     const user = response.data.user;
@@ -197,6 +208,7 @@ const PatientRegister = ({navigation}) => {
         await loginVox(user);
       } catch (err) {
         console.log(err);
+        showToast('Error logging in to vox', 'danger');
       }
     }
     //initializing global state with jwt token and user object

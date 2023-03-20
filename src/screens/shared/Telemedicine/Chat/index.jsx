@@ -28,6 +28,8 @@ const Chat = ({route, navigation}) => {
   // console.log(route.params);
   const receiverId = route.params.receiver._id;
 
+  console.log(route.params.receiver);
+
   const [receiver] = useState(route.params.receiver);
 
   const role = useSelector(state => state.role.role);
@@ -150,7 +152,7 @@ const Chat = ({route, navigation}) => {
     <View style={styles.container}>
       <ChatHeader
         role={role}
-        receiver={receiver}
+        user={receiver}
         onPressCall={onPressCall}
         callee={getVoxUsername(receiver)}
       />

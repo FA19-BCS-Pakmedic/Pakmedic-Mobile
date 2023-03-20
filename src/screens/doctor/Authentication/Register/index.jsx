@@ -51,6 +51,7 @@ import {loginVox} from '../../../../services/voxServices';
 
 import {specialistNames} from '../../../../utils/constants/Specialists';
 import {register} from '../../../../services/notificationService';
+import {useCustomToast} from '../../../../hooks/useCustomHook';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
@@ -86,6 +87,9 @@ const DoctorRegister = ({navigation}) => {
 
   // for opening and closing the Dropdown
   const [open, setOpen] = useState(false);
+  const [openSpec, setOpenSpec] = useState(false);
+
+  const {showToast} = useCustomToast();
 
   // form submit handler
   const onSubmit = async formData => {
@@ -110,7 +114,8 @@ const DoctorRegister = ({navigation}) => {
       // console.log(data);
       try {
         const response = await registerDoctor(data);
-        alert('User registered successfully');
+        // alert('User registered successfully');
+        showToast('User registered successfully', 'success');
 
         // //storing jwt token to mobile storage
         // await deviceStorage.saveItem('jwtToken', response?.data?.token);
@@ -126,7 +131,8 @@ const DoctorRegister = ({navigation}) => {
       } catch (err) {
         dispatch(authLogout());
         console.log(err.response.data);
-        alert(err.response.data.message);
+        showToast(err.response.data.message, 'danger');
+
         if (err.response.data.error.statusCode === 409) {
           setError('email', {
             type: 'conflict',
@@ -173,6 +179,8 @@ const DoctorRegister = ({navigation}) => {
       authSuccess({user: response.data.user, token: response.data.token}),
     );
 
+    showToast('User registered successfully', 'success');
+
     // navigate to the app stack
     navigation.replace('App');
   };
@@ -200,8 +208,9 @@ const DoctorRegister = ({navigation}) => {
         clearErrors('pmcId');
       }
       console.log(data);
+      showToast('Pmc Id verified', 'success');
     } catch (err) {
-      alert(err.response.data.message);
+      showToast(err.response.data.message, 'danger');
       console.log(err.response.data);
       setIsPmcIdVerified(false);
       setPmcIdErrorMessage(err.response.data.message);
@@ -258,6 +267,8 @@ const DoctorRegister = ({navigation}) => {
     } catch (err) {
       dispatch(authLogout());
       console.log(err.response.data);
+      showToast('Error authenticating users', 'danger');
+
       // alert(err.response.data.message);
       // setIsLoading(false);
       // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
@@ -310,190 +321,197 @@ const DoctorRegister = ({navigation}) => {
     <StaticContainer>
       <View style={styles.container}>
         {/* form */}
-        <View style={styles.formContainer}>
-          {/* pmc id field */}
-          <ValidateInputField
-            placeholder="PMC ID"
-            type="outlined"
-            width="93%"
-            placeholderTextColor={colors.secondary1}
-            onBlurEvent={getPmcData}
-            control={control}
-            name="pmcId"
-            //title={'PMC ID'}
-            rules={{
-              required: "PMC ID can't be empty",
-              minLength: {
-                value: 3,
-                message: 'PMC ID must be at least 3 characters',
-              },
-              pattern: {value: pmcIdRegex, message: 'Invalid PMC ID'},
-            }}
-          />
-
-          {/* email field */}
-          <ValidateInputField
-            placeholder="Email"
-            type="outlined"
-            width="93%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="email-address"
-            control={control}
-            //title={'Email'}
-            name="email"
-            rules={{
-              required: "Email can't be empty",
-              pattern: {value: emailRegex, message: 'Invalid Email'},
-            }}
-          />
-          {/* password field */}
-          <ValidateInputField
-            placeholder="Password"
-            type="outlined"
-            width="85.5%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="password"
-            control={control}
-            name="password"
-            isPasswordField={true}
-            //title={'Password'}
-            isPasswordVisible={!isPasswordVisible}
-            setIsPasswordVisible={setIsPasswordVisible}
-            rules={{
-              required: "Password can't be empty",
-              pattern: {
-                value: passwordRegex,
-                message:
-                  'Password must contain atleast 1 uppercase, 1 lowercase, and 1 number',
-              },
-              minLength: {
-                value: 8,
-                message: 'Password must be at least 8 characters',
-              },
-            }}
-          />
-          {/* confirm password field */}
-          <ValidateInputField
-            placeholder="Confirm Password"
-            type="outlined"
-            width="85.5%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="password"
-            control={control}
-            name="confirmPassword"
-            //title={'Confirm Password'}
-            isPasswordField={true}
-            isPasswordVisible={!isConfirmPasswordVisible}
-            setIsPasswordVisible={setIsConfirmPasswordVisible}
-            rules={{
-              required: "Confirm password can't be empty",
-              validate: value => {
-                return value === watch('password') || 'Passwords do not match';
-              },
-            }}
-          />
-          {/* contact field */}
-          <ContactInputField
-            type="outlined"
-            width="86%"
-            control={control}
-            name="phone"
-            //title={'Phone number'}
-            rules={{
-              required: "Phone number can't be empty",
-              pattern: {
-                value: phoneNumberRegex,
-                message: 'Invalid phone number',
-              },
-            }}
-          />
-
-          {/* cities dropdown */}
-          <ValidateDropdown
-            open={open}
-            setOpen={setOpen}
-            items={CITIES}
-            control={control}
-            //title="City"
-            setValue={setCity}
-            name="location"
-            placeholder="Please select your city"
-            rules={{
-              required: 'Please select a city',
-              validate: value => value !== null || 'Please select a city',
-            }}
-          />
-
-          <ValidateDropdown
-            open={open}
-            setOpen={setOpen}
-            items={CITIES}
-            control={control}
-            //title="City"
-            setValue={setCity}
-            name="location"
-            placeholder="Please select your city"
-            rules={{
-              required: 'Please select a city',
-              validate: value => value !== null || 'Please select a city',
-            }}
-          />
-
-          {/* genders radio buttons */}
-          <Text style={styles.radioText}>Gender</Text>
-          <RadioGroup
-            values={GENDERS}
-            selected={watch('gender')}
-            setSelected={setGender}
-            //title="Gender"
-            name="gender"
-            control={control}
-            rules={{required: 'Please select a gender'}}
-          />
-        </View>
-
-        {/* Register button */}
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          label="Register"
-          type="filled"
-          width="100%"
-        />
-
-        {/* divider */}
-
-        <TextDivider
-          label="Or Register With"
-          color={colors.secondary1}
-          gap={50}
-        />
-
-        {/*SOCIAL BUTTONS */}
-        <View style={styles.socialButtonContainer}>
-          {/* facebook login button */}
-          <TouchableOpacity style={styles.socialButton}>
-            <FaceBookLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
+        <ScrollView style={{width: '100%'}}>
+          <View style={styles.formContainer}>
+            {/* pmc id field */}
+            <ValidateInputField
+              placeholder="PMC ID"
+              type="outlined"
+              width="93%"
+              placeholderTextColor={colors.secondary1}
+              onBlurEvent={getPmcData}
+              control={control}
+              name="pmcId"
+              //title={'PMC ID'}
+              rules={{
+                required: "PMC ID can't be empty",
+                minLength: {
+                  value: 3,
+                  message: 'PMC ID must be at least 3 characters',
+                },
+                pattern: {value: pmcIdRegex, message: 'Invalid PMC ID'},
+              }}
             />
-          </TouchableOpacity>
+
+            {/* email field */}
+            <ValidateInputField
+              placeholder="Email"
+              type="outlined"
+              width="93%"
+              placeholderTextColor={colors.secondary1}
+              keyboardType="email-address"
+              control={control}
+              //title={'Email'}
+              name="email"
+              rules={{
+                required: "Email can't be empty",
+                pattern: {value: emailRegex, message: 'Invalid Email'},
+              }}
+            />
+            {/* password field */}
+            <ValidateInputField
+              placeholder="Password"
+              type="outlined"
+              width="85.5%"
+              placeholderTextColor={colors.secondary1}
+              keyboardType="password"
+              control={control}
+              name="password"
+              isPasswordField={true}
+              //title={'Password'}
+              isPasswordVisible={!isPasswordVisible}
+              setIsPasswordVisible={setIsPasswordVisible}
+              rules={{
+                required: "Password can't be empty",
+                pattern: {
+                  value: passwordRegex,
+                  message:
+                    'Password must contain atleast 1 uppercase, 1 lowercase, and 1 number',
+                },
+                minLength: {
+                  value: 8,
+                  message: 'Password must be at least 8 characters',
+                },
+              }}
+            />
+            {/* confirm password field */}
+            <ValidateInputField
+              placeholder="Confirm Password"
+              type="outlined"
+              width="85.5%"
+              placeholderTextColor={colors.secondary1}
+              keyboardType="password"
+              control={control}
+              name="confirmPassword"
+              //title={'Confirm Password'}
+              isPasswordField={true}
+              isPasswordVisible={!isConfirmPasswordVisible}
+              setIsPasswordVisible={setIsConfirmPasswordVisible}
+              rules={{
+                required: "Confirm password can't be empty",
+                validate: value => {
+                  return (
+                    value === watch('password') || 'Passwords do not match'
+                  );
+                },
+              }}
+            />
+            {/* contact field */}
+            <ContactInputField
+              type="outlined"
+              width="86%"
+              control={control}
+              name="phone"
+              //title={'Phone number'}
+              rules={{
+                required: "Phone number can't be empty",
+                pattern: {
+                  value: phoneNumberRegex,
+                  message: 'Invalid phone number',
+                },
+              }}
+            />
+
+            {/* cities dropdown */}
+            <ValidateDropdown
+              open={open}
+              setOpen={setOpen}
+              items={CITIES}
+              control={control}
+              //title="City"
+              setValue={setCity}
+              name="location"
+              placeholder="Please select your city"
+              rules={{
+                required: 'Please select a city',
+                validate: value => value !== null || 'Please select a city',
+              }}
+            />
+
+            <ValidateDropdown
+              open={openSpec}
+              setOpen={setOpenSpec}
+              items={specialistNames}
+              control={control}
+              //title="City"
+              setValue={callback => {
+                setValue('speciality', callback());
+              }}
+              name="speciality"
+              placeholder="Please select your speciality"
+              rules={{
+                required: 'Please select a speciality',
+                validate: value =>
+                  value !== null || 'Please select a speciality',
+              }}
+            />
+
+            {/* genders radio buttons */}
+            <Text style={styles.radioText}>Gender</Text>
+            <RadioGroup
+              values={GENDERS}
+              selected={watch('gender')}
+              setSelected={setGender}
+              //title="Gender"
+              name="gender"
+              control={control}
+              rules={{required: 'Please select a gender'}}
+            />
+          </View>
+
+          {/* Register button */}
+          <Button
+            onPress={handleSubmit(onSubmit)}
+            label="Register"
+            type="filled"
+            width="100%"
+          />
+
+          {/* divider */}
+
+          <TextDivider
+            label="Or Register With"
+            color={colors.secondary1}
+            gap={50}
+          />
+
+          {/*SOCIAL BUTTONS */}
+          <View style={styles.socialButtonContainer}>
+            {/* facebook login button */}
+            <TouchableOpacity style={styles.socialButton}>
+              <FaceBookLogo
+                width={dimensions.Width / 10}
+                height={dimensions.Height / 20}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={onPressGoogleLogin}>
+              <GoogleLogo
+                width={dimensions.Width / 10}
+                height={dimensions.Height / 20}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* register with text */}
           <TouchableOpacity
-            style={styles.socialButton}
-            onPress={onPressGoogleLogin}>
-            <GoogleLogo
-              width={dimensions.Width / 10}
-              height={dimensions.Height / 20}
-            />
+            style={styles.registerTextContainer}
+            onPress={navigateToLoginScreen}>
+            <Text style={styles.text}>Already have an account? </Text>
+            <Text style={styles.registerText}>Login Now</Text>
           </TouchableOpacity>
-        </View>
-
-        {/* register with text */}
-        <TouchableOpacity
-          style={styles.registerTextContainer}
-          onPress={navigateToLoginScreen}>
-          <Text style={styles.text}>Already have an account? </Text>
-          <Text style={styles.registerText}>Login Now</Text>
-        </TouchableOpacity>
+        </ScrollView>
       </View>
     </StaticContainer>
   );

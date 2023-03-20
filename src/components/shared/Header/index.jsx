@@ -60,7 +60,7 @@ const Header = ({color}) => {
     await deviceStorage.deleteItem('jwtToken');
     await voximplant.disconnect();
     dispatch(authLogout());
-    navigation.navigate('Auth', {
+    navigation.replace('Auth', {
       screen: 'Login',
     });
   };
@@ -94,12 +94,14 @@ const Header = ({color}) => {
 
         {/* <MenuDropdown options={menuDropDownOptions}> */}
         <TouchableOpacity
-          // onPress={() => {
-          //   navigation.navigate('App', {
-          //     screen: 'ProfileManagement',
-          //   });
-          // }}
-          onPress={logout}>
+          onPress={() => {
+            navigation.navigate('App', {
+              screen: 'ProfileManagement',
+              params: {userId: user._id},
+            });
+          }}
+          // onPress={logout}
+        >
           <Image
             //if user has no avatar then use default avatar
             width={dimensions.Width / 10}

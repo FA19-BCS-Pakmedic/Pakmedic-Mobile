@@ -107,7 +107,6 @@ export default RootNavigation = () => {
       ) : (
         <rootStack.Screen name="App" component={PatientNavigation} />
       )}
-      
     </rootStack.Navigator>
   );
 };
