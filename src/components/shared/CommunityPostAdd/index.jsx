@@ -160,6 +160,7 @@ export default CommunityPostAdd = props => {
             multiline={true}
             inputHeight={dimensions.Height / 6.5}
             type="outlined"
+            isFlexStart={true}
             watch={watch('post')}
           />
         </View>
