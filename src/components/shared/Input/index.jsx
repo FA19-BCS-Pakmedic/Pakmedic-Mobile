@@ -118,7 +118,7 @@ export const ValidateInputField = ({
   fontColor = colors.secondary1,
   fontSize = fonts.size.font14,
   multiline = false,
-  inputHeight = dimensions.Height / 20,
+  inputHeight = dimensions.Height / 17,
   useRef,
   isFlexStart = false,
 }) => {

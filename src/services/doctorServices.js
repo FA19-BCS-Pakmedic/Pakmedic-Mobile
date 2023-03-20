@@ -146,3 +146,10 @@ export const Xray = data => {
 
   return API.post(`ML/chestXray?name=${image}`, data);
 };
+
+export const BrainMRI = data => {
+  const image = data?.file;
+  delete data?.file;
+
+  return API.post(`ML/brainMRI?name=${image}`, data);
+};
