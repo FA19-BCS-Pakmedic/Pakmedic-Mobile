@@ -241,6 +241,7 @@ const Post = props => {
             inputHeight={dimensions.Height / 10}
             type="outlined"
             useRef={inputRef}
+            isFlexStart={true}
             text={watch('content')}
           />
 
