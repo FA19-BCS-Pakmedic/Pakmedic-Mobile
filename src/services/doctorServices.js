@@ -97,6 +97,11 @@ export const addSignature = data => {
   });
 };
 
+//filter doctors
+export const filterDoctors = query => {
+  return API.get(`/doctors/filter/?${query}`);
+};
+
 export const retinopathy = data => {
   user = {user: Object.values(data).map(value => parseFloat(value))};
 
