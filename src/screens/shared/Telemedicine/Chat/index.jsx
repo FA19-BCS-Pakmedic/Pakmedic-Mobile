@@ -57,6 +57,7 @@ const Chat = ({route, navigation}) => {
   });
 
   useEffect(() => {
+    console.log(baseUrl);
     const socket = io(baseUrl); //TODO: REPLACE THIS WITH THE CONSTANT
     setSocket(socket);
 

@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   communityName: {
+    width: dimensions.Width * 0.5,
     fontSize: fonts.size.font14,
     fontWeight: 'bold',
     color: colors.secondary1,

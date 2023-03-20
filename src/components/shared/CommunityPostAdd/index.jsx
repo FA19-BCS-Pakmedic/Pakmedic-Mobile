@@ -37,7 +37,7 @@ export default CommunityPostAdd = props => {
     defaultValues: {
       title: '',
       post: '',
-      file: null,
+      file: '',
     },
   });
 
@@ -90,6 +90,9 @@ export default CommunityPostAdd = props => {
     } catch (error) {
       console.log('error', error);
       setLoading(false);
+    } finally {
+      reset();
+      setIsCheck(false);
     }
   };
 
@@ -115,6 +118,7 @@ export default CommunityPostAdd = props => {
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
       bgColor={colors.white}
+      back={false}
       borderColor={colors.primary1}>
       <View style={styles.container}>
         <View style={styles.header}>
@@ -168,9 +172,6 @@ export default CommunityPostAdd = props => {
             width="100%"
             height={dimensions.Height / 15}
             placeholder="Choose File"
-            rules={{
-              required: 'File is required',
-            }}
             isLoading={isUploading}
             text={watch('file')}
             onPress={async () => {
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: dimensions.Height / 20,
+    height: dimensions.Height / 25,
   },
   headerText: {
     fontSize: fonts.size.font16,
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
     color: colors.secondary1,
   },
   body: {
-    height: dimensions.Height / 3.3,
+    height: dimensions.Height / 3,
     justifyContent: 'space-evenly',
   },
   title: {
@@ -267,24 +268,14 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   fileContainer: {
-    height: dimensions.Height / 10,
-    justifyContent: 'space-evenly',
+    height: dimensions.Height / 9,
+    //justifyContent: 'center',
   },
   fileText: {
     marginLeft: dimensions.Width * 0.01,
     fontSize: fonts.size.font12,
     fontWeight: fonts.weight.normal,
     color: colors.secondary1,
-  },
-  file: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    borderColor: colors.primary1,
-    borderWidth: 1,
-    height: dimensions.Height / 17,
-    borderRadius: 5,
-    padding: dimensions.Height / 100,
   },
   checkContainer: {
     flexDirection: 'row',

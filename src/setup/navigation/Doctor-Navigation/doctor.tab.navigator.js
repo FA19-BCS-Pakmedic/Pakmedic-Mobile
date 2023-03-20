@@ -135,6 +135,7 @@ const DoctorTabStack = props => {
           tabBarStyle: {
             height: dimensions.Height / 12,
             backgroundColor: Colors.secondaryMonoChrome100,
+            borderTopWidth: 0,
           },
           //tabBarActiveBackgroundColor: Colors.secondaryMonoChrome300,
         })}>
@@ -166,7 +167,7 @@ const DoctorTabStack = props => {
 const styles = StyleSheet.create({
   labelText: {
     fontSize: 9,
-    marginBottom: dimensions.Height / 100,
+    marginBottom: dimensions.Height * 0.01,
     color: Colors.secondary1,
   },
   activeStyle: {
@@ -175,7 +176,8 @@ const styles = StyleSheet.create({
     width: dimensions.Width / 6,
     height: dimensions.Height / 13,
     backgroundColor: Colors.secondaryMonoChrome500,
-    borderRadius: 23,
+    borderRadius: 5,
+    elevation: 5,
     padding: dimensions.Height / 200,
   },
   inactiveStyle: {
