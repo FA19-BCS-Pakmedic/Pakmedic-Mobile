@@ -19,6 +19,7 @@ const ModalContainer = props => {
     bgColor,
     padding,
     borderColor,
+    back = true,
   } = props;
   return (
     <Modal
@@ -30,9 +31,13 @@ const ModalContainer = props => {
       animationInTiming={400}
       isVisible={isModalVisible}
       style={[styles().container, type == 'bottom' ? styles().bottom : {}]}
-      onBackdropPress={() => {
-        setModalVisible(false);
-      }}>
+      onBackdropPress={
+        back
+          ? () => {
+              setModalVisible(false);
+            }
+          : null
+      }>
       <View
         style={[
           styles(bgColor, height, width, padding, borderColor).modal,

@@ -17,6 +17,7 @@ import {useEffect} from 'react';
 
 import colors from '../../../../utils/styles/themes/colors';
 import {useSelector} from 'react-redux';
+import NotFound from '../../../../components/shared/NotFound';
 
 const CommunityDetails = ({route}) => {
   const {item} = route.params;
@@ -119,6 +120,11 @@ const CommunityDetails = ({route}) => {
             style={{
               flex: 1,
             }}
+          />
+        ) : posts.length === 0 ? (
+          <NotFound
+            title="No Posts Found"
+            text="Sorry we couldn't find any posts for this community try adding one"
           />
         ) : (
           <FlatList

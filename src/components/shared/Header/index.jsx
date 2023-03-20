@@ -87,24 +87,23 @@ const Header = ({color}) => {
       <Text style={styles().text}>Pakmedic</Text>
     </View>
   ) : (
-    <View style={styles().root}>
-      <View style={styles(role).innerView}>
-        {/* Logo Container */}
-        <View style={styles().logoContainer}>
-          <Logo width={dimensions.Width / 10} />
-          <Text style={styles().text}>Pakmedic</Text>
-        </View>
+    <View style={styles(role).root}>
+      {/* Logo Container */}
+      <View style={styles().logoContainer}>
+        <Logo width={dimensions.Width / 10} />
+        <Text style={styles().text}>Pakmedic</Text>
+      </View>
 
-        {/* User avatar and notification bell */}
-        <View style={styles().actionsContainer}>
-          <TouchableOpacity style={styles().notificationContainer}>
-            <Notification width={30} height={30} />
-            {notif && <View style={styles().notifIndicator}></View>}
-          </TouchableOpacity>
-          {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
+      {/* User avatar and notification bell */}
+      <View style={styles().actionsContainer}>
+        <TouchableOpacity style={styles().notificationContainer}>
+          <Notification width={30} height={30} />
+          {notif && <View style={styles().notifIndicator}></View>}
+        </TouchableOpacity>
+        {/* <MenuDropdown visible={visible} closeMenu={closeMenu} links={links} /> */}
 
-          {/* <MenuDropdown options={menuDropDownOptions}> */}
-          {/* <TouchableOpacity
+        {/* <MenuDropdown options={menuDropDownOptions}> */}
+        {/* <TouchableOpacity
           // onPress={() => {
           //   navigation.navigate('App', {
           //     screen: 'ProfileManagement',
@@ -121,45 +120,44 @@ const Header = ({color}) => {
             style={styles().avatar}
           />
         </TouchableOpacity> */}
-          {/* </MenuDropdown> */}
+        {/* </MenuDropdown> */}
 
-          <Menu
-            visible={visible}
-            onDismiss={closeMenu}
-            contentStyle={styles().menu}
-            anchor={
-              <TouchableOpacity onPress={openMenu}>
-                <Image
-                  //if user has no avatar then use default avatar
-                  width={dimensions.Width / 10}
-                  height={dimensions.Width / 10}
-                  source={{
-                    uri: `${apiEndpoint}files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
-                  }}
-                  style={styles().avatar}
-                />
-              </TouchableOpacity>
-            }>
-            <Menu.Item
-              onPress={() => {
-                navigation.navigate('App', {
-                  screen: 'ProfileManagement',
-                });
-                closeMenu();
-              }}
-              title="Profile"
-            />
-            <Divider />
-            <Menu.Item onPress={logout} title="Logout" />
-            <Divider />
-            <Menu.Item
-              onPress={() => {
-                BackHandler.exitApp();
-              }}
-              title="Exit"
-            />
-          </Menu>
-        </View>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          contentStyle={styles().menu}
+          anchor={
+            <TouchableOpacity onPress={openMenu}>
+              <Image
+                //if user has no avatar then use default avatar
+                width={dimensions.Width / 10}
+                height={dimensions.Width / 10}
+                source={{
+                  uri: `${apiEndpoint}files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
+                }}
+                style={styles().avatar}
+              />
+            </TouchableOpacity>
+          }>
+          <Menu.Item
+            onPress={() => {
+              navigation.navigate('App', {
+                screen: 'ProfileManagement',
+              });
+              closeMenu();
+            }}
+            title="Profile"
+          />
+          <Divider />
+          <Menu.Item onPress={logout} title="Logout" />
+          <Divider />
+          <Menu.Item
+            onPress={() => {
+              BackHandler.exitApp();
+            }}
+            title="Exit"
+          />
+        </Menu>
       </View>
     </View>
   );
@@ -172,10 +170,7 @@ const styles = (role, justifyContent) =>
     root: {
       width: dimensions.Width,
       height: dimensions.Height / 15,
-    },
-    innerView: {
-      width: dimensions.Width,
-      height: dimensions.Height / 15,
+
       backgroundColor:
         role === ROLES.doctor
           ? colors.secondaryMonoChrome300
