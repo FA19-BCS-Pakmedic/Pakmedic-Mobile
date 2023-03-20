@@ -17,38 +17,42 @@ import Reviews from '../../../../components/doctor/Reviews';
 import About from '../../../../components/doctor/About';
 import Signature from '../../../../components/doctor/Signature';
 import {useDispatch, useSelector} from 'react-redux';
-import {getDoctor} from '../../../../services/doctorServices';
+import {getDoctor, getDoctorById} from '../../../../services/doctorServices';
 import {setLoading} from '../../../../setup/redux/slices/loading.slice';
 import {getDoctorInfo} from '../../../../utils/helpers/getProfileInfo';
+import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
+import Loader from '../../../../components/shared/Loader';
 
-const ProfileManagement = () => {
+const ProfileManagement = ({route}) => {
   const [profileOptions, setProfileOptions] = useState(options);
   const [storedUser, setStoredUser] = useState(null);
   const [information, setInformation] = useState([]);
   const [loadProfile, setLoadProfile] = useState(null);
 
-  const user = useSelector(state => state.auth.user);
+  const [loading, setLoading] = useState(false);
 
-  const isLoading = useSelector(state => state.loading.loading);
+  const userId = route.params.userId;
 
   const dispatch = useDispatch();
 
   const [activeOption, setActiveOption] = useState();
 
   const getUserData = async () => {
-    dispatch(setLoading(true));
+    setLoading(true);
     try {
-      const response = await getDoctor();
+      const response = await getDoctorById(userId);
       setStoredUser(response.data.data.user);
+      dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
-    dispatch(setLoading(false));
   };
 
   useEffect(() => {
     getUserData();
-  }, [user]);
+  }, [userId]);
 
   useEffect(() => {
     if (storedUser) {
@@ -74,9 +78,9 @@ const ProfileManagement = () => {
     });
   };
 
-  // useEffect(() => {
-  //   storedUser && console.log(storedUser.services);
-  // }, [setStoredUser]);
+  useEffect(() => {
+    storedUser && console.log('STORED USER', storedUser);
+  }, [setStoredUser]);
 
   const getActiveComponent = () => {
     console.log(activeOption);
@@ -120,13 +124,16 @@ const ProfileManagement = () => {
 
   return (
     <StaticContainer>
-      <View style={styles.root}>
+      {loading ? (
+        <Loader title={'Loading'} />
+      ) : (
+        <View style={styles.root}>
+          <ProfileCard user={storedUser} />
 
-        <ProfileCard user={storedUser} />
-
-        <ProfileOptions options={profileOptions} onClick={onOptionClick} />
-        {getActiveComponent()}
-      </View>
+          <ProfileOptions options={profileOptions} onClick={onOptionClick} />
+          {getActiveComponent()}
+        </View>
+      )}
     </StaticContainer>
   );
 };

@@ -9,5 +9,7 @@ const API = axios.create({
 });
 
 export const getAppointmentsByUserId = data => {
-  return API.get('/appointments', data);
+  console.log(data);
+
+  return API.get(`appointments/?${data}`);
 };

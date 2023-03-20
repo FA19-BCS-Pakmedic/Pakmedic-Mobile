@@ -104,7 +104,7 @@ const patientSide = () => {
 //stack navigator for onboarding Screens
 const OnboardingNavigation = () => {
   const role = useSelector(state => state.role.role);
-
+  console.log(role, 'here');
   return role == ROLES.doctor ? doctorSide() : patientSide();
 };
 

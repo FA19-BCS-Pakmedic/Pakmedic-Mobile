@@ -70,7 +70,7 @@ const Header = ({color}) => {
     await deviceStorage.deleteItem('jwtToken');
     await voximplant.disconnect();
     dispatch(authLogout());
-    navigation.navigate('Auth', {
+    navigation.replace('Auth', {
       screen: 'Login',
     });
   };
@@ -143,6 +143,7 @@ const Header = ({color}) => {
             onPress={() => {
               navigation.navigate('App', {
                 screen: 'ProfileManagement',
+                params: {userId: user._id},
               });
               closeMenu();
             }}

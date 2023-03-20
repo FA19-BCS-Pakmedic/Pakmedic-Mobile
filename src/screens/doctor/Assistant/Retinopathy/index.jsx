@@ -152,7 +152,7 @@ const RetinopathyScreen = () => {
         setModalVisible={setModalVisible}
         height={1.8}
         width={1.2}
-        timer={1500}
+        timer={2500}
         alertName={alertName}
         message={message}
         redirect={{screen: 'DoctorTabStack'}}></PopupAlerts>

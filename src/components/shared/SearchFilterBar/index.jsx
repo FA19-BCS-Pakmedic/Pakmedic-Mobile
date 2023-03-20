@@ -38,8 +38,8 @@ const styles = (type, role) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      backgroundColor:
-        type === 'outlined' ? colors.white : (role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome300),
+      // backgroundColor:
+      //   type === 'outlined' ? colors.white : (role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome300),
       borderWidth: type === 'outlined' ? 1 : 0,
       borderColor:
         type === 'outlined' ? colors.primary1 : colors.secondaryMonoChrome100,

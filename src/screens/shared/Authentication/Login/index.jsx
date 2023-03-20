@@ -43,11 +43,13 @@ import {googleConfig} from '../../../../utils/helpers/googleConfig';
 import {getFile} from '../../../../services/fileServices';
 
 import {loginVox} from '../../../../services/voxServices';
+import {useCustomToast} from '../../../../hooks/useCustomHook';
 
 const Login = ({navigation}) => {
   // states
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const {showToast} = useCustomToast();
   const role = useSelector(state => state.role.role);
 
   const dispatch = useDispatch();
@@ -160,8 +162,8 @@ const Login = ({navigation}) => {
         }),
       );
 
-      alert('Login Successful');
       setIsLoading(false);
+      showToast('User Logged In Successfully', 'success');
 
       //clear all inputs
       // setValue('email', '');
@@ -173,8 +175,7 @@ const Login = ({navigation}) => {
     } catch (err) {
       dispatch(authLogout());
       console.log(err);
-      // console.log(err.response.data);
-      // alert(err.response.data.message);
+      showToast('Invalid email or password', 'danger');
       setIsLoading(false);
     }
   };
