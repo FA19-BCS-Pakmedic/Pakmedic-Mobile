@@ -28,7 +28,7 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import {useSelector} from 'react-redux';
 
 const Post = props => {
-  const {control, handleSubmit, watch} = useForm({
+  const {control, handleSubmit, watch, resetField} = useForm({
     mode: 'onChange',
     defaultValues: {
       content: '',
@@ -162,10 +162,12 @@ const Post = props => {
       await addComment(item._id, cid, data);
       setLoading(false);
       isReply(false);
+      resetField('content');
     } catch (error) {
       console.log(error);
       setLoading(false);
       isReply(false);
+    } finally {
     }
   };
 
@@ -185,11 +187,11 @@ const Post = props => {
               <Text
                 style={styles.communityName}>{`C/${item.community.name}`}</Text>
               <Text style={styles.communityMembers}>{`u/${
-                item.isAnonymous ? 'Anonymous' : item.author.name
+                item.isAnonymous ? 'Anonymous' : item.author?.name
               }`}</Text>
             </View>
           </View>
-          {item.author._id === user._id ? (
+          {item.author?._id === user._id ? (
             <Button
               label="Delete Post"
               type="filled"
@@ -239,7 +241,8 @@ const Post = props => {
             inputHeight={dimensions.Height / 10}
             type="outlined"
             useRef={inputRef}
-            watch={watch('content')}
+            isFlexStart={true}
+            text={watch('content')}
           />
 
           <View style={styles.buttonContainer}>
@@ -289,7 +292,9 @@ const Post = props => {
                 <View key={index} style={styles.comment}>
                   <View style={styles.commentContainer}>
                     <View style={styles.commentHeader}>
-                      <Text style={styles.commentUser}>{item.author.name}</Text>
+                      <Text style={styles.commentUser}>
+                        {item.author?.name}
+                      </Text>
                       <Text style={styles.commentTime}>
                         {formatDate(item.date)}
                       </Text>
@@ -297,7 +302,7 @@ const Post = props => {
                     {item.authorType === 'Doctor' && (
                       <View style={styles.doctorBadge}>
                         <Text style={styles.doctorBadgeText}>
-                          {item.author.speciality}
+                          {item.author?.speciality}
                         </Text>
                       </View>
                     )}
@@ -316,7 +321,7 @@ const Post = props => {
                         }}
                       />
 
-                      {item.author._id === user._id ? (
+                      {item.author?._id === user._id ? (
                         <Button
                           label="Delete"
                           type="outlined"
@@ -342,7 +347,7 @@ const Post = props => {
                         <View style={styles.replyFooter}>
                           <View style={styles.replyHeader}>
                             <Text style={styles.replyUser}>
-                              {item.author.name}
+                              {item.author?.name}
                             </Text>
                             <Text style={styles.replyTime}>
                               {formatDate(item.date)}

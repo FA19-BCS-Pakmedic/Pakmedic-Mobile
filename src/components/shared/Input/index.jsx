@@ -1,4 +1,5 @@
 //node modules import
+import React from 'react';
 import {
   TextInput,
   View,
@@ -117,8 +118,9 @@ export const ValidateInputField = ({
   fontColor = colors.secondary1,
   fontSize = fonts.size.font14,
   multiline = false,
-  inputHeight = dimensions.Height / 17,
+  inputHeight = dimensions.Height / 20,
   useRef,
+  isFlexStart = false,
 }) => {
   // setting the password eye icon name based on the visiblility status
   const passwordIconName = !isPasswordVisible
@@ -129,6 +131,8 @@ export const ValidateInputField = ({
   const togglePasswordView = () => {
     setIsPasswordVisible(isPasswordVisible);
   };
+
+  const [padding, setPadding] = React.useState(false);
 
   return (
     <Controller
@@ -152,8 +156,17 @@ export const ValidateInputField = ({
             ) : null}
             <View
               style={[
-                styles(type, null, isDisabled, null, null, null, inputHeight)
-                  .container,
+                styles(
+                  type,
+                  null,
+                  isDisabled,
+                  null,
+                  null,
+                  null,
+                  inputHeight,
+                  isFlexStart,
+                  padding,
+                ).container,
                 {
                   borderColor: error
                     ? colors.invalid
@@ -164,7 +177,19 @@ export const ValidateInputField = ({
               ]}>
               <TextInput
                 editable={!isDisabled}
-                style={styles(type, width).input}
+                style={
+                  styles(
+                    type,
+                    width,
+                    null,
+                    null,
+                    null,
+                    null,
+                    inputHeight,
+                    isFlexStart,
+                  ).input
+                }
+                onFocus={() => setPadding(true)}
                 placeholder={placeholder}
                 secureTextEntry={isPasswordVisible}
                 keyboardType={keyboardType || 'text'}
@@ -180,37 +205,46 @@ export const ValidateInputField = ({
                 }}
                 ref={useRef}
               />
-              <View
+              {/* <View
                 style={
                   isPasswordField &&
                   (isDirty || isTouched || error) &&
                   styles().iconsContainer
-                }>
-                {isPasswordField && (
-                  <TouchableOpacity
-                    onPress={togglePasswordView}
-                    style={styles().iconContainer}>
-                    <Icon name={passwordIconName} size={18} />
-                  </TouchableOpacity>
-                )}
-                {(isDirty || isTouched || error) && (
-                  <Animatable.View
-                    animation="fadeIn"
-                    easing="ease-in-out"
-                    style={styles().iconContainer}>
-                    {!error && (
-                      <Icon name="checkmark-circle-outline" size={18} />
-                    )}
-                    {error && (
-                      <Icon
-                        name="close-circle-outline"
-                        size={18}
-                        color={colors.invalid}
-                      />
-                    )}
-                  </Animatable.View>
-                )}
-              </View>
+                }> */}
+              {isPasswordField && (
+                <TouchableOpacity
+                  onPress={togglePasswordView}
+                  style={styles().iconContainer}>
+                  <Icon name={passwordIconName} size={18} />
+                </TouchableOpacity>
+              )}
+              {(isDirty || isTouched || error) && (
+                <Animatable.View
+                  animation="fadeIn"
+                  easing="ease-in-out"
+                  style={
+                    styles(
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      inputHeight,
+                      isFlexStart,
+                    ).iconContainer
+                  }>
+                  {!error && <Icon name="checkmark-circle-outline" size={18} />}
+                  {error && (
+                    <Icon
+                      name="close-circle-outline"
+                      size={18}
+                      color={colors.invalid}
+                    />
+                  )}
+                </Animatable.View>
+              )}
+              {/* </View> */}
             </View>
             {/* error message */}
             {isErrorBoundary || error ? (
@@ -233,6 +267,8 @@ const styles = (
   fontColor,
   fontSize,
   inputHeight,
+  isFlexStart,
+  padding,
 ) =>
   StyleSheet.create({
     root: {
@@ -258,11 +294,14 @@ const styles = (
           : isDisabled
           ? colors.gray
           : colors.secondaryMonoChrome100,
-      paddingHorizontal: dimensions.Width / 40,
+
+      paddingLeft: padding ? dimensions.Width * 0.03 : 0,
+      paddingRight: padding ? dimensions.Width * 0.02 : 0,
+
       borderRadius: 5,
       flexDirection: 'row',
       justifyContent: 'space-around',
-      alignItems: 'flex-start',
+      alignItems: `${isFlexStart ? 'flex-start' : 'center'}`,
     },
 
     flagContainer: {
@@ -279,7 +318,8 @@ const styles = (
     },
 
     input: {
-      //textAlignVertical: 'center',
+      textAlignVertical: isFlexStart ? 'top' : 'center',
+      height: inputHeight,
       color: colors.secondary1,
       width: width,
     },
@@ -293,15 +333,18 @@ const styles = (
 
     iconsContainer: {
       flexDirection: 'row',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       alignItems: 'center',
+      borderWidth: 1,
     },
 
     iconContainer: {
-      marginTop: dimensions.Height * 0.015,
-      width: 25,
-      justifyContent: 'center',
+      // marginTop: dimensions.Height * 0.015,
+      width: dimensions.Width * 0.065,
+      marginTop: isFlexStart ? dimensions.Height * 0.012 : 0,
+      justifyContent: `${isFlexStart ? 'flex-start' : 'center'}`,
       alignItems: 'center',
+      height: inputHeight ? inputHeight : dimensions.Height / 20,
     },
   });
 

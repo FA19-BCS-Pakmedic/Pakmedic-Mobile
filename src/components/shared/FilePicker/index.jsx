@@ -11,6 +11,7 @@ const FilePicker = ({
   name,
   title,
   type,
+  rules = {},
   width,
   height,
   onPress,
@@ -22,13 +23,14 @@ const FilePicker = ({
     <Controller
       control={control}
       name={name}
+      rules={rules}
       render={({
         field: {onChange, onBlur},
         fieldState: {error, isDirty, isTouched},
       }) => (
-        <View style={styles(width, null, type).container}>
+        <View style={styles(width, null, type, error).container}>
           <Text style={styles().title}>{title}</Text>
-          <View style={styles(null, height, type).filePickerContainer}>
+          <View style={styles(null, height, type, error).filePickerContainer}>
             <Button
               height={height / 1.5}
               width={dimensions.Width / 4}
@@ -51,8 +53,8 @@ const FilePicker = ({
 
 export default FilePicker;
 
-const styles = (width, height, type) =>
-  StyleSheet.create({
+const styles = (width, height, type, error) => {
+  return StyleSheet.create({
     container: {
       width: width,
     },
@@ -68,7 +70,11 @@ const styles = (width, height, type) =>
       width: '100%',
       height: height,
       borderWidth: 1,
-      borderColor: type === 'outlined' ? colors.primary1 : colors.white,
+      borderColor: error
+        ? colors.invalid
+        : type === 'outlined'
+        ? colors.primary1
+        : colors.white,
       borderRadius: dimensions.Width / 60,
       backgroundColor: type === 'outlined' ? colors.white : colors.primary1,
       alignItems: 'center',
@@ -92,3 +98,4 @@ const styles = (width, height, type) =>
       alignItems: 'flex-start',
     },
   });
+};

@@ -14,15 +14,15 @@ export default function MenuDropDown({children, options}) {
     <Menu>
       <MenuTrigger>{children}</MenuTrigger>
       <MenuOptions>
-        {/* <MenuOption onSelect={() => alert(`Save`)} text="Save" />
+        <MenuOption onSelect={() => alert(`Save`)} text="Save" />
         <MenuOption onSelect={() => alert(`Delete`)}>
-        <Text style={{color: 'red'}}>Delete</Text>
+          <Text style={{color: 'red'}}>Delete</Text>
         </MenuOption>
         <MenuOption
-        onSelect={() => alert(`Not called`)}
+          onSelect={() => alert(`Not called`)}
           disabled={true}
           text="Disabled"
-        /> */}
+        />
         {options.map((option, index) => (
           <TouchableOpacity key={index}>
             <MenuOption
@@ -40,6 +40,7 @@ export default function MenuDropDown({children, options}) {
 const styles = StyleSheet.create({
   container: {
     borderRadius: dimensions.Width / 10,
+    zIndex: 10,
   },
 
   option: {
