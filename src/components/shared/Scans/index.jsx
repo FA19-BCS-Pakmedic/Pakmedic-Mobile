@@ -324,7 +324,7 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
         style={styles.scrollContainer}
         contentContainer={styles.scrollContentContainer}>
         <View style={styles.contentContainer}>
-          {scans.length &&
+          {scans.length > 0 &&
             scans.map(scan => {
               return (
                 <View style={styles.scanContainer} key={scan._id}>

@@ -11,7 +11,7 @@ import StarSvg from '../../../assets/svgs/FullStarIcon.svg';
 import fonts from '../../../utils/styles/themes/fonts';
 import {useSelector} from 'react-redux';
 import ROLES from '../../../utils/constants/ROLES';
-import { apiEndpoint } from '../../../utils/constants/APIendpoint';
+import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 const ProfileCard = ({user}) => {
   const role = useSelector(state => state.role.role);
@@ -21,6 +21,7 @@ const ProfileCard = ({user}) => {
   const navigateToEditProfile = () => {
     navigation.navigate('App', {
       screen: 'EditProfile',
+      params: {userId: user._id},
     });
   };
 
@@ -103,8 +104,9 @@ const styles = role =>
     },
 
     name: {
-      fontSize: fonts.size.font24,
+      fontSize: fonts.size.font20,
       fontWeight: fonts.weight.bold,
+      maxWidth: dimensions.Width / 2,
     },
     iconTextContainer: {
       flexDirection: 'row',
@@ -118,7 +120,7 @@ const styles = role =>
     },
     buttonContainer: {
       position: 'absolute',
-      right: dimensions.Width / 20,
-      top: dimensions.Height / 120,
+      right: dimensions.Width / 30,
+      top: dimensions.Height / 40000,
     },
   });

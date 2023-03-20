@@ -1,3 +1,3 @@
 export default function getVoxUsername(user) {
-  return `${user.name.replace(' ', '_')}-${user._id.toString().slice(0, 5)}`;
+  return `${user.name.split(' ')[0]}-${user._id.toString().slice(0, 5)}`;
 }

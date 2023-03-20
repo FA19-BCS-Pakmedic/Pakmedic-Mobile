@@ -19,13 +19,11 @@ const UsersList = ({navigation}) => {
   useEffect(() => {
     const getAppointments = async () => {
       try {
-        const response = await getAppointmentsByUserId({
-          [role.toLowerCase()]: user._id,
-        });
+        const response = await getAppointmentsByUserId(`${role}=${user._id}`);
 
-        console.log(response.data.data);
+        console.log(response.data);
 
-        setAppointments(response.data.data.appointments);
+        setAppointments(response.data.data.data);
       } catch (err) {
         console.log(err);
       }
@@ -46,11 +44,7 @@ const UsersList = ({navigation}) => {
   };
 
   return (
-    <StaticContainer
-      isBack={true}
-      customHeaderName={role === 'doctor' ? 'Patients list' : 'Doctors list'}
-      customHeaderEnable={true}
-      isHorizontalPadding={false}>
+    <StaticContainer isHorizontalPadding={false}>
       <View style={styles.container}>
         <View style={styles.filterSearchContainer}>
           <SearchFilterBar role={role} />

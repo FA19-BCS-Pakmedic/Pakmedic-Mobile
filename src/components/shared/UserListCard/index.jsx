@@ -8,6 +8,7 @@ import DefaultImage from '../../../assets/images/default-avatar.png';
 import fonts from '../../../utils/styles/themes/fonts';
 import Button from '../Button';
 import {getDate} from '../../../utils/helpers/getDate';
+import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 const UserListCard = ({role, appointment, onPressContact}) => {
   const receiver =
@@ -100,7 +101,12 @@ const UserListCard = ({role, appointment, onPressContact}) => {
     <View style={styles(role).container}>
       <View style={styles().informationContainer}>
         <View style={styles().imageContainer}>
-          <Image source={DefaultImage} style={styles().image} />
+          <Image
+            source={{
+              uri: `${apiEndpoint}files/${receiver.avatar}`,
+            }}
+            style={styles().image}
+          />
         </View>
         <View style={styles().informationContent}>
           <View style={styles().information}>

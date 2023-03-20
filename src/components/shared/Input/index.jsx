@@ -29,6 +29,7 @@ export const ContactInputField = ({
   type,
   width,
   title,
+  inputHeight,
 }) => {
   return (
     <Controller
@@ -43,7 +44,8 @@ export const ContactInputField = ({
           {title ? <Text style={styles().title}>{title}</Text> : null}
           <View
             style={[
-              styles(type, width).container,
+              styles(type, width, null, null, null, null, inputHeight)
+                .container,
 
               {
                 borderColor: error ? colors.invalid : colors.primary1,
@@ -61,7 +63,9 @@ export const ContactInputField = ({
               placeholderTextColor={colors.secondary1}
               onBlur={onBlur}
               defaultCountry="PK"
-              phoneInputStyle={styles(type, width).input}
+              phoneInputStyle={
+                styles(type, width, null, null, null, null, inputHeight).input
+              }
               containerStyle={{
                 width: '93.5%',
                 // borderWidth: 1,
@@ -118,7 +122,7 @@ export const ValidateInputField = ({
   fontColor = colors.secondary1,
   fontSize = fonts.size.font14,
   multiline = false,
-  inputHeight = dimensions.Height / 20,
+  inputHeight = dimensions.Height / 17,
   useRef,
   isFlexStart = false,
 }) => {
@@ -302,11 +306,7 @@ const styles = (
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: `${isFlexStart ? 'flex-start' : 'center'}`,
-    },
-
-    flagContainer: {
       justifyContent: 'center',
-      alignItems: 'center',
       fontSize: fonts.size.font24,
     },
 

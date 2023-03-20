@@ -43,6 +43,7 @@ const styles = () =>
       justifyContent: 'space-between',
 
       paddingHorizontal: dimensions.Width / 20,
+      height: dimensions.Height / 15,
     },
 
     filterContainer: {

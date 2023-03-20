@@ -1,3 +1,7 @@
+import {View, Text} from 'react-native';
+
+import {useCustomToast} from '../../hooks/useCustomHook';
+
 // importing stack navigator
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,11 +21,13 @@ import ROLES from '../../utils/constants/ROLES';
 
 //import helper functions
 import deviceStorage from '../../utils/helpers/deviceStorage';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {getDoctor} from '../../services/doctorServices';
 import {getPatient} from '../../services/patientServices';
 import {authSuccess} from '../redux/actions';
 import {loginVox} from '../../services/voxServices';
+import {ActivityIndicator} from 'react-native-paper';
+import Loader from '../../components/shared/Loader';
 
 // create stacks
 const authStack = createNativeStackNavigator();
@@ -34,6 +40,8 @@ const screenOptions = {
 //stack navigator for nested register and login screen
 const AuthNavigation = ({navigation}) => {
   const role = useSelector(state => state.role.role);
+  const [loading, setLoading] = useState(false);
+  const {showToast} = useCustomToast();
 
   const dispatch = useDispatch();
 
@@ -44,6 +52,7 @@ const AuthNavigation = ({navigation}) => {
       if (token && role) {
         try {
           //getting logged in user data
+          setLoading(true);
           const response =
             role === ROLES.doctor
               ? await getDoctor(token)
@@ -60,11 +69,16 @@ const AuthNavigation = ({navigation}) => {
               }),
             );
 
+            showToast('User has successfully logged in', 'success');
+
             //navigate to user app if the user is logged in
             navigation.replace('App');
           }
         } catch (err) {
           console.log(err);
+          showToast('User session has expired', 'danger');
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -72,34 +86,43 @@ const AuthNavigation = ({navigation}) => {
   }, []);
 
   return (
-    <authStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName="LoginNavigation">
-      <authStack.Screen name="Login" component={Login} />
-
-      {role === ROLES.doctor ? (
-        <authStack.Screen name="Register" component={DoctorRegister} />
+    <>
+      {loading ? (
+        <Loader title={'Loading'} />
       ) : (
-        <authStack.Screen name="Register" component={PatientRegister} />
-      )}
-      {role === ROLES.doctor ? (
-        <authStack.Screen
-          name="CompleteProfile"
-          component={DoctorCompleteProfile}
-        />
-      ) : (
-        <authStack.Screen
-          name="CompleteProfile"
-          component={PatientCompleteProfile}
-        />
-      )}
+        <authStack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          initialRouteName="Login">
+          <authStack.Screen name="Login" component={Login} />
 
-      <authStack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <authStack.Screen name="OtpVerification" component={OtpVerification} />
-      <authStack.Screen name="SetNewPassword" component={SetNewPassword} />
-    </authStack.Navigator>
+          {role === ROLES.doctor ? (
+            <authStack.Screen name="Register" component={DoctorRegister} />
+          ) : (
+            <authStack.Screen name="Register" component={PatientRegister} />
+          )}
+          {role === ROLES.doctor ? (
+            <authStack.Screen
+              name="CompleteProfile"
+              component={DoctorCompleteProfile}
+            />
+          ) : (
+            <authStack.Screen
+              name="CompleteProfile"
+              component={PatientCompleteProfile}
+            />
+          )}
+
+          <authStack.Screen name="ForgotPassword" component={ForgotPassword} />
+          <authStack.Screen
+            name="OtpVerification"
+            component={OtpVerification}
+          />
+          <authStack.Screen name="SetNewPassword" component={SetNewPassword} />
+        </authStack.Navigator>
+      )}
+    </>
   );
 };
 

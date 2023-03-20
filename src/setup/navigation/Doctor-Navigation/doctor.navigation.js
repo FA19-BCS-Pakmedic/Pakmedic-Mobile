@@ -14,7 +14,7 @@ import Support from '../../../screens/shared/Support-communities/Home';
 import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
 import Post from '../../../screens/shared/Support-communities/Post';
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
-import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
+import EditProfile from '../../../screens/doctor/Profile-management/Edit-Profile';
 import Chat from '../../../screens/shared/Telemedicine/Chat';
 import OngoingCall from '../../../screens/shared/Telemedicine/Ongoing-call';
 import IncomingCall from '../../../screens/shared/Telemedicine/Incoming-call';

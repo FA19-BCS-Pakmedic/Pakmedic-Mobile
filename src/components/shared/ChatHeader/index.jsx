@@ -11,7 +11,10 @@ import VideoIcon from '../../../assets/svgs/Video-on.svg';
 
 import ROLES from '../../../utils/constants/ROLES';
 
+import {useNavigation} from '@react-navigation/native';
+
 const ChatHeader = ({role, user, onPressCall, callee}) => {
+  const navigation = useNavigation();
   const goBack = () => {
     navigation.goBack();
   };
