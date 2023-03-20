@@ -22,12 +22,15 @@ import {setLoading} from '../../../../setup/redux/slices/loading.slice';
 import {getDoctorInfo} from '../../../../utils/helpers/getProfileInfo';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
 import Loader from '../../../../components/shared/Loader';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 const ProfileManagement = ({route}) => {
   const [profileOptions, setProfileOptions] = useState(options);
   const [storedUser, setStoredUser] = useState(null);
   const [information, setInformation] = useState([]);
-  const [loadProfile, setLoadProfile] = useState(null);
+  // const [loadProfile, setLoadProfile] = useState(null);
+
+  const {showToast} = useCustomToast();
 
   const [loading, setLoading] = useState(false);
 
@@ -45,14 +48,15 @@ const ProfileManagement = ({route}) => {
       dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
       console.log(err);
+      showToast("Can't load user data", 'danger');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getUserData();
-  }, [userId]);
+    if (userId) getUserData();
+  }, []);
 
   useEffect(() => {
     if (storedUser) {
@@ -61,9 +65,9 @@ const ProfileManagement = ({route}) => {
     }
   }, [storedUser]);
 
-  useEffect(() => {
-    setLoadProfile(true);
-  }, [information]);
+  // useEffect(() => {
+  //   setLoadProfile(true);
+  // }, [information]);
 
   const onOptionClick = index => {
     setProfileOptions(prevState => {

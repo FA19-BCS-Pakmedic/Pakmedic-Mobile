@@ -49,9 +49,9 @@ import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 import {loginVox} from '../../../../services/voxServices';
 
-import {specialistNames} from '../../../../utils/constants/Specialists';
+import {Specialists} from '../../../../utils/constants/Specialists';
 import {register} from '../../../../services/notificationService';
-import {useCustomToast} from '../../../../hooks/useCustomHook';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
@@ -441,7 +441,7 @@ const DoctorRegister = ({navigation}) => {
             <ValidateDropdown
               open={openSpec}
               setOpen={setOpenSpec}
-              items={specialistNames}
+              items={Specialists}
               control={control}
               //title="City"
               setValue={callback => {

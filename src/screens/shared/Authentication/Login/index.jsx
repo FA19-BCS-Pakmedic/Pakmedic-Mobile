@@ -43,7 +43,7 @@ import {googleConfig} from '../../../../utils/helpers/googleConfig';
 import {getFile} from '../../../../services/fileServices';
 
 import {loginVox} from '../../../../services/voxServices';
-import {useCustomToast} from '../../../../hooks/useCustomHook';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 const Login = ({navigation}) => {
   // states

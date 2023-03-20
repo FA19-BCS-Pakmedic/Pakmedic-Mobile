@@ -1,6 +1,6 @@
 import {View, Text} from 'react-native';
 
-import {useCustomToast} from '../../hooks/useCustomHook';
+import {useCustomToast} from '../../hooks/useCustomToast';
 
 // importing stack navigator
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -77,6 +77,7 @@ const AuthNavigation = ({navigation}) => {
         } catch (err) {
           console.log(err);
           showToast('User session has expired', 'danger');
+          await deviceStorage.deleteItem('jwtToken');
         } finally {
           setLoading(false);
         }

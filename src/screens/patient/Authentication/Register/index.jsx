@@ -30,7 +30,7 @@ import AutoNextInput from '../../../../components/shared/AutoNextInput';
 import CustomDatePicker from '../../../../components/shared/CustomDatePicker';
 import ErrorMessage from '../../../../components/shared/ErrorMessage';
 
-import {useCustomToast} from '../../../../hooks/useCustomHook';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 // import constants
 import CITIES from '../../../../utils/constants/Cities';

@@ -26,7 +26,7 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import GiftedChatSend from '../../../components/shared/GiftedChatSend';
 import GiftedChatInput from '../../../components/shared/GiftedChatInput';
 import {useSelector} from 'react-redux';
-import {specialistNames} from '../../../utils/constants/Specialists';
+import {Specialists} from '../../../utils/constants/Specialists';
 
 const Chatbot = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
@@ -100,7 +100,7 @@ const Chatbot = ({route, navigation}) => {
       sessionId: sessionId,
     });
 
-    const findSpeciality = specialistNames.find(
+    const findSpeciality = Specialists.find(
       item => item.label === response.data.data.intent,
     );
 

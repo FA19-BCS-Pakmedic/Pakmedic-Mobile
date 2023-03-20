@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: dimensions.Height / 30,
   },
 
   avatarContainer: {
@@ -75,6 +76,9 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.semi,
+  },
+  formContainer: {
+    width: '100%',
   },
 });
 
