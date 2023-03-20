@@ -27,9 +27,55 @@ import CompoundResults from '../../../screens/doctor/Assistant/CompoundRecommend
 
 import BrainMri from '../../../screens/doctor/Assistant/BrainMri';
 
+import notifee, {EventType, AndroidImportance} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+import {useEffect} from 'react';
+
+import {useNavigation} from '@react-navigation/native';
+import ResultsScreen from '../../../screens/doctor/Assistant/ResultsScreen';
+
 const Stack = createNativeStackNavigator();
 
+const onMessageReceived = async message => {
+  notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+  await notifee.displayNotification(JSON.parse(message.data.notifee));
+};
+
+const onBackgroundMessage = navigation => {
+  notifee.onBackgroundEvent(async ({type, detail}) => {
+    const {notification, pressAction} = detail;
+
+    // Check if the user pressed the "Mark as read" action
+
+    console.log('Inside onBackgroundEvent');
+    if (type === EventType.PRESS) {
+      // Update external API
+      console.log('Pressed Notification');
+
+      if (notification?.data?.navigate) {
+        navigation.navigate('App', {
+          screen: notification?.data?.navigate,
+          params: {image: notification?.data?.image},
+        });
+      }
+
+      // Remove the notification
+      await notifee.cancelNotification(notification.id);
+    }
+  });
+};
+
 const DoctorNavigation = () => {
+  const navigation = useNavigation();
+  useEffect(() => {
+    messaging().onMessage(onMessageReceived);
+    messaging().setBackgroundMessageHandler(onMessageReceived);
+    onBackgroundMessage(navigation);
+  }, []);
+
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
@@ -47,6 +93,7 @@ const DoctorNavigation = () => {
         component={CompoundRecommendation}
       />
       <Stack.Screen name="CompoundResults" component={CompoundResults} />
+      <Stack.Screen name="ResultsScreen" component={ResultsScreen} />
       <Stack.Screen name="BrainMri" component={BrainMri} />
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="OngoingCall" component={OngoingCall} />

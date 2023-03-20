@@ -43,7 +43,6 @@ const PopupAlerts = props => {
     if (!isModalVisible) return;
     setTimeout(
       () => {
-        console.log(props.redirect);
         navigation.navigate('App', props.redirect);
         setModalVisible(false);
       },

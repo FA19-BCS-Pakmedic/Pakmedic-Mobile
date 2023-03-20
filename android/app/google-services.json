@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "672656595833",
+    "project_id": "pakmedic-notifications",
+    "storage_bucket": "pakmedic-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672656595833:android:5cdd5f72a3b146b9652da8",
+        "android_client_info": {
+          "package_name": "com.pakmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "672656595833-o7rb3s9a28b275118udoqs5fpai2hq7i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCX5kcSM4snarsPf5ZGUJOYqozjq7d4uk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "672656595833-o7rb3s9a28b275118udoqs5fpai2hq7i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

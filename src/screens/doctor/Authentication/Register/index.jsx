@@ -50,6 +50,7 @@ import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 import {loginVox} from '../../../../services/voxServices';
 
 import {specialistNames} from '../../../../utils/constants/Specialists';
+import {register} from '../../../../services/notificationService';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
@@ -144,10 +145,20 @@ const DoctorRegister = ({navigation}) => {
 
   //on successfull registration
   const onSuccess = async response => {
+    // Register the token
+    // await register(token);
+
+    const fcm = await deviceStorage.loadItem('FCMToken');
+
+    console.log(response?.data?.user._id);
+
+    await register({tokenID: fcm, user: response?.data?.user._id});
+
     //storing jwt token to mobile storage
+
     await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
-    const user = response.data.user;
+    const user = response?.data?.user;
 
     if (user) {
       try {
