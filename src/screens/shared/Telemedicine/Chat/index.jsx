@@ -133,15 +133,15 @@ const Chat = ({route, navigation}) => {
       : setIsTyping(false);
   };
 
-  const onPressCall = async (callee, isVideoCall) => {
+  const onPressCall = async () => {
     const permissionsGranted = await requestPermissions(true);
 
     if (permissionsGranted) {
       navigation.navigate('App', {
         screen: 'OngoingCall',
         params: {
-          callee,
-          isVideoCall,
+          callee: receiver._id,
+          isVideoCall: false,
           isIncomingCall: false,
           otherUsername: receiver.name,
         },
