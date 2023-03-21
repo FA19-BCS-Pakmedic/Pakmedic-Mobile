@@ -33,8 +33,6 @@ export const specialistNames = [
   {label: 'Internist', value: 'Internist'},
   {label: 'Nephrologist', value: 'Nephrologist'},
   {label: 'Obstetrician', value: 'Obstetrician'},
-  {label: 'Oncologist', value: 'Oncologist'},
   {label: 'Ophthalmologist', value: 'Ophthalmologist'},
   {label: 'Orthopedist', value: 'Orthopedist'},
-  {label: 'Otolaryngologist', value: 'Otolaryngologist'},
 ];

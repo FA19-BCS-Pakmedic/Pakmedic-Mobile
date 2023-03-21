@@ -46,6 +46,9 @@ export const loginVox = async user => {
       user,
     )}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`;
     const password = user._id.toString();
+
+    console.log(username, password);
+
     try {
       let clientState = await voximplant.getClientState();
       if (clientState === Voximplant.ClientState.DISCONNECTED) {

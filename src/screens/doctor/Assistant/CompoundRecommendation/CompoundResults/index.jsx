@@ -28,9 +28,9 @@ const Results = props => {
 
   const renderItem = ({item}) => (
     <View>
-      <Text style={styles.category}>{item.category}</Text>
+      <Text style={styles.category}>{item?.category}</Text>
       <View style={styles.item}>
-        {item.medicines.map(medicine => (
+        {item?.medicines?.map(medicine => (
           <View style={styles.flex} key={medicine}>
             <Ellipse
               width={dimensions.Width / 50}

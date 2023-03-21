@@ -12,6 +12,8 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
 
+const {useNavigation} = require('@react-navigation/native');
+
 const BookAppointment = () => {
   const role = useSelector(state => state.role.role);
   return (

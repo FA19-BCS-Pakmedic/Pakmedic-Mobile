@@ -99,7 +99,7 @@ const XrayScreen = navigation => {
           <Image
             source={
               file != null && !isUploading
-                ? {uri: `${apiEndpoint}files/${file[0]?.name}`}
+                ? {uri: `${apiEndpoint}files/${watch('file')}`}
                 : null
             }
             style={styles.image}
