@@ -42,9 +42,7 @@ export const loginVox = async user => {
   //   password,
   // );
   if (user) {
-    const username = `${getVoxUsername(
-      user,
-    )}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`;
+    const username = `${user._id}@${VOXIMPLANT_APP}.${VOXIMPLANT_ACCOUNT}.voximplant.com`;
     const password = user._id.toString();
 
     console.log(username, password);
