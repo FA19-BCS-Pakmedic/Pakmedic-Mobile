@@ -41,4 +41,5 @@ export const getPatient = () => API.get('patients/');
 //get patient by id
 export const getPatientById = id => API.get(`patients/${id}`);
 
-
+//update patient
+export const updatePatient = data => API.patch('patients', data);

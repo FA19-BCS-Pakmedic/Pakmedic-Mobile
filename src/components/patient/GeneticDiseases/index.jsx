@@ -1,21 +1,27 @@
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, {useState} from 'react';
+import {ModalInputField, ValidateInputField} from '../../shared/Input';
 import {useForm} from 'react-hook-form';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import ModalContainer from '../../../containers/ModalContainer';
-import {addTreatment, updateDoctor} from '../../../services/doctorServices';
 import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import AddMore from '../../shared/AddMore';
 import Button from '../../shared/Button';
-import {ModalInputField, ValidateInputField} from '../../shared/Input';
-import AvailableTreatmentsCard from './Card';
+import {updatePatient} from '../../../services/patientServices';
+import GeneticCard from './Card';
+import ModalContainer from '../../../containers/ModalContainer';
+import {useCustomToast} from '../../../hooks/useCustomToast';
 
-export default function AvailableTreatments({setStoredUser, treatments}) {
+const GeneticDiseases = ({updateUser, med}) => {
+  const {showToast} = useCustomToast();
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editIdx, setEditIdx] = useState(-1);
   const [loading, setLoading] = useState(false);
+
+  const medical = med ? med : {geneticDiseases: []};
+
+  console.log(medical, med);
 
   const {
     control,
@@ -32,24 +38,23 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
     },
   });
 
-  console.log(treatments);
-
   const onSubmit = async values => {
     console.log('here');
     setLoading(true);
     try {
-      let response;
       if (!isEdit) {
-        response = await addTreatment({treatment: values.name});
+        medical?.geneticDiseases.push(values.name);
       } else {
-        treatments[editIdx] = values.name;
-        response = await updateDoctor({treatments});
+        if (medical?.geneticDiseases.length > 0)
+          medical.geneticDiseases[editIdx] = values.name;
       }
-      setStoredUser(response.data.data.user);
-      showToast('Treatment added successfully', 'success');
+      console.log(medical);
+      const response = await updatePatient({medical});
+      updateUser();
+      showToast('Genetic disease added successfully', 'success');
     } catch (err) {
       console.log(err);
-      showToast('Error deleting treatment', 'danger');
+      showToast('Error deleting genetic disease', 'danger');
     } finally {
       setVisible(false);
       setLoading(false);
@@ -59,15 +64,17 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
 
   const onDeletePress = async idx => {
     try {
-      treatments.splice(idx, 1);
+      if (medical?.geneticDiseases.length > 0) {
+        treatments.splice(idx, 1);
 
-      response = await updateDoctor({treatments});
-      setStoredUser(response.data.data.user);
+        response = await updateDoctor({treatments});
+        setStoredUser(response.data.data.user);
 
-      setVisible(false);
+        setVisible(false);
 
-      reset();
-      showToast('Treatment deleted successfully', 'success');
+        reset();
+        showToast('Treatment deleted successfully', 'success');
+      }
     } catch (err) {
       console.log(err);
       showToast('Error deleting treatment', 'danger');
@@ -77,7 +84,8 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
   const onEditPress = idx => {
     setIsEdit(true);
     setEditIdx(idx);
-    setValue('name', treatments[idx]);
+    if (medical?.geneticDiseases.length > 0)
+      setValue('name', medical?.geneticDiseases[idx]);
     setVisible(true);
   };
 
@@ -96,12 +104,12 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
           borderColor={colors.primary1}>
           <View style={styles.modalContainer}>
             <View style={styles.headingContainer}>
-              <Text style={styles.heading}>Add Treatment</Text>
+              <Text style={styles.heading}>Add Genetic Disease</Text>
             </View>
             <View style={styles.infoContainer}>
               <View style={styles.inputContainer}>
                 <ValidateInputField
-                  placeholder="Treatment name"
+                  placeholder="Genetic disease"
                   type="outlined"
                   placeholderTextColor={colors.secondary1}
                   control={control}
@@ -112,10 +120,10 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
                   rules={{
                     required: {
                       value: true,
-                      message: 'Treatment Name is required',
+                      message: 'Genetic disease is required',
                     },
                   }}
-                  title="Treatment Name"
+                  title="Genetic disease"
                 />
               </View>
             </View>
@@ -160,25 +168,27 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
         />
       </View>
       <ScrollView style={styles.contentContainer}>
-        {treatments.length > 0 ? (
-          treatments.map((treatment, index) => {
+        {medical?.geneticDiseases.length > 0 ? (
+          medical?.geneticDiseases.map((disease, index) => {
             return (
-              <AvailableTreatmentsCard
+              <GeneticCard
                 key={index}
                 index={index}
-                treatment={treatment}
+                disease={disease}
                 onEdit={onEditPress}
                 onDelete={onDeletePress}
               />
             );
           })
         ) : (
-          <Text>No treatments added</Text>
+          <Text>No Genetic diseases found</Text>
         )}
       </ScrollView>
     </View>
   );
-}
+};
+
+export default GeneticDiseases;
 
 const styles = StyleSheet.create({
   container: {
