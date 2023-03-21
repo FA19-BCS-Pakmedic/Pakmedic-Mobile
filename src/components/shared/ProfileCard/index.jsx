@@ -31,7 +31,10 @@ const ProfileCard = ({user}) => {
         source={{
           uri: `${apiEndpoint}files/${user?.avatar}`,
         }}
-        style={styles().avatar}
+        style={[
+          styles().avatar,
+          {width: dimensions.Width / 5, height: dimensions.Width / 5},
+        ]}
       />
       <View style={styles().profileInfoContainer}>
         <Text style={styles().name}>Dr. {user?.name}</Text>
@@ -87,8 +90,7 @@ const styles = role =>
     },
 
     avatar: {
-      width: dimensions.Width / 5,
-      height: dimensions.Width / 5,
+
       position: 'absolute',
       top: -(dimensions.Height / 20),
       left: dimensions.Width / 20,
