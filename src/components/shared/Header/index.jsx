@@ -62,6 +62,8 @@ const Header = ({color}) => {
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user) || null;
 
+  console.log(user);
+
   const notif = true;
 
   const dispatch = useDispatch();
@@ -130,12 +132,17 @@ const Header = ({color}) => {
             <TouchableOpacity onPress={openMenu}>
               <Image
                 //if user has no avatar then use default avatar
-                width={dimensions.Width / 10}
-                height={dimensions.Width / 10}
+
                 source={{
                   uri: `${apiEndpoint}files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
                 }}
-                style={styles().avatar}
+                style={[
+                  styles().avatar,
+                  {
+                    width: dimensions.Width / 10,
+                    height: dimensions.Width / 10,
+                  },
+                ]}
               />
             </TouchableOpacity>
           }>
