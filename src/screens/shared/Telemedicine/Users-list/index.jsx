@@ -19,9 +19,9 @@ const UsersList = ({navigation}) => {
   useEffect(() => {
     const getAppointments = async () => {
       try {
-        const response = await getAppointmentsByUserId(`${role}=${user._id}`);
+        const response = await getAppointmentsByUserId(`${role.toLowerCase()}=${user._id}`);
 
-        console.log(response.data);
+        console.log(response.data.data.data);
 
         setAppointments(response.data.data.data);
       } catch (err) {
