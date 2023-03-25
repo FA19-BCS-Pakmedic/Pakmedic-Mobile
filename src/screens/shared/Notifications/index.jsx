@@ -36,8 +36,8 @@ const Notification = () => {
       }}>
       <View style={{flexDirection: 'row'}}>
         <View style={styles.flexVertical}>
-          <Text style={styles.text}>{item.title}</Text>
-          <Text style={styles.text2}>{item.body}</Text>
+          <Text style={styles.text}>{item?.title}</Text>
+          <Text style={styles.text2}>{item?.body}</Text>
         </View>
         <Image
           source={
@@ -59,9 +59,9 @@ const Notification = () => {
       customHeaderName="Notifications"
       disableHeader={true}>
       <FlatList
-        data={notifications}
+        data={notifications.reverse()}
         renderItem={item => renderItem(item, navigation)}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item?.data?.image}
         style={styles.flatList}
       />
     </StaticContainer>

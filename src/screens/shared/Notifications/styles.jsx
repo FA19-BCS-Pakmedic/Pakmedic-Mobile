@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
     height: dimensions.Height / 9,
     marginBottom: dimensions.Height / 50,
     paddingHorizontal: dimensions.Width / 100,
+    scaleY: -1,
   },
   flexVertical: {
     flexDirection: 'column',
