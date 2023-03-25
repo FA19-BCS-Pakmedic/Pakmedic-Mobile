@@ -96,7 +96,13 @@ const Header = ({color}) => {
 
       {/* User avatar and notification bell */}
       <View style={styles().actionsContainer}>
-        <TouchableOpacity style={styles().notificationContainer}>
+        <TouchableOpacity
+          style={styles().notificationContainer}
+          onPress={() => {
+            navigation.navigate('App', {
+              screen: 'Notifications',
+            });
+          }}>
           <Notification width={30} height={30} />
           {notif && <View style={styles().notifIndicator}></View>}
         </TouchableOpacity>

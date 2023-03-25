@@ -34,6 +34,8 @@ import {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import ResultsScreen from '../../../screens/doctor/Assistant/ResultsScreen';
 
+import Notifications from '../../../screens/shared/Notifications';
+
 const Stack = createNativeStackNavigator();
 
 const onMessageReceived = async message => {
@@ -99,6 +101,7 @@ const DoctorNavigation = () => {
       <Stack.Screen name="OngoingCall" component={OngoingCall} />
       <Stack.Screen name="IncomingCall" component={IncomingCall} />
       <Stack.Screen name="Post" component={Post} />
+      <Stack.Screen name="Notifications" component={Notifications} />
     </Stack.Navigator>
   );
 };

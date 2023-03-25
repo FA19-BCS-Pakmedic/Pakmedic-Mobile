@@ -15,10 +15,11 @@ const StaticContainer = ({
   customHeaderName,
   isBack = true,
   isHorizontalPadding = true,
+  disableHeader,
 }) => {
   return (
     <SafeAreaView style={styles().root}>
-      <Header />
+      {disableHeader === true ? null : <Header />}
       {customHeaderEnable && (
         <CustomNavHeader screenName={customHeaderName} isBack={isBack} />
       )}
