@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@notifee/react-native": "^7.6.1",
+    "@openspacelabs/react-native-zoomable-view": "^2.1.1",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-firebase/app": "^17.3.2",
     "@react-native-firebase/messaging": "^17.3.2",
@@ -22,6 +23,7 @@
     "@reduxjs/toolkit": "^1.9.1",
     "axios": "^1.2.0",
     "babel-plugin-module-resolver": "^5.0.0",
+    "lottie-ios": "3.4.0",
     "lottie-react-native": "^5.1.5",
     "react": "18.1.0",
     "react-hook-form": "^7.40.0",

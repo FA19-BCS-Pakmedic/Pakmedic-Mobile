@@ -9,6 +9,8 @@ import {useRoute} from '@react-navigation/native';
 import {useEffect} from 'react';
 import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 
+import ReactNativeZoomableView from '@openspacelabs/react-native-zoomable-view/src/ReactNativeZoomableView';
+
 const ResultsScreen = () => {
   const route = useRoute();
   const [file, setFile] = React.useState(null);
@@ -22,12 +24,25 @@ const ResultsScreen = () => {
       customHeaderName="Diagnosis Results">
       <View style={styles.container}>
         <View style={styles.fileContainer}>
-          <Image
-            source={file != null ? {uri: `${apiEndpoint}files/${file}`} : null}
-            style={styles.image}
-            width={dimensions.Width / 1.1}
-            height={dimensions.Height / 2.2}
-          />
+          <ReactNativeZoomableView
+            maxZoom={5}
+            minZoom={1}
+            zoomStep={0.5}
+            initialZoom={1}
+            bindToBorders={true}
+            onZoomAfter={this.logOutZoomState}
+            style={{
+              backgroundColor: 'white',
+            }}>
+            <Image
+              source={
+                file != null ? {uri: `${apiEndpoint}files/${file}`} : null
+              }
+              style={styles.image}
+              width={dimensions.Width / 1.1}
+              height={dimensions.Height / 2.2}
+            />
+          </ReactNativeZoomableView>
         </View>
       </View>
     </StaticContainer>
