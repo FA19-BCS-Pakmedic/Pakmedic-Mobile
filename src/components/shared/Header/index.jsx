@@ -62,7 +62,6 @@ const Header = ({color}) => {
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user) || null;
 
-  console.log(user);
 
   const notif = true;
 

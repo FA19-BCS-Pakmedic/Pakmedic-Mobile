@@ -38,7 +38,6 @@ const ProfileManagement = ({navigation, route}) => {
     setLoading(true);
     try {
       const response = await getPatientById(userId);
-      console.log(response.data.data.user);
       setStoredUser(response.data.data.user);
       dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
@@ -81,21 +80,21 @@ const ProfileManagement = ({navigation, route}) => {
       case 'Genetic diseases':
         return (
           <GeneticDiseases
-            medical={storedUser?.medical}
+            geneDis={storedUser?.medical?.geneticDiseases}
             updateUser={getUserData}
           />
         );
       case 'Allergies':
         return (
           <Allergies
-            diseases={storedUser?.medical?.allergies}
+            allergys={storedUser?.medical?.allergies}
             updateUser={getUserData}
           />
         );
       case 'Family members':
         return (
           <FamilyMembers
-            experiences={storedUser?.famiilyMembers}
+            familyMembers={storedUser?.familyMembers}
             updateUser={getUserData}
           />
         );

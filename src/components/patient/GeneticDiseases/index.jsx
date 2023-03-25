@@ -12,16 +12,15 @@ import GeneticCard from './Card';
 import ModalContainer from '../../../containers/ModalContainer';
 import {useCustomToast} from '../../../hooks/useCustomToast';
 
-const GeneticDiseases = ({updateUser, med}) => {
+const geneticDiseases = ({updateUser, geneDis}) => {
   const {showToast} = useCustomToast();
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editIdx, setEditIdx] = useState(-1);
   const [loading, setLoading] = useState(false);
 
-  const medical = med ? med : {geneticDiseases: []};
-
-  console.log(medical, med);
+  console.log(geneticDiseases);
+  const geneticDiseases = geneDis ? [...geneDis] : [];
 
   const {
     control,
@@ -43,18 +42,18 @@ const GeneticDiseases = ({updateUser, med}) => {
     setLoading(true);
     try {
       if (!isEdit) {
-        medical?.geneticDiseases.push(values.name);
+        geneticDiseases.push(values.name);
       } else {
-        if (medical?.geneticDiseases.length > 0)
-          medical.geneticDiseases[editIdx] = values.name;
+        if (geneticDiseases?.length > 0) geneticDiseases[editIdx] = values.name;
       }
-      console.log(medical);
-      const response = await updatePatient({medical});
+      const response = await updatePatient({
+        medical: {geneticDiseases},
+      });
       updateUser();
       showToast('Genetic disease added successfully', 'success');
     } catch (err) {
       console.log(err);
-      showToast('Error deleting genetic disease', 'danger');
+      showToast('Error adding genetic disease', 'danger');
     } finally {
       setVisible(false);
       setLoading(false);
@@ -64,28 +63,29 @@ const GeneticDiseases = ({updateUser, med}) => {
 
   const onDeletePress = async idx => {
     try {
-      if (medical?.geneticDiseases.length > 0) {
-        treatments.splice(idx, 1);
+      if (geneticDiseases?.length > 0) {
+        geneticDiseases.splice(idx, 1);
 
-        response = await updateDoctor({treatments});
-        setStoredUser(response.data.data.user);
+        const response = await updatePatient({
+          medical: {geneticDiseases},
+        });
 
         setVisible(false);
 
         reset();
-        showToast('Treatment deleted successfully', 'success');
+        updateUser();
+        showToast('Genetic disease deleted successfully', 'success');
       }
     } catch (err) {
       console.log(err);
-      showToast('Error deleting treatment', 'danger');
+      showToast('Error deleting Genetic disease', 'danger');
     }
   };
 
   const onEditPress = idx => {
     setIsEdit(true);
     setEditIdx(idx);
-    if (medical?.geneticDiseases.length > 0)
-      setValue('name', medical?.geneticDiseases[idx]);
+    if (geneticDiseases.length > 0) setValue('name', geneticDiseases[idx]);
     setVisible(true);
   };
 
@@ -168,8 +168,8 @@ const GeneticDiseases = ({updateUser, med}) => {
         />
       </View>
       <ScrollView style={styles.contentContainer}>
-        {medical?.geneticDiseases.length > 0 ? (
-          medical?.geneticDiseases.map((disease, index) => {
+        {geneticDiseases?.length > 0 ? (
+          geneticDiseases?.map((disease, index) => {
             return (
               <GeneticCard
                 key={index}
@@ -188,7 +188,7 @@ const GeneticDiseases = ({updateUser, med}) => {
   );
 };
 
-export default GeneticDiseases;
+export default geneticDiseases;
 
 const styles = StyleSheet.create({
   container: {
