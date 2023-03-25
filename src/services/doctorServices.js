@@ -153,3 +153,7 @@ export const BrainMRI = data => {
 
   return API.post(`ML/brainMRI?name=${image}`, data);
 };
+
+export const getNotifications = data => {
+  return API.get(`notifications/?user=${data}`);
+};
