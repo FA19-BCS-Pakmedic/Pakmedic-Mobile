@@ -14,6 +14,8 @@ import ProfileSuccess from '../../../assets/svgs/ProfileSuccess.svg';
 import VectorFailure from '../../../assets/svgs/VectorFailure.svg';
 import ProfileFailure from '../../../assets/svgs/ProfileFailure.svg';
 
+import Lottie from 'lottie-react-native';
+
 const PopupAlerts = props => {
   const {
     isModalVisible,
@@ -63,14 +65,23 @@ const PopupAlerts = props => {
       <Text style={styles()?.message}>{`You will be redirected to ${
         !props?.redirect?.screen ? '' : props?.redirect?.screen
       } Page in a Few Seconds`}</Text>
-      <ActivityIndicator
-        size="large"
-        color={
-          alertName?.includes('Failure') == false
-            ? colors.primary1
-            : colors.accent1
-        }
-      />
+      <View style={styles().lottie}>
+        <Lottie
+          style={[
+            {
+              transform: [{scale: 1.6}],
+            },
+          ]}
+          source={
+            alertName?.includes('Failure') == false
+              ? require('../../../assets/lottie/success.json')
+              : require('../../../assets/lottie/error.json')
+          }
+          autoPlay
+          loop
+          resizeMode="cover"
+        />
+      </View>
     </ModalContainer>
   );
 };
@@ -78,11 +89,18 @@ const PopupAlerts = props => {
 const styles = () =>
   StyleSheet.create({
     font: {
+      width: dimensions.Width / 1.5,
+      textAlign: 'center',
+      margin: 10,
       fontSize: fonts.size.font20,
       fontWeight: fonts.weight.bold,
       color: colors.secondary1,
     },
-    message: {width: '80%'},
+    message: {width: dimensions.Width / 1.5, margin: 5, textAlign: 'center'},
+    lottie: {
+      width: dimensions.Width / 5,
+      height: dimensions.Width / 5,
+    },
   });
 
 export default PopupAlerts;
