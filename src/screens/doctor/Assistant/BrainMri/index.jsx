@@ -19,15 +19,17 @@ import FilePicker from '../../../../components/shared/FilePicker';
 
 import {addFile} from '../../../../services/fileServices';
 
-import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
-
 import {BrainMRI} from '../../../../services/doctorServices';
 
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 
 import PopupAlerts from '../../../../components/shared/PopupAlerts';
 
+import {useSelector} from 'react-redux';
+
 const BrainMRIScreen = navigation => {
+  const user = useSelector(state => state.auth.user);
+
   const {control, handleSubmit, watch, setValue, reset} = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -83,6 +85,7 @@ const BrainMRIScreen = navigation => {
     } else {
       const fcm = await deviceStorage.loadItem('FCMToken');
       data.token = fcm;
+      data.user = user?._id;
       const res = await BrainMRI(data);
       if (res?.data === 'Processing image...') {
         setModalVisible(true);
