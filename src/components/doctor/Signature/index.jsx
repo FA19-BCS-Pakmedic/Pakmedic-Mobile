@@ -1,4 +1,3 @@
-
 import {
   StyleSheet,
   Text,
@@ -10,7 +9,6 @@ import {
 import React, {useEffect} from 'react';
 import RNFetchBlob from 'rn-fetch-blob';
 
-
 import Signature from 'react-native-signature-canvas';
 import {useState} from 'react';
 import ModalContainer from '../../../containers/ModalContainer';
@@ -18,8 +16,8 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import colors from '../../../utils/styles/themes/colors';
 import Button from '../../shared/Button';
 
-
 import {addSignature} from '../../../services/doctorServices';
+import {useCustomToast} from '../../../hooks/useCustomToast';
 
 const SignatureScreen = () => {
   const [signature, setSign] = useState(null);
@@ -27,14 +25,16 @@ const SignatureScreen = () => {
 
   const signatureRef = React.useRef();
 
-  const uploadSignature = async formData => {
-    try {
-      const response = await addSignature(formData);
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const {showToast} = useCustomToast();
+
+  // const uploadSignature = async formData => {
+  //   try {
+  //     const response = await addSignature(formData);
+  //     console.log(response);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const handleOK = async signature => {
     setSign(signature);
@@ -55,24 +55,19 @@ const SignatureScreen = () => {
               PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
             );
             console.log('Successfuly saved to' + filePath);
-            const formData = new FormData();
-
-            formData.append('file', {
-              uri: `file:/${filePath}`,
-              type: 'image/png',
-              name: fileName,
-            });
-
-            console.log(formData);
-
-            uploadSignature(formData);
           })
+          .then(() => {
+            showToast('Signature saved successfully', 'success');
+            setVisible(false);
+          })
+
           .catch(errorMessage => {
             console.log(errorMessage);
+            showToast('Error saving signature', 'danger');
+            setVisible(false);
           });
       }
     }
-
   };
 
   const handleEmpty = () => {
@@ -97,7 +92,6 @@ const SignatureScreen = () => {
               onOK={handleOK}
               onEmpty={handleEmpty}
               descriptionText="Draw Your Sign"
-
               ref={signatureRef}
               clearText="Clear"
               confirmText="Save"
@@ -129,21 +123,21 @@ const SignatureScreen = () => {
         ) : null}
       </View>
       <View style={styles.controls}>
-        <Button
+        {/* <Button
           type="outlined"
           label="Remove Signature"
           onPress={() => {
             setSign(null);
           }}
           width={dimensions.Width / 2.6}
-        />
+        /> */}
         <Button
           type="filled"
-          label="Add Signature"
+          label="Create new Signature"
           onPress={() => {
             setVisible(prevState => !prevState);
           }}
-          width={dimensions.Width / 2.6}
+          width={'100%'}
         />
       </View>
     </View>

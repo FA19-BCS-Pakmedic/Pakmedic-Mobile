@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     paddingHorizontal: dimensions.Width / 20,
     paddingVertical: dimensions.Height / 200,
+    marginTop: dimensions.Height * 0.01,
   },
   communityName: {
     width: dimensions.Width / 3.5,

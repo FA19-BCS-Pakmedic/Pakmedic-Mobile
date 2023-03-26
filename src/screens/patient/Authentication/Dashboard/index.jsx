@@ -22,8 +22,6 @@ import {
 
 const Dashboard = () => {
   const user = useSelector(state => state.auth.user);
-  console.log('user', user);
-
   const [appointments, setAppointments] = React.useState([
     {
       id: 1,

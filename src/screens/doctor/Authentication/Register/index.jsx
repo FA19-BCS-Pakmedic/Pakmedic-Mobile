@@ -49,9 +49,9 @@ import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 import {loginVox} from '../../../../services/voxServices';
 
-import {specialistNames} from '../../../../utils/constants/Specialists';
+import {Specialists} from '../../../../utils/constants/Specialists';
 import {register} from '../../../../services/notificationService';
-import {useCustomToast} from '../../../../hooks/useCustomHook';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
@@ -62,6 +62,7 @@ const DoctorRegister = ({navigation}) => {
   //error hook to prevent form submission if pmc id is not verified
   const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
   const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // useForm hook from react-hook-form
   const {control, handleSubmit, setValue, clearErrors, watch, setError} =
@@ -93,6 +94,7 @@ const DoctorRegister = ({navigation}) => {
 
   // form submit handler
   const onSubmit = async formData => {
+    setLoading(true);
     if (isPmcIdVerified) {
       const issueDate = pmcData.RegistrationDate.split('/');
       const expiryDate = pmcData.ValidUpto.split('/');
@@ -127,7 +129,7 @@ const DoctorRegister = ({navigation}) => {
 
         // // navigate to the app stack
         // navigation.replace('App');
-        onSuccess(response);
+        await onSuccess(response);
       } catch (err) {
         dispatch(authLogout());
         console.log(err.response.data);
@@ -139,6 +141,8 @@ const DoctorRegister = ({navigation}) => {
             message: 'This email is already registered',
           });
         }
+      } finally {
+        setLoading(false);
       }
     } else {
       dispatch(authLogout());
@@ -263,7 +267,7 @@ const DoctorRegister = ({navigation}) => {
     // REMOVE THE ENTIRE CODE BELOW THIS COMMENT AFTER GOOGLE API WORKS
     try {
       const response = await loginDoctor({email, isThirdParty: true});
-      onSuccess(response);
+      await onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
       console.log(err.response.data);
@@ -441,7 +445,7 @@ const DoctorRegister = ({navigation}) => {
             <ValidateDropdown
               open={openSpec}
               setOpen={setOpenSpec}
-              items={specialistNames}
+              items={Specialists}
               control={control}
               //title="City"
               setValue={callback => {
@@ -475,6 +479,7 @@ const DoctorRegister = ({navigation}) => {
             label="Register"
             type="filled"
             width="100%"
+            isLoading={loading}
           />
 
           {/* divider */}

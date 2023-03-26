@@ -30,7 +30,7 @@ import AutoNextInput from '../../../../components/shared/AutoNextInput';
 import CustomDatePicker from '../../../../components/shared/CustomDatePicker';
 import ErrorMessage from '../../../../components/shared/ErrorMessage';
 
-import {useCustomToast} from '../../../../hooks/useCustomHook';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 // import constants
 import CITIES from '../../../../utils/constants/Cities';
@@ -62,6 +62,7 @@ import {register} from '../../../../services/notificationService';
 const PatientRegister = ({navigation}) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // useForm hook from react-hook-form
   const {control, handleSubmit, setValue, clearErrors, setError, watch} =
@@ -98,6 +99,7 @@ const PatientRegister = ({navigation}) => {
   const onSubmit = async data => {
     console.log(data);
 
+    setLoading(true);
     //creating a patient object to send to the backend.
     const patient = {
       name: data?.name,
@@ -126,7 +128,7 @@ const PatientRegister = ({navigation}) => {
       console.log('response', response.data);
       showToast('Patient was successfully registered', 'success');
 
-      onSuccess(response);
+      await onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
 
@@ -137,6 +139,8 @@ const PatientRegister = ({navigation}) => {
           message: 'This email is already registered',
         });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -173,7 +177,7 @@ const PatientRegister = ({navigation}) => {
       const response = await loginPatient({email, isThirdParty: true});
       console.log(response);
 
-      onSuccess(response);
+      await onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
       console.log(err.response.data);
@@ -456,6 +460,7 @@ const PatientRegister = ({navigation}) => {
           label="Register"
           type="filled"
           width="100%"
+          isLoading={loading}
         />
         {/* </View> */}
 

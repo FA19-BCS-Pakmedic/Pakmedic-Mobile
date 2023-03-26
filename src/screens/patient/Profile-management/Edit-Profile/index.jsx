@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
+import * as Animatable from 'react-native-animatable';
 
 import DocumentPicker, {
   DirectoryPickerResponse,
@@ -31,14 +32,21 @@ import ProfileImage from '../../../../assets/images/default-avatar.png';
 import EditIcon from '../../../../assets/svgs/Edit.svg';
 import Button from '../../../../components/shared/Button';
 import ModalContainer from '../../../../containers/ModalContainer';
-import {addAvatar, getDoctor} from '../../../../services/doctorServices';
 import {useDispatch, useSelector} from 'react-redux';
 import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 import {setUseProxies} from 'immer';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
+import {BLOODGROUPS} from '../../../../utils/constants/BloodGroups';
+import {
+  getPatient,
+  addAvatar,
+  updatePatient,
+} from '../../../../services/patientServices';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 const EditProfile = () => {
   const [open, setOpen] = useState(false);
+  const [bloodGroupOpen, setBloodGroupOpen] = useState(false);
   const [visible, setVisible] = useState(false);
 
   const user = useSelector(state => state.auth.user);
@@ -46,6 +54,8 @@ const EditProfile = () => {
   const dispatch = useDispatch();
 
   const [storedUser, setStoredUser] = useState(user);
+
+  const {showToast} = useCustomToast();
 
   const {
     control,
@@ -62,10 +72,14 @@ const EditProfile = () => {
       email: user?.email || '',
       phone: user?.phone || '',
       location: user?.location || '',
+      weight: user?.weight || '',
+      height: user?.height || '',
+      bloodGroup: user?.bloodGroup || '',
     },
   });
 
   const [profileImage, setProfileImage] = useState(null);
+  const [step, setStep] = useState(0);
 
   const uploadImage = async formData => {
     try {
@@ -78,7 +92,7 @@ const EditProfile = () => {
 
   const updateUser = async () => {
     try {
-      const response = await getDoctor();
+      const response = await getPatient();
       console.log(response.data.data);
 
       setStoredUser(response.data.data.user);
@@ -123,6 +137,139 @@ const EditProfile = () => {
 
   const onSubmit = async formData => {
     console.log(formData);
+    try {
+      const response = await updatePatient(formData);
+      updateUser();
+      showToast('Profile Updated Successfully', 'success');
+    } catch (err) {
+      console.log(err);
+      showToast('Something went wrong', 'danger');
+    } finally {
+      setStep(0);
+    }
+  };
+
+  const getForm = () => {
+    switch (step) {
+      case 0:
+        return (
+          <Animatable.View animation="slideInRight">
+            <Text style={styles.label}>Name</Text>
+            <ValidateInputField
+              placeholder="Enter Name"
+              type="outlined"
+              width="93%"
+              placeholderTextColor={colors.secondary1}
+              control={control}
+              text={watch('name')}
+              name="name"
+              rules={{
+                required: 'Name is required',
+                pattern: {
+                  value: stringRegex,
+                  message: 'Name can only contain alphabets',
+                },
+              }}
+            />
+
+            <Text style={styles.label}>Email</Text>
+            <ValidateInputField
+              placeholder="Enter Email"
+              type="outlined"
+              width="93%"
+              placeholderTextColor={colors.secondary1}
+              keyboardType="email-address"
+              control={control}
+              isDisabled={true}
+              text={watch('email')}
+              name="email"
+              rules={{
+                required: "Email can't be empty",
+                pattern: {value: emailRegex, message: 'Invalid Email'},
+              }}
+            />
+
+            <Text style={styles.label}>Phone</Text>
+            <ValidateInputField
+              placeholder="Enter Phone"
+              type="outlined"
+              width="93%"
+              placeholderTextColor={colors.secondary1}
+              keyboardType="phone-pad"
+              control={control}
+              text={watch('phone')}
+              name="phone"
+              rules={{
+                required: "phone can't be empty",
+                pattern: {
+                  value: phoneNumberRegex,
+                  message: 'Invalid Phone number',
+                },
+              }}
+            />
+
+            <Text style={styles.label}>Location</Text>
+            <ValidateDropdown
+              open={open}
+              width={dimensions.Width / 1.09}
+              setOpen={setOpen}
+              items={Cities}
+              control={control}
+              title="City"
+              setValue={setCity}
+              name="location"
+              placeholder="Please select your city"
+              rules={{
+                required: 'Please select a city',
+                validate: value => value !== null || 'Please select a city',
+              }}
+            />
+          </Animatable.View>
+        );
+      case 1:
+        return (
+          <Animatable.View animation="slideInLeft">
+            <Text style={styles.label}>Blood Group</Text>
+            <ValidateDropdown
+              open={bloodGroupOpen}
+              width={dimensions.Width / 1.09}
+              setOpen={setBloodGroupOpen}
+              items={BLOODGROUPS}
+              control={control}
+              title="Blood Group"
+              setValue={callback => {
+                setValue('bloodGroup', callback());
+              }}
+              name="bloodGroup"
+              placeholder="Please select your blood group"
+            />
+
+            <Text style={styles.label}>Weight</Text>
+            <ValidateInputField
+              placeholder="Enter your weight in KG"
+              type="outlined"
+              width="93%"
+              placeholderTextColor={colors.secondary1}
+              control={control}
+              text={watch('weight')}
+              name="weight"
+            />
+
+            <Text style={styles.label}>Height</Text>
+            <ValidateInputField
+              placeholder="Enter Height in CM"
+              type="outlined"
+              width="93%"
+              placeholderTextColor={colors.secondary1}
+              control={control}
+              text={watch('height')}
+              name="height"
+            />
+          </Animatable.View>
+        );
+      default:
+        null;
+    }
   };
 
   const openModal = () => {
@@ -210,86 +357,34 @@ const EditProfile = () => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.formContainer}>
-          <Text style={styles.label}>Name</Text>
-          <ValidateInputField
-            placeholder="Enter Name"
-            type="outlined"
-            width="93%"
-            placeholderTextColor={colors.secondary1}
-            control={control}
-            text={watch('name')}
-            name="name"
-            rules={{
-              required: 'Name is required',
-              pattern: {
-                value: stringRegex,
-                message: 'Name can only contain alphabets',
-              },
-            }}
-          />
-
-          <Text style={styles.label}>Email</Text>
-          <ValidateInputField
-            placeholder="Enter Email"
-            type="outlined"
-            width="93%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="email-address"
-            control={control}
-            isDisabled={true}
-            text={watch('email')}
-            name="email"
-            rules={{
-              required: "Email can't be empty",
-              pattern: {value: emailRegex, message: 'Invalid Email'},
-            }}
-          />
-
-          <Text style={styles.label}>Phone</Text>
-          <ValidateInputField
-            placeholder="Enter Phone"
-            type="outlined"
-            width="93%"
-            placeholderTextColor={colors.secondary1}
-            keyboardType="phone-pad"
-            control={control}
-            text={watch('phone')}
-            name="phone"
-            rules={{
-              required: "phone can't be empty",
-              pattern: {
-                value: phoneNumberRegex,
-                message: 'Invalid Phone number',
-              },
-            }}
-          />
-
-          <Text style={styles.label}>Cities</Text>
-          <ValidateDropdown
-            open={open}
-            width={dimensions.Width / 1.09}
-            setOpen={setOpen}
-            items={Cities}
-            control={control}
-            title="City"
-            setValue={setCity}
-            name="location"
-            placeholder="Please select your city"
-            rules={{
-              required: 'Please select a city',
-              validate: value => value !== null || 'Please select a city',
-            }}
-          />
-        </View>
+        <View style={styles.formContainer}>{getForm()}</View>
 
         {/* Register button */}
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          label="Save Changes"
-          type="filled"
-          width="100%"
-        />
+
+        <View style={styles.controls}>
+          {step === 1 && (
+            <Button
+              onPress={() => {
+                setStep(0);
+              }}
+              label="Previous"
+              type="outlined"
+              width="48%"
+            />
+          )}
+          <Button
+            onPress={() => {
+              if (step === 1) {
+                handleSubmit(onSubmit)();
+              } else {
+                setStep(1);
+              }
+            }}
+            label={`${step === 1 ? 'Finish' : 'Next'}`}
+            type="filled"
+            width={`${step === 1 ? '48%' : '100%'}`}
+          />
+        </View>
       </View>
     </StaticContainer>
   );

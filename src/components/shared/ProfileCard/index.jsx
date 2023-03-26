@@ -42,23 +42,27 @@ const ProfileCard = ({user}) => {
           <LocationSvg width={dimensions.Width / 20} />
           <Text style={styles().otherInfo}>{user?.location}</Text>
         </View>
-        <View style={styles().iconTextContainer}>
-          <SpecialistSvg width={dimensions.Width / 20} />
-          <Text style={styles().otherInfo}>{user?.speciality}</Text>
-        </View>
-        <View style={styles().iconTextContainer}>
-          <StarSvg width={dimensions.Width / 20} />
-          <Text
-            style={[
-              styles().otherInfo,
-              {
-                fontWeight: fonts.weight.low,
-                color: colors.secondaryMonoChrome800,
-              },
-            ]}>
-            4.5/5 (674 reviews)
-          </Text>
-        </View>
+        {role !== ROLES.patient && (
+          <>
+            <View style={styles().iconTextContainer}>
+              <SpecialistSvg width={dimensions.Width / 20} />
+              <Text style={styles().otherInfo}>{user?.speciality}</Text>
+            </View>
+            <View style={styles().iconTextContainer}>
+              <StarSvg width={dimensions.Width / 20} />
+              <Text
+                style={[
+                  styles().otherInfo,
+                  {
+                    fontWeight: fonts.weight.low,
+                    color: colors.secondaryMonoChrome800,
+                  },
+                ]}>
+                4.5/5 (674 reviews)
+              </Text>
+            </View>
+          </>
+        )}
       </View>
       <View style={styles().buttonContainer}>
         <Button
@@ -90,7 +94,6 @@ const styles = role =>
     },
 
     avatar: {
-
       position: 'absolute',
       top: -(dimensions.Height / 20),
       left: dimensions.Width / 20,

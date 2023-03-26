@@ -38,7 +38,21 @@ export const resetForgotPasswordPatient = data =>
 //get patient if he is logged in
 export const getPatient = () => API.get('patients/');
 
+// add avatar
+export const addAvatar = data => API.post('patients/avatar', data);
+
 //get patient by id
 export const getPatientById = id => API.get(`patients/${id}`);
 
+//update patient
+export const updatePatient = data => API.patch('patients', data);
 
+// add family member
+export const addFamilyMember = data => API.post('families', data);
+
+// update family member
+export const updateFamilyMember = (id, data) =>
+  API.patch(`families/${id}`, data);
+
+//delete family member
+export const deleteFamilyMember = id => API.delete(`families/${id}`);
