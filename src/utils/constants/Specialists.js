@@ -1,3 +1,4 @@
+
 import AllergyIcon from '../../assets/images/Allergy.png';
 import CardiologyIcon from '../../assets/images/Cardiology.png';
 import DentistryIcon from '../../assets/images/Dentistry.png';
@@ -30,14 +31,11 @@ export const Specialists = [
     icon: GastroenterologyIcon,
   },
   {label: 'Hematologist', value: 'Hematologist', icon: HematologyIcon},
-  // {
-  //   label: 'Infectious Disease Specialist',
-  //   value: 'Infectious Disease Specialist',
-  // },
   {label: 'Neurologist', value: 'Neurologist', icon: NeurologyIcon},
   {label: 'Gynecologist', value: 'Gynecologist', icon: ObstetricsIcon},
   {label: 'Oncologist', value: 'Oncologist', icon: OncologyIcon},
   {label: 'Ophthalmologist', value: 'Ophthalmologist', icon: OphthalmologyIcon},
+
   {
     label: 'Otolaryngologist',
     value: 'Otolaryngologist',
@@ -50,17 +48,10 @@ export const Specialists = [
   {label: 'Rheumatologist', value: 'Rheumatologist', icon: RheumatologyIcon},
   {label: 'Urologist', value: 'Urologist', icon: UrologyIcon},
   {label: 'Allergist', value: 'Allergist', icon: AllergyIcon},
-  // {label: 'Anesthesiologist', value: 'Anesthesiologist'},
   {label: 'Dentist', value: 'Dentist', icon: DentistryIcon},
   {label: 'Dietitian', value: 'Dietitian', icon: DietitianIcon},
-  // {
-  //   label: 'Emergency Medicine Specialist',
-  //   value: 'Emergency Medicine Specialist',
-  // },
-  // {label: 'Family Medicine Specialist', value: 'Family Medicine Specialist'},
-  // {label: 'General Practitioner', value: 'General Practitioner'},
-  // {label: 'Internist', value: 'Internist'},
   {label: 'Nephrologist', value: 'Nephrologist', icon: NephrologyIcon},
   {label: 'Obstetrician', value: 'Obstetrician', icon: ObstetricsIcon},
   {label: 'Orthopedist', value: 'Orthopedist', icon: OrthopedicsIcon},
+
 ];
