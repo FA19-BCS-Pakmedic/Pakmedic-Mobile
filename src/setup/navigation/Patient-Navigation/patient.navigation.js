@@ -26,6 +26,7 @@ import {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import ProfileManagement from '../../../screens/patient/Profile-management/Home';
 import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
+import SpecialistCategory from '../../../screens/patient/Appointment-management/Specialist-category';
 
 const Stack = createNativeStackNavigator();
 
@@ -83,6 +84,7 @@ const PatientNavigation = () => {
       <Stack.Screen name="DoctorsList" component={DoctorsList} />
       <Stack.Screen name="ProfileManagement" component={ProfileManagement} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Specialists" component={SpecialistCategory} />
     </Stack.Navigator>
   );
 };
