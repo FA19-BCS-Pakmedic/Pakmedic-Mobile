@@ -1,4 +1,4 @@
-export const specialistNames = [
+export const Specialists = [
   {label: 'Cardiologist', value: 'Cardiologist'},
   {label: 'Dermatologist', value: 'Dermatologist'},
   {label: 'Endocrinologist', value: 'Endocrinologist'},
@@ -12,7 +12,6 @@ export const specialistNames = [
   {label: 'Gynecologist', value: 'Gynecologist'},
   {label: 'Oncologist', value: 'Oncologist'},
   {label: 'Ophthalmologist', value: 'Ophthalmologist'},
-  {label: 'Orthopedist', value: 'Orthopedist'},
   {label: 'Otolaryngologist', value: 'Otolaryngologist'},
   {label: 'Pediatrician', value: 'Pediatrician'},
   {label: 'Psychiatrist', value: 'Psychiatrist'},
@@ -33,6 +32,5 @@ export const specialistNames = [
   {label: 'Internist', value: 'Internist'},
   {label: 'Nephrologist', value: 'Nephrologist'},
   {label: 'Obstetrician', value: 'Obstetrician'},
-  {label: 'Ophthalmologist', value: 'Ophthalmologist'},
   {label: 'Orthopedist', value: 'Orthopedist'},
 ];

@@ -76,6 +76,13 @@ const styles = StyleSheet.create({
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.semi,
   },
+
+  controls: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
 });
 
 export default styles;

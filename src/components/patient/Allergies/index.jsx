@@ -1,21 +1,26 @@
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, {useState} from 'react';
+import {ModalInputField, ValidateInputField} from '../../shared/Input';
 import {useForm} from 'react-hook-form';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import ModalContainer from '../../../containers/ModalContainer';
-import {addTreatment, updateDoctor} from '../../../services/doctorServices';
 import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import AddMore from '../../shared/AddMore';
 import Button from '../../shared/Button';
-import {ModalInputField, ValidateInputField} from '../../shared/Input';
-import AvailableTreatmentsCard from './Card';
+import {updatePatient} from '../../../services/patientServices';
+import AllergyCard from './Card';
+import ModalContainer from '../../../containers/ModalContainer';
+import {useCustomToast} from '../../../hooks/useCustomToast';
 
-export default function AvailableTreatments({setStoredUser, treatments}) {
+const allergies = ({updateUser, allergys}) => {
+  const {showToast} = useCustomToast();
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editIdx, setEditIdx] = useState(-1);
   const [loading, setLoading] = useState(false);
+
+  const allergies = allergys ? [...allergys] : [];
+  console.log(allergies);
 
   const {
     control,
@@ -32,24 +37,23 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
     },
   });
 
-  console.log(treatments);
-
   const onSubmit = async values => {
     console.log('here');
     setLoading(true);
     try {
-      let response;
       if (!isEdit) {
-        response = await addTreatment({treatment: values.name});
+        allergies.push(values.name);
       } else {
-        treatments[editIdx] = values.name;
-        response = await updateDoctor({treatments});
+        if (allergies?.length > 0) allergies[editIdx] = values.name;
       }
-      setStoredUser(response.data.data.user);
-      showToast('Treatment added successfully', 'success');
+      const response = await updatePatient({
+        medical: {allergies},
+      });
+      updateUser();
+      showToast('Allergy added successfully', 'success');
     } catch (err) {
       console.log(err);
-      showToast('Error deleting treatment', 'danger');
+      showToast('Error adding Allergy', 'danger');
     } finally {
       setVisible(false);
       setLoading(false);
@@ -59,25 +63,29 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
 
   const onDeletePress = async idx => {
     try {
-      treatments.splice(idx, 1);
+      if (allergies?.length > 0) {
+        allergies.splice(idx, 1);
 
-      response = await updateDoctor({treatments});
-      setStoredUser(response.data.data.user);
+        const response = await updatePatient({
+          medical: {allergies},
+        });
 
-      setVisible(false);
+        setVisible(false);
 
-      reset();
-      showToast('Treatment deleted successfully', 'success');
+        reset();
+        updateUser();
+        showToast('Allergy deleted successfully', 'success');
+      }
     } catch (err) {
       console.log(err);
-      showToast('Error deleting treatment', 'danger');
+      showToast('Error deleting Allergy', 'danger');
     }
   };
 
   const onEditPress = idx => {
     setIsEdit(true);
     setEditIdx(idx);
-    setValue('name', treatments[idx]);
+    if (allergies.length > 0) setValue('name', allergies[idx]);
     setVisible(true);
   };
 
@@ -96,12 +104,12 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
           borderColor={colors.primary1}>
           <View style={styles.modalContainer}>
             <View style={styles.headingContainer}>
-              <Text style={styles.heading}>Add Treatment</Text>
+              <Text style={styles.heading}>Add Allergy</Text>
             </View>
             <View style={styles.infoContainer}>
               <View style={styles.inputContainer}>
                 <ValidateInputField
-                  placeholder="Treatment name"
+                  placeholder="Allergy"
                   type="outlined"
                   placeholderTextColor={colors.secondary1}
                   control={control}
@@ -112,10 +120,10 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
                   rules={{
                     required: {
                       value: true,
-                      message: 'Treatment Name is required',
+                      message: 'Allergy is required',
                     },
                   }}
-                  title="Treatment Name"
+                  title="Allergy"
                 />
               </View>
             </View>
@@ -160,25 +168,27 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
         />
       </View>
       <ScrollView style={styles.contentContainer}>
-        {treatments.length > 0 ? (
-          treatments.map((treatment, index) => {
+        {allergies?.length > 0 ? (
+          allergies?.map((allergy, index) => {
             return (
-              <AvailableTreatmentsCard
+              <AllergyCard
                 key={index}
                 index={index}
-                treatment={treatment}
+                allergy={allergy}
                 onEdit={onEditPress}
                 onDelete={onDeletePress}
               />
             );
           })
         ) : (
-          <Text>No treatments added</Text>
+          <Text>No allergies found</Text>
         )}
       </ScrollView>
     </View>
   );
-}
+};
+
+export default allergies;
 
 const styles = StyleSheet.create({
   container: {

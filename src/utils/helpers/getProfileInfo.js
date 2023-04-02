@@ -36,3 +36,38 @@ export const getDoctorInfo = user => {
 
   return data;
 };
+
+export const getPatientInfo = user => {
+  return [
+    {
+      label: 'Email',
+      value: user?.email,
+      icon: 'email',
+    },
+    {
+      label: 'Phone',
+      value: user?.phone,
+      icon: 'phone',
+    },
+    {
+      label: 'Gender',
+      value: user?.gender,
+      icon: 'gender',
+    },
+    {
+      label: 'Blood Group',
+      value: user?.bloodGroup ? user.bloodGroup : 'Not Specified',
+      icon: 'blood',
+    },
+    {
+      label: 'Height',
+      value: user?.height ? user.height : 'Not Specified',
+      icon: 'height',
+    },
+    {
+      label: 'Weight',
+      value: user?.weight ? user.weight : 'Not Specified',
+      icon: 'weight',
+    },
+  ];
+};

@@ -4,7 +4,11 @@ import LicenseIcon from '../../../../assets/svgs/License.svg';
 import PersonIcon from '../../../../assets/svgs/Person.svg';
 import PhoneIcon from '../../../../assets/svgs/PhoneOutlined.svg';
 import EmailIcon from '../../../../assets/svgs/Email.svg';
-import IDIcon from '../../../../assets/svgs/id.svg';
+import IdIcon from '../../../../assets/svgs/id.svg';
+import WeightIcon from '../../../../assets/svgs/Weight.svg';
+import HeightIcon from '../../../../assets/svgs/Height.svg';
+import BloodIcon from '../../../../assets/svgs/Blood.svg';
+import GenderIcon from '../../../../assets/svgs/Gender.svg';
 import {LineDivider} from '../../Divider';
 
 import colors from '../../../../utils/styles/themes/colors';
@@ -23,7 +27,11 @@ const ProfileInfo = ({icon, label, value}) => {
     person: <PersonIcon />,
     phone: <PhoneIcon />,
     email: <EmailIcon />,
-    id: <IDIcon />,
+    id: <IdIcon />,
+    weight: <WeightIcon />,
+    height: <HeightIcon />,
+    blood: <BloodIcon />,
+    gender: <GenderIcon />,
   };
 
   return (
