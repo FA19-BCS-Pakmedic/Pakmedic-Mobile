@@ -13,7 +13,7 @@ import MenuIcon from '../../../assets/svgs/menuIcon.svg';
 //Screens
 import Home from '../../../screens/doctor/Authentication/Dashboard';
 import Assistant from '../../../screens/doctor/Assistant/Assistant-home';
-import Appointment from '../../../screens/doctor/Appointment-management/Appointments';
+import Appointments from '../../../screens/shared/Appointment-management/Appointments';
 import Telemedicine from '../../../screens/doctor/Telemedicine/Patients-list';
 import Modal from './doctor.modal.navigator';
 
@@ -25,6 +25,7 @@ import PopupAlerts from '../../../components/shared/PopupAlerts';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import Colors from '../../../utils/styles/themes/colors';
+import UsersList from '../../../screens/shared/Telemedicine/Users-list';
 
 const Tab = createBottomTabNavigator();
 
@@ -134,13 +135,14 @@ const DoctorTabStack = props => {
           tabBarStyle: {
             height: dimensions.Height / 12,
             backgroundColor: Colors.secondaryMonoChrome100,
+            borderTopWidth: 0,
           },
           //tabBarActiveBackgroundColor: Colors.secondaryMonoChrome300,
         })}>
         <Tab.Screen name="HomeScreen" component={Home} />
         <Tab.Screen name="AssistantScreen" component={Assistant} />
-        <Tab.Screen name="AppointmentScreen" component={Appointment} />
-        <Tab.Screen name="TelemedicineScreen" component={Telemedicine} />
+        <Tab.Screen name="AppointmentScreen" component={Appointments} />
+        <Tab.Screen name="TelemedicineScreen" component={UsersList} />
         <Tab.Screen
           name="MenuScreen"
           component={Home}
@@ -165,7 +167,7 @@ const DoctorTabStack = props => {
 const styles = StyleSheet.create({
   labelText: {
     fontSize: 9,
-    marginBottom: dimensions.Height / 100,
+    marginBottom: dimensions.Height * 0.01,
     color: Colors.secondary1,
   },
   activeStyle: {
@@ -174,7 +176,8 @@ const styles = StyleSheet.create({
     width: dimensions.Width / 6,
     height: dimensions.Height / 13,
     backgroundColor: Colors.secondaryMonoChrome500,
-    borderRadius: 23,
+    borderRadius: 5,
+    elevation: 5,
     padding: dimensions.Height / 200,
   },
   inactiveStyle: {

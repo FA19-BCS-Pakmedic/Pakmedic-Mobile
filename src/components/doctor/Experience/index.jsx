@@ -34,10 +34,14 @@ import {
   updateExperience,
 } from '../../../services/doctorServices';
 
+import {useCustomToast} from '../../../hooks/useCustomToast';
+
 const Experiences = ({setStoredUser, experiences}) => {
   const [visible, setVisible] = useState(false);
 
   const [cityOpen, setCityOpen] = useState(false);
+
+  const {showToast} = useCustomToast();
 
   // for opening and closing date modal
   const [openFromDate, setOpenFromDate] = useState(false);
@@ -106,8 +110,11 @@ const Experiences = ({setStoredUser, experiences}) => {
       let response;
       try {
         response = await deleteExperience(id);
+
+        showToast('Experience deleted successfully', 'success');
       } catch (err) {
         console.log(err);
+        showToast('Error deleting experience', 'danger');
       } finally {
         response && setStoredUser(response.data.data.user);
       }
@@ -136,8 +143,10 @@ const Experiences = ({setStoredUser, experiences}) => {
       response = await (isEdit && selectedExperience
         ? updateExperience(selectedExperience._id, values)
         : addExperience(values));
+      showToast('Experience added successfully', 'success');
     } catch (err) {
       console.log(err);
+      showToast('Error adding experience', 'danger');
     } finally {
       reset();
       response && setStoredUser(response.data.data.user);
@@ -291,7 +300,6 @@ const Experiences = ({setStoredUser, experiences}) => {
                         required: "Date of birth can't be empty",
                       }}
                       control={control}
-                      title={'Date of birth'}
                     />
                   </View>
                 </View>
@@ -302,7 +310,10 @@ const Experiences = ({setStoredUser, experiences}) => {
               <Button
                 type="outlined"
                 label="Cancel"
-                onPress={() => {}}
+                onPress={() => {
+                  setVisible(false);
+                  reset();
+                }}
                 width={dimensions.Width / 2.6}
               />
               <Button
@@ -439,8 +450,9 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: fonts.size.font16,
+    fontSize: fonts.size.font14,
     fontWeight: fonts.weight.semi,
+    marginBottom: dimensions.Height / 100,
   },
   subText: {
     fontSize: fonts.size.font14,

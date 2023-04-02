@@ -20,28 +20,105 @@ import CheckBoxIcon from '../../../assets/svgs/Checkbox.svg';
 import UncheckBoxIcon from '../../../assets/svgs/Checkbox-unchecked.svg';
 import {ValidateInputField} from '../Input';
 import {useForm} from 'react-hook-form';
+import DocumentPicker, {
+  isInProgress,
+  types,
+} from 'react-native-document-picker';
+
+import {addPost} from '../../../services/communityServices';
+import {addFile} from '../../../services/fileServices';
+import FilePicker from '../FilePicker';
+import {useSelector} from 'react-redux';
 
 export default CommunityPostAdd = props => {
-  const {Visible, setModalVisible, navigation} = props;
-  const {control, handleSubmit, errors} = useForm({
+  const {Visible, setModalVisible, navigation, item} = props;
+  const {control, handleSubmit, watch, setValue, reset} = useForm({
     mode: 'onChange',
-    initialValues: {
+    defaultValues: {
       title: '',
       post: '',
+      file: '',
     },
   });
 
+  const [file, setFile] = React.useState(null);
+
   const [isCheck, setIsCheck] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
+
+  React.useEffect(() => {
+    const uploadFile = async () => {
+      const formData = new FormData();
+      setIsUploading(true);
+      formData.append('file', {
+        uri: file[0].uri,
+        type: file[0].type,
+        name: file[0].name,
+      });
+      try {
+        const response = await addFile(formData);
+        setValue('file', response.data.data.filename);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsUploading(false);
+      }
+    };
+    if (file) {
+      uploadFile();
+    }
+  }, [file]);
+
+  const onSubmit = async data => {
+    setLoading(true);
+    Post({
+      title: data?.title,
+      content: data?.post,
+      isAnonymous: isCheck,
+      file: data?.file,
+    });
+  };
+
+  const Post = async data => {
+    try {
+      const response = await addPost(item._id, data);
+      if (response?.status === 201) {
+        setLoading(false);
+        setModalVisible(false);
+      }
+    } catch (error) {
+      console.log('error', error);
+      setLoading(false);
+    } finally {
+      reset();
+      setIsCheck(false);
+    }
+  };
+
+  const handleError = err => {
+    if (DocumentPicker.isCancel(err)) {
+      console.warn('cancelled');
+      // User cancelled the picker, exit any dialogs or menus and move on
+    } else if (isInProgress(err)) {
+      console.warn(
+        'multiple pickers were opened, only the last will be considered',
+      );
+    } else {
+      throw err;
+    }
+  };
 
   return (
     <ModalContainer
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
-      height={dimensions.Height / 1.7}
+      height={dimensions.Height / 1.6}
       width={dimensions.Width * 0.9}
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
       bgColor={colors.white}
+      back={false}
       borderColor={colors.primary1}>
       <View style={styles.container}>
         <View style={styles.header}>
@@ -63,6 +140,7 @@ export default CommunityPostAdd = props => {
             fontSize={fonts.size.font14}
             title="Title"
             type="outlined"
+            watch={watch('title')}
           />
 
           <ValidateInputField
@@ -82,20 +160,34 @@ export default CommunityPostAdd = props => {
             multiline={true}
             inputHeight={dimensions.Height / 6.5}
             type="outlined"
+            isFlexStart={true}
+            watch={watch('post')}
           />
         </View>
         <View style={styles.fileContainer}>
-          <Text style={styles.title}>Attach Files:</Text>
-          <View style={styles.file}>
-            <Button
-              label="Choose file"
-              type="filled"
-              width={dimensions.Width / 3.5}
-              height={dimensions.Height / 25}
-              fontSize={fonts.size.font14}
-            />
-            <Text style={styles.fileText}>File Name</Text>
-          </View>
+          <FilePicker
+            control={control}
+            name="file"
+            title={'Attach Files'}
+            type="outlined"
+            width="100%"
+            height={dimensions.Height / 15}
+            placeholder="Choose File"
+            isLoading={isUploading}
+            text={watch('file')}
+            onPress={async () => {
+              try {
+                const pickerResult = await DocumentPicker.pickSingle({
+                  presentationStyle: 'fullScreen',
+                  copyTo: 'cachesDirectory',
+                  type: [types.images, types.pdf],
+                });
+                setFile([pickerResult]);
+              } catch (e) {
+                handleError(e);
+              }
+            }}
+          />
         </View>
         <View style={styles.checkContainer}>
           {/* on Button click it switches between check and uncheck */}
@@ -126,7 +218,12 @@ export default CommunityPostAdd = props => {
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              setIsCheck(false);
+              setLoading(false);
+              reset();
+              setModalVisible(false);
+            }}
           />
           <Button
             label="Post"
@@ -134,6 +231,9 @@ export default CommunityPostAdd = props => {
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
+            isLoading={loading}
+            onPress={handleSubmit(onSubmit)}
+            isDisabled={loading || isUploading}
           />
         </View>
       </View>
@@ -144,12 +244,12 @@ export default CommunityPostAdd = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
   },
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: dimensions.Height / 20,
+    height: dimensions.Height / 25,
   },
   headerText: {
     fontSize: fonts.size.font16,
@@ -157,7 +257,7 @@ const styles = StyleSheet.create({
     color: colors.secondary1,
   },
   body: {
-    height: dimensions.Height / 3.3,
+    height: dimensions.Height / 3,
     justifyContent: 'space-evenly',
   },
   title: {
@@ -169,24 +269,14 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   fileContainer: {
-    height: dimensions.Height / 10,
-    justifyContent: 'space-evenly',
+    height: dimensions.Height / 9,
+    //justifyContent: 'center',
   },
   fileText: {
     marginLeft: dimensions.Width * 0.01,
     fontSize: fonts.size.font12,
     fontWeight: fonts.weight.normal,
     color: colors.secondary1,
-  },
-  file: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    borderColor: colors.primary1,
-    borderWidth: 1,
-    height: dimensions.Height / 17,
-    borderRadius: 5,
-    padding: dimensions.Height / 100,
   },
   checkContainer: {
     flexDirection: 'row',

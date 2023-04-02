@@ -1,4 +1,11 @@
-import {View, Text, Dimensions, FlatList, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useState} from 'react';
 import colors from '../../../../utils/styles/themes/colors';
 import dimensions from '../../../../utils/styles/themes/dimensions';
@@ -11,28 +18,52 @@ import DropDownPicker from 'react-native-dropdown-picker';
 DropDownPicker.setListMode('SCROLLVIEW');
 
 import {styles} from './styles';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {
+  getCommunity,
+  joinCommunity,
+  leaveCommunity,
+} from '../../../../services/communityServices';
+import {useEffect} from 'react';
+import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
 
 const Home = ({navigation}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'C/Dermatologist', value: 'home'},
-    {label: 'C/Dermatologist', value: 'haris'},
-    {label: 'C/Dermatologist', value: 'moeed'},
-    {label: 'C/Dermatologist', value: 'ali'},
-  ]);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const [community, setCommunity] = useState([
-    {id: 1, label: 'C/Dermatologist', members: 200},
-    {id: 2, label: 'C/Dermatologist', members: 200},
-    {id: 3, label: 'C/Dermatologist', members: 200},
-    {id: 4, label: 'C/Dermatologist', members: 200},
-    {id: 5, label: 'C/Dermatologist', members: 200},
-    {id: 6, label: 'C/Dermatologist', members: 200},
-    {id: 7, label: 'C/Dermatologist', members: 200},
-    {id: 8, label: 'C/Dermatologist', members: 200},
-    {id: 9, label: 'C/Dermatologist', members: 200},
-  ]);
+  const [jcommunities, setjCommunities] = useState([]);
+  const [communities, setCommunities] = useState([]);
+
+  //user
+  const [user, setUser] = useState(useSelector(state => state.auth.user));
+  const userCommunities = user.communities;
+
+  const dispatch = useDispatch();
+
+  //get joined and all communities
+  const getCommunities = async () => {
+    setLoading(true);
+    const res = await getCommunity();
+    //join communities
+    const joinedCommunities = res.data.data.data.filter(community => {
+      return userCommunities.includes(community._id);
+    });
+    setjCommunities(joinedCommunities);
+
+    //all communities
+    const allCommunities = res.data.data.data.filter(community => {
+      return !userCommunities.includes(community._id);
+    });
+    setCommunities(allCommunities);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getCommunities();
+  }, [user]);
 
   return (
     <StaticContainer
@@ -63,63 +94,100 @@ const Home = ({navigation}) => {
           <View style={styles.joinedCommunity}>
             <Text style={styles.communityText}>Joined Communities</Text>
             <View style={styles.line} />
-            <FlatList
-              data={community}
-              renderItem={({item}) => (
-                <TouchableOpacity
-                  style={styles.community}
-                  onPress={() => {
-                    navigation.navigate('CommunityDetails', {
-                      communityName: item.label,
-                      item: {item},
-                    });
-                  }}>
-                  <View style={styles.communitydetail}>
-                    <Logo
-                      width={dimensions.Width / 12}
-                      height={dimensions.Height / 18}
-                    />
-                    <View style={{marginLeft: dimensions.Width / 40}}>
-                      <Text style={styles.communityName}>{item.label}</Text>
-                      <Text style={styles.communityMembers}>
-                        Members: {item.members}
-                      </Text>
+            {loading ? (
+              <ActivityIndicator
+                size="large"
+                color={colors.primary1}
+                style={{
+                  flex: 1,
+                }}
+              />
+            ) : (
+              <FlatList
+                data={jcommunities}
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    style={styles.community}
+                    onPress={() => {
+                      navigation.navigate('CommunityDetails', {item});
+                    }}>
+                    <View style={styles.communitydetail}>
+                      <Logo
+                        width={dimensions.Width / 12}
+                        height={dimensions.Height / 18}
+                      />
+                      <View style={{marginLeft: dimensions.Width / 40}}>
+                        <Text style={styles.communityName}>{item.name}</Text>
+                        <Text style={styles.communityMembers}>
+                          Members: {item.totalMember}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                  <TouchableOpacity style={styles.communityButton}>
-                    <Text style={styles.communityButtonText}>Leave</Text>
+                    <TouchableOpacity
+                      style={styles.communityButton}
+                      onPress={async () => {
+                        const res = await leaveCommunity(item._id);
+                        setUser(res.data.data.user);
+                        dispatch(
+                          authUpdate({
+                            user: res.data.data.user,
+                          }),
+                        );
+                      }}>
+                      <Text style={styles.communityButtonText}>Leave</Text>
+                    </TouchableOpacity>
                   </TouchableOpacity>
-                </TouchableOpacity>
-              )}
-              keyExtractor={item => item.id}
-            />
+                )}
+                keyExtractor={item => item._id}
+              />
+            )}
           </View>
           <View style={styles.otherCommunity}>
             <Text style={styles.communityText}>Other Communities</Text>
             <View style={styles.line} />
-            <FlatList
-              data={community}
-              renderItem={({item}) => (
-                <TouchableOpacity style={styles.community}>
-                  <View style={styles.communitydetail}>
-                    <Logo
-                      width={dimensions.Width / 12}
-                      height={dimensions.Height / 18}
-                    />
-                    <View style={{marginLeft: dimensions.Width / 40}}>
-                      <Text style={styles.communityName}>{item.label}</Text>
-                      <Text style={styles.communityMembers}>
-                        Members: {item.members}
-                      </Text>
+            {loading ? (
+              <ActivityIndicator
+                size="large"
+                color={colors.primary1}
+                style={{
+                  flex: 1,
+                }}
+              />
+            ) : (
+              <FlatList
+                data={communities}
+                renderItem={({item}) => (
+                  <View style={styles.community}>
+                    <View style={styles.communitydetail}>
+                      <Logo
+                        width={dimensions.Width / 12}
+                        height={dimensions.Height / 18}
+                      />
+                      <View style={{marginLeft: dimensions.Width / 40}}>
+                        <Text style={styles.communityName}>{item.name}</Text>
+                        <Text style={styles.communityMembers}>
+                          Members: {item.totalMember}
+                        </Text>
+                      </View>
                     </View>
+                    <TouchableOpacity
+                      style={styles.communityButton}
+                      onPress={async () => {
+                        const res = await joinCommunity(item._id);
+                        setUser(res.data.data.user);
+                        dispatch(
+                          authUpdate({
+                            user: res.data.data.user,
+                          }),
+                        );
+                      }}>
+                      <Text style={styles.communityButtonText}>Join</Text>
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={styles.communityButton}>
-                    <Text style={styles.communityButtonText}>Join</Text>
-                  </TouchableOpacity>
-                </TouchableOpacity>
-              )}
-              keyExtractor={item => item.id}
-            />
+                )}
+                keyExtractor={item => item._id}
+              />
+            )}
           </View>
         </View>
       </View>

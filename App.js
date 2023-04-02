@@ -1,29 +1,73 @@
 // app entry point
+
 import AppNavigation from './src/setup/navigation/app.navigation';
 
 // your entry point
 import {MenuProvider} from 'react-native-popup-menu';
+import SplashScreen from 'react-native-splash-screen';
 
 //redux toolkit store
 import {Provider} from 'react-redux';
 import {store} from './src/setup/redux/store';
+import CallHome from './src/screens/shared/Telemedicine/Home';
+import {NavigationContainer} from '@react-navigation/native';
+import {ToastProvider} from 'react-native-toast-notifications';
 
-// fetch logger
-// global._fetch = fetch;
-// global.fetch = function (uri, options, ...args) {
-//   return global._fetch(uri, options, ...args).then(response => {
-//     console.log('Fetch', {request: {uri, options, ...args}, response});
-//     return response;
-//   });
-// };
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import History from './src/screens/shared/Telemedicine/History';
+import {voximplant} from './src/services/voxServices';
+import {Voximplant} from 'react-native-voximplant';
+import {useEffect} from 'react';
+import IncomingCall from './src/screens/shared/Telemedicine/Incoming-call';
+import OngoingCall from './src/screens/shared/Telemedicine/Ongoing-call';
+import calls from './src/utils/helpers/Store';
+import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home';
+
+import {Provider as PaperProvider, MD2LightTheme} from 'react-native-paper';
+
+import notifee, {EventType} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+
+// import {register} from './src/services/notificationService';
+import deviceStorage from './src/utils/helpers/deviceStorage';
+import Toast from 'react-native-toast-notifications';
+
+const StackNavigate = createNativeStackNavigator();
+
+const registerDeviceForMessaging = async () => {
+  await messaging().registerDeviceForRemoteMessages();
+  const token = await messaging().getToken();
+
+  await deviceStorage.saveItem('FCMToken', token);
+
+  console.log('FCM Token: ', token);
+  // Register the token
+  // await register(token);
+};
 
 const App = () => {
-  return (
+  useEffect(() => {
+    registerDeviceForMessaging();
+  }, []);
+
+  https: return (
     <Provider store={store}>
       <MenuProvider>
-        <AppNavigation />
+        <PaperProvider theme={MD2LightTheme}>
+          <ToastProvider>
+            <AppNavigation />
+          </ToastProvider>
+        </PaperProvider>
       </MenuProvider>
     </Provider>
+    // <NavigationContainer>
+    //   <StackNavigate.Navigator initialRouteName="Home">
+    //     <StackNavigate.Screen name="Home" component={CallHome} />
+    //     <StackNavigate.Screen name="History" component={History} />
+    //     <StackNavigate.Screen name="IncomingCall" component={IncomingCall} />
+    //     <StackNavigate.Screen name="OngoingCall" component={OngoingCall} />
+    //   </StackNavigate.Navigator>
+    // </NavigationContainer>
   );
 };
 

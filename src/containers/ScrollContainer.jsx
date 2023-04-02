@@ -15,9 +15,10 @@ const ScrollContainer = ({
   customHeaderEnable,
   customHeaderName,
   isBack = true,
+  isTab = false,
 }) => {
   return (
-    <SafeAreaView style={styles().root}>
+    <SafeAreaView style={styles(null, isTab).root}>
       <Header />
       {customHeaderEnable && (
         <CustomNavHeader screenName={customHeaderName} isBack={isBack} />
@@ -35,10 +36,10 @@ const ScrollContainer = ({
 
 export default ScrollContainer;
 
-const styles = isPadding =>
+const styles = (isPadding, isTab) =>
   StyleSheet.create({
     root: {
-      height: dimensions.Height,
+      height: isTab ? dimensions.Height / 1.07 : dimensions.Height,
       width: dimensions.Width,
       backgroundColor: colors.white,
     },

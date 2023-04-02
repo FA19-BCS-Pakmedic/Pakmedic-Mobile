@@ -6,9 +6,9 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
   container: {
-    marginTop: dimensions.Height / 20,
+    marginTop: dimensions.Height / 25,
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: dimensions.Height / 1.5,
+    height: dimensions.Height / 1.33,
   },
 });

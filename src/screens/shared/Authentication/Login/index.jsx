@@ -5,7 +5,6 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-
 //importing images
 import SVGImage from '../../../../assets/svgs/login-screen-icon.svg';
 import GoogleLogo from '../../../../assets/svgs/google-logo.svg';
@@ -33,28 +32,30 @@ import StaticContainer from '../../../../containers/StaticContainer';
 //import API call for login
 import {getPatient, loginPatient} from '../../../../services/patientServices';
 import {getDoctor, loginDoctor} from '../../../../services/doctorServices';
+import {update} from '../../../../services/notificationService';
 
 //importing deviceStorage handler
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
-
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 
 //import google config
 import {googleConfig} from '../../../../utils/helpers/googleConfig';
 import {getFile} from '../../../../services/fileServices';
 
-
+import {loginVox} from '../../../../services/voxServices';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 const Login = ({navigation}) => {
   // states
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const {showToast} = useCustomToast();
   const role = useSelector(state => state.role.role);
 
   const dispatch = useDispatch();
 
   //hook for react hook forms
-  const {control, handleSubmit, setValue, watch} = useForm({
+  const {control, handleSubmit, setValue, watch, reset} = useForm({
     mode: 'all',
     defaultValues: {
       email: '',
@@ -74,10 +75,8 @@ const Login = ({navigation}) => {
     //       ? await loginDoctor({email: data?.email, password: data?.password})
     //       : await loginPatient({email: data?.email, password: data?.password});
 
-
     //   // preserving jwt token in async storage
     //   await deviceStorage.saveItem('jwtToken', response?.data?.token);
-
 
     //   // setting the global state with the jwt and user information received in the response
     //   dispatch(
@@ -102,7 +101,6 @@ const Login = ({navigation}) => {
     //   alert(err.response.data.message);
     //   setIsLoading(false);
     // }
-
   };
 
   //navigate to signup screen
@@ -141,9 +139,20 @@ const Login = ({navigation}) => {
           ? await loginDoctor({...data})
           : await loginPatient({...data});
 
+      const fcm = await deviceStorage.loadItem('FCMToken');
+      await update({
+        userId: response?.data?.user?._id,
+        token: fcm,
+      });
+
       // preserving jwt token in async storage
       await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
+      const user = response.data.user;
+      // console.log('calling vox login');
+      if (user) {
+        await loginVox(user);
+      }
 
       // setting the global state with the jwt and user information received in the response
       dispatch(
@@ -153,20 +162,20 @@ const Login = ({navigation}) => {
         }),
       );
 
-      alert('Login Successful');
       setIsLoading(false);
+      showToast('User Logged In Successfully', 'success');
 
       //clear all inputs
-      setValue('email', '');
-      setValue('password', '');
+      // setValue('email', '');
+      // setValue('password', '');
+      reset();
 
       //navigate to the app stack
       navigation.replace('App');
     } catch (err) {
       dispatch(authLogout());
       console.log(err);
-      // console.log(err.response.data);
-      // alert(err.response.data.message);
+      showToast('Invalid email or password', 'danger');
       setIsLoading(false);
     }
   };

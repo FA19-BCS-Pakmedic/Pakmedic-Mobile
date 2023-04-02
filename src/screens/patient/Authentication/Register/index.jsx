@@ -30,6 +30,8 @@ import AutoNextInput from '../../../../components/shared/AutoNextInput';
 import CustomDatePicker from '../../../../components/shared/CustomDatePicker';
 import ErrorMessage from '../../../../components/shared/ErrorMessage';
 
+import {useCustomToast} from '../../../../hooks/useCustomToast';
+
 // import constants
 import CITIES from '../../../../utils/constants/Cities';
 import GENDERS from '../../../../utils/constants/Genders';
@@ -45,7 +47,6 @@ import {
 import ROLES from '../../../../utils/constants/ROLES';
 
 //import patient service
-
 import {
   loginPatient,
   registerPatient,
@@ -53,9 +54,15 @@ import {
 import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
+import {loginVox} from '../../../../services/voxServices';
+import {ValidateDropdown} from '../../../../components/shared/Dropdown';
+import Cities from '../../../../utils/constants/Cities';
+import {register} from '../../../../services/notificationService';
 
 const PatientRegister = ({navigation}) => {
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // useForm hook from react-hook-form
   const {control, handleSubmit, setValue, clearErrors, setError, watch} =
@@ -70,6 +77,7 @@ const PatientRegister = ({navigation}) => {
         phone: '',
         dob: new Date(),
         gender: '',
+        location: '',
       },
     });
 
@@ -79,6 +87,7 @@ const PatientRegister = ({navigation}) => {
     useState(false);
 
   //cnic error
+  const {showToast} = useCustomToast();
 
   // for date picker
   const [date, setDate] = useState(new Date());
@@ -90,6 +99,7 @@ const PatientRegister = ({navigation}) => {
   const onSubmit = async data => {
     console.log(data);
 
+    setLoading(true);
     //creating a patient object to send to the backend.
     const patient = {
       name: data?.name,
@@ -97,17 +107,18 @@ const PatientRegister = ({navigation}) => {
       password: data?.password,
       phone: data?.phone,
       dob: `${
-        data?.dob.getMonth().toString().length > 1
+        data?.dob.getMonth() > 9
           ? `${data?.dob.getMonth() + 1}`
           : `0${data?.dob?.getMonth() + 1}`
       }/${
-        data?.dob.getDate().toString().length > 1
+        data?.dob.getDate() > 9
           ? `${data?.dob.getDate() + 1}`
           : `0${data?.dob?.getDate() + 1}`
       }/${data?.dob.getFullYear()}`,
       gender: data?.gender,
       // cnic: `${data?.cnic1}-${data?.cnic2}-${data?.cnic3}`,
       role: ROLES.patient,
+      location: data?.location,
     };
 
     console.log(patient);
@@ -115,19 +126,21 @@ const PatientRegister = ({navigation}) => {
     try {
       const response = await registerPatient(patient);
       console.log('response', response.data);
-      alert('Patient was successfully registered');
+      showToast('Patient was successfully registered', 'success');
 
-      onSuccess(response);
+      await onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
 
-      alert(err.response.data.message);
+      showToast(err.response.data.message, 'danger');
       if (err.response.data.error.statusCode === 409) {
         setError('email', {
           type: 'conflict',
           message: 'This email is already registered',
         });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -163,7 +176,8 @@ const PatientRegister = ({navigation}) => {
     try {
       const response = await loginPatient({email, isThirdParty: true});
       console.log(response);
-      onSuccess(response);
+
+      await onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
       console.log(err.response.data);
@@ -183,9 +197,24 @@ const PatientRegister = ({navigation}) => {
 
   //function if the registration was successful
   const onSuccess = async response => {
+    const fcm = await deviceStorage.loadItem('FCMToken');
+
+    console.log(response?.data?.user._id);
+
+    await register({tokenID: fcm, user: response?.data?.user._id});
+
     //store jwt in local storage
     await deviceStorage.saveItem('jwtToken', response?.data?.token);
+    const user = response.data.user;
 
+    if (user) {
+      try {
+        await loginVox(user);
+      } catch (err) {
+        console.log(err);
+        showToast('Error logging in to vox', 'danger');
+      }
+    }
     //initializing global state with jwt token and user object
     dispatch(
       authSuccess({user: response.data.user, token: response.data.token}),
@@ -313,6 +342,23 @@ const PatientRegister = ({navigation}) => {
             },
           }}
         />
+
+        {/* cities dropdown */}
+        <ValidateDropdown
+          open={open}
+          setOpen={setOpen}
+          items={Cities}
+          control={control}
+          //title="City"
+          setValue={callback => setValue('location', callback())}
+          name="location"
+          placeholder="Select your location"
+          rules={{
+            required: 'Please select a location',
+            validate: value => value !== null || 'Please select a location',
+          }}
+        />
+
         {/* contact field */}
         <ContactInputField
           type="outlined"
@@ -414,6 +460,7 @@ const PatientRegister = ({navigation}) => {
           label="Register"
           type="filled"
           width="100%"
+          isLoading={loading}
         />
         {/* </View> */}
 

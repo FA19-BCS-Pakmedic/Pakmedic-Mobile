@@ -14,22 +14,26 @@ const StaticContainer = ({
   customHeaderEnable = false,
   customHeaderName,
   isBack = true,
+  isHorizontalPadding = true,
+  disableHeader,
 }) => {
   return (
     <SafeAreaView style={styles().root}>
-      <Header />
+      {disableHeader === true ? null : <Header />}
       {customHeaderEnable && (
         <CustomNavHeader screenName={customHeaderName} isBack={isBack} />
       )}
 
-      <View style={styles(!customHeaderEnable).container}>{children}</View>
+      <View style={styles(!customHeaderEnable, isHorizontalPadding).container}>
+        {children}
+      </View>
     </SafeAreaView>
   );
 };
 
 export default StaticContainer;
 
-const styles = isPadding =>
+const styles = (isVerticalPadding, isHorizontalPadding) =>
   StyleSheet.create({
     root: {
       width: dimensions.Width,
@@ -42,7 +46,7 @@ const styles = isPadding =>
     container: {
       width: '100%',
       flex: 1,
-      paddingHorizontal: dimensions.Width / 20,
-      paddingVertical: isPadding ? dimensions.Height / 50 : 0,
+      paddingHorizontal: isHorizontalPadding ? dimensions.Width / 20 : 0,
+      paddingVertical: isVerticalPadding ? dimensions.Height / 50 : 0,
     },
   });

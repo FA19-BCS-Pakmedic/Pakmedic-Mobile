@@ -2,7 +2,6 @@ import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 
-
 import Button from '../Button';
 import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
@@ -12,6 +11,7 @@ import StarSvg from '../../../assets/svgs/FullStarIcon.svg';
 import fonts from '../../../utils/styles/themes/fonts';
 import {useSelector} from 'react-redux';
 import ROLES from '../../../utils/constants/ROLES';
+import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 const ProfileCard = ({user}) => {
   const role = useSelector(state => state.role.role);
@@ -21,14 +21,20 @@ const ProfileCard = ({user}) => {
   const navigateToEditProfile = () => {
     navigation.navigate('App', {
       screen: 'EditProfile',
+      params: {userId: user._id},
     });
   };
 
   return (
     <View style={styles(role).container}>
       <Image
-        source={{uri: `http://192.168.0.118:8000/api/v1/files/${user?.avatar}`}}
-        style={styles().avatar}
+        source={{
+          uri: `${apiEndpoint}files/${user?.avatar}`,
+        }}
+        style={[
+          styles().avatar,
+          {width: dimensions.Width / 5, height: dimensions.Width / 5},
+        ]}
       />
       <View style={styles().profileInfoContainer}>
         <Text style={styles().name}>Dr. {user?.name}</Text>
@@ -36,33 +42,34 @@ const ProfileCard = ({user}) => {
           <LocationSvg width={dimensions.Width / 20} />
           <Text style={styles().otherInfo}>{user?.location}</Text>
         </View>
-        <View style={styles().iconTextContainer}>
-          <SpecialistSvg width={dimensions.Width / 20} />
-          <Text style={styles().otherInfo}>{user?.speciality}</Text>
-
-        </View>
-        <View style={styles().iconTextContainer}>
-          <StarSvg width={dimensions.Width / 20} />
-          <Text
-            style={[
-              styles().otherInfo,
-              {
-                fontWeight: fonts.weight.low,
-                color: colors.secondaryMonoChrome800,
-              },
-            ]}>
-            4.5/5 (674 reviews)
-          </Text>
-        </View>
+        {role !== ROLES.patient && (
+          <>
+            <View style={styles().iconTextContainer}>
+              <SpecialistSvg width={dimensions.Width / 20} />
+              <Text style={styles().otherInfo}>{user?.speciality}</Text>
+            </View>
+            <View style={styles().iconTextContainer}>
+              <StarSvg width={dimensions.Width / 20} />
+              <Text
+                style={[
+                  styles().otherInfo,
+                  {
+                    fontWeight: fonts.weight.low,
+                    color: colors.secondaryMonoChrome800,
+                  },
+                ]}>
+                4.5/5 (674 reviews)
+              </Text>
+            </View>
+          </>
+        )}
       </View>
       <View style={styles().buttonContainer}>
         <Button
           label="Edit Profile"
           width={dimensions.Width / 3}
           type="filled"
-
           onPress={navigateToEditProfile}
-
           height={dimensions.Height / 20}
         />
       </View>
@@ -87,8 +94,6 @@ const styles = role =>
     },
 
     avatar: {
-      width: dimensions.Width / 5,
-      height: dimensions.Width / 5,
       position: 'absolute',
       top: -(dimensions.Height / 20),
       left: dimensions.Width / 20,
@@ -96,7 +101,6 @@ const styles = role =>
       borderRadius: 100,
       borderWidth: 2,
       borderColor: colors.primaryMonoChrome700,
-
     },
 
     profileInfoContainer: {
@@ -105,8 +109,9 @@ const styles = role =>
     },
 
     name: {
-      fontSize: fonts.size.font24,
+      fontSize: fonts.size.font20,
       fontWeight: fonts.weight.bold,
+      maxWidth: dimensions.Width / 2,
     },
     iconTextContainer: {
       flexDirection: 'row',
@@ -120,7 +125,7 @@ const styles = role =>
     },
     buttonContainer: {
       position: 'absolute',
-      right: dimensions.Width / 20,
-      top: dimensions.Height / 120,
+      right: dimensions.Width / 30,
+      top: dimensions.Height / 40000,
     },
   });

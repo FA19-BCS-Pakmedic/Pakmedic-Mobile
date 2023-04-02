@@ -74,9 +74,10 @@ export const styles = StyleSheet.create({
     marginVertical: dimensions.Width / 50,
   },
   communityName: {
-    fontSize: fonts.size.font16,
+    fontSize: fonts.size.font14,
     fontWeight: 'bold',
     color: colors.secondary1,
+    width: dimensions.Width / 2,
   },
   communityMembers: {
     fontSize: fonts.size.font12,

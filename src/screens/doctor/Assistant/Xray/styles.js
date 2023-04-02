@@ -5,41 +5,16 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
-  heading: {
-    fontSize: fonts.size.font16,
-    fontWeight: 'bold',
-    color: colors.secondary1,
-  },
-  flex: {
-    flexDirection: 'row',
+  container: {
+    marginTop: dimensions.Height / 25,
+    justifyContent: 'space-between',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.primary1,
-    borderRadius: 20,
-    width: dimensions.Width / 1.1,
-    height: dimensions.Height / 8,
-    marginBottom: dimensions.Height / 50,
-    paddingHorizontal: dimensions.Width / 100,
+    height: dimensions.Height / 1.33,
   },
-  flexVertical: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    marginLeft: 10,
+  fileContainer: {
+    justifyContent: 'space-evenly',
   },
-  text: {
-    fontSize: fonts.size.font16,
-    fontWeight: 'bold',
-    color: colors.secondary1,
-  },
-  text2: {
-    fontSize: fonts.size.font14,
-    color: colors.secondary1,
-    width: dimensions.Width / 1.6,
-  },
-  flatList: {
-    marginTop: dimensions.Height / 50,
-    width: dimensions.Width,
-    height: dimensions.Height,
+  image: {
+    borderRadius: 5,
   },
 });

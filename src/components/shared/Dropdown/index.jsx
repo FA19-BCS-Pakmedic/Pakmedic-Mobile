@@ -131,7 +131,6 @@ const styles = width =>
       borderColor: colors.primary1,
       color: colors.secondary1,
       paddingHorizontal: dimensions.Width / 30,
-      marginTop: dimensions.Height / 100,
       zIndex: -1,
       width: width ? width : '100%',
     },

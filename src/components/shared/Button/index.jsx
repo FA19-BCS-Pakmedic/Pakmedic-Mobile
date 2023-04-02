@@ -18,15 +18,18 @@ export default Button = ({
   borderColor,
   height,
   isLoading,
+  marginVertical,
   fontSize = fonts.size.font16,
-  fontColor = colors.white,
+  fontColor = colors.secondary1,
 }) => {
   return (
     <TouchableOpacity
       style={
         isDisabled
-          ? styles(type, width, height).disabled
-          : styles(type, width, borderColor, height).button
+          ? styles(type, width, null, height, null, null, marginVertical)
+              .disabled
+          : styles(type, width, borderColor, height, null, null, marginVertical)
+              .button
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
@@ -38,8 +41,9 @@ export default Button = ({
         <Text
           style={
             isDisabled
-              ? styles().buttonLabelDisabled
-              : styles(null, null, null, null, fontSize).buttonLabel
+              ? styles(null, null, null, null, fontSize, fontColor)
+                  .buttonLabelDisabled
+              : styles(null, null, null, null, fontSize, fontColor).buttonLabel
           }>
           {label}
         </Text>
@@ -48,7 +52,15 @@ export default Button = ({
   );
 };
 
-const styles = (type, width, borderColor, height, fontSize) =>
+const styles = (
+  type,
+  width,
+  borderColor,
+  height,
+  fontSize,
+  fontColor,
+  marginVertical,
+) =>
   StyleSheet.create({
     button: {
       marginTop: dimensions.Height / 50, //remove if it there is unneseccary space
@@ -56,7 +68,7 @@ const styles = (type, width, borderColor, height, fontSize) =>
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 50,
-      marginVertical: dimensions.Height / 60,
+      marginVertical: marginVertical ? marginVertical : dimensions.Height / 60,
       backgroundColor: type === 'filled' ? colors.primary1 : colors.white,
       borderWidth: 2,
       borderColor: borderColor ? borderColor : colors.primary1,
@@ -64,7 +76,7 @@ const styles = (type, width, borderColor, height, fontSize) =>
     },
 
     disabled: {
-      height: dimensions.Height / 15,
+      height: height ? height : dimensions.Height / 17,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 50,
@@ -76,6 +88,7 @@ const styles = (type, width, borderColor, height, fontSize) =>
     buttonLabel: {
       fontSize: fontSize,
       fontWeight: fonts.weight.bold,
+      color: fontColor,
     },
 
     buttonLabelDisabled: {

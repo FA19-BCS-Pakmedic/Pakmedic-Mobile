@@ -11,18 +11,19 @@ import Button from '../../shared/Button';
 import {ModalInputField, ValidateInputField} from '../../shared/Input';
 import AvailableTreatmentsCard from './Card';
 
-export default function AvailableTreatments({setStoredUser, treatments, id}) {
+export default function AvailableTreatments({setStoredUser, treatments}) {
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editIdx, setEditIdx] = useState(-1);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: {errors, isValid},
     setValue,
-    clearErrors,
     watch,
+    reset,
   } = useForm({
     mode: 'all',
     revalidate: 'all',
@@ -35,7 +36,7 @@ export default function AvailableTreatments({setStoredUser, treatments, id}) {
 
   const onSubmit = async values => {
     console.log('here');
-
+    setLoading(true);
     try {
       let response;
       if (!isEdit) {
@@ -45,14 +46,14 @@ export default function AvailableTreatments({setStoredUser, treatments, id}) {
         response = await updateDoctor({treatments});
       }
       setStoredUser(response.data.data.user);
-
-      setVisible(false);
-
-      setValue('name', '');
-
-      clearErrors();
+      showToast('Treatment added successfully', 'success');
     } catch (err) {
       console.log(err);
+      showToast('Error deleting treatment', 'danger');
+    } finally {
+      setVisible(false);
+      setLoading(false);
+      reset();
     }
   };
 
@@ -65,9 +66,11 @@ export default function AvailableTreatments({setStoredUser, treatments, id}) {
 
       setVisible(false);
 
-      clearErrors();
+      reset();
+      showToast('Treatment deleted successfully', 'success');
     } catch (err) {
       console.log(err);
+      showToast('Error deleting treatment', 'danger');
     }
   };
 
@@ -131,6 +134,7 @@ export default function AvailableTreatments({setStoredUser, treatments, id}) {
                 onPress={handleSubmit(onSubmit)}
                 // isLoading={loading}
                 width={dimensions.Width / 2.6}
+                isLoading={loading}
               />
             </View>
           </View>

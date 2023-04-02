@@ -42,6 +42,9 @@ export const resetForgotPasswordDoctor = data =>
 //get doctor if he is logged in
 export const getDoctor = () => API.get('doctors');
 
+//get doctor by id
+export const getDoctorById = id => API.get(`doctors/${id}`);
+
 //update doctor data
 export const updateDoctor = data => API.patch(`doctors`, data);
 
@@ -94,8 +97,63 @@ export const addSignature = data => {
   });
 };
 
+//filter doctors
+export const filterDoctors = query => {
+  return API.get(`/doctors/filter/?${query}`);
+};
+
 export const retinopathy = data => {
   user = {user: Object.values(data).map(value => parseFloat(value))};
 
   return API.post('ML/retinopathy', user);
+};
+
+export const riskOfDeath = data => {
+  const keys = [
+    'Age',
+    'DiastolicBP',
+    'PovertyIndex',
+    'Race',
+    'RedBloodCells',
+    'SedimentationRate',
+    'SerumAlbumin',
+    'SerumCholesterol',
+    'SerumIron',
+    'SerumMagnesium',
+    'SerumProtein',
+    'Sex',
+    'SystolicBP',
+    'TIBC',
+    'TransferrinSaturation',
+    'WhiteBloodCells',
+    'BMI',
+    'PulsePressure',
+  ];
+
+  const userValues = keys.map(key => parseFloat(data[key]));
+  const user = {user: userValues};
+
+  return API.post('ML/riskOfDeath', user);
+};
+
+export const RecommendCompounds = data => {
+  return API.post('ML/recommendcompound', {conditions: data});
+};
+
+export const Xray = data => {
+  const image = data?.file;
+  delete data?.file;
+
+  return API.post(`ML/chestXray?name=${image}`, data);
+};
+
+export const BrainMRI = data => {
+  const image = data?.file;
+  delete data?.file;
+
+  return API.post(`ML/brainMRI?name=${image}`, data);
+};
+
+export const getNotifications = data => {
+  return API.get(`notifications/?user=${data}`);
 };

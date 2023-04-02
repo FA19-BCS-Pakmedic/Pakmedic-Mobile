@@ -22,8 +22,6 @@ const styles = StyleSheet.create({
   },
 
   avatar: {
-    width: dimensions.Width / 3,
-    height: dimensions.Width / 3,
     borderRadius: dimensions.Width / 5,
     borderWidth: 2,
     borderColor: colors.primaryMonoChrome700,
@@ -77,6 +75,13 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.semi,
+  },
+
+  controls: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 });
 

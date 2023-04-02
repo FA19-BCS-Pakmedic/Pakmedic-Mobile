@@ -34,6 +34,8 @@ const RetinopathyScreen = () => {
     },
   });
 
+  const numberRegex = /^\d+(\.\d+)?$/;
+
   //on submit of sign up form
   const onSubmit = async data => {
     setIsLoading(true);
@@ -74,6 +76,7 @@ const RetinopathyScreen = () => {
               value: true,
               message: 'Age is required',
             },
+            pattern: {value: numberRegex, message: 'Invalid Number'},
           }}
           containerWidth={dimensions.Width * 0.9}
           fontSize={fonts.size.font14}
@@ -91,6 +94,7 @@ const RetinopathyScreen = () => {
               value: true,
               message: 'Systolic BP is required',
             },
+            pattern: {value: numberRegex, message: 'Invalid Number'},
           }}
           containerWidth={dimensions.Width * 0.9}
           fontSize={fonts.size.font14}
@@ -109,6 +113,7 @@ const RetinopathyScreen = () => {
               value: true,
               message: 'Diastolic BP is required',
             },
+            pattern: {value: numberRegex, message: 'Invalid Number'},
           }}
           containerWidth={dimensions.Width * 0.9}
           fontSize={fonts.size.font14}
@@ -126,6 +131,7 @@ const RetinopathyScreen = () => {
               value: true,
               message: 'Cholestrol is required',
             },
+            pattern: {value: numberRegex, message: 'Invalid Number'},
           }}
           containerWidth={dimensions.Width * 0.9}
           fontSize={fonts.size.font14}
@@ -146,7 +152,7 @@ const RetinopathyScreen = () => {
         setModalVisible={setModalVisible}
         height={1.8}
         width={1.2}
-        timer={1500}
+        timer={2500}
         alertName={alertName}
         message={message}
         redirect={{screen: 'DoctorTabStack'}}></PopupAlerts>

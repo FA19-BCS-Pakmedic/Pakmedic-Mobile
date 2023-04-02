@@ -71,11 +71,11 @@ const styles = StyleSheet.create({
   },
   button: {
     width: dimensions.Width,
-    height: dimensions.Height / 13,
+    height: dimensions.Height / 15,
     justifyContent: 'center',
     alignItems: 'center',
     //borderBottomWidth: 0.5,
-    marginTop: dimensions.Height / 50,
+    // marginTop: dimensions.Height / 50,
   },
   // line: {
   //   borderBottomWidth: 1,

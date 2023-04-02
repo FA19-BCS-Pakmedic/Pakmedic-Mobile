@@ -1,0 +1,101 @@
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {Controller} from 'react-hook-form';
+import Button from '../Button';
+import colors from '../../../utils/styles/themes/colors';
+import fonts from '../../../utils/styles/themes/fonts';
+import dimensions from '../../../utils/styles/themes/dimensions';
+
+const FilePicker = ({
+  control,
+  name,
+  title,
+  type,
+  rules = {},
+  width,
+  height,
+  onPress,
+  text,
+  isDisabled = false,
+  isLoading = false,
+}) => {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      rules={rules}
+      render={({
+        field: {onChange, onBlur},
+        fieldState: {error, isDirty, isTouched},
+      }) => (
+        <View style={styles(width, null, type, error).container}>
+          <Text style={styles().title}>{title}</Text>
+          <View style={styles(null, height, type, error).filePickerContainer}>
+            <Button
+              height={height / 1.5}
+              width={dimensions.Width / 4}
+              label="Choose File"
+              fontSize={fonts.size.font14}
+              type="filled"
+              onPress={onPress}
+              isLoading={isLoading}
+            />
+            <Text style={styles().fileName}>{text ? text : 'File Name'}</Text>
+          </View>
+          <View style={styles().errorMessageContainer}>
+            {error && <ErrorMessage error={error} />}
+          </View>
+        </View>
+      )}
+    />
+  );
+};
+
+export default FilePicker;
+
+const styles = (width, height, type, error) => {
+  return StyleSheet.create({
+    container: {
+      width: width,
+    },
+
+    title: {
+      fontSize: fonts.size.font14,
+      color: colors.secondary1,
+      fontWeight: fonts.weight.semi,
+      marginBottom: dimensions.Height / 100,
+    },
+
+    filePickerContainer: {
+      width: '100%',
+      height: height,
+      borderWidth: 1,
+      borderColor: error
+        ? colors.invalid
+        : type === 'outlined'
+        ? colors.primary1
+        : colors.white,
+      borderRadius: dimensions.Width / 60,
+      backgroundColor: type === 'outlined' ? colors.white : colors.primary1,
+      alignItems: 'center',
+
+      flexDirection: 'row',
+      paddingHorizontal: dimensions.Width / 30,
+    },
+
+    fileName: {
+      fontSize: fonts.size.font14,
+      color: colors.secondary1,
+      fontWeight: fonts.weight.semi,
+      marginLeft: dimensions.Width / 50,
+      maxWidth: dimensions.Width / 2,
+    },
+
+    errorMessageContainer: {
+      width: '100%',
+      height: dimensions.Height / 40,
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+    },
+  });
+};

@@ -29,6 +29,8 @@ import {Dropdown, ValidateDropdown} from '../../shared/Dropdown';
 import Cities from '../../../utils/constants/Cities';
 import {STATES} from '../../../utils/constants/States';
 
+import {useCustomToast} from '../../../hooks/useCustomToast';
+
 import {
   addService,
   deleteService,
@@ -66,6 +68,8 @@ const Services = ({services, setStoredUser}) => {
   const [dayChips, setDayChips] = useState(DAYS);
 
   const [isEdit, setIsEdit] = useState(false);
+
+  const {showToast} = useCustomToast();
 
   const [dropdownFromHourOpen, setDropDownFromHourOpen] = useState(false);
   const [dropdownFromMinOpen, setDropDownFromMinOpen] = useState(false);
@@ -206,14 +210,11 @@ const Services = ({services, setStoredUser}) => {
 
       console.log(response.data.data.user);
 
-      Alert.alert('Success', 'Service deleted successfully', [
-        {
-          text: 'OK',
-        },
-      ]);
+      showToast('Service deleted successfully', 'success');
       console.log(response);
     } catch (err) {
       console.log(err);
+      showToast('Error deleting service', 'danger');
     } finally {
       setStoredUser(response.data.data.user);
     }
@@ -247,13 +248,10 @@ const Services = ({services, setStoredUser}) => {
 
         console.log(response.data.data);
 
-        Alert.alert('Success', 'Service added successfully', [
-          {
-            text: 'OK',
-          },
-        ]);
+        showToast('Service added successfully', 'success');
       } catch (err) {
         console.log(err);
+        showToast('Error adding service', 'danger');
       } finally {
         setStoredUser(response.data.data.user);
         resetForm();

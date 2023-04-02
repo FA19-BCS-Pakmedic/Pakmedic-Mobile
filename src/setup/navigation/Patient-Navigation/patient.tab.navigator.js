@@ -13,7 +13,7 @@ import MenuIcon from '../../../assets/svgs/menuIcon.svg';
 //Screens
 import Home from '../../../screens/patient/Authentication/Dashboard';
 import Chatbot from '../../../screens/patient/Chatbot';
-import Appointment from '../../../screens/patient/Appointment-management/Book-appointment';
+import Appointments from '../../../screens/shared/Appointment-management/Appointments';
 import Telemedicine from '../../../screens/patient/Labs/Home';
 import Modal from './patient.modal.navigator';
 
@@ -23,11 +23,20 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
 import Colors from '../../../utils/styles/themes/colors';
+import {useNavigation} from '@react-navigation/native';
+import UsersList from '../../../screens/shared/Telemedicine/Users-list';
 
 const Tab = createBottomTabNavigator();
 
 const PatientTabStack = props => {
   const [isModalVisible, setModalVisible] = React.useState(false);
+
+  const navigation = useNavigation();
+
+  const navigateToTelemedicine = () => {
+    navigation.navigate('App', {screen: 'TelemedicineScreen'});
+  };
+
   return (
     <>
       <Tab.Navigator
@@ -92,7 +101,9 @@ const PatientTabStack = props => {
               );
             } else if (route.name === 'TelemedicineScreen') {
               return focused ? (
-                <View style={styles.activeStyle}>
+                <View
+                  style={styles.activeStyle}
+                  onPress={navigateToTelemedicine}>
                   <TelemedicineIcon
                     width={dimensions.Width / 15}
                     height={dimensions.Height / 15}
@@ -100,7 +111,9 @@ const PatientTabStack = props => {
                   <Text style={styles.labelText}>Telemedicine</Text>
                 </View>
               ) : (
-                <View style={styles.inactiveStyle}>
+                <View
+                  style={styles.inactiveStyle}
+                  onPress={navigateToTelemedicine}>
                   <TelemedicineIcon
                     width={dimensions.Width / 15}
                     height={dimensions.Height / 15}
@@ -138,8 +151,8 @@ const PatientTabStack = props => {
         })}>
         <Tab.Screen name="HomeScreen" component={Home} />
         <Tab.Screen name="ChatbotScreen" component={Chatbot} />
-        <Tab.Screen name="AppointmentScreen" component={Appointment} />
-        <Tab.Screen name="TelemedicineScreen" component={Telemedicine} />
+        <Tab.Screen name="AppointmentScreen" component={Appointments} />
+        <Tab.Screen name="TelemedicineScreen" component={UsersList} />
         <Tab.Screen
           name="MenuScreen"
           component={Home}
@@ -172,7 +185,8 @@ const styles = StyleSheet.create({
     width: dimensions.Width / 6,
     height: dimensions.Height / 13,
     backgroundColor: Colors.primaryMonoChrome300,
-    borderRadius: 23,
+    borderRadius: 5,
+    elevation: 5,
     padding: dimensions.Height / 200,
   },
   inactiveStyle: {
