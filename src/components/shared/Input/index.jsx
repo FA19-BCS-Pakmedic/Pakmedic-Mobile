@@ -125,6 +125,8 @@ export const ValidateInputField = ({
   inputHeight = dimensions.Height / 17,
   useRef,
   isFlexStart = false,
+  onChangeCallback = null,
+  maxLength = 1000,
 }) => {
   // setting the password eye icon name based on the visiblility status
   const passwordIconName = !isPasswordVisible
@@ -194,12 +196,13 @@ export const ValidateInputField = ({
                   ).input
                 }
                 onFocus={() => setPadding(true)}
+                maxLength={maxLength}
                 placeholder={placeholder}
                 secureTextEntry={isPasswordVisible}
                 keyboardType={keyboardType || 'text'}
                 placeholderTextColor={placeholderTextColor || colors.secondary1}
                 value={text}
-                onChangeText={onChange}
+                onChangeText={onChangeCallback || onChange}
                 multiline={multiline}
                 onBlur={() => {
                   onBlur();
