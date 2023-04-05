@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,18 +18,33 @@ import {useForm} from 'react-hook-form';
 
 import {ValidateInputField} from '../../../../components/shared/Input';
 import Button from '../../../../components/shared/Button';
+import Loader from '../../../../components/shared/Loader';
 
 import {creditCardNumberRegex} from '../../../../utils/constants/Regex';
 import dimensions from '../../../../utils/styles/themes/dimensions';
+import {
+  createCustomer,
+  createPaymentMethod,
+  payForService,
+} from '../../../../services/stripeServices';
+
+import {getCustomer} from '../../../../services/stripeServices';
+
+import {useCustomToast} from '../../../../hooks/useCustomToast';
+import {createAppointment} from '../../../../services/appointmentServices';
 
 const OnlinePayment = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvc, setCvc] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [customer, setCustomer] = useState(null);
 
   const [edit, setEdit] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
+
+  const {showToast} = useCustomToast();
 
   const {handleSubmit, setValue, control, watch} = useForm({
     mode: 'onChange',
@@ -46,6 +61,10 @@ const OnlinePayment = () => {
   const user = useSelector(state => state.auth.user);
 
   const {doctorId, service, date, time} = route.params;
+
+  console.log(route.params);
+
+  console.log(user.stripeCustomerId);
 
   const handleCardNumberInput = value => {
     setValue('cardNumber', formatCardNumber(value));
@@ -66,12 +85,119 @@ const OnlinePayment = () => {
     setValue('cvc', value.replace(/[^0-9]/g, '').slice(0, 3));
   };
 
-  const onSubmit = values => {
-    console.log(values);
-    
+  const fetchCustomerData = async () => {
+    setLoading(true);
+    try {
+      const response = await getCustomer(user.stripeCustomerId);
+      setCustomer(response.data.data.customer);
+      setPaymentMethod(response.data.data?.paymentMethod);
+    } catch (err) {
+      console.log(err);
+      showToast('Error fetching customer details', 'danger');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
+  useEffect(() => {
+    if (user.stripeCustomerId) {
+      fetchCustomerData();
+    }
+  }, [user.stripeCustomerId]);
+
+  useEffect(() => {
+    if (paymentMethod) {
+      setValue('cardNumber', `**** **** **** ${paymentMethod.card.last4}`);
+      setValue(
+        'expiryDate',
+        `${
+          paymentMethod.card.exp_month < 10
+            ? `0${paymentMethod.card.exp_month}`
+            : paymentMethod.card.exp_month
+        }/${paymentMethod.card.exp_year?.toString().slice(2, 4)}`,
+      );
+      setValue('cvc', '***');
+    }
+  }, [paymentMethod]);
+
+  const onSubmit = async values => {
+    const data = {
+      number: values.cardNumber.replaceAll(' ', ''),
+      exp_month: values.expiryDate.split('/')[0],
+      exp_year: values.expiryDate.split('/')[1],
+      cvc: values.cvc,
+    };
+
+    let response;
+    setBtnLoading(true);
+    try {
+      response = !edit ? await createPaymentMethod(data) : null;
+
+      const paymentMethod = response.data.data.paymentMethod;
+
+      if (response.data) {
+        setPaymentMethod({id: paymentMethod.id, card: paymentMethod.card});
+        setEdit(false);
+        showToast('Payment method added successfully', 'success');
+      }
+    } catch (err) {
+      console.log(err);
+      showToast('Error adding payment method', 'danger');
+    } finally {
+      setBtnLoading(false);
+    }
+  };
+
+  console.log(btnLoading);
+
+  const pay = async () => {
+    const data = {
+      price: service.fee,
+      metadata: {
+        doctorId,
+        serviceId: service._id,
+        patientId: user._id,
+      },
+    };
+    try {
+      setBtnLoading(true);
+      const response = await payForService(customer.id, data);
+
+      const {paymentIntent} = response.data.data;
+
+      if (paymentIntent.status === 'succeeded') {
+        const data = {
+          doctor: doctorId,
+          patient: user._id,
+          service: service._id,
+          time: time,
+          date: date,
+          is_paid: true,
+          stripe_payment_intent_id: paymentIntent.id,
+        };
+
+        const response = await createAppointment(data);
+
+        if (response.data) {
+          console.log(response.data.data)
+          showToast('Appointment booked successfully', 'success');
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      showToast('Error', 'danger');
+    } finally {
+      setBtnLoading(false);
+    }
+  };
+
+  const getCardNumber = index => {
+    return watch('cardNumber').split(' ')[index] || '****';
+  };
+
+  return loading ? (
+    <Loader title={'Loading customer details...'} />
+  ) : (
     <StaticContainer
       customHeaderName={'Online Payment'}
       customHeaderEnable={true}
@@ -90,27 +216,20 @@ const OnlinePayment = () => {
             </View>
             <MobileChipIcon />
             <View style={styles.cardNumberContainer}>
-              <Text style={styles.text}>
-                {watch('cardNumber').split(' ')[0] || '****'}
-              </Text>
-              <Text style={styles.text}>
-                {watch('cardNumber').split(' ')[1] || '****'}
-              </Text>
-              <Text style={styles.text}>
-                {watch('cardNumber').split(' ')[2] || '****'}
-              </Text>
-              <Text style={styles.text}>
-                {watch('cardNumber').split(' ')[3] || '****'}
-              </Text>
+              <Text style={styles.text}>{getCardNumber(0)}</Text>
+              <Text style={styles.text}>{getCardNumber(1)}</Text>
+              <Text style={styles.text}>{getCardNumber(2)}</Text>
+              <Text style={styles.text}>{getCardNumber(3)}</Text>
             </View>
           </LinearGradient>
-
-          <Text style={[styles.text, {marginBottom: 10}]}>
+          {/* 
+          <Text style={[styles.text, {marginBottom: 10, marginTop: 20}]}>
             Enter Your card Information
-          </Text>
+          </Text> */}
 
           <View style={styles.cardFormContainer}>
             <ValidateInputField
+              isDisabled={!edit}
               type="outlined"
               placeholder="Enter Card Number"
               control={control}
@@ -138,6 +257,7 @@ const OnlinePayment = () => {
 
             <View style={styles.inputsContainer}>
               <ValidateInputField
+                isDisabled={!edit}
                 type="outlined"
                 placeholder="Expiry Date (MM/YY)"
                 control={control}
@@ -157,6 +277,7 @@ const OnlinePayment = () => {
               />
 
               <ValidateInputField
+                isDisabled={!edit}
                 type="outlined"
                 placeholder="CVC"
                 control={control}
@@ -175,21 +296,33 @@ const OnlinePayment = () => {
                 maxLength={3}
               />
             </View>
-            <View style={styles.controls}>
-              <Button
-                label={!edit ? 'Edit Card' : 'Cancel Edit'}
-                onPress={() => {
-                  setEdit(prevState => !prevState);
-                }}
-                width={dimensions.Width / 2.5}
-              />
+            {/* <View style={styles.controls}> */}
+            <Button
+              label={!edit ? 'Edit Card Information' : 'Cancel Editing'}
+              onPress={() => {
+                setEdit(prevState => !prevState);
+              }}
+              width={'100%'}
+            />
+            {edit ? (
               <Button
                 label={'Save Card'}
                 onPress={handleSubmit(onSubmit)}
-                width={dimensions.Width / 2.5}
+                width={'100%'}
                 type="filled"
+                isLoading={btnLoading}
               />
-            </View>
+            ) : (
+              <Button
+                label={`Pay (Rs.${service.fee}) now`}
+                onPress={pay}
+                width="100%"
+                type="filled"
+                isDisabled={!paymentMethod}
+                isLoading={btnLoading}
+              />
+            )}
+            {/* </View> */}
           </View>
         </View>
       </View>

@@ -8,6 +8,10 @@ const API = axios.create({
   withCredentials: true,
 });
 
+export const createAppointment = data => {
+  return API.post('/appointments', data);
+};
+
 export const getAppointmentsByUserId = data => {
   console.log(data);
 
