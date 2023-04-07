@@ -12,8 +12,6 @@ export const createAppointment = data => {
   return API.post('/appointments', data);
 };
 
-export const getAppointmentsByUserId = data => {
-  console.log(data);
-
-  return API.get(`appointments/?${data}`);
+export const getAppointmentsByUserId = query => {
+  return API.get(`appointments?${query}`);
 };

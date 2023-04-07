@@ -31,6 +31,7 @@ import PaymentPerson from '../../../../assets/svgs/Payment-person.svg';
 import PaymentOnline from '../../../../assets/svgs/Payment-online.svg';
 
 import ModalContainer from '../../../../containers/ModalContainer';
+import {createAppointment} from '../../../../services/appointmentServices';
 
 const {useNavigation, useRoute} = require('@react-navigation/native');
 
@@ -39,6 +40,8 @@ const BookAppointment = () => {
   const navigation = useNavigation();
 
   const [open, setOpen] = useState(false);
+
+  const user = useSelector(state => state.auth.user);
 
   const [dates, setDates] = useState(generateDates(14));
   const [selectedDate, setSelectedDate] = useState(null);
@@ -63,6 +66,25 @@ const BookAppointment = () => {
       console.log(selectedDate, selectedTime);
       //move on to the payment screen and pass along the required data in params
       if (!service.isOnline) setOpen(true);
+      else navigateToPayment();
+    }
+  };
+
+  const bookAppointment = async () => {
+    const data = {
+      doctor: doctor._id,
+      service: service._id,
+      patient: user._id,
+      date: selectedDate,
+      time: selectedTime,
+      is_paid: false,
+    };
+
+    try {
+      const response = await createAppointment(data);
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -205,7 +227,7 @@ const BookAppointment = () => {
             </View>
 
             <View style={styles.modalControl}>
-              <TouchableOpacity style={styles.option}>
+              <TouchableOpacity style={styles.option} onPress={bookAppointment}>
                 <PaymentPerson width={25} />
                 <Text style={styles.optionText}>In-Person Payment</Text>
               </TouchableOpacity>
