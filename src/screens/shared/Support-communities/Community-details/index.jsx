@@ -19,6 +19,10 @@ import colors from '../../../../utils/styles/themes/colors';
 import {useSelector} from 'react-redux';
 import NotFound from '../../../../components/shared/NotFound';
 
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
+import PostLoader from './PostLoader';
+
 const CommunityDetails = ({route}) => {
   const {item} = route.params;
   const [isModalVisible, setModalVisible] = React.useState(false);
@@ -114,13 +118,10 @@ const CommunityDetails = ({route}) => {
           />
         </View>
         {loading ? (
-          <ActivityIndicator
-            size="large"
-            color={colors.secondary1}
-            style={{
-              flex: 1,
-            }}
-          />
+          <View style={{flex: 1, flexDirection: 'column'}}>
+            <PostLoader />
+            <PostLoader />
+          </View>
         ) : posts.length === 0 ? (
           <NotFound
             title="No Posts Found"
