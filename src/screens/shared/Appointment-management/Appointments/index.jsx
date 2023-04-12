@@ -14,7 +14,9 @@ import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
 import ROLES from '../../../../utils/constants/ROLES';
 import {getAppointmentsByUserId} from '../../../../services/appointmentServices';
-import AppointmentCard from '../../../../components/doctor/Appointment-Card';
+import AppointmentCard from '../../../../components/shared/Appointment-Card';
+import AppointmentSwitch from '../../../../components/shared/Switch';
+import AppointmentOptions from '../../../../utils/constants/AppointmentOptions';
 
 const {useNavigation, useRoute} = require('@react-navigation/native');
 
@@ -22,13 +24,18 @@ const Appointments = () => {
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user);
 
+  const [options, setOptions] = useState(AppointmentOptions);
+  const [activeOption, setActiveOption] = useState('');
+
   const [appointments, setAppointments] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
   const getAppointments = async () => {
     const query =
-      role === ROLES.patient ? `patient=${user._id}` : `doctor=${user._id}`;
+      role === ROLES.patient
+        ? `patient=${user._id}&status=${activeOption.toLowerCase()}`
+        : `doctor=${user._id}&status=${activeOption.toLowerCase()}`;
 
     try {
       setLoading(true);
@@ -42,54 +49,66 @@ const Appointments = () => {
   };
 
   useEffect(() => {
+    console.log(activeOption);
     getAppointments();
-  }, []);
+  }, [activeOption]);
 
-  const getAppointmentCard = appointment => {
-    console.log(appointment);
-    return <AppointmentCard appointment={appointment} />;
+  useEffect(() => {
+    setActiveOption(options.find(option => option.isActive).label);
+  }, [options]);
+
+  const onOptionPress = index => {
+    setOptions(prevOptions => {
+      return prevOptions.map((option, i) => {
+        if (i === index) {
+          return {...option, isActive: true};
+        } else {
+          return {...option, isActive: false};
+        }
+      });
+    });
   };
 
   return (
-    <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <StaticContainer
-          isBack={true}
-          customHeaderName={'Book Appointment'}
-          customHeaderEnable={true}
-          isHorizontalPadding={false}>
-          <View style={styles.container}>
-            <View style={styles.filterSearchContainer}>
-              <SearchFilterBar role={role} />
-            </View>
+    <StaticContainer
+      isBack={true}
+      customHeaderName={'Book Appointment'}
+      customHeaderEnable={true}
+      isHorizontalPadding={false}>
+      <View style={styles.container}>
+        <AppointmentSwitch
+          options={options}
+          role={role}
+          onOptionPress={onOptionPress}
+        />
 
-            {appointments.length > 0 ? (
-              <View style={styles.appointmentsContainer}>
-                <FlatList
-                  data={appointments}
-                  renderItem={({item}) => (
-                    <AppointmentCard appointment={item} />
-                  )}
-                  keyExtractor={item => item._id}
-                />
-              </View>
-            ) : (
-              <View style={styles.notFoundContainer}>
-                <NotFound
-                  title={'No Doctors Found'}
-                  text={
-                    'Sorry we could not find any doctors for you at the moment'
-                  }
-                  center
-                />
-              </View>
-            )}
+        <View style={styles.filterSearchContainer}>
+          <SearchFilterBar role={role} />
+        </View>
+
+        {loading ? (
+          <Loader title={'Loading Appointments....'} />
+        ) : appointments.length > 0 ? (
+          <View style={styles.appointmentsContainer}>
+            <FlatList
+              data={appointments}
+              renderItem={({item}) => <AppointmentCard appointment={item} />}
+              keyExtractor={item => item._id}
+            />
           </View>
-        </StaticContainer>
-      )}
-    </>
+        ) : (
+          <View style={styles.notFoundContainer}>
+            <NotFound
+              title={'No Appointments Found'}
+              text={
+                'Sorry we could not find any appointments for you at the moment'
+              }
+              center
+            />
+          </View>
+        )}
+      </View>
+    </StaticContainer>
   );
 };
 

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
 import PhysicalIcon from '../../../assets/svgs/Physical-checkup.svg';
@@ -38,7 +38,7 @@ const AppointmentCard = ({appointment}) => {
   };
 
   return (
-    <View
+    <TouchableOpacity
       style={styles().container}
       onPress={() => {
         navigation.navigate('App', {
@@ -72,7 +72,7 @@ const AppointmentCard = ({appointment}) => {
         {role === ROLES.doctor &&
           (!hasAccess ? (
             <Button
-              height={dimensions.Height / 30}
+              height={dimensions.Height / 25}
               fontSize={fonts.size.font12}
               width={dimensions.Width / 4}
               marginVertical={'5%'}
@@ -83,7 +83,7 @@ const AppointmentCard = ({appointment}) => {
             </Button>
           ) : (
             <Button
-              height={dimensions.Height / 30}
+              height={dimensions.Height / 25}
               fontSize={fonts.size.font12}
               width={dimensions.Width / 4}
               marginVertical={'5%'}
@@ -95,7 +95,7 @@ const AppointmentCard = ({appointment}) => {
           ))}
 
         <Button
-          height={dimensions.Height / 30}
+          height={dimensions.Height / 25}
           fontSize={fonts.size.font12}
           width={dimensions.Width / 4}
           marginVertical={'5%'}
@@ -106,7 +106,7 @@ const AppointmentCard = ({appointment}) => {
         </Button>
 
         <Button
-          height={dimensions.Height / 30}
+          height={dimensions.Height / 25}
           fontSize={fonts.size.font12}
           width={dimensions.Width / 4}
           marginVertical={'5%'}
@@ -116,7 +116,7 @@ const AppointmentCard = ({appointment}) => {
           <CallIcon width={15} />
         </Button>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

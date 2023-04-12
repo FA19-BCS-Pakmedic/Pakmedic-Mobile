@@ -55,10 +55,6 @@ const BookAppointment = () => {
     getTimeIntervals(service.availFrom, service.availTo),
   );
 
-  useEffect(() => {
-    console.log(selectedDate, selectedTime);
-  }, [selectedDate, selectedTime]);
-
   const onSubmit = () => {
     setDateError(selectedDate ? false : true);
     setTimeError(selectedTime ? false : true);

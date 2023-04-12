@@ -3,7 +3,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import styles from './styles';
+// import styles from './styles';
 
 import StaticContainer from '../../../../containers/StaticContainer';
 
@@ -179,7 +179,7 @@ const OnlinePayment = () => {
         const response = await createAppointment(data);
 
         if (response.data) {
-          console.log(response.data.data)
+          console.log(response.data.data);
           showToast('Appointment booked successfully', 'success');
         }
       }

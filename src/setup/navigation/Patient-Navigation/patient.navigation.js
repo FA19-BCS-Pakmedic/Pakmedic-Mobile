@@ -30,7 +30,9 @@ import EditProfile from '../../../screens/patient/Profile-management/Edit-Profil
 import SpecialistCategory from '../../../screens/patient/Appointment-management/Specialist-category';
 import BookAppointment from '../../../screens/patient/Appointment-management/Book-appointment';
 import OnlinePayment from '../../../screens/patient/Appointment-management/Online-payment';
-import AppointmentDetails from '../../../screens/shared/Appointment-details';
+import AppointmentDetails from '../../../screens/shared/Appointment-management/Appointment-details';
+import RescheduleAppointment from '../../../screens/shared/Appointment-management/Reschedule-appointment';
+import CancelAppointment from '../../../screens/shared/Appointment-management/Cancel-appointment';
 
 const Stack = createNativeStackNavigator();
 
@@ -92,6 +94,11 @@ const PatientNavigation = () => {
       <Stack.Screen name="BookAppointment" component={BookAppointment} />
       <Stack.Screen name="OnlinePayment" component={OnlinePayment} />
       <Stack.Screen name="AppointmentDetails" component={AppointmentDetails} />
+      <Stack.Screen
+        name="RescheduleAppointment"
+        component={RescheduleAppointment}
+      />
+      <Stack.Screen name="CancelAppointment" component={CancelAppointment} />
     </Stack.Navigator>
   );
 };
