@@ -10,9 +10,18 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import {ValidateDropdown} from '../../../../components/shared/Dropdown';
 import {ValidateInputField} from '../../../../components/shared/Input';
 import Button from '../../../../components/shared/Button';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
+import {useSelector} from 'react-redux';
+import {createAppointmentRequest} from '../../../../services/appointmentServices';
 
-const CancelAppointment = () => {
+const CancelAppointment = ({route, navigation}) => {
   const [open, setOpen] = useState();
+
+  const {appointment} = route.params;
+
+  const [loading, setLoading] = useState(false);
+  const {showToast} = useCustomToast();
+  const user = useSelector(state => state.auth.user);
 
   const {control, watch, setValue, handleSubmit} = useForm({
     mode: 'onChange',
@@ -20,11 +29,25 @@ const CancelAppointment = () => {
     defaultValues: {
       reason: '',
       reasonDetails: '',
+      appointment: appointment._id,
+      requestType: 'cancel',
+      requestedBy: user._id,
     },
   });
 
-  const onSubmit = data => {
-    console.log(data);
+  const onSubmit = async data => {
+    setLoading(true);
+    try {
+      const res = await createAppointmentRequest(data);
+      console.log(res.data);
+      showToast('Appointment request sent', 'success');
+      navigation.goBack();
+    } catch (err) {
+      console.log(err);
+      showToast('Something went wrong', 'danger');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -85,6 +108,7 @@ const CancelAppointment = () => {
           onPress={handleSubmit(onSubmit)}
           style={styles.button}
           type={'filled'}
+          isLoading={loading}
         />
       </View>
     </StaticContainer>

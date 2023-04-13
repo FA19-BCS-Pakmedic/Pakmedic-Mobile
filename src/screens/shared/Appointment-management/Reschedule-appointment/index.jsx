@@ -2,7 +2,7 @@ import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 import {styles} from './styles';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import StaticContainer from '../../../../containers/StaticContainer';
 import {ValidateDropdown} from '../../../../components/shared/Dropdown';
 import Reasons from '../../../../utils/constants/RescheduleReasons';
@@ -19,11 +19,17 @@ import Button from '../../../../components/shared/Button';
 import {getDate} from '../../../../utils/helpers/getDate';
 import ROLES from '../../../../utils/constants/ROLES';
 import {useSelector} from 'react-redux';
+import {createAppointmentRequest} from '../../../../services/appointmentServices';
+
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 const RescheduleAppointment = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const {appointment} = route.params;
+  console.log(appointment);
   const role = useSelector(state => state.role.role);
+  const user = useSelector(state => state.auth.user);
   const {service, doctor, patient} = appointment;
 
   const [open, setOpen] = useState(false);
@@ -33,6 +39,9 @@ const RescheduleAppointment = () => {
   );
   const [dates, setDates] = useState(generateDates(14));
 
+  const [loading, setLoading] = useState(false);
+  const {showToast} = useCustomToast();
+
   const {control, watch, setValue, handleSubmit} = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -41,7 +50,9 @@ const RescheduleAppointment = () => {
       reasonDetails: '',
       date: '',
       time: '',
-      appointmentId: appointment._id,
+      appointment: appointment._id,
+      requestType: 'reschedule',
+      requestedBy: user._id,
     },
   });
 
@@ -172,8 +183,20 @@ const RescheduleAppointment = () => {
     });
   };
 
-  const onSubmit = data => {
+  const onSubmit = async data => {
     console.log(data);
+    setLoading(true);
+    try {
+      const res = await createAppointmentRequest(data);
+      console.log(res.data);
+      showToast('Appointment request sent', 'success');
+      navigation.goBack();
+    } catch (err) {
+      console.log(err);
+      showToast('Something went wrong', 'danger');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -269,6 +292,7 @@ const RescheduleAppointment = () => {
           onPress={handleSubmit(onSubmit)}
           width="100%"
           type="filled"
+          isLoading={loading}
         />
       </View>
     </StaticContainer>
