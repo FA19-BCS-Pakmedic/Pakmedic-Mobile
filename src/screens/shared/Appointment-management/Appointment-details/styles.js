@@ -4,6 +4,30 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import fonts from '../../../../utils/styles/themes/fonts';
 
 const styles = StyleSheet.create({
+  mapContainer: {
+    // ...StyleSheet.absoluteFillObject,
+    height: 200,
+    width: dimensions.Width / 1.2,
+    borderRadius: dimensions.Width / 2,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    zIndex: 1,
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    zIndex: -1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    // position: 'absolute',
+    background: '#000',
+    zIndex: 999,
+    opacity: 0.5,
+  },
+
   container: {
     flex: 1,
     width: '100%',
@@ -69,6 +93,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+
+  text: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.semi,
   },
 });
 

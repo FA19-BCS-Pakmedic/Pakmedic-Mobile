@@ -1,5 +1,7 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import openMap, {createOpenLink} from 'react-native-open-maps';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import StaticContainer from '../../../../containers/StaticContainer';
@@ -19,7 +21,14 @@ import colors from '../../../../utils/styles/themes/colors';
 const AppointmentDetails = () => {
   const route = useRoute();
   const {appointment} = route.params;
+  console.log(appointment.service.hospital);
   const navigation = useNavigation();
+  const travelType = 'drive';
+  const address = appointment.service.hospital.address;
+
+  const [end] = useState(
+    address ? `${address.address} ${address.city} ${address.country}` : null,
+  );
 
   const role = useSelector(state => state.role.role);
 
@@ -38,6 +47,10 @@ const AppointmentDetails = () => {
         appointment: appointment,
       },
     });
+  };
+
+  const _openMaps = () => {
+    return createOpenLink({travelType, end, provider: 'google'});
   };
 
   const getServiceInfo = () => {
@@ -148,6 +161,32 @@ const AppointmentDetails = () => {
             <View style={styles.appointmentInfoRow}>{getServiceInfo()}</View>
           </View>
         </View>
+
+        {address ? (
+          <View style={styles.mapContainer}>
+            <Text style={styles.text}>Click to open google maps</Text>
+            <TouchableOpacity
+              onPress={_openMaps()}
+              style={styles.overlay}></TouchableOpacity>
+            <MapView
+              initialRegion={{
+                latitude: address.lat,
+                longitude: address.lng,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              style={styles.map}>
+              <Marker
+                coordinate={{latitude: address.lat, longitude: address.lng}}
+              />
+            </MapView>
+          </View>
+        ) : (
+          <View style={styles.mapContainer}>
+            <Text style={styles.heading}>No Location Found</Text>
+          </View>
+        )}
+
         <View style={styles.controls}>
           <Button
             label={'Request Cancel'}

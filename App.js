@@ -6,6 +6,8 @@ import AppNavigation from './src/setup/navigation/app.navigation';
 import {MenuProvider} from 'react-native-popup-menu';
 import SplashScreen from 'react-native-splash-screen';
 
+import {enableLatestRenderer} from 'react-native-maps';
+
 //redux toolkit store
 import {Provider} from 'react-redux';
 import {store} from './src/setup/redux/store';
@@ -44,6 +46,8 @@ const registerDeviceForMessaging = async () => {
   // Register the token
   // await register(token);
 };
+
+enableLatestRenderer();
 
 const App = () => {
   useEffect(() => {
