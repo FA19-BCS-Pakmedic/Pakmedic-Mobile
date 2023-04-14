@@ -27,6 +27,13 @@ import {useNavigation} from '@react-navigation/native';
 import ProfileManagement from '../../../screens/patient/Profile-management/Home';
 import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
 
+import SpecialistCategory from '../../../screens/patient/Appointment-management/Specialist-category';
+import BookAppointment from '../../../screens/patient/Appointment-management/Book-appointment';
+import OnlinePayment from '../../../screens/patient/Appointment-management/Online-payment';
+import AppointmentDetails from '../../../screens/shared/Appointment-management/Appointment-details';
+import RescheduleAppointment from '../../../screens/shared/Appointment-management/Reschedule-appointment';
+import CancelAppointment from '../../../screens/shared/Appointment-management/Cancel-appointment';
+
 const Stack = createNativeStackNavigator();
 
 const onMessageReceived = async message => {
@@ -83,6 +90,15 @@ const PatientNavigation = () => {
       <Stack.Screen name="DoctorsList" component={DoctorsList} />
       <Stack.Screen name="ProfileManagement" component={ProfileManagement} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Specialists" component={SpecialistCategory} />
+      <Stack.Screen name="BookAppointment" component={BookAppointment} />
+      <Stack.Screen name="OnlinePayment" component={OnlinePayment} />
+      <Stack.Screen name="AppointmentDetails" component={AppointmentDetails} />
+      <Stack.Screen
+        name="RescheduleAppointment"
+        component={RescheduleAppointment}
+      />
+      <Stack.Screen name="CancelAppointment" component={CancelAppointment} />
     </Stack.Navigator>
   );
 };

@@ -4,7 +4,7 @@ import React, {useState, useEffect} from 'react';
 import styles from './styles';
 import {useSelector, useDispatch} from 'react-redux';
 import StaticContainer from '@/containers/StaticContainer';
-import EhrSwitch from '@/components/shared/EhrSwitch';
+import EhrSwitch from '../../../../components/shared/Switch';
 
 import EhrOptions from '@/utils/constants/EhrOptions';
 import AddFilterBar from '@/components/shared/AddFilterBar';
@@ -13,8 +13,8 @@ import {getPatient, getPatientById} from '../../../../services/patientServices';
 import {authSuccess} from '../../../../setup/redux/actions';
 import Reports from '../../../../components/shared/Reports';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
-import Prescription from '../../../../components/shared/Prescriptions';
 import Prescriptions from '../../../../components/shared/Prescriptions';
+
 
 const ElectronicHealthRecords = ({route}) => {
   const role = useSelector(state => state.role.role);

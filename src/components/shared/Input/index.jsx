@@ -125,6 +125,8 @@ export const ValidateInputField = ({
   inputHeight = dimensions.Height / 17,
   useRef,
   isFlexStart = false,
+  onChangeCallback = null,
+  maxLength = 1000,
 }) => {
   // setting the password eye icon name based on the visiblility status
   const passwordIconName = !isPasswordVisible
@@ -194,12 +196,13 @@ export const ValidateInputField = ({
                   ).input
                 }
                 onFocus={() => setPadding(true)}
+                maxLength={maxLength}
                 placeholder={placeholder}
                 secureTextEntry={isPasswordVisible}
                 keyboardType={keyboardType || 'text'}
                 placeholderTextColor={placeholderTextColor || colors.secondary1}
                 value={text}
-                onChangeText={onChange}
+                onChangeText={onChangeCallback || onChange}
                 multiline={multiline}
                 onBlur={() => {
                   onBlur();
@@ -222,32 +225,36 @@ export const ValidateInputField = ({
                   <Icon name={passwordIconName} size={18} />
                 </TouchableOpacity>
               )}
-              {(isDirty || isTouched || error) && (
-                <Animatable.View
-                  animation="fadeIn"
-                  easing="ease-in-out"
-                  style={
-                    styles(
-                      null,
-                      null,
-                      null,
-                      null,
-                      null,
-                      null,
-                      inputHeight,
-                      isFlexStart,
-                    ).iconContainer
-                  }>
-                  {!error && <Icon name="checkmark-circle-outline" size={18} />}
-                  {error && (
-                    <Icon
-                      name="close-circle-outline"
-                      size={18}
-                      color={colors.invalid}
-                    />
-                  )}
-                </Animatable.View>
-              )}
+              {(isDirty || isTouched || error) &&
+                width !== '100%' &&
+                width !== dimensions.Width && (
+                  <Animatable.View
+                    animation="fadeIn"
+                    easing="ease-in-out"
+                    style={
+                      styles(
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        inputHeight,
+                        isFlexStart,
+                      ).iconContainer
+                    }>
+                    {!error && (
+                      <Icon name="checkmark-circle-outline" size={18} />
+                    )}
+                    {error && (
+                      <Icon
+                        name="close-circle-outline"
+                        size={18}
+                        color={colors.invalid}
+                      />
+                    )}
+                  </Animatable.View>
+                )}
               {/* </View> */}
             </View>
             {/* error message */}
@@ -278,13 +285,14 @@ const styles = (
     root: {
       width: containerWidth,
       marginVertical: dimensions.Height / 200,
+      // borderWidth: 1,
     },
     container: {
       width: '100%',
       height: inputHeight,
       // backgroundColor:
       //   type === 'filled' ? colors.secondaryMonochrome100 : colors.white,
-      borderWidth: type === 'filled' ? 0 : 1,
+      borderWidth: 1,
       // borderColor:
       //   type === 'filled' ? colors.secondaryMonochrome100 : colors.primary1,
       // borderColor:
@@ -299,14 +307,14 @@ const styles = (
           ? colors.gray
           : colors.secondaryMonoChrome100,
 
-      paddingLeft: padding ? dimensions.Width * 0.03 : 0,
-      paddingRight: padding ? dimensions.Width * 0.02 : 0,
+      // paddingLeft: padding ? dimensions.Width * 0.03 : 0,
+      // paddingRight: padding ? dimensions.Width * 0.02 : 0,
 
       borderRadius: 5,
       flexDirection: 'row',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
       alignItems: `${isFlexStart ? 'flex-start' : 'center'}`,
-      justifyContent: 'center',
+      // justifyContent: 'center',
       fontSize: fonts.size.font24,
     },
 
@@ -319,9 +327,12 @@ const styles = (
 
     input: {
       textAlignVertical: isFlexStart ? 'top' : 'center',
+      // borderWidth: 1,
+      maxWidth: '100%',
       height: inputHeight,
       color: colors.secondary1,
-      width: width,
+      width: width ? width : '92%',
+      paddingLeft: dimensions.Width / 80,
     },
 
     errorMessageContainer: {
