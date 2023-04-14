@@ -25,7 +25,6 @@ import {voximplant} from '../../services/voxServices';
 import {Voximplant} from 'react-native-voximplant';
 import calls from '../../utils/helpers/Store';
 import {useNavigation} from '@react-navigation/native';
-import ElectronicHealthRecords from '../../screens/shared/E-health-records/Home';
 
 //create stacks
 const rootStack = createNativeStackNavigator();
@@ -34,21 +33,10 @@ const rootStack = createNativeStackNavigator();
 export default RootNavigation = () => {
   const [userRole, setUserRole] = useState();
   const [isFirstTime, setIsFirstTime] = useState(true);
-  const dispatch = useDispatch();
+
 
   const navigation = useNavigation();
 
-  // use effect to check if user has selected a role
-  useEffect(() => {
-    const getRole = async () => {
-      const storedRole = await deviceStorage.loadItem('role');
-      if (storedRole) {
-        dispatch(setRole(storedRole));
-        setUserRole(storedRole);
-      }
-    };
-    getRole();
-  }, []);
 
   // use effect to check if the user has already gone through the onboarding
   useEffect(() => {
@@ -93,9 +81,6 @@ export default RootNavigation = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      {!userRole && (
-        <rootStack.Screen name="ChooseRole" component={ChooseRole} />
-      )}
       {isFirstTime && (
         <rootStack.Screen name="Onboarding" component={OnboardingNavigation} />
       )}
