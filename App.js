@@ -33,6 +33,8 @@ import messaging from '@react-native-firebase/messaging';
 // import {register} from './src/services/notificationService';
 import deviceStorage from './src/utils/helpers/deviceStorage';
 import Toast from 'react-native-toast-notifications';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { googleConfig } from './src/utils/helpers/googleConfig';
 
 const StackNavigate = createNativeStackNavigator();
 
@@ -52,6 +54,7 @@ enableLatestRenderer();
 const App = () => {
   useEffect(() => {
     registerDeviceForMessaging();
+    GoogleSignin.configure(googleConfig);
   }, []);
 
   https: return (

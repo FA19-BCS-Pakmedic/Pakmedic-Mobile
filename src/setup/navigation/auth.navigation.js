@@ -26,7 +26,6 @@ import {getDoctor} from '../../services/doctorServices';
 import {getPatient} from '../../services/patientServices';
 import {authSuccess} from '../redux/actions';
 import {loginVox} from '../../services/voxServices';
-import {ActivityIndicator} from 'react-native-paper';
 import Loader from '../../components/shared/Loader';
 
 // create stacks
@@ -89,7 +88,7 @@ const AuthNavigation = ({navigation}) => {
   return (
     <>
       {loading ? (
-        <Loader title={'Loading'} />
+        <Loader title={'Loading Data...'} />
       ) : (
         <authStack.Navigator
           screenOptions={{

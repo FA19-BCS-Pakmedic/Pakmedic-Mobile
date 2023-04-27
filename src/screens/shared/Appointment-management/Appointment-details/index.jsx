@@ -24,10 +24,10 @@ const AppointmentDetails = () => {
   console.log(appointment.service.hospital);
   const navigation = useNavigation();
   const travelType = 'drive';
-  const address = appointment.service.hospital.address;
+  const address = appointment.service.hospital?.address;
 
   const [end] = useState(
-    address ? `${address.address} ${address.city} ${address.country}` : null,
+    address ? `${address?.address} ${address?.city} ${address?.country}` : null,
   );
 
   const role = useSelector(state => state.role.role);
@@ -187,24 +187,26 @@ const AppointmentDetails = () => {
           </View>
         )}
 
-        <View style={styles.controls}>
-          <Button
-            label={'Request Cancel'}
-            onPress={() => {
-              navigate('CancelAppointment');
-            }}
-            type="outlined"
-            width={'48%'}
-          />
-          <Button
-            label={'Request Reschedule'}
-            onPress={() => {
-              navigate('RescheduleAppointment');
-            }}
-            type="filled"
-            width={'48%'}
-          />
-        </View>
+        {appointment?.status === 'upcoming' && (
+          <View style={styles.controls}>
+            <Button
+              label={'Request Cancel'}
+              onPress={() => {
+                navigate('CancelAppointment');
+              }}
+              type="outlined"
+              width={'48%'}
+            />
+            <Button
+              label={'Request Reschedule'}
+              onPress={() => {
+                navigate('RescheduleAppointment');
+              }}
+              type="filled"
+              width={'48%'}
+            />
+          </View>
+        )}
       </View>
     </StaticContainer>
   );

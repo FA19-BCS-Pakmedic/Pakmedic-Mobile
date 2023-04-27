@@ -3,7 +3,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-// import styles from './styles';
+import styles from './styles';
 
 import StaticContainer from '../../../../containers/StaticContainer';
 
@@ -32,6 +32,7 @@ import {getCustomer} from '../../../../services/stripeServices';
 
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 import {createAppointment} from '../../../../services/appointmentServices';
+import useCustomApi from '../../../../hooks/useCustomApi';
 
 const OnlinePayment = () => {
   const navigation = useNavigation();
@@ -41,10 +42,11 @@ const OnlinePayment = () => {
 
   const [edit, setEdit] = useState(false);
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
 
   const {showToast} = useCustomToast();
+  const {callApi, error, isLoading, success, setMessage} = useCustomApi();
 
   const {handleSubmit, setValue, control, watch} = useForm({
     mode: 'onChange',
@@ -85,17 +87,28 @@ const OnlinePayment = () => {
     setValue('cvc', value.replace(/[^0-9]/g, '').slice(0, 3));
   };
 
+  useEffect(() => {}, [error, success]);
+
   const fetchCustomerData = async () => {
-    setLoading(true);
-    try {
-      const response = await getCustomer(user.stripeCustomerId);
-      setCustomer(response.data.data.customer);
-      setPaymentMethod(response.data.data?.paymentMethod);
-    } catch (err) {
-      console.log(err);
-      showToast('Error fetching customer details', 'danger');
-    } finally {
-      setLoading(false);
+    // setLoading(true);
+    // try {
+    //   const response = await getCustomer(user.stripeCustomerId);
+    //   setCustomer(response.data.data.customer);
+    //   setPaymentMethod(response.data.data?.paymentMethod);
+    // } catch (err) {
+    //   console.log(err);
+    //   showToast('Error fetching customer details', 'danger');
+    // } finally {
+    //   setLoading(false);
+    // }
+
+    const responseData = await callApi(getCustomer, user.stripeCustomerId);
+    if (responseData) {
+      setMessage('Customer data fetched successfully');
+      setCustomer(responseData.data.customer);
+      setPaymentMethod(responseData.data?.paymentMethod);
+    } else {
+      setMessage('Error fetching customer details');
     }
   };
 
@@ -179,8 +192,11 @@ const OnlinePayment = () => {
         const response = await createAppointment(data);
 
         if (response.data) {
+          navigation.navigate('AppointmentScreen');
           console.log(response.data.data);
           showToast('Appointment booked successfully', 'success');
+
+          console.log('navigating');
         }
       }
     } catch (err) {
@@ -195,7 +211,7 @@ const OnlinePayment = () => {
     return watch('cardNumber').split(' ')[index] || '****';
   };
 
-  return loading ? (
+  return isLoading ? (
     <Loader title={'Loading customer details...'} />
   ) : (
     <StaticContainer

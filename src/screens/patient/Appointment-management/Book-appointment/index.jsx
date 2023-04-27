@@ -189,7 +189,7 @@ const BookAppointment = () => {
       params: {
         doctorId: doctor._id,
         service,
-        date: selectedDate,
+        date: selectedDate.toString(),
         time: selectedTime,
       },
     });

@@ -45,12 +45,21 @@ import {getFile} from '../../../../services/fileServices';
 import {loginVox} from '../../../../services/voxServices';
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 
+import useCustomApi from '../../../../hooks/useCustomApi';
+// import PopupLoader from '../../../../components/shared/PopupLoader';
+import PopupAlerts from '../../../../components/shared/PopupAlerts';
+
 const Login = ({navigation}) => {
   // states
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const {showToast} = useCustomToast();
   const role = useSelector(state => state.role.role);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [alertName, setAlertName] = useState('LoginSuccess');
+  const [message, setMessage] = useState('');
+  // const {} = useCustomApi()
+  // const {error, isLoading, callApi, success} = useCustomApi();
 
   const dispatch = useDispatch();
 
@@ -133,6 +142,7 @@ const Login = ({navigation}) => {
   };
 
   const onLogin = async data => {
+    // setModalVisible(true);
     try {
       const response =
         role === ROLES.doctor
@@ -161,9 +171,10 @@ const Login = ({navigation}) => {
           token: response?.data?.token,
         }),
       );
-
+      setMessage('User Logged In Successfully');
+      setAlertName('LoginSuccess');
       setIsLoading(false);
-      showToast('User Logged In Successfully', 'success');
+      // showToast('User Logged In Successfully', 'success');
 
       //clear all inputs
       // setValue('email', '');
@@ -171,118 +182,140 @@ const Login = ({navigation}) => {
       reset();
 
       //navigate to the app stack
-      navigation.replace('App');
+      // navigation.replace('App');
     } catch (err) {
       dispatch(authLogout());
       console.log(err);
-      showToast('Invalid email or password', 'danger');
+      // showToast('Invalid email or password', 'danger');
+      setMessage('Invalid email or password');
+      setAlertName('LoginFailure');
       setIsLoading(false);
+    } finally {
+      setModalVisible(true);
+      
     }
   };
 
   return (
-    <StaticContainer>
-      <View style={styles.container}>
-        {/* icon */}
+    <>
+      <StaticContainer>
+        <View style={styles.container}>
+          {/* icon */}
 
-        <View style={styles.imageContainer}>
-          <SVGImage
-            width={dimensions.Width / 1.6}
-            height={dimensions.Height / 3}
+          <View style={styles.imageContainer}>
+            <SVGImage
+              width={dimensions.Width / 1.6}
+              height={dimensions.Height / 3}
+            />
+          </View>
+
+          {/* email field */}
+          <ValidateInputField
+            placeholder="Email"
+            type="outlined"
+            width="93%"
+            placeholderTextColor={colors.secondary1}
+            keyboardType="email-address"
+            control={control}
+            //title={'Email'}
+            name="email"
+            rules={{
+              required: "Email can't be empty",
+              pattern: {
+                value: emailRegex,
+                message: 'Please enter a valid email',
+              },
+            }}
+            text={watch('email')}
+          />
+          {/* password field */}
+          <ValidateInputField
+            placeholder="Password"
+            type="outlined"
+            width="85.5%"
+            placeholderTextColor={colors.secondary1}
+            keyboardType="password"
+            control={control}
+            name="password"
+            //title={'Password'}
+            isPasswordField={true}
+            isPasswordVisible={!isPasswordVisible}
+            setIsPasswordVisible={setIsPasswordVisible}
+            rules={{
+              required: "Password can't be empty",
+              pattern: {
+                value: passwordRegex,
+                message: 'Please enter a valid password',
+              },
+            }}
+            text={watch('password')}
+          />
+
+          {/* forgot password text */}
+          <TouchableOpacity
+            style={styles.textContainer}
+            onPress={navigateToForgotPasswordScreen}>
+            <Text style={styles.forgotText}>Forgot Password?</Text>
+          </TouchableOpacity>
+
+          {/* login button */}
+          <Button
+            onPress={handleSubmit(onSubmit)}
+            label="Login"
+            type="filled"
+            width="100%"
+            isLoading={isLoading}
+          />
+
+          {/* divider */}
+          <TextDivider
+            label="Or Login With"
+            color={colors.secondary1}
+            gap={40}
+          />
+
+          {/*SOCIAL BUTTONS */}
+          <View style={styles.socialButtonContainer}>
+            {/* facebook login button */}
+            <TouchableOpacity style={styles.socialButton}>
+              <FaceBookLogo
+                width={dimensions.Width / 12}
+                height={dimensions.Height / 22}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={onPressGoogleLogin}>
+              <GoogleLogo
+                width={dimensions.Width / 12}
+                height={dimensions.Height / 22}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* register with text */}
+          <TouchableOpacity
+            style={styles.registerTextContainer}
+            onPress={navigateToRegisterScreen}>
+            <Text style={styles.text}>Don't have an account? </Text>
+            <Text>
+              <Text style={styles.registerText}>Register Now</Text>
+            </Text>
+          </TouchableOpacity>
+          <PopupAlerts
+            isModalVisible={isModalVisible}
+            setModalVisible={setModalVisible}
+            height={1.8}
+            width={1.2}
+            timer={2000}
+            alertName={alertName}
+            message={message}
+            redirect={null}
+            isReplace={true}
           />
         </View>
-
-        {/* email field */}
-        <ValidateInputField
-          placeholder="Email"
-          type="outlined"
-          width="93%"
-          placeholderTextColor={colors.secondary1}
-          keyboardType="email-address"
-          control={control}
-          //title={'Email'}
-          name="email"
-          rules={{
-            required: "Email can't be empty",
-            pattern: {
-              value: emailRegex,
-              message: 'Please enter a valid email',
-            },
-          }}
-          text={watch('email')}
-        />
-        {/* password field */}
-        <ValidateInputField
-          placeholder="Password"
-          type="outlined"
-          width="85.5%"
-          placeholderTextColor={colors.secondary1}
-          keyboardType="password"
-          control={control}
-          name="password"
-          //title={'Password'}
-          isPasswordField={true}
-          isPasswordVisible={!isPasswordVisible}
-          setIsPasswordVisible={setIsPasswordVisible}
-          rules={{
-            required: "Password can't be empty",
-            pattern: {
-              value: passwordRegex,
-              message: 'Please enter a valid password',
-            },
-          }}
-          text={watch('password')}
-        />
-
-        {/* forgot password text */}
-        <TouchableOpacity
-          style={styles.textContainer}
-          onPress={navigateToForgotPasswordScreen}>
-          <Text style={styles.forgotText}>Forgot Password?</Text>
-        </TouchableOpacity>
-
-        {/* login button */}
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          label="Login"
-          type="filled"
-          width="100%"
-          isLoading={isLoading}
-        />
-
-        {/* divider */}
-        <TextDivider label="Or Login With" color={colors.secondary1} gap={40} />
-
-        {/*SOCIAL BUTTONS */}
-        <View style={styles.socialButtonContainer}>
-          {/* facebook login button */}
-          <TouchableOpacity style={styles.socialButton}>
-            <FaceBookLogo
-              width={dimensions.Width / 12}
-              height={dimensions.Height / 22}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.socialButton}
-            onPress={onPressGoogleLogin}>
-            <GoogleLogo
-              width={dimensions.Width / 12}
-              height={dimensions.Height / 22}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* register with text */}
-        <TouchableOpacity
-          style={styles.registerTextContainer}
-          onPress={navigateToRegisterScreen}>
-          <Text style={styles.text}>Don't have an account? </Text>
-          <Text>
-            <Text style={styles.registerText}>Register Now</Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </StaticContainer>
+      </StaticContainer>
+    </>
   );
 };
 

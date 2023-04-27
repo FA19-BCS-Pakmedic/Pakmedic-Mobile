@@ -14,7 +14,6 @@ import deviceStorage from '../../utils/helpers/deviceStorage';
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isFirstTime, setIsFirstTime] = useState(true);
 
   const [userRole, setUserRole] = useState();
 
@@ -35,16 +34,6 @@ const AppNavigation = () => {
   const selectRole = role => {
     setUserRole(role);
   };
-
-  // use effect to check if the user has already gone through the onboarding
-  useEffect(() => {
-    const getIsFirstTime = async () => {
-      const isFirstTime = await deviceStorage.loadItem('isFirstTime');
-      setIsFirstTime(isFirstTime === null);
-    };
-
-    getIsFirstTime();
-  });
 
   useEffect(() => {
     SplashScreen.hide();
