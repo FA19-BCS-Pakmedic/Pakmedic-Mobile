@@ -53,7 +53,7 @@ const Login = ({navigation}) => {
   // states
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const {showToast} = useCustomToast();
+  // const {showToast} = useCustomToast();
   const role = useSelector(state => state.role.role);
   const [isModalVisible, setModalVisible] = useState(false);
   const [alertName, setAlertName] = useState('LoginSuccess');
@@ -161,7 +161,12 @@ const Login = ({navigation}) => {
       const user = response.data.user;
       // console.log('calling vox login');
       if (user) {
-        await loginVox(user);
+        try {
+          await loginVox(user);
+        } catch (err) {
+          setMessage('Error logging in to vox');
+          setAlertName('LoginFailure');
+        }
       }
 
       // setting the global state with the jwt and user information received in the response
@@ -173,26 +178,16 @@ const Login = ({navigation}) => {
       );
       setMessage('User Logged In Successfully');
       setAlertName('LoginSuccess');
-      setIsLoading(false);
-      // showToast('User Logged In Successfully', 'success');
-
-      //clear all inputs
-      // setValue('email', '');
-      // setValue('password', '');
+      // setIsLoading(false);
       reset();
-
-      //navigate to the app stack
-      // navigation.replace('App');
     } catch (err) {
       dispatch(authLogout());
       console.log(err);
-      // showToast('Invalid email or password', 'danger');
       setMessage('Invalid email or password');
       setAlertName('LoginFailure');
-      setIsLoading(false);
     } finally {
+      setIsLoading(false);
       setModalVisible(true);
-      
     }
   };
 
