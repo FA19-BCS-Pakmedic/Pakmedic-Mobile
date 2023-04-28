@@ -1,9 +1,17 @@
-import {View, Text, Image, FlatList, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 //import {styles} from './styles';
 
 import {useSelector} from 'react-redux';
 import React from 'react';
 import ScrollContainer from '../../../../containers/ScrollContainer';
+import {useNavigation} from '@react-navigation/native';
 
 import Button from '../../../../components/shared/Button';
 
@@ -22,7 +30,8 @@ import {
 
 const Dashboard = () => {
   const user = useSelector(state => state.auth.user);
-  console.log('user', user);
+
+  const navigation = useNavigation();
 
   const [appointments, setAppointments] = React.useState([
     {
@@ -136,6 +145,12 @@ const Dashboard = () => {
     },
   ];
 
+  const navigate = screenName => {
+    navigation.navigate('App', {
+      screen: screenName,
+    });
+  };
+
   return (
     <ScrollContainer isTab>
       <View style={styles.container}>
@@ -144,7 +159,12 @@ const Dashboard = () => {
           <Text style={styles.subTitle}>How are we feeling today?</Text>
         </View>
         <View style={styles.appContainer}>
-          <Text style={styles.appTitle}>Upcoming Appointments:</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.appTitle}>Upcoming Appointments:</Text>
+            <TouchableOpacity onPress={() => {}}>
+              <Text style={styles.viewAll}>View All</Text>
+            </TouchableOpacity>
+          </View>
           <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal={true}
@@ -183,7 +203,15 @@ const Dashboard = () => {
             snapToInterval={dimensions.Width * 0.9}
             decelerationRate={0.5}
           />
-          <Text style={styles.appTitle}>Most Searched Specialists:</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.appTitle}>Most Searched Specialists</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigate('Specialists');
+              }}>
+              <Text style={styles.viewAll}>View All</Text>
+            </TouchableOpacity>
+          </View>
           <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal={true}
@@ -253,9 +281,10 @@ const styles = StyleSheet.create({
     marginTop: dimensions.Height * 0.03,
   },
   appTitle: {
-    marginHorizontal: dimensions.Width * 0.03,
+    // marginHorizontal: dimensions.Width * 0.03,
     fontSize: fonts.size.font16,
     fontWeight: 'bold',
+    // borderWidth: 1,
   },
   appointment: {
     flexDirection: 'row',
@@ -331,6 +360,11 @@ const styles = StyleSheet.create({
   },
   speciality: {
     fontSize: fonts.size.font12,
+  },
+  textContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 

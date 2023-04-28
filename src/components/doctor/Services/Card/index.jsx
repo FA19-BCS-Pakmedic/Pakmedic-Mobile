@@ -7,7 +7,7 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import VideoIcon from '../../../../assets/svgs/Video-on.svg';
 import PhyscialCheckupIcon from '../../../../assets/svgs/Physical-checkup.svg';
 import ClockIcon from '../../../../assets/svgs/material-symbols_nest-clock-farsight-analog-outline-rounded.svg';
-import MoneyIcon from '../../../../assets/svgs/fa6-regular_money-bill-1.svg';
+import MoneyIcon from '../../../../assets/svgs/Money.svg';
 import AppointmentIcon from '../../../../assets/svgs/Appointment.svg';
 import OptionsIcon from '../../../../assets/svgs/Options.svg';
 import MenuDropdown from '../../../shared/MenuDropdown';

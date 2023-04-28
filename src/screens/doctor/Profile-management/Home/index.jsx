@@ -1,7 +1,7 @@
 import {View, Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
-import {options} from '../../../../utils/constants/ProfileOptions';
+import {docOptions} from '../../../../utils/constants/ProfileOptions';
 
 // import SkeletonContent from 'react-native-skeleton-content';
 
@@ -17,25 +17,25 @@ import Reviews from '../../../../components/doctor/Reviews';
 import About from '../../../../components/doctor/About';
 import Signature from '../../../../components/doctor/Signature';
 import {useDispatch, useSelector} from 'react-redux';
-import {getDoctor, getDoctorById} from '../../../../services/doctorServices';
-import {setLoading} from '../../../../setup/redux/slices/loading.slice';
+import {getDoctorById} from '../../../../services/doctorServices';
 import {getDoctorInfo} from '../../../../utils/helpers/getProfileInfo';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
 import Loader from '../../../../components/shared/Loader';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 const ProfileManagement = ({route}) => {
-  const [profileOptions, setProfileOptions] = useState(options);
+  const [profileOptions, setProfileOptions] = useState(docOptions);
   const [storedUser, setStoredUser] = useState(null);
   const [information, setInformation] = useState([]);
-  const [loadProfile, setLoadProfile] = useState(null);
+  const [activeOption, setActiveOption] = useState();
+
+  const {showToast} = useCustomToast();
 
   const [loading, setLoading] = useState(false);
 
   const userId = route.params.userId;
 
   const dispatch = useDispatch();
-
-  const [activeOption, setActiveOption] = useState();
 
   const getUserData = async () => {
     setLoading(true);
@@ -45,13 +45,14 @@ const ProfileManagement = ({route}) => {
       dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
       console.log(err);
+      showToast("Can't load user data", 'danger');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getUserData();
+    if (userId) getUserData();
   }, [userId]);
 
   useEffect(() => {
@@ -61,9 +62,9 @@ const ProfileManagement = ({route}) => {
     }
   }, [storedUser]);
 
-  useEffect(() => {
-    setLoadProfile(true);
-  }, [information]);
+  // useEffect(() => {
+  //   setLoadProfile(true);
+  // }, [information]);
 
   const onOptionClick = index => {
     setProfileOptions(prevState => {
@@ -78,9 +79,9 @@ const ProfileManagement = ({route}) => {
     });
   };
 
-  useEffect(() => {
-    storedUser && console.log('STORED USER', storedUser);
-  }, [setStoredUser]);
+  // useEffect(() => {
+  //   storedUser && console.log('STORED USER', storedUser);
+  // }, [setStoredUser]);
 
   const getActiveComponent = () => {
     console.log(activeOption);
@@ -127,6 +128,7 @@ const ProfileManagement = ({route}) => {
       {loading ? (
         <Loader title={'Loading'} />
       ) : (
+        
         <View style={styles.root}>
           <ProfileCard user={storedUser} />
 

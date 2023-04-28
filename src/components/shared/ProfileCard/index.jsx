@@ -31,7 +31,10 @@ const ProfileCard = ({user}) => {
         source={{
           uri: `${apiEndpoint}files/${user?.avatar}`,
         }}
-        style={styles().avatar}
+        style={[
+          styles().avatar,
+          {width: dimensions.Width / 5, height: dimensions.Width / 5},
+        ]}
       />
       <View style={styles().profileInfoContainer}>
         <Text style={styles().name}>Dr. {user?.name}</Text>
@@ -39,23 +42,27 @@ const ProfileCard = ({user}) => {
           <LocationSvg width={dimensions.Width / 20} />
           <Text style={styles().otherInfo}>{user?.location}</Text>
         </View>
-        <View style={styles().iconTextContainer}>
-          <SpecialistSvg width={dimensions.Width / 20} />
-          <Text style={styles().otherInfo}>{user?.speciality}</Text>
-        </View>
-        <View style={styles().iconTextContainer}>
-          <StarSvg width={dimensions.Width / 20} />
-          <Text
-            style={[
-              styles().otherInfo,
-              {
-                fontWeight: fonts.weight.low,
-                color: colors.secondaryMonoChrome800,
-              },
-            ]}>
-            4.5/5 (674 reviews)
-          </Text>
-        </View>
+        {role !== ROLES.patient && (
+          <>
+            <View style={styles().iconTextContainer}>
+              <SpecialistSvg width={dimensions.Width / 20} />
+              <Text style={styles().otherInfo}>{user?.speciality}</Text>
+            </View>
+            <View style={styles().iconTextContainer}>
+              <StarSvg width={dimensions.Width / 20} />
+              <Text
+                style={[
+                  styles().otherInfo,
+                  {
+                    fontWeight: fonts.weight.low,
+                    color: colors.secondaryMonoChrome800,
+                  },
+                ]}>
+                4.5/5 (674 reviews)
+              </Text>
+            </View>
+          </>
+        )}
       </View>
       <View style={styles().buttonContainer}>
         <Button
@@ -87,8 +94,6 @@ const styles = role =>
     },
 
     avatar: {
-      width: dimensions.Width / 5,
-      height: dimensions.Width / 5,
       position: 'absolute',
       top: -(dimensions.Height / 20),
       left: dimensions.Width / 20,

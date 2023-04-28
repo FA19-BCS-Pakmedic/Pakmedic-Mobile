@@ -62,6 +62,7 @@ const Header = ({color}) => {
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user) || null;
 
+
   const notif = true;
 
   const dispatch = useDispatch();
@@ -96,7 +97,13 @@ const Header = ({color}) => {
 
       {/* User avatar and notification bell */}
       <View style={styles().actionsContainer}>
-        <TouchableOpacity style={styles().notificationContainer}>
+        <TouchableOpacity
+          style={styles().notificationContainer}
+          onPress={() => {
+            navigation.navigate('App', {
+              screen: 'Notifications',
+            });
+          }}>
           <Notification width={30} height={30} />
           {notif && <View style={styles().notifIndicator}></View>}
         </TouchableOpacity>
@@ -130,12 +137,17 @@ const Header = ({color}) => {
             <TouchableOpacity onPress={openMenu}>
               <Image
                 //if user has no avatar then use default avatar
-                width={dimensions.Width / 10}
-                height={dimensions.Width / 10}
+
                 source={{
                   uri: `${apiEndpoint}files/${user.avatar}`, //TODO: replace the link with a variable that fetches images from the backend
                 }}
-                style={styles().avatar}
+                style={[
+                  styles().avatar,
+                  {
+                    width: dimensions.Width / 10,
+                    height: dimensions.Width / 10,
+                  },
+                ]}
               />
             </TouchableOpacity>
           }>

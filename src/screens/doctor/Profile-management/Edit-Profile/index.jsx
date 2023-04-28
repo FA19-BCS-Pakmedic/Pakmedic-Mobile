@@ -27,25 +27,40 @@ import {
 } from '../../../../utils/constants/Regex';
 import colors from '../../../../utils/styles/themes/colors';
 import dimensions from '../../../../utils/styles/themes/dimensions';
-import ProfileImage from '../../../../assets/images/default-avatar.png';
 import EditIcon from '../../../../assets/svgs/Edit.svg';
 import Button from '../../../../components/shared/Button';
 import ModalContainer from '../../../../containers/ModalContainer';
-import {addAvatar, getDoctor} from '../../../../services/doctorServices';
+import {
+  addAvatar,
+  getDoctor,
+  updateDoctor,
+} from '../../../../services/doctorServices';
 import {useDispatch, useSelector} from 'react-redux';
 import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
-import {setUseProxies} from 'immer';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
+import {Specialists} from '../../../../utils/constants/Specialists';
+import {useCustomToast} from '../../../../hooks/useCustomToast';
+import Loader from '../../../../components/shared/Loader';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const EditProfile = () => {
   const [open, setOpen] = useState(false);
+  const [specialistOpen, setSpecialistOpen] = useState(false);
   const [visible, setVisible] = useState(false);
 
   const user = useSelector(state => state.auth.user);
+  const navigation = useNavigation();
+  const route = useRoute();
 
   const dispatch = useDispatch();
 
+  const {showToast} = useCustomToast();
+
   const [storedUser, setStoredUser] = useState(user);
+
+  const [loading, setLoading] = useState(false);
+
+  console.log(user?.speciality);
 
   const {
     control,
@@ -58,10 +73,11 @@ const EditProfile = () => {
     mode: 'all',
     revalidate: 'all',
     defaultValues: {
-      name: user?.name || '',
-      email: user?.email || '',
-      phone: user?.phone || '',
-      location: user?.location || '',
+      name: storedUser?.name || '',
+      email: storedUser?.email || '',
+      phone: storedUser?.phone || '',
+      location: storedUser?.location || '',
+      speciality: storedUser?.speciality || '',
     },
   });
 
@@ -69,7 +85,7 @@ const EditProfile = () => {
 
   const uploadImage = async formData => {
     try {
-      const response = await addAvatar(formData);
+      await addAvatar(formData);
       updateUser();
     } catch (err) {
       console.log(err);
@@ -77,14 +93,17 @@ const EditProfile = () => {
   };
 
   const updateUser = async () => {
+    setLoading(true);
     try {
       const response = await getDoctor();
-      console.log(response.data.data);
 
+      console.log(response.data.data);
       setStoredUser(response.data.data.user);
       dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,7 +141,17 @@ const EditProfile = () => {
   };
 
   const onSubmit = async formData => {
-    console.log(formData);
+    try {
+      await updateDoctor(formData);
+      await updateUser();
+      showToast('Profile successfully updated', 'success');
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1500);
+    } catch (err) {
+      console.log(err);
+      showToast('Error updating profile', 'danger');
+    } 
   };
 
   const openModal = () => {
@@ -183,7 +212,9 @@ const EditProfile = () => {
   };
 
   // add image picker
-  return (
+  return loading ? (
+    <Loader title={'Loading Profile'} />
+  ) : (
     <StaticContainer
       customHeaderName={'Edit Profile'}
       customHeaderEnable={true}>
@@ -246,6 +277,43 @@ const EditProfile = () => {
             }}
           />
 
+          <Text style={styles.label}>Cities</Text>
+          <ValidateDropdown
+            open={open}
+            width={'99%'}
+            setOpen={setOpen}
+            items={Cities}
+            control={control}
+            title="City"
+            setValue={setCity}
+            name="location"
+            placeholder="Please select your city"
+            rules={{
+              required: 'Please select a city',
+              validate: value => value !== null || 'Please select a city',
+            }}
+          />
+
+          <Text style={styles.label}>Specialty</Text>
+          <ValidateDropdown
+            open={specialistOpen}
+            width={'99%'}
+            setOpen={setSpecialistOpen}
+            items={Specialists}
+            control={control}
+            title="Speciality"
+            setValue={callback => {
+              setValue('speciality', callback());
+              clearErrors('speciality');
+            }}
+            name="speciality"
+            placeholder="Please select your speciality"
+            rules={{
+              required: 'Please select a speciality',
+              validate: value => value !== null || 'Please select a speciality',
+            }}
+          />
+
           <Text style={styles.label}>Phone</Text>
           <ValidateInputField
             placeholder="Enter Phone"
@@ -262,23 +330,6 @@ const EditProfile = () => {
                 value: phoneNumberRegex,
                 message: 'Invalid Phone number',
               },
-            }}
-          />
-
-          <Text style={styles.label}>Cities</Text>
-          <ValidateDropdown
-            open={open}
-            width={dimensions.Width / 1.09}
-            setOpen={setOpen}
-            items={Cities}
-            control={control}
-            title="City"
-            setValue={setCity}
-            name="location"
-            placeholder="Please select your city"
-            rules={{
-              required: 'Please select a city',
-              validate: value => value !== null || 'Please select a city',
             }}
           />
         </View>

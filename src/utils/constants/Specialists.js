@@ -1,38 +1,57 @@
-export const specialistNames = [
-  {label: 'Cardiologist', value: 'Cardiologist'},
-  {label: 'Dermatologist', value: 'Dermatologist'},
-  {label: 'Endocrinologist', value: 'Endocrinologist'},
-  {label: 'Gastroenterologist', value: 'Gastroenterologist'},
-  {label: 'Hematologist', value: 'Hematologist'},
+
+import AllergyIcon from '../../assets/images/Allergy.png';
+import CardiologyIcon from '../../assets/images/Cardiology.png';
+import DentistryIcon from '../../assets/images/Dentistry.png';
+import DermatologyIcon from '../../assets/images/Dermatology.png';
+import EndocrinologyIcon from '../../assets/images/Endocrinology.png';
+import GastroenterologyIcon from '../../assets/images/Gastroenterology.png';
+import HematologyIcon from '../../assets/images/Hematology.png';
+import NephrologyIcon from '../../assets/images/Nephrology.png';
+import NeurologyIcon from '../../assets/images/Neurology.png';
+import ObstetricsIcon from '../../assets/images/Obstetrician.png';
+import OncologyIcon from '../../assets/images/Oncology.png';
+import OphthalmologyIcon from '../../assets/images/Ophthalmology.png';
+import OrthopedicsIcon from '../../assets/images/Orthopedics.png';
+import OtolaryngologyIcon from '../../assets/images/Otolaryngology.png';
+import PediatricsIcon from '../../assets/images/Pediatrics.png';
+import PsychiatryIcon from '../../assets/images/Psychiatry.png';
+import PulmonologyIcon from '../../assets/images/Pulmonology.png';
+import RadiologyIcon from '../../assets/images/Radiology.png';
+import RheumatologyIcon from '../../assets/images/Rheumatology.png';
+import UrologyIcon from '../../assets/images/Urology.png';
+import DietitianIcon from '../../assets/images/Dietitian.png';
+
+export const Specialists = [
+  {label: 'Cardiologist', value: 'Cardiologist', icon: CardiologyIcon},
+  {label: 'Dermatologist', value: 'Dermatologist', icon: DermatologyIcon},
+  {label: 'Endocrinologist', value: 'Endocrinologist', icon: EndocrinologyIcon},
   {
-    label: 'Infectious Disease Specialist',
-    value: 'Infectious Disease Specialist',
+    label: 'Gastroenterologist',
+    value: 'Gastroenterologist',
+    icon: GastroenterologyIcon,
   },
-  {label: 'Neurologist', value: 'Neurologist'},
-  {label: 'Gynecologist', value: 'Gynecologist'},
-  {label: 'Oncologist', value: 'Oncologist'},
-  {label: 'Ophthalmologist', value: 'Ophthalmologist'},
-  {label: 'Orthopedist', value: 'Orthopedist'},
-  {label: 'Otolaryngologist', value: 'Otolaryngologist'},
-  {label: 'Pediatrician', value: 'Pediatrician'},
-  {label: 'Psychiatrist', value: 'Psychiatrist'},
-  {label: 'Pulmonologist', value: 'Pulmonologist'},
-  {label: 'Radiologist', value: 'Radiologist'},
-  {label: 'Rheumatologist', value: 'Rheumatologist'},
-  {label: 'Urologist', value: 'Urologist'},
-  {label: 'Allergist', value: 'Allergist'},
-  {label: 'Anesthesiologist', value: 'Anesthesiologist'},
-  {label: 'Dentist', value: 'Dentist'},
-  {label: 'Dietitian', value: 'Dietitian'},
+  {label: 'Hematologist', value: 'Hematologist', icon: HematologyIcon},
+  {label: 'Neurologist', value: 'Neurologist', icon: NeurologyIcon},
+  {label: 'Gynecologist', value: 'Gynecologist', icon: ObstetricsIcon},
+  {label: 'Oncologist', value: 'Oncologist', icon: OncologyIcon},
+  {label: 'Ophthalmologist', value: 'Ophthalmologist', icon: OphthalmologyIcon},
+
   {
-    label: 'Emergency Medicine Specialist',
-    value: 'Emergency Medicine Specialist',
+    label: 'Otolaryngologist',
+    value: 'Otolaryngologist',
+    icon: OtolaryngologyIcon,
   },
-  {label: 'Family Medicine Specialist', value: 'Family Medicine Specialist'},
-  {label: 'General Practitioner', value: 'General Practitioner'},
-  {label: 'Internist', value: 'Internist'},
-  {label: 'Nephrologist', value: 'Nephrologist'},
-  {label: 'Obstetrician', value: 'Obstetrician'},
-  {label: 'Ophthalmologist', value: 'Ophthalmologist'},
-  {label: 'Orthopedist', value: 'Orthopedist'},
+  {label: 'Pediatrician', value: 'Pediatrician', icon: PediatricsIcon},
+  {label: 'Psychiatrist', value: 'Psychiatrist', icon: PsychiatryIcon},
+  {label: 'Pulmonologist', value: 'Pulmonologist', icon: PulmonologyIcon},
+  {label: 'Radiologist', value: 'Radiologist', icon: RadiologyIcon},
+  {label: 'Rheumatologist', value: 'Rheumatologist', icon: RheumatologyIcon},
+  {label: 'Urologist', value: 'Urologist', icon: UrologyIcon},
+  {label: 'Allergist', value: 'Allergist', icon: AllergyIcon},
+  {label: 'Dentist', value: 'Dentist', icon: DentistryIcon},
+  {label: 'Dietitian', value: 'Dietitian', icon: DietitianIcon},
+  {label: 'Nephrologist', value: 'Nephrologist', icon: NephrologyIcon},
+  {label: 'Obstetrician', value: 'Obstetrician', icon: ObstetricsIcon},
+  {label: 'Orthopedist', value: 'Orthopedist', icon: OrthopedicsIcon},
+
 ];

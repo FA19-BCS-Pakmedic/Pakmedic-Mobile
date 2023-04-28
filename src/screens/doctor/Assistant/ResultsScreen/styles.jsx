@@ -8,11 +8,13 @@ export const styles = StyleSheet.create({
   container: {
     marginTop: dimensions.Height / 25,
     justifyContent: 'space-between',
+    flexDirection: 'column',
     alignItems: 'center',
-    // height: dimensions.Height / 1.33,
   },
   fileContainer: {
     justifyContent: 'space-evenly',
+    width: dimensions.Width / 1.1,
+    height: dimensions.Height / 1.5,
   },
   image: {
     width: '100%',

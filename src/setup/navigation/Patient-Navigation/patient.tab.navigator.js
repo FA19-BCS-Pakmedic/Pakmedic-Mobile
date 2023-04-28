@@ -13,7 +13,7 @@ import MenuIcon from '../../../assets/svgs/menuIcon.svg';
 //Screens
 import Home from '../../../screens/patient/Authentication/Dashboard';
 import Chatbot from '../../../screens/patient/Chatbot';
-import Appointment from '../../../screens/patient/Appointment-management/Book-appointment';
+import Appointments from '../../../screens/shared/Appointment-management/Appointments';
 import Telemedicine from '../../../screens/patient/Labs/Home';
 import Modal from './patient.modal.navigator';
 
@@ -151,7 +151,7 @@ const PatientTabStack = props => {
         })}>
         <Tab.Screen name="HomeScreen" component={Home} />
         <Tab.Screen name="ChatbotScreen" component={Chatbot} />
-        <Tab.Screen name="AppointmentScreen" component={Appointment} />
+        <Tab.Screen name="AppointmentScreen" component={Appointments} />
         <Tab.Screen name="TelemedicineScreen" component={UsersList} />
         <Tab.Screen
           name="MenuScreen"
