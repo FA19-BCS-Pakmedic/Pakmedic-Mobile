@@ -33,12 +33,16 @@ import {getCustomer} from '../../../../services/stripeServices';
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 import {createAppointment} from '../../../../services/appointmentServices';
 import useCustomApi from '../../../../hooks/useCustomApi';
+import PopupAlerts from '../../../../components/shared/PopupAlerts';
 
 const OnlinePayment = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [customer, setCustomer] = useState(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [message, setAlertMessage] = useState('');
+  const [alertName, setAlertName] = useState('LoginSuccess');
 
   const [edit, setEdit] = useState(false);
 
@@ -64,10 +68,6 @@ const OnlinePayment = () => {
 
   const {doctorId, service, date, time} = route.params;
 
-  console.log(route.params);
-
-  console.log(user.stripeCustomerId);
-
   const handleCardNumberInput = value => {
     setValue('cardNumber', formatCardNumber(value));
     if (value.length === 19) {
@@ -87,14 +87,12 @@ const OnlinePayment = () => {
     setValue('cvc', value.replace(/[^0-9]/g, '').slice(0, 3));
   };
 
-  useEffect(() => {}, [error, success]);
-
   const fetchCustomerData = async () => {
     // setLoading(true);
     // try {
     //   const response = await getCustomer(user.stripeCustomerId);
-    //   setCustomer(response.data.data.customer);
-    //   setPaymentMethod(response.data.data?.paymentMethod);
+    //   setCustomer(response?.data?.data?.customer);
+    //   setPaymentMethod(response?.data?.data?.paymentMethod);
     // } catch (err) {
     //   console.log(err);
     //   showToast('Error fetching customer details', 'danger');
@@ -105,14 +103,15 @@ const OnlinePayment = () => {
     const responseData = await callApi(getCustomer, user.stripeCustomerId);
     if (responseData) {
       setMessage('Customer data fetched successfully');
-      setCustomer(responseData.data.customer);
-      setPaymentMethod(responseData.data?.paymentMethod);
+      setCustomer(responseData?.data?.customer);
+      setPaymentMethod(responseData?.data?.paymentMethod);
     } else {
-      setMessage('Error fetching customer details');
+      // setMessage('Error fetching customer details');
     }
   };
 
   useEffect(() => {
+    console.log(user.stripeCustomerId);
     if (user.stripeCustomerId) {
       fetchCustomerData();
     }
@@ -146,9 +145,9 @@ const OnlinePayment = () => {
     try {
       response = !edit ? await createPaymentMethod(data) : null;
 
-      const paymentMethod = response.data.data.paymentMethod;
+      const paymentMethod = response?.data?.data?.paymentMethod;
 
-      if (response.data) {
+      if (response?.data) {
         setPaymentMethod({id: paymentMethod.id, card: paymentMethod.card});
         setEdit(false);
         showToast('Payment method added successfully', 'success');
@@ -176,7 +175,7 @@ const OnlinePayment = () => {
       setBtnLoading(true);
       const response = await payForService(customer.id, data);
 
-      const {paymentIntent} = response.data.data;
+      const {paymentIntent} = response?.data?.data;
 
       if (paymentIntent.status === 'succeeded') {
         const data = {
@@ -191,19 +190,25 @@ const OnlinePayment = () => {
 
         const response = await createAppointment(data);
 
-        if (response.data) {
-          navigation.navigate('AppointmentScreen');
-          console.log(response.data.data);
-          showToast('Appointment booked successfully', 'success');
+        if (response?.data) {
+          setAlertMessage(
+            'Appointment booked successfully, Redirecting you to appointments screen',
+          );
+          // navigation.navigate('AppointmentScreen');
+          console.log(response?.data?.data);
+          // showToast('Appointment booked successfully', 'success');
 
           console.log('navigating');
         }
       }
     } catch (err) {
       console.log(err);
-      showToast('Error', 'danger');
+      setAlertMessage('Appointment booking failed, please try again later');
+      setAlertName('LoginFailure');
+      // showToast('Error', 'danger');
     } finally {
       setBtnLoading(false);
+      setModalVisible(true);
     }
   };
 
@@ -228,7 +233,9 @@ const OnlinePayment = () => {
             style={styles.card}>
             <View style={styles.highlightTextContainer}>
               <Text style={styles.name}>{user.name}</Text>
-              <Text style={styles.expDate}>{watch('expiryDate')}</Text>
+              <Text style={styles.expDate}>
+                {watch('expiryDate') ? watch('expiryDate') : 'MM/YY'}
+              </Text>
             </View>
             <MobileChipIcon />
             <View style={styles.cardNumberContainer}>
@@ -341,6 +348,18 @@ const OnlinePayment = () => {
             {/* </View> */}
           </View>
         </View>
+
+        <PopupAlerts
+          isModalVisible={isModalVisible}
+          setModalVisible={setModalVisible}
+          height={1.8}
+          width={1.2}
+          timer={2000}
+          alertName={alertName}
+          message={message}
+          redirect={{screen: 'AppointmentScreen'}}
+          isReplace={true}
+        />
       </View>
     </StaticContainer>
   );

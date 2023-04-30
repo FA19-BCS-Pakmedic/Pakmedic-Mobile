@@ -10,7 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
 
-import ProfileSuccess from '../../../assets/svgs/ProfileSuccess.svg';
+import ProfileSuccess from '../../../assets/svgs/VectorSuccess.svg';
 import VectorFailure from '../../../assets/svgs/VectorFailure.svg';
 import ProfileFailure from '../../../assets/svgs/ProfileFailure.svg';
 
@@ -28,6 +28,8 @@ const PopupAlerts = ({
   redirect,
   message,
   isReplace = false,
+  isNavigate = true,
+  isBack = false,
 }) => {
   // const {} = props;
 
@@ -46,8 +48,15 @@ const PopupAlerts = ({
     if (!isModalVisible) return;
     setTimeout(
       () => {
-        if (!alertName.includes('Failure'))
-          navigation[isReplace ? 'replace' : 'navigate']('App', redirect);
+        console.log('navigating to ', redirect);
+
+        if (!alertName.includes('Failure') && isNavigate) {
+          if (isBack) {
+            navigation.goBack();
+          } else {
+            navigation[isReplace ? 'replace' : 'navigate']('App', redirect);
+          }
+        }
         setModalVisible(false);
       },
       timer ? timer : 1000,

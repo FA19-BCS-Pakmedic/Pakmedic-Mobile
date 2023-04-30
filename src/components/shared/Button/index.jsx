@@ -88,6 +88,8 @@ const styles = (
       alignItems: 'center',
       borderRadius: 50,
       // marginVertical: dimensions.Height / 60,
+      marginVertical: marginVertical ? marginVertical : dimensions.Height / 60,
+
       backgroundColor: colors.gray1,
       width: width,
     },

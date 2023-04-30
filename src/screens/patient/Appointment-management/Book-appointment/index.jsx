@@ -32,6 +32,8 @@ import PaymentOnline from '../../../../assets/svgs/Payment-online.svg';
 
 import ModalContainer from '../../../../containers/ModalContainer';
 import {createAppointment} from '../../../../services/appointmentServices';
+import ConfirmationAlert from '../../../../components/shared/ConfirmationAlert';
+import PopupAlerts from '../../../../components/shared/PopupAlerts';
 
 const {useNavigation, useRoute} = require('@react-navigation/native');
 
@@ -49,6 +51,10 @@ const BookAppointment = () => {
   const [dateError, setDateError] = useState(false);
   const [timeError, setTimeError] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
+  const [alertName, setAlertName] = useState('LoginSuccess');
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const {doctor, service} = route.params;
   const [times, setTimes] = useState(
@@ -66,6 +72,32 @@ const BookAppointment = () => {
     }
   };
 
+  const openConfirmationModal = () => {
+    return (
+      <ConfirmationAlert
+        alertText={'Are you sure you want to book this appointment?'}
+        cancelControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            setVisible(false);
+          },
+        }}
+        confirmControl={{
+          width: dimensions.Width / 3,
+          onPress: () => {
+            bookAppointment();
+            setVisible(false);
+          },
+        }}
+        height={dimensions.Height / 5}
+        width={dimensions.Width / 1.2}
+        isModalVisible={visible}
+        setModalVisible={setVisible}
+        type="center"
+      />
+    );
+  };
+
   const bookAppointment = async () => {
     const data = {
       doctor: doctor._id,
@@ -79,8 +111,14 @@ const BookAppointment = () => {
     try {
       const response = await createAppointment(data);
       console.log(response.data);
+      setMessage('Appointment booked successfully');
+      setAlertName('LoginSuccess');
     } catch (err) {
       console.log(err);
+      setMessage('Appointment booking failed');
+      setAlertName('LoginFailure');
+    } finally {
+      setModalVisible(true);
     }
   };
 
@@ -223,7 +261,12 @@ const BookAppointment = () => {
             </View>
 
             <View style={styles.modalControl}>
-              <TouchableOpacity style={styles.option} onPress={bookAppointment}>
+              <TouchableOpacity
+                style={styles.option}
+                onPress={() => {
+                  setOpen(false);
+                  setVisible(true);
+                }}>
                 <PaymentPerson width={25} />
                 <Text style={styles.optionText}>In-Person Payment</Text>
               </TouchableOpacity>
@@ -240,6 +283,7 @@ const BookAppointment = () => {
       customHeaderName={'Book Appointment'}
       customHeaderEnable={true}>
       {openPaymentMethodModal()}
+      {openConfirmationModal()}
       <View style={styles.container}>
         {/* doctors information section */}
         <ServiceInformation
@@ -315,6 +359,17 @@ const BookAppointment = () => {
             type={'filled'}
           />
         </View>
+        <PopupAlerts
+          isModalVisible={isModalVisible}
+          setModalVisible={setModalVisible}
+          height={1.8}
+          width={1.2}
+          timer={2000}
+          alertName={alertName}
+          message={message}
+          redirect={null}
+          isReplace={true}
+        />
       </View>
     </StaticContainer>
   );

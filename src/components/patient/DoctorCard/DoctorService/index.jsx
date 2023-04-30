@@ -81,12 +81,14 @@ export default DoctorService;
 const styles = StyleSheet.create({
   container: {
     width: dimensions.Width / 1.3,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.primary1,
     borderRadius: dimensions.Width / 20,
     padding: dimensions.Width / 30,
     marginHorizontal: dimensions.Width / 30,
+    paddingBottom: 0,
   },
+
   infoContainer: {
     flexDirection: 'row',
     width: '100%',

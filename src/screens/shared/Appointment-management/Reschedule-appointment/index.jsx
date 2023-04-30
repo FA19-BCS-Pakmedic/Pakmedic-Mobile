@@ -20,6 +20,7 @@ import {getDate} from '../../../../utils/helpers/getDate';
 import ROLES from '../../../../utils/constants/ROLES';
 import {useSelector} from 'react-redux';
 import {createAppointmentRequest} from '../../../../services/appointmentServices';
+import PopupAlerts from '../../../../components/shared/PopupAlerts';
 
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 
@@ -31,6 +32,9 @@ const RescheduleAppointment = () => {
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user);
   const {service, doctor, patient} = appointment;
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [alertName, setAlertName] = useState('LoginSuccess');
+  const [message, setMessage] = useState('');
 
   const [open, setOpen] = useState(false);
 
@@ -189,13 +193,18 @@ const RescheduleAppointment = () => {
     try {
       const res = await createAppointmentRequest(data);
       console.log(res.data);
-      showToast('Appointment request sent', 'success');
-      navigation.goBack();
+      // showToast('Appointment request sent', 'success');
+      setAlertName('LoginSuccess');
+      setMessage('Appointment request sent');
+      // navigation.goBack();
     } catch (err) {
       console.log(err);
-      showToast('Something went wrong', 'danger');
+      // showToast('Something went wrong', 'danger');
+      setAlertName('LoginFailure');
+      setMessage('Something went wrong');
     } finally {
       setLoading(false);
+      setModalVisible(true);
     }
   };
 
@@ -293,6 +302,19 @@ const RescheduleAppointment = () => {
           width="100%"
           type="filled"
           isLoading={loading}
+        />
+
+        <PopupAlerts
+          isModalVisible={isModalVisible}
+          setModalVisible={setModalVisible}
+          height={1.8}
+          width={1.2}
+          timer={2000}
+          alertName={alertName}
+          message={message}
+          // redirect={{screen: 'AppointmentScreen'}}
+          isReplace={false}
+          isBack={true}
         />
       </View>
     </StaticContainer>

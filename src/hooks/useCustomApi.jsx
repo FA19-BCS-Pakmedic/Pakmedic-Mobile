@@ -4,7 +4,7 @@ import {useCustomToast} from './useCustomToast';
 
 const useCustomApi = () => {
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState('');
@@ -30,10 +30,10 @@ const useCustomApi = () => {
       setIsLoading(false);
       setIsBtnLoading(false);
     }
-    return response.data ? response.data : null;
+    return response?.data ? response.data : null;
   };
 
-  return {error, isLoading, callApi, success, setMessage};
+  return {error, isLoading, callApi, success, setMessage, isBtnLoading};
 };
 
 export default useCustomApi;
