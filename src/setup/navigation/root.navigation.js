@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 //import redux hooks
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 //import actions
 import {authSuccess, setRole} from '../redux/actions';
@@ -31,12 +31,11 @@ const rootStack = createNativeStackNavigator();
 
 //configure root navigator
 export default RootNavigation = () => {
-  const [userRole, setUserRole] = useState();
+  // const [userRole, setUserRole] = useState();
   const [isFirstTime, setIsFirstTime] = useState(true);
-
+  const userRole = useSelector(state => state.role.role);
 
   const navigation = useNavigation();
-
 
   // use effect to check if the user has already gone through the onboarding
   useEffect(() => {
@@ -47,6 +46,8 @@ export default RootNavigation = () => {
 
     getIsFirstTime();
   });
+
+  // useEffect to get the user role form the devic
 
   useEffect(() => {
     voximplant.on(Voximplant.ClientEvents.IncomingCall, incomingCallEvent => {
