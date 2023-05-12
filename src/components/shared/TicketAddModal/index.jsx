@@ -29,7 +29,7 @@ export default TicketAddModal = props => {
     },
   });
 
-  console.log(item);
+  //console.log(item);
 
   const [open, setOpen] = useState(false);
   const [value, setVal] = useState(null);

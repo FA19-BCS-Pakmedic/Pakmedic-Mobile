@@ -104,7 +104,7 @@ const Home = props => {
             <DropDownPicker
               open={open}
               value={value}
-              listMode="MODAL"
+              //listMode="MODAL"
               items={items}
               setOpen={setOpen}
               setValue={setValue}
@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
   body: {
     paddingHorizontal: dimensions.Width / 20,
     marginTop: dimensions.Height * 0.02,
+    height: dimensions.Height / 1.5,
   },
   card: {
     borderWidth: 1,
