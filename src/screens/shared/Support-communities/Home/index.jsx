@@ -10,7 +10,6 @@ import React, {useState} from 'react';
 import colors from '../../../../utils/styles/themes/colors';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 import StaticContainer from '../../../../containers/StaticContainer';
-import BackHeader from '../../../../components/shared/BackHeader';
 import Search from '../../../../components/shared/CommunitySearch';
 import Logo from '../../../../assets/svgs/community-logo';
 

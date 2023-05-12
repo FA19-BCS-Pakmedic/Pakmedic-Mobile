@@ -11,6 +11,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import DoctorTabStack from './doctor.tab.navigator';
 //Screens
 import Support from '../../../screens/shared/Support-communities/Home';
+import ComplaintDesk from '../../../screens/shared/Complaint-desk/Home';
+import Complaint from '../../../screens/shared/Complaint-desk/Complaint';
 import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
 import Post from '../../../screens/shared/Support-communities/Post';
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
@@ -86,10 +88,12 @@ const DoctorNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="PrescriptionManagement">
+      initialRouteName="DoctorTabStack">
       <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
       <Stack.Screen name="Support Communities" component={Support} />
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
+      <Stack.Screen name="ComplaintDesk" component={ComplaintDesk} />
+      <Stack.Screen name="Complaint" component={Complaint} />
       <Stack.Screen name="ProfileManagement" component={ProfileManagement} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="Retinopathy" component={Retinopathy} />
