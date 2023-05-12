@@ -23,6 +23,8 @@ export default Button = ({
   fontSize = fonts.size.font16,
   fontColor = colors.secondary1,
   children,
+  color = colors.primary1,
+  radius = 50,
 }) => {
   return (
     <TouchableOpacity
@@ -30,8 +32,17 @@ export default Button = ({
         isDisabled
           ? styles(type, width, null, height, null, null, marginVertical)
               .disabled
-          : styles(type, width, borderColor, height, null, null, marginVertical)
-              .button
+          : styles(
+              type,
+              width,
+              borderColor,
+              height,
+              null,
+              null,
+              marginVertical,
+              color,
+              radius,
+            ).button
       }
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
@@ -66,6 +77,8 @@ const styles = (
   fontSize,
   fontColor,
   marginVertical,
+  color,
+  radius,
 ) =>
   StyleSheet.create({
     button: {
@@ -73,10 +86,10 @@ const styles = (
       height: height ? height : dimensions.Height / 17,
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 50,
+      borderRadius: radius,
       borderWidth: 1,
       marginVertical: marginVertical ? marginVertical : dimensions.Height / 60,
-      backgroundColor: type === 'filled' ? colors.primary1 : colors.white,
+      backgroundColor: type === 'filled' ? color : colors.white,
       borderWidth: 2,
       borderColor: borderColor ? borderColor : colors.primary1,
       width: width,

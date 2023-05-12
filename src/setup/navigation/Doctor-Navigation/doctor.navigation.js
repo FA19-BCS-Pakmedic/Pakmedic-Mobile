@@ -39,6 +39,8 @@ import RescheduleAppointment from '../../../screens/shared/Appointment-managemen
 import CancelAppointment from '../../../screens/shared/Appointment-management/Cancel-appointment';
 import AppointmentDetails from '../../../screens/shared/Appointment-management/Appointment-details';
 
+import PrescriptionManagement from '../../../screens/doctor/Prescription/Prescription-management';
+
 const Stack = createNativeStackNavigator();
 
 const onMessageReceived = async message => {
@@ -84,7 +86,7 @@ const DoctorNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="DoctorTabStack">
+      initialRouteName="PrescriptionManagement">
       <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
       <Stack.Screen name="Support Communities" component={Support} />
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
@@ -109,6 +111,10 @@ const DoctorNavigation = () => {
       <Stack.Screen
         name="RescheduleAppointment"
         component={RescheduleAppointment}
+      />
+      <Stack.Screen
+        name="PrescriptionManagement"
+        component={PrescriptionManagement}
       />
       <Stack.Screen name="CancelAppointment" component={CancelAppointment} />
     </Stack.Navigator>
