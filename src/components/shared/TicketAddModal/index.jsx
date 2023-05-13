@@ -28,7 +28,6 @@ export default TicketAddModal = props => {
       complainee: '',
     },
   });
-
   //console.log(item);
 
   const [open, setOpen] = useState(false);

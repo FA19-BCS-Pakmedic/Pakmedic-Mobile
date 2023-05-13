@@ -42,6 +42,7 @@ import CancelAppointment from '../../../screens/shared/Appointment-management/Ca
 import AppointmentDetails from '../../../screens/shared/Appointment-management/Appointment-details';
 
 import PrescriptionManagement from '../../../screens/doctor/Prescription/Prescription-management';
+import FinanceHome from '../../../screens/shared/Finance/Home';
 
 const Stack = createNativeStackNavigator();
 
@@ -88,8 +89,9 @@ const DoctorNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="DoctorTabStack">
+      initialRouteName="FinanceHome">
       <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
+      <Stack.Screen name="FinanceHome" component={FinanceHome} />
       <Stack.Screen name="Support Communities" component={Support} />
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
       <Stack.Screen name="ComplaintDesk" component={ComplaintDesk} />
