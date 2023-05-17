@@ -13,6 +13,8 @@ import MedicineAddModal from '../../../../components/doctor/MedicineAddModal';
 
 import {useNavigation} from '@react-navigation/native';
 
+import {addPrescription} from '../../../../services/prescriptionServices';
+
 //import {styles} from './styles'
 
 const PrescriptionManagement = () => {
@@ -20,35 +22,19 @@ const PrescriptionManagement = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const role = useSelector(state => state.role.role);
 
-  const medicines = [
-    {
-      name: 'Pandadol',
-      dosageForm: 'Tablet',
-      size: 40,
-      freq: 2,
-      days: 7,
-      addDays: 2,
-      details: 'Make sure to not take the tablet on empty stomach',
-    },
-    {
-      name: 'Pandadol',
-      dosageForm: 'Tablet',
-      size: 40,
-      freq: 2,
-      days: 7,
+  const [edit, setEdit] = useState(false);
+  const [medicine, setMedicine] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-      details: 'Make sure to not take the tablet on empty stomach',
-    },
-    {
-      name: 'Pandadol',
-      dosageForm: 'Tablet',
-      size: 40,
-      freq: 2,
-      days: 7,
-      addDays: 2,
-      details: 'Make sure to not take the tablet on empty stomach',
-    },
-  ];
+  const [medicines, setMedicines] = useState([]);
+
+  const onSubmit = () => {
+    setLoading(true);
+  };
+
+  React.useEffect(() => {
+    console.log(medicines);
+  }, [medicines]);
 
   return (
     <StaticContainer
@@ -64,7 +50,10 @@ const PrescriptionManagement = () => {
             //borderColor={colors.secondary1}
             label={'Add More'}
             role={role}
-            onPress={() => setModalVisible(true)}
+            onPress={() => {
+              setEdit(false);
+              setModalVisible(true);
+            }}
           />
         </View>
         <View style={styles.body}>
@@ -80,15 +69,19 @@ const PrescriptionManagement = () => {
                 <View style={styles.itemBody}>
                   <View style={styles.itemRow}>
                     <Text style={styles.itemTitle}>Dosage Form:</Text>
-                    <Text style={styles.itemText}>{item.dosageForm}</Text>
+                    <Text style={styles.itemText}>{item.dosage_form}</Text>
                   </View>
                   <View style={styles.itemRow}>
                     <Text style={styles.itemTitle}>Dosage Size:</Text>
-                    <Text style={styles.itemText}>{item.size} mg/ml</Text>
+                    <Text style={styles.itemText}>
+                      {item.dosage_size} mg/ml
+                    </Text>
                   </View>
                   <View style={styles.itemRow}>
                     <Text style={styles.itemTitle}>Dosage Frequency:</Text>
-                    <Text style={styles.itemText}>{item.freq} times a day</Text>
+                    <Text style={styles.itemText}>
+                      {item.dosage_frequency} times a day
+                    </Text>
                   </View>
                   <View style={styles.itemRow}>
                     <Text style={styles.itemTitle}>Dosage Duration:</Text>
@@ -97,7 +90,9 @@ const PrescriptionManagement = () => {
                   {item.addDays > 0 && (
                     <View style={styles.itemRow}>
                       <Text style={styles.itemTitle}>Additional Days:</Text>
-                      <Text style={styles.itemText}>{item.addDays} days</Text>
+                      <Text style={styles.itemText}>
+                        {item.additional_days} days
+                      </Text>
                     </View>
                   )}
                   <View style={styles.itemRow}>
@@ -110,7 +105,7 @@ const PrescriptionManagement = () => {
                           textAlign: 'right',
                         },
                       ]}>
-                      {item.details}
+                      {item.precautionary_details}
                     </Text>
                   </View>
                 </View>
@@ -121,6 +116,11 @@ const PrescriptionManagement = () => {
                     width={dimensions.Width / 3.5}
                     height={dimensions.Height / 25}
                     fontSize={fonts.size.font14}
+                    onPress={() => {
+                      setMedicines(
+                        medicines.filter(medicine => medicine !== item),
+                      );
+                    }}
                   />
                   <Button
                     label="Edit"
@@ -128,6 +128,11 @@ const PrescriptionManagement = () => {
                     width={dimensions.Width / 3.5}
                     height={dimensions.Height / 25}
                     fontSize={fonts.size.font14}
+                    onPress={() => {
+                      setMedicine(item);
+                      setEdit(true);
+                      setModalVisible(true);
+                    }}
                   />
                 </View>
               </View>
@@ -148,13 +153,57 @@ const PrescriptionManagement = () => {
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
+            onPress={onSubmit}
+            isLoading={loading}
+            isDisabled={loading}
           />
         </View>
       </View>
-      <MedicineAddModal
-        Visible={isModalVisible}
-        setModalVisible={setModalVisible}
-      />
+      {edit ? (
+        <MedicineAddModal
+          Visible={isModalVisible}
+          setModalVisible={setModalVisible}
+          onAdd={item => {
+            setMedicines(
+              medicines.map(medicine =>
+                medicine.name === item.name ? item : medicine,
+              ),
+            );
+            setEdit(false);
+          }}
+          edit={true}
+          medicine={{
+            name: medicine.name,
+            dosageForm: medicine.dosage_form,
+            frequency: medicine.dosage_frequency,
+            dosageSize: medicine.dosage_size,
+            duration: medicine.days,
+            addDays: medicine.additional_days,
+            details: medicine.precautionary_details,
+          }}
+        />
+      ) : (
+        <MedicineAddModal
+          Visible={isModalVisible}
+          setModalVisible={setModalVisible}
+          onAdd={item => {
+            if (
+              medicines.filter(
+                medicine =>
+                  medicine.name.replace(/\s/g, '') ===
+                    item.name.replace(/\s/g, '') &&
+                  medicine.dosage_form === item.dosage_form &&
+                  medicine.dosage_size === item.dosage_size,
+              ).length === 0
+            ) {
+              setMedicines([...medicines, item]);
+            } else {
+              alert('Medicine already added');
+            }
+          }}
+          edit={false}
+        />
+      )}
     </StaticContainer>
   );
 };

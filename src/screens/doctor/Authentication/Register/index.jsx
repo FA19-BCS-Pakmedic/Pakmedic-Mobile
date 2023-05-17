@@ -49,7 +49,6 @@ import {useDispatch} from 'react-redux';
 import {authLogout, authSuccess} from '../../../../setup/redux/actions';
 import {loginVox} from '../../../../services/voxServices';
 
-import {Specialists} from '../../../../utils/constants/Specialists';
 import {register} from '../../../../services/notificationService';
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 
@@ -63,6 +62,38 @@ const DoctorRegister = ({navigation}) => {
   const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
   const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const Specialists = [
+    {label: 'Cardiologist', value: 'Cardiologist'},
+    {label: 'Dermatologist', value: 'Dermatologist'},
+    {label: 'Endocrinologist', value: 'Endocrinologist'},
+    {
+      label: 'Gastroenterologist',
+      value: 'Gastroenterologist',
+    },
+    {label: 'Hematologist', value: 'Hematologist'},
+    {label: 'Neurologist', value: 'Neurologist'},
+    {label: 'Gynecologist', value: 'Gynecologist'},
+    {label: 'Oncologist', value: 'Oncologist'},
+    {label: 'Ophthalmologist', value: 'Ophthalmologist'},
+
+    {
+      label: 'Otolaryngologist',
+      value: 'Otolaryngologist',
+    },
+    {label: 'Pediatrician', value: 'Pediatrician'},
+    {label: 'Psychiatrist', value: 'Psychiatrist'},
+    {label: 'Pulmonologist', value: 'Pulmonologist'},
+    {label: 'Radiologist', value: 'Radiologist'},
+    {label: 'Rheumatologist', value: 'Rheumatologist'},
+    {label: 'Urologist', value: 'Urologist'},
+    {label: 'Allergist', value: 'Allergist'},
+    {label: 'Dentist', value: 'Dentist'},
+    {label: 'Dietitian', value: 'Dietitian'},
+    {label: 'Nephrologist', value: 'Nephrologist'},
+    {label: 'Obstetrician', value: 'Obstetrician'},
+    {label: 'Orthopedist', value: 'Orthopedist'},
+  ];
 
   // useForm hook from react-hook-form
   const {control, handleSubmit, setValue, clearErrors, watch, setError} =
@@ -325,7 +356,9 @@ const DoctorRegister = ({navigation}) => {
     <StaticContainer>
       <View style={styles.container}>
         {/* form */}
-        <ScrollView style={{width: '100%'}}>
+        <ScrollView
+          style={{width: '100%'}}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.formContainer}>
             {/* pmc id field */}
             <ValidateInputField

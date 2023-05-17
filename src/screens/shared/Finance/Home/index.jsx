@@ -52,7 +52,7 @@ const Home = () => {
           <Text style={styles.headerText}>Good Day,</Text>
           <Text style={styles.Text}>John Doe</Text>
         </View>
-        <View styles={styles.cardContainer}>
+        <View style={styles.cardContainer}>
           <View style={styles.cardRow}>
             <View style={styles.cardItem}>
               <Text style={styles.cardTitleText}>Total Balance</Text>
@@ -129,9 +129,10 @@ const styles = StyleSheet.create({
     color: colors.secondary1,
   },
   cardContainer: {
+    marginTop: dimensions.Height * 0.03,
     padding: dimensions.Width * 0.05,
     borderWidth: 1,
-    width: dimensions.Width * 0.9,
+    borderColor: colors.secondary1,
   },
   cardRow: {
     flexDirection: 'row',
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
   },
   historyItemRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     marginBottom: dimensions.Height * 0.02,
   },
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     width: dimensions.Width * 0.1,
     height: dimensions.Width * 0.1,
 
-    borderRadius: 100,
+    //borderRadius: 10,
     overflow: 'hidden',
   },
   Image: {

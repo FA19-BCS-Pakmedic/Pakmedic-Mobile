@@ -104,14 +104,13 @@ const Home = props => {
             <DropDownPicker
               open={open}
               value={value}
-              //listMode="MODAL"
               items={items}
               setOpen={setOpen}
               setValue={setValue}
               setItems={setItems}
               style={styles.dropDown}
               dropDownContainerStyle={styles.dropDownContainer}
-              //placeholder="Home"
+              placeholder="Home"
               textStyle={{
                 fontSize: 12,
               }}
@@ -215,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: dimensions.Height / 15,
     paddingHorizontal: dimensions.Width / 20,
-    backgroundColor: colors.secondaryMonoChrome100,
+    //backgroundColor: colors.secondaryMonoChrome100,
     marginTop: -dimensions.Height * 0.01,
   },
   dropDown: {

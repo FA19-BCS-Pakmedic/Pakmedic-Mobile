@@ -17,26 +17,52 @@ import fonts from '../../../utils/styles/themes/fonts';
 import CheckBoxIcon from '../../../assets/svgs/Checkbox.svg';
 import UncheckBoxIcon from '../../../assets/svgs/Checkbox-unchecked.svg';
 
-import {useForm} from 'react-hook-form';
+import {set, useForm} from 'react-hook-form';
 import Button from '../../shared/Button';
 import {ValidateInputField} from '../../shared/Input';
 
 import RadioGroup from '../../shared/Radio';
 
+import {useEffect} from 'react';
+
 export default MedicineAddModal = props => {
-  const {Visible, setModalVisible, navigation} = props;
+  const {Visible, setModalVisible, navigation, onAdd, medicine, edit} = props;
   const {control, handleSubmit, watch, reset, setValue, clearErrors} = useForm({
     mode: 'onChange',
     defaultValues: {
       name: '',
       dosageForm: '',
       dosageSize: '',
-      frequency: '',
       duration: '',
       addDays: '',
+      frequency: 1,
       details: '',
     },
   });
+
+  useEffect(() => {
+    if (edit) {
+      reset({
+        name: medicine?.name,
+        dosageForm: medicine?.dosageForm,
+        dosageSize: medicine?.dosageSize,
+        duration: medicine?.duration,
+        addDays: medicine?.addDays,
+        details: medicine?.details,
+      });
+      setFrequency(medicine?.frequency);
+    } else {
+      reset({
+        name: '',
+        dosageForm: '',
+        dosageSize: '',
+        duration: '',
+        addDays: '',
+        details: '',
+      });
+      setFrequency(1);
+    }
+  }, [medicine]);
 
   const setDosage = dosage => {
     setValue('dosageForm', dosage);
@@ -45,17 +71,37 @@ export default MedicineAddModal = props => {
 
   const [isCheck, setIsCheck] = React.useState(false);
   const [frequency, setFrequency] = React.useState(1);
+  const [loading, setLoading] = React.useState(false);
+
+  const onSubmit = data => {
+    setLoading(true);
+    data.frequency = frequency;
+
+    onAdd({
+      name: data.name,
+      dosage_form: data.dosageForm,
+      dosage_frequency: data.frequency,
+      dosage_size: data.dosageSize,
+      days: data.duration,
+      additional_days: data.addDays,
+      precautionary_details: data.details,
+    });
+    setFrequency(1);
+    reset();
+    setLoading(false);
+    setModalVisible(false);
+  };
 
   return (
     <ModalContainer
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
-      height={dimensions.Height / 1.35}
+      height={dimensions.Height / 1.44}
       width={dimensions.Width * 0.95}
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
       bgColor={colors.white}
-      //back={false}
+      back={false}
       borderColor={colors.primary1}>
       <View style={styles.container}>
         <View style={styles.header}>
@@ -73,6 +119,7 @@ export default MedicineAddModal = props => {
                 message: 'Name is required',
               },
             }}
+            text={watch('name')}
             containerWidth={dimensions.Width * 0.85}
             inputHeight={dimensions.Height / 20}
             fontSize={fonts.size.font14}
@@ -80,51 +127,31 @@ export default MedicineAddModal = props => {
             type="outlined"
             watch={watch('name')}
           />
-          <View style={styles.checkContainer}>
-            <TouchableOpacity
-              style={styles.check}
-              onPress={() => setIsCheck(!isCheck)}>
-              {isCheck ? (
-                <CheckBoxIcon
-                  width={dimensions.Width / 20}
-                  height={dimensions.Height / 20}
-                />
-              ) : (
-                <UncheckBoxIcon
-                  width={dimensions.Width / 20}
-                  height={dimensions.Height / 20}
-                />
-              )}
-            </TouchableOpacity>
-
-            <Text style={styles.checkText}>
-              Check to enter medicine manually
-            </Text>
+          <View style={styles.radioContainer}>
+            <RadioGroup
+              control={control}
+              name="dosageForm"
+              title={'Dosage Form'}
+              titleSize={fonts.size.font14}
+              iconSize={15}
+              textSize={fonts.size.font12}
+              borderWidth={0}
+              values={[
+                {label: 'Tablet', value: 'tablet'},
+                {label: 'Capsule', value: 'capsule'},
+                {label: 'Syrup', value: 'syrup'},
+                {label: 'Syringe', value: 'syringe'},
+              ]}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Dosage is required',
+                },
+              }}
+              selected={watch('dosageForm')}
+              setSelected={setDosage}
+            />
           </View>
-
-          <RadioGroup
-            control={control}
-            name="dosageForm"
-            title={'Dosage Form'}
-            titleSize={fonts.size.font14}
-            iconSize={15}
-            textSize={fonts.size.font12}
-            borderWidth={0}
-            values={[
-              {label: 'Tablet', value: 'tablet'},
-              {label: 'Capsule', value: 'capsule'},
-              {label: 'Syrup', value: 'syrup'},
-              {label: 'Syringe', value: 'syringe'},
-            ]}
-            rules={{
-              required: {
-                value: true,
-                message: 'Dosage is required',
-              },
-            }}
-            selected={watch('dosageForm')}
-            setSelected={setDosage}
-          />
           <View style={styles.row}>
             <ValidateInputField
               placeholder="Enter dosage"
@@ -137,6 +164,8 @@ export default MedicineAddModal = props => {
                   message: 'dosage size is required',
                 },
               }}
+              text={watch('dosageSize')}
+              keyboardType="numeric"
               containerWidth={dimensions.Width * 0.35}
               width="80%"
               inputHeight={dimensions.Height / 20}
@@ -164,14 +193,7 @@ export default MedicineAddModal = props => {
                   fontSize={fonts.size.font20}
                   i //sDisabled={frequency === 1}
                 />
-                <TextInput
-                  style={styles.freqInput}
-                  placeholder="Frequency"
-                  placeholderTextColor={colors.secondary1}
-                  keyboardType="numeric"
-                  value={frequency.toString()}
-                  onChangeText={text => setFrequency(text)}
-                />
+                <Text style={styles.freqInput}>{frequency}</Text>
                 <Button
                   radius={10}
                   label="+"
@@ -195,12 +217,14 @@ export default MedicineAddModal = props => {
               placeholderTextColor={colors.secondary1}
               control={control}
               name="duration"
+              keyboardType="numeric"
               rules={{
                 required: {
                   value: true,
                   message: 'duration is required',
                 },
               }}
+              text={watch('duration')}
               containerWidth={dimensions.Width * 0.35}
               width="80%"
               inputHeight={dimensions.Height / 20}
@@ -210,12 +234,14 @@ export default MedicineAddModal = props => {
               watch={watch('duration')}
             />
             <ValidateInputField
-              placeholder="Enter additional days"
+              placeholder="Enter days"
               placeholderTextColor={colors.secondary1}
               control={control}
+              keyboardType="numeric"
               name="addDays"
               containerWidth={dimensions.Width * 0.45}
               width="80%"
+              text={watch('addDays')}
               inputHeight={dimensions.Height / 20}
               fontSize={fonts.size.font14}
               title="Additional Days"
@@ -235,6 +261,7 @@ export default MedicineAddModal = props => {
                   message: 'detail is required',
                 },
               }}
+              text={watch('details')}
               containerWidth={dimensions.Width * 0.85}
               //width="80%"
               inputHeight={dimensions.Height / 10}
@@ -253,13 +280,22 @@ export default MedicineAddModal = props => {
               width={dimensions.Width / 3.5}
               height={dimensions.Height / 25}
               fontSize={fonts.size.font14}
+              onPress={() => {
+                reset();
+                setFrequency(1);
+                setLoading(false);
+                setModalVisible(false);
+              }}
             />
             <Button
-              label="Add"
+              label={edit ? 'Update' : 'Add'}
               type="filled"
               width={dimensions.Width / 3.5}
               height={dimensions.Height / 25}
               fontSize={fonts.size.font14}
+              isLoading={loading}
+              isDisabled={loading}
+              onPress={handleSubmit(onSubmit)}
             />
           </View>
         </View>
@@ -279,21 +315,8 @@ const styles = StyleSheet.create({
     fontSize: fonts.size.font18,
     fontWeight: fonts.weight.bold,
   },
-  checkContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: dimensions.Height * 0.03,
-    marginTop: -dimensions.Height * 0.009,
-    marginBottom: dimensions.Height * 0.01,
-  },
-  check: {
-    width: dimensions.Width / 15,
-    height: dimensions.Height / 15,
-    justifyContent: 'center',
-    //alignItems: 'center',
-  },
-  checkText: {
-    fontSize: fonts.size.font12,
+  radioContainer: {
+    marginTop: -dimensions.Height * 0.01,
   },
   row: {
     flexDirection: 'row',
@@ -323,9 +346,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.primary1,
     textAlign: 'center',
-    fontSize: fonts.size.font12,
+    textAlignVertical: 'center',
+    fontSize: fonts.size.font14,
   },
   ButtonContainer: {
+    marginTop: dimensions.Height * 0.01,
     height: dimensions.Height / 20,
     flexDirection: 'row',
     justifyContent: 'space-evenly',

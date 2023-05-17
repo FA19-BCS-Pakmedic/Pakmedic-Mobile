@@ -23,12 +23,19 @@ export default TicketAddModal = props => {
   const {control, handleSubmit, watch, setValue, reset} = useForm({
     mode: 'onChange',
     defaultValues: {
-      subject: '',
-      complaint: '',
-      complainee: '',
+      subject: item?.subject,
+      complaint: item?.complaint,
+      complainee: item?.complainee,
     },
   });
-  //console.log(item);
+
+  React.useEffect(() => {
+    reset({
+      subject: item?.subject,
+      complaint: item?.complaint,
+      complainee: item?.complainee,
+    });
+  }, [item]);
 
   const [open, setOpen] = useState(false);
   const [value, setVal] = useState(null);
@@ -63,10 +70,9 @@ export default TicketAddModal = props => {
             containerWidth={dimensions.Width * 0.8}
             inputHeight={dimensions.Height / 20}
             fontSize={fonts.size.font14}
-            text={item ? item.subject : ''}
+            text={watch('subject')}
             title="Subject"
             type="outlined"
-            watch={watch('subject')}
           />
           <ValidateInputField
             placeholder="Write complaint details"
@@ -82,7 +88,7 @@ export default TicketAddModal = props => {
             containerWidth={dimensions.Width * 0.8}
             inputHeight={dimensions.Height / 6}
             fontSize={fonts.size.font14}
-            text={item ? item.complaint : ''}
+            text={watch('complaint')}
             multiline
             isFlexStart
             title="Complaint"
