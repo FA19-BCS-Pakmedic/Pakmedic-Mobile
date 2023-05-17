@@ -9,6 +9,8 @@ import fonts from '../../../utils/styles/themes/fonts';
 
 import {useNavigation} from '@react-navigation/native';
 
+import {deleteComplaint} from '../../../services/complaintServices';
+
 const TicketOptionModal = props => {
   const {Visible, setModalVisible, navigation, item, onEdit} = props;
   //console.log(item);
@@ -16,7 +18,11 @@ const TicketOptionModal = props => {
     <ModalContainer
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
-      height={dimensions.Height / 3.5}
+      height={
+        item?.status === 'Pending'
+          ? dimensions.Height / 3.5
+          : dimensions.Height / 5
+      }
       width={dimensions.Width}
       borderColor={colors.primary1}
       type="bottom"
@@ -33,19 +39,29 @@ const TicketOptionModal = props => {
           <Text style={styles.text}>View Details</Text>
         </TouchableOpacity>
         <View style={styles.line} />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            setModalVisible(false);
-            onEdit(true);
-          }}>
-          <Text style={styles.text}>Edit</Text>
-        </TouchableOpacity>
-        <View style={styles.line} />
+        {item?.status === 'Pending' && (
+          <>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                setModalVisible(false);
+                onEdit(true);
+              }}>
+              <Text style={styles.text}>Edit</Text>
+            </TouchableOpacity>
+
+            <View style={styles.line} />
+          </>
+        )}
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
+            if (item.status === 'Pending') {
+              deleteComplaint(item._id);
+            } else {
+              alert('You can not delete this complaint');
+            }
             setModalVisible(false);
           }}>
           <Text style={styles.text}>Delete</Text>

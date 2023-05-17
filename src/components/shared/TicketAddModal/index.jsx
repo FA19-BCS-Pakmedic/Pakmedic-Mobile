@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
 import ModalContainer from '../../../containers/ModalContainer';
@@ -10,6 +10,13 @@ import fonts from '../../../utils/styles/themes/fonts';
 import DropDownPicker from 'react-native-dropdown-picker';
 DropDownPicker.setListMode('SCROLLVIEW');
 
+import {getDoctor} from '../../../services/doctorServices';
+import {getPatient} from '../../../services/patientServices';
+import {
+  createComplaint,
+  updateComplaint,
+} from '../../../services/complaintServices';
+
 import Button from '../Button';
 
 import {ValidateInputField} from '../Input';
@@ -19,27 +26,129 @@ import {useForm} from 'react-hook-form';
 import {useSelector} from 'react-redux';
 
 export default TicketAddModal = props => {
-  const {Visible, setModalVisible, navigation, item} = props;
+  const {Visible, setModalVisible, navigation, item, edit} = props;
+  const role = useSelector(state => state.role.role);
+  const id = useSelector(state => state.auth.user._id);
+
   const {control, handleSubmit, watch, setValue, reset} = useForm({
     mode: 'onChange',
     defaultValues: {
-      subject: item?.subject,
-      complaint: item?.complaint,
-      complainee: item?.complainee,
+      subject: '',
+      complaint: '',
+      complainee: '',
+      complaineeType: role === 'Doctor' ? 'Patient' : 'Doctor',
+      complainantType: role === 'Doctor' ? 'Doctor' : 'Patient',
+      complainant: id,
     },
   });
 
   React.useEffect(() => {
-    reset({
-      subject: item?.subject,
-      complaint: item?.complaint,
-      complainee: item?.complainee,
-    });
+    if (edit) {
+      reset({
+        subject: item?.subject,
+        complaint: item?.complaint,
+        complainee: item?.complainee,
+      });
+    } else {
+      reset({
+        subject: '',
+        complaint: '',
+        complainee: '',
+      });
+    }
   }, [item]);
 
   const [open, setOpen] = useState(false);
   const [value, setVal] = useState(null);
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  React.useEffect(() => {
+    if (edit) {
+      setVal(item?.complainee);
+      console.log('Complainee', item?.complainee);
+    } else {
+      setVal(null);
+    }
+  }, [edit, item]);
+
+  const getPatients = async () => {
+    try {
+      const res = await getPatient();
+      console.log(res.data);
+
+      const data = Object.values(res.data.data).map(item => {
+        return {
+          label: item.name,
+          value: item._id,
+        };
+      });
+      console.log(data);
+      setItems(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDoctors = async () => {
+    try {
+      const res = await getDoctor();
+      console.log(res.data);
+
+      const data = Object.values(res.data.data).map(item => {
+        console.log(item);
+        return {
+          label: item.name,
+          value: item._id,
+        };
+      });
+      console.log(data);
+      setItems(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (role === 'Doctor') {
+      getPatients();
+      console.log('getPatients');
+    } else {
+      getDoctors();
+    }
+  }, [setModalVisible]);
+
+  const onSubmit = async data => {
+    console.log(data);
+    if (value === null) {
+      alert('Please select complainee');
+    } else {
+      console.log('value', value);
+      data.complainee = value;
+      data.complaineeType = role === 'Doctor' ? 'Patient' : 'Doctor';
+      data.complainantType = role === 'Doctor' ? 'Doctor' : 'Patient';
+      data.complainant = id;
+
+      console.log('storing this data', data);
+      setLoading(true);
+      try {
+        if (!edit) {
+          const res = await createComplaint(data);
+          console.log(res.data);
+          setLoading(false);
+          setModalVisible(false);
+        } else {
+          const res = await updateComplaint(item._id, data);
+          console.log(res.data);
+          setLoading(false);
+          setModalVisible(false);
+        }
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <ModalContainer
@@ -104,13 +213,14 @@ export default TicketAddModal = props => {
               setOpen={setOpen}
               setValue={setVal}
               setItems={setItems}
+              searchable
               style={styles.dropDown}
               dropDownContainerStyle={styles.dropDownContainer}
-              placeholder="Home"
+              placeholder={'Select Complainee'}
               textStyle={{
                 fontSize: 12,
               }}
-              maxHeight={dimensions.Height * 0.15}
+              maxHeight={dimensions.Height * 0.2}
             />
           </View>
         </View>
@@ -122,13 +232,17 @@ export default TicketAddModal = props => {
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
+            onPress={() => setModalVisible(false)}
           />
           <Button
-            label="Post"
+            label={edit ? 'Update' : 'Create'}
             type="filled"
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
+            isLoading={loading}
+            isDisabled={loading}
+            onPress={handleSubmit(onSubmit)}
           />
         </View>
       </View>
@@ -163,12 +277,12 @@ const styles = StyleSheet.create({
     minHeight: dimensions.Height / 20,
     width: dimensions.Width * 0.8,
     backgroundColor: colors.white,
-    borderRadius: 5,
+    //borderRadius: 5,
     borderColor: colors.primary1,
     marginBottom: dimensions.Height * 0.01,
   },
   dropDownContainer: {
-    borderRadius: 5,
+    //borderRadius: 5,
     borderWidth: 0.1,
     backgroundColor: 'white',
   },

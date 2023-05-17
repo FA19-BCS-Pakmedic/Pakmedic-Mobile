@@ -20,6 +20,8 @@ DropDownPicker.setListMode('SCROLLVIEW');
 
 import TicketOptionModal from '../../../../components/shared/TicketOptionModal';
 
+import {getAllComplaints} from '../../../../services/complaintServices';
+
 //import {styles} from './styles';
 
 const Home = props => {
@@ -28,7 +30,7 @@ const Home = props => {
   const [items, setItems] = useState([
     {label: 'All', value: 'All'},
     {label: 'On Hold', value: 'on Hold'},
-    {label: 'In Progress', value: 'In Progress'},
+    {label: 'Pending', value: 'Pending'},
     {label: 'Resolved', value: 'Resolved'},
   ]);
 
@@ -42,56 +44,80 @@ const Home = props => {
 
   const role = useSelector(state => state.role.role);
 
-  const complaints = [
-    {
-      id: 3410,
-      subject: 'Complaint about pending dues',
-      complaint:
-        'I have been paying my dues on time but still they are pending and I am being charged with late fees',
-      complainee: 'Mr. Ali',
-      status: 'on Hold',
-    },
-    {
-      id: 3412,
-      subject: 'Complaint about pending dues',
-      complaint:
-        'I have been paying my dues on time but still they are pending and I am being charged with late fees',
-      complainee: 'Mr. Ali',
-      status: 'In Progress',
-    },
-    {
-      id: 2422,
-      subject: 'Complaint about pending dues',
-      complaint:
-        'I have been paying my dues on time but still they are pending and I am being charged with late fees',
-      complainee: 'Mr. Ali',
-      status: 'Resolved',
-    },
-    {
-      id: 3710,
-      subject: 'Complaint about pending dues',
-      complaint:
-        'I have been paying my dues on time but still they are pending and I am being charged with late fees',
-      complainee: 'Mr. Ali',
-      status: 'on Hold',
-    },
-    {
-      id: 3416,
-      subject: 'Complaint about pending dues',
-      complaint:
-        'I have been paying my dues on time but still they are pending and I am being charged with late fees',
-      complainee: 'Mr. Ali',
-      status: 'In Progress',
-    },
-    {
-      id: 3492,
-      subject: 'Complaint about pending dues',
-      complaint:
-        'I have been paying my dues on time but still they are pending and I am being charged with late fees',
-      complainee: 'Mr. Ali',
-      status: 'Resolved',
-    },
-  ];
+  // const Complaints = [
+  //   {
+  //     id: 3410,
+  //     subject: 'Complaint about pending dues',
+  //     complaint:
+  //       'I have been paying my dues on time but still they are pending and I am being charged with late fees',
+  //     complainee: 'Mr. Ali',
+  //     status: 'on Hold',
+  //   },
+  //   {
+  //     id: 3412,
+  //     subject: 'Complaint about pending dues',
+  //     complaint:
+  //       'I have been paying my dues on time but still they are pending and I am being charged with late fees',
+  //     complainee: 'Mr. Ali',
+  //     status: 'In Progress',
+  //   },
+  //   {
+  //     id: 2422,
+  //     subject: 'Complaint about pending dues',
+  //     complaint:
+  //       'I have been paying my dues on time but still they are pending and I am being charged with late fees',
+  //     complainee: 'Mr. Ali',
+  //     status: 'Resolved',
+  //   },
+  //   {
+  //     id: 3710,
+  //     subject: 'Complaint about pending dues',
+  //     complaint:
+  //       'I have been paying my dues on time but still they are pending and I am being charged with late fees',
+  //     complainee: 'Mr. Ali',
+  //     status: 'on Hold',
+  //   },
+  //   {
+  //     id: 3416,
+  //     subject: 'Complaint about pending dues',
+  //     complaint:
+  //       'I have been paying my dues on time but still they are pending and I am being charged with late fees',
+  //     complainee: 'Mr. Ali',
+  //     status: 'In Progress',
+  //   },
+  //   {
+  //     id: 3492,
+  //     subject: 'Complaint about pending dues',
+  //     complaint:
+  //       'I have been paying my dues on time but still they are pending and I am being charged with late fees',
+  //     complainee: 'Mr. Ali',
+  //     status: 'Resolved',
+  //   },
+  // ];
+
+  const [complaints, setComplaints] = useState([]);
+
+  const getComplaints = async () => {
+    setLoading(true);
+    try {
+      const res = await getAllComplaints();
+      if (res) {
+        //console.log(res.data.data.data);
+        setComplaints(
+          res.data.data.data.filter(item => item.complainantType === role),
+        );
+      }
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    getComplaints();
+    //console.log(complaints);
+  }, [OptionModalVisible, AddModalVisible]);
 
   return (
     <StaticContainer
@@ -140,7 +166,7 @@ const Home = props => {
                 : complaints.filter(item => item.status === value)
             }
             showsVerticalScrollIndicator={false}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item._id}
             renderItem={({item}) => (
               <TouchableOpacity
                 onPress={async () => {
@@ -150,12 +176,14 @@ const Home = props => {
                 <View style={styles.card}>
                   <View style={styles.cardLeft}>
                     <Text style={styles.cardHeading}>{item.subject}</Text>
-                    <Text style={styles.cardtext}>Ticket # {item.id}</Text>
+                    <Text style={styles.cardtext}>
+                      Ticket # {item.ticketNumber}
+                    </Text>
                   </View>
                   <View style={styles.cardRight}>
                     {item.status === 'on Hold' ? (
                       <StatusR />
-                    ) : item.status === 'In Progress' ? (
+                    ) : item.status === 'Pending' ? (
                       <StatusY />
                     ) : (
                       <StatusG />
@@ -182,11 +210,13 @@ const Home = props => {
           Visible={AddModalVisible}
           setModalVisible={setAddVisible}
           item={item}
+          edit={true}
         />
       ) : (
         <TicketAddModal
           Visible={AddModalVisible}
           setModalVisible={setAddVisible}
+          edit={false}
         />
       )}
 

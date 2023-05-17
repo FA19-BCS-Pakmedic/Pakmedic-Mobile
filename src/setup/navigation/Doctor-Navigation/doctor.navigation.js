@@ -89,7 +89,7 @@ const DoctorNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="PrescriptionManagement">
+      initialRouteName="ComplaintDesk">
       <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
       <Stack.Screen name="FinanceHome" component={FinanceHome} />
       <Stack.Screen name="Support Communities" component={Support} />

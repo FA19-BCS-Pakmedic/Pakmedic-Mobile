@@ -19,29 +19,29 @@ const Complaint = props => {
   return (
     <ScrollContainer
       customHeaderEnable
-      customHeaderName={`Ticket # ${item.id}`}
+      customHeaderName={`Ticket # ${item?.ticketNumber}`}
       isBack
       isHorizontalPadding>
       <View style={styles.container}>
         <View style={styles.subjContainer}>
           <View style={styles.Left}>
             <Text style={styles.Heading}>Subject</Text>
-            <Text style={styles.text}>{item.subject}</Text>
+            <Text style={styles.text}>{item?.subject}</Text>
           </View>
           <View style={styles.Right}>
-            {item.status === 'on Hold' ? (
+            {item?.status === 'on Hold' ? (
               <StatusR />
-            ) : item.status === 'In Progress' ? (
+            ) : item?.status === 'Pending' ? (
               <StatusY />
             ) : (
               <StatusG />
             )}
-            <Text style={styles.statusText}>{item.status}</Text>
+            <Text style={styles.statusText}>{item?.status}</Text>
           </View>
         </View>
         <View style={styles.detailContainer}>
           <Text style={styles.Heading}>Complaint</Text>
-          <Text style={styles.complainText}>{item.complaint}</Text>
+          <Text style={styles.complainText}>{item?.complaint}</Text>
         </View>
         <View style={styles.complaineeContainer}>
           <Text style={styles.Heading}>Complainee</Text>
@@ -54,7 +54,7 @@ const Complaint = props => {
                 />
               </View>
               <View style={styles.detailRight}>
-                <Text style={styles.text}>{item.complainee}</Text>
+                <Text style={styles.text}>{item?.complainee}</Text>
                 <Text style={styles.text}>+92-332-xxxxx</Text>
               </View>
             </View>
@@ -74,7 +74,7 @@ const Complaint = props => {
 
         <View style={styles.reviewContainer}>
           <Text style={styles.Heading}>Review Comment</Text>
-          {item.status === 'In Progress' ? (
+          {item?.status === 'Pending' ? (
             <Text style={styles.reviewText}>No review comment yet</Text>
           ) : (
             <Text style={styles.reviewText}>
