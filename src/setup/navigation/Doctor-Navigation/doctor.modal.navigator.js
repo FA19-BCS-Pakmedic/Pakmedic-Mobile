@@ -44,7 +44,12 @@ const DoctorModalNavigator = props => {
         </TouchableOpacity>
         <View style={styles.line} />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setModalVisible(false);
+            navigation.navigate('ComplaintDesk');
+          }}>
           <Text style={styles.text}>Complaint Desk</Text>
         </TouchableOpacity>
         <View style={styles.line} />
