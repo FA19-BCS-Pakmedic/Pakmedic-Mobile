@@ -10,8 +10,21 @@ import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 import DoctorService from './DoctorService';
+import {useNavigation} from '@react-navigation/native';
 
 const DoctorCard = ({doctor}) => {
+  const navigation = useNavigation();
+
+  handleBookingPress = service => {
+    navigation.navigate('App', {
+      screen: 'BookAppointment',
+      params: {
+        doctor: doctor,
+        service: service,
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.doctorContent}>
@@ -56,7 +69,13 @@ const DoctorCard = ({doctor}) => {
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {doctor.services.length > 0 &&
           doctor.services.map((service, index) => {
-            return <DoctorService key={index} service={service} />;
+            return (
+              <DoctorService
+                key={index}
+                service={service}
+                onPressBooking={handleBookingPress}
+              />
+            );
           })}
       </ScrollView>
     </View>

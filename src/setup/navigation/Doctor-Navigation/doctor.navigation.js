@@ -35,6 +35,9 @@ import {useNavigation} from '@react-navigation/native';
 import ResultsScreen from '../../../screens/doctor/Assistant/ResultsScreen';
 
 import Notifications from '../../../screens/shared/Notifications';
+import RescheduleAppointment from '../../../screens/shared/Appointment-management/Reschedule-appointment';
+import CancelAppointment from '../../../screens/shared/Appointment-management/Cancel-appointment';
+import AppointmentDetails from '../../../screens/shared/Appointment-management/Appointment-details';
 
 const Stack = createNativeStackNavigator();
 
@@ -102,6 +105,12 @@ const DoctorNavigation = () => {
       <Stack.Screen name="IncomingCall" component={IncomingCall} />
       <Stack.Screen name="Post" component={Post} />
       <Stack.Screen name="Notifications" component={Notifications} />
+      <Stack.Screen name="AppointmentDetails" component={AppointmentDetails} />
+      <Stack.Screen
+        name="RescheduleAppointment"
+        component={RescheduleAppointment}
+      />
+      <Stack.Screen name="CancelAppointment" component={CancelAppointment} />
     </Stack.Navigator>
   );
 };

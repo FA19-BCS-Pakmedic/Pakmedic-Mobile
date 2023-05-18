@@ -13,7 +13,7 @@ import MenuIcon from '../../../assets/svgs/menuIcon.svg';
 //Screens
 import Home from '../../../screens/doctor/Authentication/Dashboard';
 import Assistant from '../../../screens/doctor/Assistant/Assistant-home';
-import Appointment from '../../../screens/doctor/Appointment-management/Appointments';
+import Appointments from '../../../screens/shared/Appointment-management/Appointments';
 import Telemedicine from '../../../screens/doctor/Telemedicine/Patients-list';
 import Modal from './doctor.modal.navigator';
 
@@ -141,7 +141,7 @@ const DoctorTabStack = props => {
         })}>
         <Tab.Screen name="HomeScreen" component={Home} />
         <Tab.Screen name="AssistantScreen" component={Assistant} />
-        <Tab.Screen name="AppointmentScreen" component={Appointment} />
+        <Tab.Screen name="AppointmentScreen" component={Appointments} />
         <Tab.Screen name="TelemedicineScreen" component={UsersList} />
         <Tab.Screen
           name="MenuScreen"

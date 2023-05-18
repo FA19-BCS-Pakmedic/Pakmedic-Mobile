@@ -10,7 +10,7 @@ import colors from '../../../../utils/styles/themes/colors';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 import fonts from '../../../../utils/styles/themes/fonts';
 
-const DoctorService = ({service}) => {
+const DoctorService = ({service, onPressBooking}) => {
   const getDays = daysArr => {
     // convert array of days into a string with days separated by -
     let days = '';
@@ -28,7 +28,11 @@ const DoctorService = ({service}) => {
     <View style={styles.container}>
       <View style={styles.infoContainer}>
         <View style={styles.iconContainer}>
-          <PhysicalCheckupIcon />
+          {!service.isOnline ? (
+            <PhysicalCheckupIcon height={dimensions.Height / 30} />
+          ) : (
+            <VideoCallIcon height={dimensions.Height / 30} />
+          )}
         </View>
         <View style={styles.serviceInfoContainer}>
           <Text style={styles.title}>
@@ -61,7 +65,9 @@ const DoctorService = ({service}) => {
       <View style={styles.btnContainer}>
         <Button
           label={'Book Appointment'}
-          onPress={() => {}}
+          onPress={() => {
+            onPressBooking(service);
+          }}
           width={'100%'}
           type="filled"
         />
@@ -88,6 +94,12 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginRight: dimensions.Width / 80,
   },
+  icon: {
+    width: dimensions.Width / 10,
+    height: dimensions.Width / 10,
+    borderWidth: 1,
+  },
+
   serviceInfoContainer: {
     width: '89.5%',
   },

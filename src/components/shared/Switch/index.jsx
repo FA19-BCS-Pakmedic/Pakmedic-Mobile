@@ -4,7 +4,7 @@ import dimensions from '@/utils/styles/themes/dimensions';
 import fonts from '@/utils/styles/themes/fonts';
 import colors from '@/utils/styles/themes/colors';
 
-const EhrSwitch = ({options, role, onOptionPress}) => {
+const Switch = ({options, role, onOptionPress}) => {
   return (
     <View style={styles().container}>
       {options.map((option, index) => {
@@ -22,7 +22,7 @@ const EhrSwitch = ({options, role, onOptionPress}) => {
   );
 };
 
-export default EhrSwitch;
+export default Switch;
 
 const styles = isActive =>
   StyleSheet.create({
