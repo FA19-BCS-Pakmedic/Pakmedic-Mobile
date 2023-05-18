@@ -31,13 +31,14 @@ const CommunitySearch = () => {
 const styles = StyleSheet.create({
   root: {
     width: dimensions.Width / 2.3,
-    height: dimensions.Height / 20,
+    height: dimensions.Height / 22,
     borderColor: colors.primary1,
     borderWidth: 1,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
+    backgroundColor: colors.white,
   },
   input: {
     width: dimensions.Width / 3,

@@ -11,6 +11,8 @@ import Button from '../../shared/Button';
 import {ModalInputField, ValidateInputField} from '../../shared/Input';
 import AvailableTreatmentsCard from './Card';
 
+import {useCustomToast} from '../../../hooks/useCustomToast';
+
 export default function AvailableTreatments({setStoredUser, treatments}) {
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -31,6 +33,8 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
       name: '',
     },
   });
+
+  const {showToast} = useCustomToast();
 
   console.log(treatments);
 

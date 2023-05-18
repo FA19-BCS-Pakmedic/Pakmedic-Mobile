@@ -8,7 +8,7 @@ import ROLES from '@/utils/constants/ROLES';
 
 export default Button = ({
   isDisabled,
-  width,
+  width = dimensions.Width / 2.6,
   type,
   label,
   onPress,
@@ -20,7 +20,7 @@ export default Button = ({
       style={[
         isDisabled
           ? styles(type, width).disabled
-          : styles(type, width, borderColor, role).button,
+          : styles(type, width, borderColor, role, width).button,
       ]}
       activeOpacity={isDisabled ? 1 : 0.2}
       onPress={() => {
@@ -57,7 +57,7 @@ const styles = (type, width, borderColor, role) =>
           : colors.white,
       borderWidth: borderColor ? 2 : 0,
       borderColor: borderColor ? borderColor : colors.primary1,
-      width: dimensions.Width / 2.6,
+      width: width,
     },
 
     disabled: {

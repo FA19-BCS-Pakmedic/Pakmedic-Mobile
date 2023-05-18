@@ -37,7 +37,8 @@ export const ValidateDropdown = ({
               scrollViewProps={{
                 decelerationRate: 'fast',
               }}
-              maxHeight={dimensions.Height / 6.5}
+              searchable
+              maxHeight={dimensions.Height / 4.5}
               open={open}
               value={value}
               items={items}
