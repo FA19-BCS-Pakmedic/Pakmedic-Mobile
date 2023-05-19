@@ -143,7 +143,9 @@ const OnlinePayment = () => {
     let response;
     setBtnLoading(true);
     try {
-      response = !edit ? await createPaymentMethod(data) : null;
+      response = await createPaymentMethod(data);
+
+      console.log(response.data.data.paymentMethod)
 
       const paymentMethod = response?.data?.data?.paymentMethod;
 

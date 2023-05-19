@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import openMap, {createOpenLink} from 'react-native-open-maps';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -17,14 +17,58 @@ import CalendarIcon from '../../../../assets/svgs/Appointment.svg';
 import {getDate} from '../../../../utils/helpers/getDate';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 import colors from '../../../../utils/styles/themes/colors';
+import { getAppointmentById, getAppointmentRequests, getAppointmentsByUserId } from '../../../../services/appointmentServices';
+import { useCustomToast } from '../../../../hooks/useCustomToast';
+import Loader from '../../../../components/shared/Loader';
 
 const AppointmentDetails = () => {
   const route = useRoute();
-  const {appointment} = route.params;
-  console.log(appointment.service.hospital);
+
+  let appointmentId = route.params?.data;
+
+
+  // if(!appointment) {
+  //   console.log(route.params, "ROUTE PARAMS");
+  //   appointment = route.params.data.appointmentId;
+  // }
+
+  const [appointment, setAppointment] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const navigation = useNavigation();
   const travelType = 'drive';
-  const address = appointment.service.hospital?.address;
+  const address = appointment?.service?.hospital?.address;
+
+  const { showToast } = useCustomToast(); 
+
+  useEffect(() => {
+
+    const getAppointment = async () => {
+      try {
+        setLoading(true);
+        const response = await getAppointmentById(appointmentId);
+
+      
+
+        if(response.data && response.data.status === "success") {
+          console.log(response.data.data.data);
+          setAppointment(response.data.data.data);
+        }
+
+      }catch(err) {
+        showToast(err.message, 'danger');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if(appointmentId) {
+      getAppointment()
+    }
+
+  }, [appointmentId]);
+
+
 
   const [end] = useState(
     address ? `${address?.address} ${address?.city} ${address?.country}` : null,
@@ -34,9 +78,9 @@ const AppointmentDetails = () => {
 
   const getRoleBasedInfo = property => {
     if (role === ROLES.doctor) {
-      return appointment.patient[property];
+      return appointment?.patient[property];
     } else {
-      return appointment.doctor[property];
+      return appointment?.doctor[property];
     }
   };
 
@@ -54,7 +98,7 @@ const AppointmentDetails = () => {
   };
 
   const getServiceInfo = () => {
-    return appointment.service.isOnline ? (
+    return appointment?.service.isOnline ? (
       <>
         <View
           style={[
@@ -89,6 +133,13 @@ const AppointmentDetails = () => {
       </>
     );
   };
+
+
+  if(loading) 
+    return <Loader title={'loading appointment data....'} />
+
+
+
 
   return (
     <StaticContainer
@@ -138,7 +189,7 @@ const AppointmentDetails = () => {
                 <CalendarIcon width={20} />
               </View>
               <Text style={styles.appointmentInfoText}>
-                {getDate(appointment.date)}
+                {getDate(appointment?.date)}
               </Text>
             </View>
 
@@ -155,7 +206,7 @@ const AppointmentDetails = () => {
                 ]}>
                 <ClockIcon width={20} />
               </View>
-              <Text style={styles.appointmentInfoText}>{appointment.time}</Text>
+              <Text style={styles.appointmentInfoText}>{appointment?.time}</Text>
             </View>
 
             <View style={styles.appointmentInfoRow}>{getServiceInfo()}</View>

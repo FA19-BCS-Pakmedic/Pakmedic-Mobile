@@ -54,21 +54,31 @@ const onMessageReceived = async message => {
   await notifee.displayNotification(JSON.parse(message.data.notifee));
 };
 
-const onBackgroundMessage = navigation => {
-  notifee.onBackgroundEvent(async ({type, detail}) => {
+
+const onForegroundMessage = navigation => {
+  notifee.onForegroundEvent(async ({type, detail}) => {
+
+    console.log("INSIDE notiffeee")
+
     const {notification, pressAction} = detail;
 
     // Check if the user pressed the "Mark as read" action
+    console.log(notification);
 
-    console.log('Inside onBackgroundEvent');
+    console.log('Inside onForegroundEvent');
+
+    console.log(type);
+
+
     if (type === EventType.PRESS) {
       // Update external API
       console.log('Pressed Notification');
 
+
       if (notification?.data?.navigate) {
         navigation.navigate('App', {
           screen: notification?.data?.navigate,
-          params: {image: notification?.data?.image},
+          params: {image: notification?.data?.image, data: notification?.data?.data},
         });
       }
 
@@ -76,6 +86,44 @@ const onBackgroundMessage = navigation => {
       await notifee.cancelNotification(notification.id);
     }
   });
+}
+
+const onBackgroundMessage = navigation => {
+
+  console.log("HERE");
+
+  notifee.onBackgroundEvent(async ({type, detail}) => {
+
+    console.log("INSIDE notiffeee")
+
+    const {notification, pressAction} = detail;
+
+    // Check if the user pressed the "Mark as read" action
+    console.log(notification);
+
+    console.log('Inside onBackgroundEvent');
+
+    console.log(type);
+
+
+    if (type === EventType.PRESS) {
+      // Update external API
+      console.log('Pressed Notification');
+
+
+      if (notification?.data?.navigate) {
+        navigation.navigate('App', {
+          screen: notification?.data?.navigate,
+          params: {image: notification?.data?.image, data: notification?.data},
+        });
+      }
+
+      // Remove the notification
+      await notifee.cancelNotification(notification.id);
+    }
+  });
+
+  
 };
 
 const DoctorNavigation = () => {
@@ -84,12 +132,13 @@ const DoctorNavigation = () => {
     messaging().onMessage(onMessageReceived);
     messaging().setBackgroundMessageHandler(onMessageReceived);
     onBackgroundMessage(navigation);
+    onForegroundMessage(navigation);
   }, []);
 
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="ComplaintDesk">
+      initialRouteName="DoctorTabStack">
       <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
       <Stack.Screen name="FinanceHome" component={FinanceHome} />
       <Stack.Screen name="Support Communities" component={Support} />

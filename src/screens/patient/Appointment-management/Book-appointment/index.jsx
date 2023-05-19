@@ -32,11 +32,8 @@ import PaymentOnline from '../../../../assets/svgs/Payment-online.svg';
 
 import ModalContainer from '../../../../containers/ModalContainer';
 import {createAppointment} from '../../../../services/appointmentServices';
-<<<<<<< HEAD
 import ConfirmationAlert from '../../../../components/shared/ConfirmationAlert';
 import PopupAlerts from '../../../../components/shared/PopupAlerts';
-=======
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
 
 const {useNavigation, useRoute} = require('@react-navigation/native');
 
@@ -54,13 +51,10 @@ const BookAppointment = () => {
   const [dateError, setDateError] = useState(false);
   const [timeError, setTimeError] = useState(false);
   const [checked, setChecked] = useState(false);
-<<<<<<< HEAD
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [alertName, setAlertName] = useState('LoginSuccess');
   const [isModalVisible, setModalVisible] = useState(false);
-=======
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
 
   const {doctor, service} = route.params;
   const [times, setTimes] = useState(
@@ -78,7 +72,6 @@ const BookAppointment = () => {
     }
   };
 
-<<<<<<< HEAD
   const openConfirmationModal = () => {
     return (
       <ConfirmationAlert
@@ -105,8 +98,6 @@ const BookAppointment = () => {
     );
   };
 
-=======
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
   const bookAppointment = async () => {
     const data = {
       doctor: doctor._id,
@@ -120,7 +111,6 @@ const BookAppointment = () => {
     try {
       const response = await createAppointment(data);
       console.log(response.data);
-<<<<<<< HEAD
       setMessage('Appointment booked successfully');
       setAlertName('LoginSuccess');
     } catch (err) {
@@ -129,10 +119,6 @@ const BookAppointment = () => {
       setAlertName('LoginFailure');
     } finally {
       setModalVisible(true);
-=======
-    } catch (err) {
-      console.log(err);
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
     }
   };
 
@@ -241,11 +227,7 @@ const BookAppointment = () => {
       params: {
         doctorId: doctor._id,
         service,
-<<<<<<< HEAD
         date: selectedDate.toString(),
-=======
-        date: selectedDate,
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
         time: selectedTime,
       },
     });
@@ -279,16 +261,12 @@ const BookAppointment = () => {
             </View>
 
             <View style={styles.modalControl}>
-<<<<<<< HEAD
               <TouchableOpacity
                 style={styles.option}
                 onPress={() => {
                   setOpen(false);
                   setVisible(true);
                 }}>
-=======
-              <TouchableOpacity style={styles.option} onPress={bookAppointment}>
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
                 <PaymentPerson width={25} />
                 <Text style={styles.optionText}>In-Person Payment</Text>
               </TouchableOpacity>
@@ -305,10 +283,7 @@ const BookAppointment = () => {
       customHeaderName={'Book Appointment'}
       customHeaderEnable={true}>
       {openPaymentMethodModal()}
-<<<<<<< HEAD
       {openConfirmationModal()}
-=======
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
       <View style={styles.container}>
         {/* doctors information section */}
         <ServiceInformation

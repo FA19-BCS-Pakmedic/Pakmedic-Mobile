@@ -23,11 +23,8 @@ export default Button = ({
   fontSize = fonts.size.font16,
   fontColor = colors.secondary1,
   children,
-<<<<<<< HEAD
-=======
   color = colors.primary1,
   radius = 50,
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
 }) => {
   return (
     <TouchableOpacity
@@ -89,11 +86,7 @@ const styles = (
       height: height ? height : dimensions.Height / 17,
       justifyContent: 'center',
       alignItems: 'center',
-<<<<<<< HEAD
-      borderRadius: 50,
-=======
       borderRadius: radius,
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
       borderWidth: 1,
       marginVertical: marginVertical ? marginVertical : dimensions.Height / 60,
       backgroundColor: type === 'filled' ? color : colors.white,
@@ -108,11 +101,6 @@ const styles = (
       alignItems: 'center',
       borderRadius: 50,
       // marginVertical: dimensions.Height / 60,
-<<<<<<< HEAD
-      marginVertical: marginVertical ? marginVertical : dimensions.Height / 60,
-
-=======
->>>>>>> 1a811e936fd3a05be3b0720c114d697b366b9353
       backgroundColor: colors.gray1,
       width: width,
     },
