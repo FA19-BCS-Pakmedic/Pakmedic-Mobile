@@ -10,7 +10,6 @@ import React, {useState} from 'react';
 import colors from '../../../../utils/styles/themes/colors';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 import StaticContainer from '../../../../containers/StaticContainer';
-import BackHeader from '../../../../components/shared/BackHeader';
 import Search from '../../../../components/shared/CommunitySearch';
 import Logo from '../../../../assets/svgs/community-logo';
 
@@ -31,7 +30,12 @@ import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
 const Home = ({navigation}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState([
+    {label: 'All', value: 'All'},
+    {label: 'On Hold', value: 'on Hold'},
+    {label: 'In Progress', value: 'In Progress'},
+    {label: 'Resolved', value: 'Resolved'},
+  ]);
   const [loading, setLoading] = useState(false);
 
   const [jcommunities, setjCommunities] = useState([]);

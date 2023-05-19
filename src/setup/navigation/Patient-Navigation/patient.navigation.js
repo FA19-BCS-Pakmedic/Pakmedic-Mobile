@@ -34,6 +34,9 @@ import AppointmentDetails from '../../../screens/shared/Appointment-management/A
 import RescheduleAppointment from '../../../screens/shared/Appointment-management/Reschedule-appointment';
 import CancelAppointment from '../../../screens/shared/Appointment-management/Cancel-appointment';
 
+import MedicineScheduler from '../../../screens/patient/Medicine-reminder/Medicine-scheduler';
+import MedicineDetails from '../../../screens/patient/Medicine-reminder/Medicine-details';
+
 const Stack = createNativeStackNavigator();
 
 const onMessageReceived = async message => {
@@ -99,6 +102,8 @@ const PatientNavigation = () => {
         component={RescheduleAppointment}
       />
       <Stack.Screen name="CancelAppointment" component={CancelAppointment} />
+      <Stack.Screen name="MedicineScheduler" component={MedicineScheduler} />
+      <Stack.Screen name="MedicineDetails" component={MedicineDetails} />
     </Stack.Navigator>
   );
 };

@@ -1,4 +1,3 @@
-
 import AllergyIcon from '../../assets/images/Allergy.png';
 import CardiologyIcon from '../../assets/images/Cardiology.png';
 import DentistryIcon from '../../assets/images/Dentistry.png';
@@ -53,5 +52,4 @@ export const Specialists = [
   {label: 'Nephrologist', value: 'Nephrologist', icon: NephrologyIcon},
   {label: 'Obstetrician', value: 'Obstetrician', icon: ObstetricsIcon},
   {label: 'Orthopedist', value: 'Orthopedist', icon: OrthopedicsIcon},
-
 ];
