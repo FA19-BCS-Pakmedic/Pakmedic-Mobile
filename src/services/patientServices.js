@@ -38,6 +38,7 @@ export const resetForgotPasswordPatient = data =>
 //get patient if he is logged in
 export const getPatient = () => API.get('patients/');
 
+export const getPatients = () => API.get('patients/all');
 // add avatar
 export const addAvatar = data => API.post('patients/avatar', data);
 

@@ -259,7 +259,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   addTicket: {
-    //zIndex: -1000,
     alignItems: 'flex-end',
     marginRight: dimensions.Width / 20,
     marginTop: dimensions.Height * 0.02,
