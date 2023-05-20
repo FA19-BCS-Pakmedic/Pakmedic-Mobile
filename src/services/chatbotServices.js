@@ -1,13 +1,3 @@
-import axios from 'axios';
-
-//import api endpoint
-import {apiEndpoint} from '../utils/constants/APIendpoint';
-
-const API = axios.create({
-  baseURL: `${apiEndpoint}chatbot`,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+import API from '../utils/helpers/axios';
 
 export const chatWithBot = data => API.post('/chat', data);

@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
   },
   flexVertical: {
     flexDirection: 'column',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 10,
   },
@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
   text2: {
     fontSize: fonts.size.font14,
     color: colors.secondary1,
-    width: dimensions.Width / 1.6,
+    width: dimensions.Width / 1.075,
   },
   flatList: {
     marginTop: dimensions.Height / 50,

@@ -1,12 +1,4 @@
-import axios from 'axios';
-
-//import api end point
-import {apiEndpoint} from '../utils/constants/APIendpoint';
-
-const API = axios.create({
-  baseURL: `${apiEndpoint}`,
-  withCredentials: true,
-});
+import API from '../utils/helpers/axios';
 
 //PRESCRIPTION API
 

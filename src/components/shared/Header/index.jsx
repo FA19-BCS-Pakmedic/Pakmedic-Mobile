@@ -34,6 +34,7 @@ import {voximplant} from '../../../services/voxServices';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 import {DefaultTheme, Menu, Divider, Provider} from 'react-native-paper';
+import logout from '../../../utils/helpers/logout';
 
 const Header = ({color}) => {
   const navigation = useNavigation();
@@ -67,14 +68,14 @@ const Header = ({color}) => {
 
   const dispatch = useDispatch();
 
-  const logout = async () => {
-    await deviceStorage.deleteItem('jwtToken');
-    await voximplant.disconnect();
-    dispatch(authLogout());
-    navigation.replace('Auth', {
-      screen: 'Login',
-    });
-  };
+  // const logout = async () => {
+  //   await deviceStorage.deleteItem('jwtToken');
+  //   await voximplant.disconnect();
+  //   dispatch(authLogout());
+  //   navigation.replace('Auth', {
+  //     screen: 'Login',
+  //   });
+  // };
 
   const openMenu = () => {
     setVisible(true);
@@ -162,7 +163,9 @@ const Header = ({color}) => {
             title="Profile"
           />
           <Divider />
-          <Menu.Item onPress={logout} title="Logout" />
+          <Menu.Item onPress={() => {
+            logout(dispatch, authLogout, navigation);
+          }} title="Logout" />
           <Divider />
           <Menu.Item
             onPress={() => {

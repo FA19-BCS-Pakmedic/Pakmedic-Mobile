@@ -33,6 +33,7 @@ import notifee, {EventType, AndroidImportance} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import {useEffect} from 'react';
 
+
 import {useNavigation} from '@react-navigation/native';
 import ResultsScreen from '../../../screens/doctor/Assistant/ResultsScreen';
 
@@ -44,7 +45,14 @@ import AppointmentDetails from '../../../screens/shared/Appointment-management/A
 import PrescriptionManagement from '../../../screens/doctor/Prescription/Prescription-management';
 import FinanceHome from '../../../screens/shared/Finance/Home';
 
+import { eventEmitter } from '../../../utils/helpers/axios';
+import logout from '../../../utils/helpers/logout';
+import { useDispatch } from 'react-redux';
+import { authLogout } from '../../redux/actions';
+
 const Stack = createNativeStackNavigator();
+
+
 
 const onMessageReceived = async message => {
   notifee.createChannel({
@@ -86,12 +94,26 @@ const onBackgroundMessage = navigation => {
 };
 
 const DoctorNavigation = () => {
+
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+  
+
+
   useEffect(() => {
     messaging().onMessage(onMessageReceived);
     messaging().setBackgroundMessageHandler(onMessageReceived);
     onBackgroundMessage(navigation);
     onForegroundMessage(navigation);
+
+    eventEmitter.on("logout", () => {
+
+      logout(dispatch, authLogout, navigation);
+
+    });
+    
+
   }, []);
 
   return (
