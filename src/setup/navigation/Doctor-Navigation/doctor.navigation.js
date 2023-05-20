@@ -43,53 +43,29 @@ import AppointmentDetails from '../../../screens/shared/Appointment-management/A
 
 import PrescriptionManagement from '../../../screens/doctor/Prescription/Prescription-management';
 import FinanceHome from '../../../screens/shared/Finance/Home';
+import {eventEmitter} from '../../../../index.js';
 
 const Stack = createNativeStackNavigator();
-
-const onMessageReceived = async message => {
-  notifee.createChannel({
-    id: 'default',
-    name: 'Default Channel',
-  });
-  await notifee.displayNotification(JSON.parse(message.data.notifee));
-};
-
-// const onBackgroundMessage = navigation => {
-//   notifee.onBackgroundEvent(async ({type, detail}) => {
-//     const {notification, pressAction} = detail;
-
-//     // Check if the user pressed the "Mark as read" action
-
-//     console.log('Inside onBackgroundEvent');
-//     if (type === EventType.PRESS) {
-//       // Update external API
-//       console.log('Pressed Notification');
-
-//       if (notification?.data?.navigate) {
-//         navigation.navigate('App', {
-//           screen: notification?.data?.navigate,
-//           params: {image: notification?.data?.image},
-//         });
-//       }
-
-//       // Remove the notification
-//       await notifee.cancelNotification(notification.id);
-//     }
-//   });
-// };
 
 const DoctorNavigation = () => {
   const navigation = useNavigation();
   useEffect(() => {
-    messaging().onMessage(onMessageReceived);
-    // messaging().setBackgroundMessageHandler(onMessageReceived);
-    // onBackgroundMessage(navigation);
+    eventEmitter.on('notificationReceived', notification => {
+      if (notification?.data?.navigate) {
+        navigation.navigate(notification?.data?.navigate, {
+          params: {
+            image: notification?.data?.image,
+            data: notification?.data?.data,
+          },
+        });
+      }
+    });
   }, []);
 
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="ComplaintDesk">
+      initialRouteName="DoctorTabStack">
       <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
       <Stack.Screen name="FinanceHome" component={FinanceHome} />
       <Stack.Screen name="Support Communities" component={Support} />

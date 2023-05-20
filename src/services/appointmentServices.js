@@ -27,3 +27,5 @@ export const updateAppointmentRequest = (id, data) => {
 export const getAppointmentRequests = query => {
   return API.get(`/appointments/requests?${query}`);
 };
+
+export const getAppointmentById = id => API.get(`/appointments/${id}`);

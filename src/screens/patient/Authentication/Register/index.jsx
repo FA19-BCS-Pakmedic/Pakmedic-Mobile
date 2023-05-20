@@ -32,6 +32,8 @@ import ErrorMessage from '../../../../components/shared/ErrorMessage';
 
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 
+import PopupAlerts from '../../../../components/shared/PopupAlerts';
+
 // import constants
 import CITIES from '../../../../utils/constants/Cities';
 import GENDERS from '../../../../utils/constants/Genders';
@@ -63,6 +65,9 @@ const PatientRegister = ({navigation}) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [alertName, setAlertName] = useState('LoginSuccess');
+  const [message, setMessage] = useState('');
 
   // useForm hook from react-hook-form
   const {control, handleSubmit, setValue, clearErrors, setError, watch} =
@@ -87,7 +92,7 @@ const PatientRegister = ({navigation}) => {
     useState(false);
 
   //cnic error
-  const {showToast} = useCustomToast();
+  // const {showToast} = useCustomToast();
 
   // for date picker
   const [date, setDate] = useState(new Date());
@@ -126,13 +131,15 @@ const PatientRegister = ({navigation}) => {
     try {
       const response = await registerPatient(patient);
       console.log('response', response.data);
-      showToast('Patient was successfully registered', 'success');
+      // showToast('Patient was successfully registered', 'success');
 
       await onSuccess(response);
     } catch (err) {
       dispatch(authLogout());
 
-      showToast(err.response.data.message, 'danger');
+      // showToast(err.response.data.message, 'danger');
+      setMessage(err.response.data.message);
+      setAlertName('LoginFailure');
       if (err.response.data.error.statusCode === 409) {
         setError('email', {
           type: 'conflict',
@@ -141,6 +148,7 @@ const PatientRegister = ({navigation}) => {
       }
     } finally {
       setLoading(false);
+      setModalVisible(true);
     }
   };
 
@@ -181,6 +189,7 @@ const PatientRegister = ({navigation}) => {
     } catch (err) {
       dispatch(authLogout());
       console.log(err.response.data);
+
       // alert(err.response.data.message);
       // setIsLoading(false);
       // TODO: NAVIGATE THE USER TO COMPLETE PROFILE SCREEN ALONG WITH PASSING THE EMAIL THROUGH NAVIGATION PARAMS.
@@ -212,7 +221,9 @@ const PatientRegister = ({navigation}) => {
         await loginVox(user);
       } catch (err) {
         console.log(err);
-        showToast('Error logging in to vox', 'danger');
+        // showToast('Error logging in to vox', 'danger');
+        setMessage('Error logging in to vox');
+        setAlertName('LoginFailure');
       }
     }
     //initializing global state with jwt token and user object
@@ -220,8 +231,11 @@ const PatientRegister = ({navigation}) => {
       authSuccess({user: response.data.user, token: response.data.token}),
     );
 
+    setMessage('User Registered Successfully, Logging you in...');
+    setAlertName('LoginSuccess');
+
     // navigate to the app stack
-    navigation.replace('App');
+    // navigation.replace('App');
   };
 
   //function for setting the value of gender
@@ -498,6 +512,17 @@ const PatientRegister = ({navigation}) => {
           <Text style={styles.text}>Already have an account? </Text>
           <Text style={styles.registerText}>Login Now</Text>
         </TouchableOpacity>
+        <PopupAlerts
+          isModalVisible={isModalVisible}
+          setModalVisible={setModalVisible}
+          height={1.8}
+          width={1.2}
+          timer={2000}
+          alertName={alertName}
+          message={message}
+          redirect={null}
+          isReplace={true}
+        />
       </View>
     </StaticContainer>
   );

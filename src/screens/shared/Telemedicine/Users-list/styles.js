@@ -32,9 +32,20 @@ const styles = StyleSheet.create({
     marginBottom: dimensions.Height / 13,
   },
 
+  notFoundContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: dimensions.Width / 20,
+  },
+
   appointmentContainer: {
     width: '100%',
     paddingVertical: dimensions.Height / 100,
+  },
+  notFoundContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: dimensions.Width / 20,
   },
 });
 

@@ -52,6 +52,8 @@ import {loginVox} from '../../../../services/voxServices';
 import {register} from '../../../../services/notificationService';
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 
+import PopupAlerts from '../../../../components/shared/PopupAlerts';
+
 const DoctorRegister = ({navigation}) => {
   //to store the information fetched from the pmc endpoint
   const [pmcData, setPmcData] = useState(null);
@@ -62,6 +64,9 @@ const DoctorRegister = ({navigation}) => {
   const [isPmcIdVerified, setIsPmcIdVerified] = useState(false);
   const [pmcIdErrorMessage, setPmcIdErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [alertName, setAlertName] = useState('LoginSuccess');
+  const [message, setMessage] = useState('');
 
   const Specialists = [
     {label: 'Cardiologist', value: 'Cardiologist'},
@@ -148,7 +153,7 @@ const DoctorRegister = ({navigation}) => {
       try {
         const response = await registerDoctor(data);
         // alert('User registered successfully');
-        showToast('User registered successfully', 'success');
+        // showToast('User registered successfully', 'success');
 
         // //storing jwt token to mobile storage
         // await deviceStorage.saveItem('jwtToken', response?.data?.token);
@@ -164,7 +169,9 @@ const DoctorRegister = ({navigation}) => {
       } catch (err) {
         dispatch(authLogout());
         console.log(err.response.data);
-        showToast(err.response.data.message, 'danger');
+        // showToast(err.response.data.message, 'danger');
+        setMessage(err.response.data.message);
+        setAlertName('LoginFailure');
 
         if (err.response.data.error.statusCode === 409) {
           setError('email', {
@@ -174,6 +181,7 @@ const DoctorRegister = ({navigation}) => {
         }
       } finally {
         setLoading(false);
+        setModalVisible(true);
       }
     } else {
       dispatch(authLogout());
@@ -206,6 +214,8 @@ const DoctorRegister = ({navigation}) => {
         await loginVox(user);
       } catch (err) {
         console.log(err);
+        setMessage('Error logging in to vox');
+        setAlertName('LoginFailure');
       }
     }
 
@@ -214,10 +224,13 @@ const DoctorRegister = ({navigation}) => {
       authSuccess({user: response.data.user, token: response.data.token}),
     );
 
-    showToast('User registered successfully', 'success');
+    setMessage('User Registered Successfully, Logging you in...');
+    setAlertName('LoginSuccess');
+
+    // showToast('User registered successfully', 'success');
 
     // navigate to the app stack
-    navigation.replace('App');
+    // navigation.replace('App');
   };
 
   //function for setting the value of city
@@ -550,6 +563,17 @@ const DoctorRegister = ({navigation}) => {
             <Text style={styles.registerText}>Login Now</Text>
           </TouchableOpacity>
         </ScrollView>
+        <PopupAlerts
+          isModalVisible={isModalVisible}
+          setModalVisible={setModalVisible}
+          height={1.8}
+          width={1.2}
+          timer={2000}
+          alertName={alertName}
+          message={message}
+          redirect={null}
+          isReplace={true}
+        />
       </View>
     </StaticContainer>
   );

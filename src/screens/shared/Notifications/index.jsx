@@ -31,7 +31,7 @@ const Notification = () => {
       onPress={() => {
         navigation.navigate('App', {
           screen: item?.data?.navigate,
-          params: {image: item?.data?.image},
+          params: {image: item?.data?.image, data: item?.data?.data},
         });
       }}>
       <View style={{flexDirection: 'row'}}>
@@ -60,8 +60,9 @@ const Notification = () => {
       disableHeader={true}>
       <FlatList
         data={notifications.reverse()}
+
         renderItem={item => renderItem(item, navigation)}
-        keyExtractor={item => item?.data?.image}
+        keyExtractor={(item, index) => index}
         style={styles.flatList}
       />
     </StaticContainer>

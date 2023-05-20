@@ -29,6 +29,7 @@ import {addScan, deleteScan, updateScan} from '../../../services/ehrServices';
 import {addFile} from '../../../services/fileServices';
 import {downloadFile} from '../../../utils/helpers/downloadFile';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
+import NotFound from '../NotFound';
 
 const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
   const [scanImage, setScanImage] = useState(null);
@@ -185,6 +186,7 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
                     `${apiEndpoint}files/${selectedScan.image}`,
                     selectedScan.image,
                   );
+                  setOpenOptions(false);
                 }}>
                 <Text style={styles.optionText}>Download</Text>
               </TouchableHighlight>
@@ -320,11 +322,12 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
       {openModal()}
       {openOptionsModal()}
       {openConfirmationalModal()}
+
       <ScrollView
         style={styles.scrollContainer}
         contentContainer={styles.scrollContentContainer}>
         <View style={styles.contentContainer}>
-          {scans.length > 0 &&
+          {scans.length > 0 ? (
             scans.map(scan => {
               return (
                 <View style={styles.scanContainer} key={scan._id}>
@@ -335,7 +338,16 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
                   />
                 </View>
               );
-            })}
+            })
+          ) : (
+            <View style={styles.notFoundContainer}>
+              <NotFound
+                title={'No scans found'}
+                text={'There are no scans added by the user'}
+                center
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
     </>
@@ -345,6 +357,10 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
 export default Scans;
 
 const styles = StyleSheet.create({
+  notFoundContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   scrollContainer: {
     width: '100%',
   },

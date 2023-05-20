@@ -14,13 +14,13 @@ import deviceStorage from '../../../utils/helpers/deviceStorage';
 import ROLES from '../../../utils/constants/ROLES';
 import {setRole} from '../../../setup/redux/actions';
 
-const ChooseRole = ({navigation}) => {
+const ChooseRole = ({navigation, selectRole}) => {
   const dispatch = useDispatch();
 
   const chooseRole = async role => {
     await deviceStorage.saveItem('role', role);
     dispatch(setRole(role));
-    navigation.replace('Onboarding');
+    selectRole(role);
   };
 
   return (

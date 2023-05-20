@@ -71,7 +71,7 @@ const Appointments = () => {
 
   return (
     <StaticContainer
-      isBack={true}
+      isBack={false}
       customHeaderName={'Book Appointment'}
       customHeaderEnable={true}
       isHorizontalPadding={false}>

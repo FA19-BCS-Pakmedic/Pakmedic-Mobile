@@ -42,6 +42,9 @@ export default styles = StyleSheet.create({
     paddingVertical: dimensions.Height / 10,
     position: 'relative',
   },
-
-  
+  notFoundContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: dimensions.Width / 20,
+  },
 });
