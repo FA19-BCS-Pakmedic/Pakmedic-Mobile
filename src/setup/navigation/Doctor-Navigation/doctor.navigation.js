@@ -55,75 +55,34 @@ const onMessageReceived = async message => {
 };
 
 
-const onForegroundMessage = navigation => {
-  notifee.onForegroundEvent(async ({type, detail}) => {
-
-    console.log("INSIDE notiffeee")
-
-    const {notification, pressAction} = detail;
-
-    // Check if the user pressed the "Mark as read" action
-    console.log(notification);
-
-    console.log('Inside onForegroundEvent');
-
-    console.log(type);
-
-
-    if (type === EventType.PRESS) {
-      // Update external API
-      console.log('Pressed Notification');
-
-
-      if (notification?.data?.navigate) {
-        navigation.navigate('App', {
-          screen: notification?.data?.navigate,
-          params: {image: notification?.data?.image, data: notification?.data?.data},
-        });
-      }
-
-      // Remove the notification
-      await notifee.cancelNotification(notification.id);
+const navigateToScreen = async (notification, navigation, type) => {
+  if (type === EventType.PRESS) {
+    // Update external API
+    if (notification?.data?.navigate) {
+      navigation.navigate('App', {
+        screen: notification?.data?.navigate,
+        params: {image: notification?.data?.image, data: notification?.data?.data},
+      });
     }
+
+    // Remove the notification
+    await notifee.cancelNotification(notification.id);
+  }
+}
+
+
+const onForegroundMessage = navigation => {
+  notifee.onForegroundEvent(({type, detail}) => {
+    const {notification, pressAction} = detail;
+    navigateToScreen(notification, navigation, type);
   });
 }
 
 const onBackgroundMessage = navigation => {
-
-  console.log("HERE");
-
   notifee.onBackgroundEvent(async ({type, detail}) => {
-
-    console.log("INSIDE notiffeee")
-
     const {notification, pressAction} = detail;
-
-    // Check if the user pressed the "Mark as read" action
-    console.log(notification);
-
-    console.log('Inside onBackgroundEvent');
-
-    console.log(type);
-
-
-    if (type === EventType.PRESS) {
-      // Update external API
-      console.log('Pressed Notification');
-
-
-      if (notification?.data?.navigate) {
-        navigation.navigate('App', {
-          screen: notification?.data?.navigate,
-          params: {image: notification?.data?.image, data: notification?.data},
-        });
-      }
-
-      // Remove the notification
-      await notifee.cancelNotification(notification.id);
-    }
+    navigateToScreen(notification, navigation, type);
   });
-
-  
 };
 
 const DoctorNavigation = () => {

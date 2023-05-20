@@ -51,7 +51,8 @@ const UsersList = ({navigation}) => {
     navigation.navigate('App', {
       screen: 'Chat',
       params: {
-        receiver: receiver, //TODO: remove this id as it is only used for testing purpose
+        data: receiver._id, //TODO: remove this id as it is only used for testing purpose
+        receiver: receiver,
       },
     });
   };
