@@ -54,36 +54,36 @@ const onMessageReceived = async message => {
   await notifee.displayNotification(JSON.parse(message.data.notifee));
 };
 
-const onBackgroundMessage = navigation => {
-  notifee.onBackgroundEvent(async ({type, detail}) => {
-    const {notification, pressAction} = detail;
+// const onBackgroundMessage = navigation => {
+//   notifee.onBackgroundEvent(async ({type, detail}) => {
+//     const {notification, pressAction} = detail;
 
-    // Check if the user pressed the "Mark as read" action
+//     // Check if the user pressed the "Mark as read" action
 
-    console.log('Inside onBackgroundEvent');
-    if (type === EventType.PRESS) {
-      // Update external API
-      console.log('Pressed Notification');
+//     console.log('Inside onBackgroundEvent');
+//     if (type === EventType.PRESS) {
+//       // Update external API
+//       console.log('Pressed Notification');
 
-      if (notification?.data?.navigate) {
-        navigation.navigate('App', {
-          screen: notification?.data?.navigate,
-          params: {image: notification?.data?.image},
-        });
-      }
+//       if (notification?.data?.navigate) {
+//         navigation.navigate('App', {
+//           screen: notification?.data?.navigate,
+//           params: {image: notification?.data?.image},
+//         });
+//       }
 
-      // Remove the notification
-      await notifee.cancelNotification(notification.id);
-    }
-  });
-};
+//       // Remove the notification
+//       await notifee.cancelNotification(notification.id);
+//     }
+//   });
+// };
 
 const DoctorNavigation = () => {
   const navigation = useNavigation();
   useEffect(() => {
     messaging().onMessage(onMessageReceived);
-    messaging().setBackgroundMessageHandler(onMessageReceived);
-    onBackgroundMessage(navigation);
+    // messaging().setBackgroundMessageHandler(onMessageReceived);
+    // onBackgroundMessage(navigation);
   }, []);
 
   return (
