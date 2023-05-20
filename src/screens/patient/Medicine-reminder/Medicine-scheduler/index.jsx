@@ -13,10 +13,12 @@ import Syringe from '../../../../assets/svgs/syringeIcon.svg';
 import Syrup from '../../../../assets/svgs/syrupIcon.svg';
 import Tick from '../../../../assets/svgs/tick.svg';
 import Calendar from '../../../../assets/svgs/Calendar.svg';
+import Calendar from '../../../../assets/svgs/Calendar.svg';
 
 import StaticContainer from '../../../../containers/StaticContainer';
 import AddMore from '../../../../components/shared/AddMore';
 import ReminderAddModal from '../../../../components/patient/MedicineReminder/ReminderAddModal';
+import moment from 'moment';
 import moment from 'moment';
 
 import {useNavigation} from '@react-navigation/native';
@@ -25,13 +27,23 @@ import {useEffect} from 'react';
 
 import NotFound from '../../../../components/shared/NotFound';
 import Loader from '../../../../components/shared/Loader';
-import notifee, {TriggerType} from '@notifee/react-native';
 
+import {getReminders} from '../../../../services/patientServices';
 import {getReminders} from '../../../../services/patientServices';
 const MedicineScheduler = () => {
   const navigation = useNavigation();
   const user = useSelector(state => state.auth.user);
+  const user = useSelector(state => state.auth.user);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [date, setDate] = useState(moment().format('D/MM/YYYY'));
+
+  const [day, setDay] = useState(
+    moment.utc(new Date(), 'YYYY-MM-DD').format('dddd').substring(0, 3),
+  );
+  const [weekDates, setWeekDates] = useState([]);
+  const [dateModal, setDateModal] = useState(false);
+  const [reminders, setReminders] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(moment().format('D/MM/YYYY'));
 
   const [day, setDay] = useState(
@@ -80,38 +92,10 @@ const MedicineScheduler = () => {
     setWeekDates(dates);
   };
 
-  async function onCreateTriggerNotification() {
-    const date = new Date(Date.now());
-    // date.setHours(11);
-    // date.setMinutes(10);
-
-    // Create a time-based trigger
-    const trigger = {
-      type: TriggerType.TIMESTAMP,
-      timestamp: date.getTime() + 1000, // fire at 11:10am (10 minutes before meeting)
-    };
-
-    const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
-    });
-
-    // Create a trigger notification
-    await notifee.createTriggerNotification(
-      {
-        title: 'Meeting with Jane',
-        body: 'Today at 11:20am',
-        android: {
-          channelId: channelId,
-        },
-      },
-      trigger,
-    );
-  }
-
   return (
     <StaticContainer
       customHeaderEnable
+      customHeaderName="Medicine Reminder"
       customHeaderName="Medicine Reminder"
       isBack
       isHorizontalPadding={false}>
@@ -149,6 +133,23 @@ const MedicineScheduler = () => {
                     {item}
                   </Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.week}
+                  onPress={() => {
+                    setDate(weekDates[weekdays.indexOf(item)]);
+                    setDay(item);
+                  }}>
+                  <Text
+                    style={[
+                      styles.weekText,
+                      {
+                        color:
+                          item === day ? colors.secondary1 : colors.primary1,
+                      },
+                    ]}>
+                    {item}
+                  </Text>
+                </TouchableOpacity>
               );
             }}
           />
@@ -166,13 +167,6 @@ const MedicineScheduler = () => {
             />
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          onPress={() => {
-            onCreateTriggerNotification();
-          }}>
-          <Text style={{color: 'red'}}>Click me</Text>
-        </TouchableOpacity>
 
         {loading ? (
           <Loader />
@@ -235,6 +229,15 @@ const MedicineScheduler = () => {
         date={date}
         setDate={setDate}
         setDay={setDay}
+        date={date}
+      />
+
+      <DateModal
+        Visible={dateModal}
+        setModalVisible={setDateModal}
+        date={date}
+        setDate={setDate}
+        setDay={setDay}
       />
     </StaticContainer>
   );
@@ -244,6 +247,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  buttonLabel: {
+    fontSize: fonts.size.font16,
+    fontWeight: fonts.weight.bold,
   },
   buttonLabel: {
     fontSize: fonts.size.font16,
@@ -270,6 +277,19 @@ const styles = StyleSheet.create({
     fontSize: fonts.size.font16,
     fontWeight: fonts.weight.bold,
     color: colors.primary1,
+    width: dimensions.Width * 0.1,
+    textAlign: 'center',
+  },
+  button: {
+    marginTop: dimensions.Height / 50,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: colors.primary1,
+    width: dimensions.Width * 0.4,
     width: dimensions.Width * 0.1,
     textAlign: 'center',
   },
@@ -325,6 +345,10 @@ const styles = StyleSheet.create({
     marginHorizontal: dimensions.Width * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  date: {
+    alignItems: 'flex-end',
+    marginHorizontal: dimensions.Width * 0.03,
   },
   date: {
     alignItems: 'flex-end',

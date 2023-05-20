@@ -64,5 +64,5 @@ export const addReminder = data => {
 
 export const getReminders = (user, date) => {
   console.log(user, date);
-  return API.get(`reminder?user=${user}&startDate=${date}`);
+  return API.get(`reminder?user=${user}&dosageDates=${date}`);
 };

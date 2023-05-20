@@ -9,10 +9,12 @@ import {name as appName} from './app.json';
 import {EventEmitter} from 'eventemitter3';
 
 import messaging from '@react-native-firebase/messaging';
-import notifee, {EventType, AndroidImportance} from '@notifee/react-native';
-
-import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
-import {notificationService} from './NotificationService';
+import notifee, {
+  EventType,
+  AndroidImportance,
+  TriggerType,
+  Trigger,
+} from '@notifee/react-native';
 
 export const eventEmitter = new EventEmitter();
 

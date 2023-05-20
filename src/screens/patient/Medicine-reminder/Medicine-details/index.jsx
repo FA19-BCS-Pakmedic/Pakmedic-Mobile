@@ -31,25 +31,25 @@ const MedicineScheduler = ({route}) => {
       isHorizontalPadding={false}>
       <View style={styles.container}>
         <View style={styles.Icon}>
-          {item.type === 'tablet' && (
+          {item.dosageForm === 'tablet' && (
             <Tablet
               width={dimensions.Width * 0.4}
               height={dimensions.Width * 0.4}
             />
           )}
-          {item.type === 'capsule' && (
+          {item.dosageForme === 'capsule' && (
             <Capsule
               width={dimensions.Width * 0.4}
               height={dimensions.Width * 0.4}
             />
           )}
-          {item.type === 'syringe' && (
+          {item.dosageForm === 'syringe' && (
             <Syringe
               width={dimensions.Width * 0.4}
               height={dimensions.Width * 0.4}
             />
           )}
-          {item.type === 'syrup' && (
+          {item.dosageForm === 'syrup' && (
             <Syrup
               width={dimensions.Width * 0.4}
               height={dimensions.Width * 0.4}
