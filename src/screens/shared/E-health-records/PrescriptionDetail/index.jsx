@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
@@ -16,11 +23,32 @@ import StaticContainer from '../../../../containers/StaticContainer';
 import Button from '../../../../components/shared/Button';
 
 import {useNavigation} from '@react-navigation/native';
+import {getPrescriptionById} from '../../../../services/prescriptionServices';
 
 const PrescriptionDetail = props => {
   const navigation = useNavigation();
-  const [items, setItems] = useState(props.route.params.item.medicines);
-  const doctor = props.route.params.item.doctor;
+  const {data} = props.route.params;
+  //console.log(data);
+
+  const [items, setItems] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const getPrescription = async () => {
+    try {
+      setLoading(true);
+      const response = await getPrescriptionById(data);
+      //console.log(response.data.data.data);
+      setItems(response.data.data.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    getPrescription();
+  }, []);
 
   return (
     <StaticContainer
@@ -28,98 +56,106 @@ const PrescriptionDetail = props => {
       customHeaderName="Prescription Detail"
       isBack
       isHorizontalPadding={false}>
-      <View style={styles.container}>
-        <View style={styles.complaineeContainer}>
-          <Text style={styles.Heading}>Prescribed by:</Text>
-          <View style={styles.complaineeCard}>
-            <View style={styles.cardLeft}>
-              <View style={styles.detailLeft}>
-                <Image
-                  style={styles.img}
-                  source={require('../../../../assets/images/default-avatar.png')}
+      {loading ? (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color={colors.primary1} />
+        </View>
+      ) : (
+        // <Text>Prescription Detail</Text>
+        <View style={styles.container}>
+          <View style={styles.complaineeContainer}>
+            <Text style={styles.Heading}>Prescribed by:</Text>
+            <View style={styles.complaineeCard}>
+              <View style={styles.cardLeft}>
+                <View style={styles.detailLeft}>
+                  <Image
+                    style={styles.img}
+                    source={require('../../../../assets/images/default-avatar.png')}
+                  />
+                </View>
+                <View style={styles.detailRight}>
+                  <Text style={styles.text}>{items?.doctor.name}</Text>
+                  <Text style={styles.text}>{items?.doctor.phone}</Text>
+                </View>
+              </View>
+              <View style={styles.cardRight}>
+                <Button
+                  label={'View Profile'}
+                  type={'filled'}
+                  width={dimensions.Width * 0.3}
+                  height={dimensions.Height * 0.04}
+                  fontSize={fonts.size.font12}
+                  color={colors.primary1}
+                  onPress={() => {}}
                 />
               </View>
-              <View style={styles.detailRight}>
-                <Text style={styles.text}>{doctor.name}</Text>
-                <Text style={styles.text}>{doctor.phone}</Text>
-              </View>
-            </View>
-            <View style={styles.cardRight}>
-              <Button
-                label={'View Profile'}
-                type={'filled'}
-                width={dimensions.Width * 0.3}
-                height={dimensions.Height * 0.04}
-                fontSize={fonts.size.font12}
-                color={colors.primary1}
-                onPress={() => {}}
-              />
             </View>
           </View>
-        </View>
-        <View style={styles.body}>
-          <FlatList
-            data={items}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => {
-              return (
-                <View style={styles.itemContainer}>
-                  <View style={styles.icon}>
-                    {item.dosage_form === 'tablet' && <Tablet />}
-                    {item.dosage_form === 'capsule' && <Capsule />}
-                    {item.dosage_form === 'syringe' && <Syringe />}
-                    {item.dosage_form === 'Syrup' && <Syrup />}
-                  </View>
-
-                  <View style={styles.itemBody}>
-                    <View style={styles.itemHeader}>
-                      <Text style={styles.itemHeading}>{item.name}</Text>
+          <View style={styles.body}>
+            <FlatList
+              data={items?.medicines}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => {
+                //console.log(item);
+                return (
+                  <View style={styles.itemContainer}>
+                    <View style={styles.icon}>
+                      {item.dosage_form === 'tablet' && <Tablet />}
+                      {item.dosage_form === 'capsule' && <Capsule />}
+                      {item.dosage_form === 'syringe' && <Syringe />}
+                      {item.dosage_form === 'syrup' && <Syrup />}
                     </View>
 
-                    <View style={styles.itemRow}>
-                      <Text style={styles.itemTitle}>Dosage Size:</Text>
-                      <Text style={styles.itemText}>
-                        {item.dosage_size} mg/ml
-                      </Text>
-                    </View>
-                    <View style={styles.itemRow}>
-                      <Text style={styles.itemTitle}>Dosage Frequency:</Text>
-                      <Text style={styles.itemText}>
-                        {item.dosage_frequency} times a day
-                      </Text>
-                    </View>
-                    <View style={styles.itemRow}>
-                      <Text style={styles.itemTitle}>Dosage Duration:</Text>
-                      <Text style={styles.itemText}>{item.days} days</Text>
-                    </View>
-                    {item.addDays > 0 && (
+                    <View style={styles.itemBody}>
+                      <View style={styles.itemHeader}>
+                        <Text style={styles.itemHeading}>{item.name}</Text>
+                      </View>
+
                       <View style={styles.itemRow}>
-                        <Text style={styles.itemTitle}>Additional Days:</Text>
+                        <Text style={styles.itemTitle}>Dosage Size:</Text>
                         <Text style={styles.itemText}>
-                          {item.additional_days} days
+                          {item.dosage_size} mg/ml
                         </Text>
                       </View>
-                    )}
-                    <View style={styles.itemRow}>
-                      <Text style={styles.itemTitle}>Details:</Text>
-                      <Text
-                        style={[
-                          styles.itemText,
-                          {
-                            maxWidth: dimensions.Width * 0.5,
-                            textAlign: 'right',
-                          },
-                        ]}>
-                        {item.precautionary_details}
-                      </Text>
+                      <View style={styles.itemRow}>
+                        <Text style={styles.itemTitle}>Dosage Frequency:</Text>
+                        <Text style={styles.itemText}>
+                          {item.dosage_frequency} times a day
+                        </Text>
+                      </View>
+                      <View style={styles.itemRow}>
+                        <Text style={styles.itemTitle}>Dosage Duration:</Text>
+                        <Text style={styles.itemText}>{item.days} days</Text>
+                      </View>
+                      {item.addDays > 0 && (
+                        <View style={styles.itemRow}>
+                          <Text style={styles.itemTitle}>Additional Days:</Text>
+                          <Text style={styles.itemText}>
+                            {item.additional_days} days
+                          </Text>
+                        </View>
+                      )}
+                      <View style={styles.itemRow}>
+                        <Text style={styles.itemTitle}>Details:</Text>
+                        <Text
+                          style={[
+                            styles.itemText,
+                            {
+                              maxWidth: dimensions.Width * 0.5,
+                              textAlign: 'right',
+                            },
+                          ]}>
+                          {item.precautionary_details}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              );
-            }}
-          />
+                );
+              }}
+            />
+          </View>
         </View>
-      </View>
+      )}
     </StaticContainer>
   );
 };

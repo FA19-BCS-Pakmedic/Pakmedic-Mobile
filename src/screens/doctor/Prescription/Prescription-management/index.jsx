@@ -52,10 +52,6 @@ const PrescriptionManagement = () => {
     setLoading(false);
   };
 
-  React.useEffect(() => {
-    console.log(medicines);
-  }, [medicines]);
-
   return (
     <StaticContainer
       customHeaderEnable

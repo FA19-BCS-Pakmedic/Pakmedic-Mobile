@@ -116,7 +116,7 @@ const Home = props => {
 
   React.useEffect(() => {
     getComplaints();
-    console.log(complaints);
+    //console.log(complaints);
   }, [OptionModalVisible, AddModalVisible]);
 
   return (

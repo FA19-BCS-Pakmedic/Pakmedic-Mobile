@@ -72,7 +72,7 @@ const Prescriptions = ({prescriptions, visible, setVisible}) => {
             onPress={() => {
               console.log('item', item.medicines);
               navigation1.navigate('PrescriptionDetail', {
-                item,
+                data: item._id,
               });
               setModalVisible(false);
             }}>
