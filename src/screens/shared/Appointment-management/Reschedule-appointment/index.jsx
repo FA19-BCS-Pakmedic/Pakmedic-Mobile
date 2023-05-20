@@ -46,6 +46,7 @@ const RescheduleAppointment = () => {
   const [loading, setLoading] = useState(false);
   const {showToast} = useCustomToast();
 
+
   const {control, watch, setValue, handleSubmit} = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -57,6 +58,7 @@ const RescheduleAppointment = () => {
       appointment: appointment._id,
       requestType: 'reschedule',
       requestedBy: user._id,
+      userType: role,
     },
   });
 

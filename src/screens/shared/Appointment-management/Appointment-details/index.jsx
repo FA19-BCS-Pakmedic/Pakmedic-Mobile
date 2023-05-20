@@ -51,7 +51,6 @@ const AppointmentDetails = () => {
       
 
         if(response.data && response.data.status === "success") {
-          console.log(response.data.data.data);
           setAppointment(response.data.data.data);
         }
 
