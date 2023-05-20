@@ -36,6 +36,9 @@ import CancelAppointment from '../../../screens/shared/Appointment-management/Ca
 
 import MedicineScheduler from '../../../screens/patient/Medicine-reminder/Medicine-scheduler';
 import MedicineDetails from '../../../screens/patient/Medicine-reminder/Medicine-details';
+import PrescriptionDetail from '../../../screens/shared/E-health-records/PrescriptionDetail';
+import Complaint from '../../../screens/shared/Complaint-desk/Complaint';
+import ComplaintDesk from '../../../screens/shared/Complaint-desk/Home';
 import {eventEmitter} from '../../../../index.js';
 
 const Stack = createNativeStackNavigator();
