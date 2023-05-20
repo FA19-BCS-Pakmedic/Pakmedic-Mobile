@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 //import redux hooks
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 //import actions
 import {authSuccess, setRole} from '../redux/actions';
@@ -25,30 +25,17 @@ import {voximplant} from '../../services/voxServices';
 import {Voximplant} from 'react-native-voximplant';
 import calls from '../../utils/helpers/Store';
 import {useNavigation} from '@react-navigation/native';
-import ElectronicHealthRecords from '../../screens/shared/E-health-records/Home';
 
 //create stacks
 const rootStack = createNativeStackNavigator();
 
 //configure root navigator
 export default RootNavigation = () => {
-  const [userRole, setUserRole] = useState();
+  // const [userRole, setUserRole] = useState();
   const [isFirstTime, setIsFirstTime] = useState(true);
-  const dispatch = useDispatch();
+  const userRole = useSelector(state => state.role.role);
 
   const navigation = useNavigation();
-
-  // use effect to check if user has selected a role
-  useEffect(() => {
-    const getRole = async () => {
-      const storedRole = await deviceStorage.loadItem('role');
-      if (storedRole) {
-        dispatch(setRole(storedRole));
-        setUserRole(storedRole);
-      }
-    };
-    getRole();
-  }, []);
 
   // use effect to check if the user has already gone through the onboarding
   useEffect(() => {
@@ -59,6 +46,8 @@ export default RootNavigation = () => {
 
     getIsFirstTime();
   });
+
+  // useEffect to get the user role form the devic
 
   useEffect(() => {
     voximplant.on(Voximplant.ClientEvents.IncomingCall, incomingCallEvent => {
@@ -93,9 +82,6 @@ export default RootNavigation = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      {!userRole && (
-        <rootStack.Screen name="ChooseRole" component={ChooseRole} />
-      )}
       {isFirstTime && (
         <rootStack.Screen name="Onboarding" component={OnboardingNavigation} />
       )}

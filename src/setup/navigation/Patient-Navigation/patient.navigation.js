@@ -36,50 +36,24 @@ import CancelAppointment from '../../../screens/shared/Appointment-management/Ca
 
 import MedicineScheduler from '../../../screens/patient/Medicine-reminder/Medicine-scheduler';
 import MedicineDetails from '../../../screens/patient/Medicine-reminder/Medicine-details';
-import Complaint from '../../../screens/shared/Complaint-desk/Complaint';
-import ComplaintDesk from '../../../screens/shared/Complaint-desk/Home';
-import PrescriptionDetail from '../../../screens/shared/E-health-records/PrescriptionDetail';
+import {eventEmitter} from '../../../../index.js';
 
 const Stack = createNativeStackNavigator();
-
-const onMessageReceived = async message => {
-  notifee.createChannel({
-    id: 'default',
-    name: 'Default Channel',
-  });
-  await notifee.displayNotification(JSON.parse(message.data.notifee));
-};
-
-const onBackgroundMessage = navigation => {
-  notifee.onBackgroundEvent(async ({type, detail}) => {
-    const {notification, pressAction} = detail;
-
-    // Check if the user pressed the "Mark as read" action
-
-    console.log('Inside onBackgroundEvent');
-    if (type === EventType.PRESS) {
-      // Update external API
-      console.log('Pressed Notification');
-
-      if (notification?.data?.navigate) {
-        navigation.navigate(notification?.data?.navigate, {
-          params: {image: notification?.data?.image},
-        });
-      }
-
-      // Remove the notification
-      await notifee.cancelNotification(notification.id);
-    }
-  });
-};
 
 const PatientNavigation = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    messaging().onMessage(onMessageReceived);
-    messaging().setBackgroundMessageHandler(onMessageReceived);
-    onBackgroundMessage(navigation);
+    eventEmitter.on('notificationReceived', notification => {
+      if (notification?.data?.navigate) {
+        navigation.navigate(notification?.data?.navigate, {
+          params: {
+            image: notification?.data?.image,
+            data: notification?.data?.data,
+          },
+        });
+      }
+    });
   }, []);
   return (
     <Stack.Navigator

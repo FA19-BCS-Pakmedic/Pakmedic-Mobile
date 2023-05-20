@@ -1,7 +1,11 @@
 export const googleConfig = {
-  // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+  scopes: ['email', 'profile'], // what API you want to access on behalf of the user, default is email and profile
   webClientId:
     '1065457387343-vb9fmbvje9ltbi76fsr01dju0vktfuae.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+  offlineAccess: true,
+  // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+  // webClientId:
+  //   '1065457387343-vb9fmbvje9ltbi76fsr01dju0vktfuae.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
   // offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
   // hostedDomain: '', // specifies a hosted domain restriction
   // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.

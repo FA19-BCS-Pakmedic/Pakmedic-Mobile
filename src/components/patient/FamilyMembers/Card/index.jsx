@@ -17,6 +17,7 @@ const FamilyMemberCard = ({
     Daughter: <DaughterIcon />,
   };
 
+  console.log(familyMember);
   return (
     <View style={styles.container}>
       <View>{icons[familyMember.relation]}</View>

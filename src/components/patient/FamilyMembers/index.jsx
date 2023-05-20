@@ -81,7 +81,7 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
   };
 
   const onPressEdit = () => {
-    console.log(selectedMember);
+    console.log('pressed Edit', selectedMember);
     setIsEdit(true);
     setValue('name', selectedMember.name);
     setValue('relation', selectedMember.relation);
@@ -261,10 +261,24 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <ValidateInputField
+            {/* <ValidateInputField
               control={control}
               name="height"
               placeholder="Enter height in cm"
+              rules={{
+                required: 'height is required',
+              }}
+              type="outlined"
+              width="100%"
+              keyboardType={'numeric'}
+              height={dimensions.Height / 20}
+              title={'Height'}
+              text={watch('height')}
+            /> */}
+            <ValidateInputField
+              control={control}
+              name="height"
+              placeholder="Enter height"
               rules={{
                 required: 'height is required',
               }}
@@ -278,7 +292,7 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <ValidateInputField
+            {/* <ValidateInputField
               control={control}
               name="weight"
               placeholder="Enter weight in kg"
@@ -289,6 +303,20 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
               type="outlined"
               width="100%"
               height={dimensions.Height / 20}
+              title={'Weight'}
+              text={watch('weight')}
+            /> */}
+            <ValidateInputField
+              control={control}
+              name="weight"
+              placeholder="Enter weight"
+              rules={{
+                required: 'weight is required',
+              }}
+              type="outlined"
+              width="100%"
+              keyboardType={'numeric'}
+              height={dimensions.Height / 20} 
               title={'Weight'}
               text={watch('weight')}
             />
@@ -355,6 +383,7 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
           familyMembers.map((familyMember, index) => {
             return (
               <FamilyMemberCard
+                key={index}
                 familyMember={familyMember}
                 setOpenOptions={setOpenOptions}
                 setSelectedMember={setSelectedMember}

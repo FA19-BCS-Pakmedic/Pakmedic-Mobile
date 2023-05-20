@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   VirtualizedList,
 } from 'react-native';
+
+import moment from 'moment';
 
 import ModalContainer from '../../../../containers/ModalContainer';
 
@@ -23,16 +25,41 @@ import Button from '../../../shared/Button';
 import {ValidateInputField} from '../../../shared/Input';
 import {useForm} from 'react-hook-form';
 
+import {addReminder} from '../../../../services/patientServices';
+import {useSelector} from 'react-redux';
+
+import {useCustomToast} from '../../../../hooks/useCustomToast';
+
 export default ReminderAddModal = props => {
-  const {Visible, setModalVisible, navigation} = props;
+  const {Visible, setModalVisible, navigation, date} = props;
+  const {showToast} = useCustomToast();
+  const [loading, setLoading] = useState();
+  const user = useSelector(state => state.auth.user);
   const {control, handleSubmit, watch, setValue, reset} = useForm({
     mode: 'onChange',
     defaultValues: {
       name: '',
-      dosage: '',
+      dosageAmount: '',
       duration: '',
     },
   });
+  onSubmit = async data => {
+    data.startDate = moment.utc(date, 'DD/MM/YYYY');
+    data.dosageForm = dosage;
+    data.user = user._id;
+    setLoading(true);
+    const res = await addReminder(data);
+    try {
+      if (res?.data?.status == 'success') {
+        setModalVisible(false);
+        showToast('Successfully Added Reminder');
+      }
+    } catch {
+      showToast('Something went wrong', 'danger');
+    } finally {
+      setLoading(false);
+    }
+  };
   const [dosage, setDosage] = React.useState('tablet');
   return (
     <ModalContainer
@@ -131,10 +158,10 @@ export default ReminderAddModal = props => {
             </View>
           </View>
           <ValidateInputField
-            placeholder="Enter Dosage Amount"
+            placeholder="Enter Dosage Amount in mgs"
             placeholderTextColor={colors.secondary1}
             control={control}
-            name="dosage"
+            name="dosageAmount"
             rules={{
               required: {
                 value: true,
@@ -147,9 +174,10 @@ export default ReminderAddModal = props => {
             title="Dosage Amount"
             type="outlined"
             watch={watch('dosage')}
+            keyboardType="numeric"
           />
           <ValidateInputField
-            placeholder="Enter Dosage duration"
+            placeholder="Enter Dosage duration in Days"
             placeholderTextColor={colors.secondary1}
             control={control}
             name="duration"
@@ -165,6 +193,7 @@ export default ReminderAddModal = props => {
             title="Duration"
             type="outlined"
             watch={watch('duration')}
+            keyboardType="numeric"
           />
         </View>
         <View style={styles.ButtonContainer}>
@@ -185,8 +214,8 @@ export default ReminderAddModal = props => {
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
-            //isLoading={loading}
-            //onPress={handleSubmit(onSubmit)}
+            isLoading={loading}
+            onPress={handleSubmit(onSubmit)}
             //isDisabled={loading || isUploading}
           />
         </View>

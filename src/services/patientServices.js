@@ -57,3 +57,13 @@ export const updateFamilyMember = (id, data) =>
 
 //delete family member
 export const deleteFamilyMember = id => API.delete(`families/${id}`);
+
+export const addReminder = data => {
+  console.log(data);
+  return API.post('reminder', data);
+};
+
+export const getReminders = (user, date) => {
+  console.log(user, date);
+  return API.get(`reminder?user=${user}&startDate=${date}`);
+};

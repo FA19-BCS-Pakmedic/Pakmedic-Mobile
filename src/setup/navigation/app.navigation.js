@@ -8,9 +8,32 @@ import ProfileManagement from '../../screens/doctor/Profile-management/Home';
 import EditProfile from '../../screens/patient/Profile-management/Edit-Profile';
 
 import {useSelector, useDispatch} from 'react-redux';
+import {setRole} from '../redux/actions';
+import ChooseRole from '../../screens/shared/ChooseRole';
+import deviceStorage from '../../utils/helpers/deviceStorage';
 
 const AppNavigation = () => {
   const [isLoading, setIsLoading] = useState(true);
+
+  const [userRole, setUserRole] = useState();
+
+  const dispatch = useDispatch();
+
+  // use effect to check if user has selected a role
+  useEffect(() => {
+    const getRole = async () => {
+      const storedRole = await deviceStorage.loadItem('role');
+      if (storedRole) {
+        dispatch(setRole(storedRole));
+        setUserRole(storedRole);
+      }
+    };
+    getRole();
+  });
+
+  const selectRole = role => {
+    setUserRole(role);
+  };
 
   useEffect(() => {
     SplashScreen.hide();
@@ -26,17 +49,22 @@ const AppNavigation = () => {
       backgroundColor={'#FFFFFF'}
       logoHeight={200}
       logoWidth={200}>
-      <NavigationContainer
-        theme={{
-          colors: {
-            background: '#FFFFFF',
-          },
-        }}
-        style={{backgroundColor: '#FFFFFF'}}>
-        <RootNavigation />
-        {/* <EditProfile /> */}
-        {/* <ProfileManagement /> */}
-      </NavigationContainer>
+      <>
+        {!userRole && <ChooseRole selectRole={selectRole} />}
+        {userRole && (
+          <NavigationContainer
+            theme={{
+              colors: {
+                background: '#FFFFFF',
+              },
+            }}
+            style={{backgroundColor: '#FFFFFF'}}>
+            <RootNavigation />
+            {/* <EditProfile /> */}
+            {/* <ProfileManagement /> */}
+          </NavigationContainer>
+        )}
+      </>
     </AnimatedSplash>
   );
 };

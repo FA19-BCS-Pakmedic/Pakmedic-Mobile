@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
   },
   Icon: {
     height: dimensions.Height / 3.5,
-
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',

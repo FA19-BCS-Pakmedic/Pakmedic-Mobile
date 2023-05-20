@@ -10,25 +10,28 @@ import {useNavigation} from '@react-navigation/native';
 import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
 
-import ProfileSuccess from '../../../assets/svgs/ProfileSuccess.svg';
+import ProfileSuccess from '../../../assets/svgs/VectorSuccess.svg';
 import VectorFailure from '../../../assets/svgs/VectorFailure.svg';
 import ProfileFailure from '../../../assets/svgs/ProfileFailure.svg';
 
 import Lottie from 'lottie-react-native';
 
-const PopupAlerts = props => {
-  const {
-    isModalVisible,
-    setModalVisible,
-    height,
-    width,
-    type,
-    alertName,
-    backDropOpacity,
-    backDropColor,
-    bgColor,
-    timer,
-  } = props;
+const PopupAlerts = ({
+  isModalVisible,
+  setModalVisible,
+  height,
+  width,
+  type,
+  alertName,
+  bgColor,
+  timer,
+  redirect,
+  message,
+  isReplace = false,
+  isNavigate = true,
+  isBack = false,
+}) => {
+  // const {} = props;
 
   const alertsList = {
     LoginSuccess: ProfileSuccess,
@@ -37,7 +40,7 @@ const PopupAlerts = props => {
     RegisterFailure: VectorFailure,
   };
 
-  const Alert = alertsList[props?.alertName];
+  const Alert = alertsList[alertName];
 
   const navigation = useNavigation();
 
@@ -45,7 +48,15 @@ const PopupAlerts = props => {
     if (!isModalVisible) return;
     setTimeout(
       () => {
-        navigation.navigate('App', props.redirect);
+        console.log('navigating to ', redirect);
+
+        if (!alertName.includes('Failure') && isNavigate) {
+          if (isBack) {
+            navigation.goBack();
+          } else {
+            navigation[isReplace ? 'replace' : 'navigate']('App', redirect);
+          }
+        }
         setModalVisible(false);
       },
       timer ? timer : 1000,
@@ -61,10 +72,10 @@ const PopupAlerts = props => {
       bgColor={bgColor}
       type={type}>
       <Alert />
-      <Text style={styles()?.font}>{props.message}</Text>
-      <Text style={styles()?.message}>{`You will be redirected to ${
-        !props?.redirect?.screen ? '' : props?.redirect?.screen
-      } Page in a Few Seconds`}</Text>
+      <Text style={styles()?.message}>{message}</Text>
+      {/* <Text style={styles()?.message}>{`You will be redirected to ${
+        !redirect?.screen ? '' : redirect?.screen
+      } Page in a Few Seconds`}</Text> */}
       <View style={styles().lottie}>
         <Lottie
           style={[

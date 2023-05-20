@@ -13,6 +13,7 @@ import Button from '../../../../components/shared/Button';
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 import {useSelector} from 'react-redux';
 import {createAppointmentRequest} from '../../../../services/appointmentServices';
+import PopupAlerts from '../../../../components/shared/PopupAlerts';
 
 const CancelAppointment = ({route, navigation}) => {
   const [open, setOpen] = useState();
@@ -20,6 +21,9 @@ const CancelAppointment = ({route, navigation}) => {
   const {appointment} = route.params;
 
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [alertName, setAlertName] = useState('LoginSuccess');
+  const [message, setMessage] = useState('');
   const {showToast} = useCustomToast();
   const user = useSelector(state => state.auth.user);
 
@@ -40,13 +44,19 @@ const CancelAppointment = ({route, navigation}) => {
     try {
       const res = await createAppointmentRequest(data);
       console.log(res.data);
-      showToast('Appointment request sent', 'success');
-      navigation.goBack();
+      // showToast('Appointment request sent', 'success');
+      // navigation.goBack();
+      setAlertName('LoginSuccess');
+      setMessage('Appointment request sent');
     } catch (err) {
       console.log(err);
-      showToast('Something went wrong', 'danger');
+      // showToast('Something went wrong', 'danger');
+      // navigation.goBack();
+      setAlertName('LoginFailed');
+      setMessage('Something went wrong');
     } finally {
       setLoading(false);
+      setModalVisible(true);
     }
   };
 
@@ -109,6 +119,18 @@ const CancelAppointment = ({route, navigation}) => {
           style={styles.button}
           type={'filled'}
           isLoading={loading}
+        />
+        <PopupAlerts
+          isModalVisible={isModalVisible}
+          setModalVisible={setModalVisible}
+          height={1.8}
+          width={1.2}
+          timer={2000}
+          alertName={alertName}
+          message={message}
+          // redirect={{screen: 'AppointmentScreen'}}
+          isReplace={false}
+          isBack={true}
         />
       </View>
     </StaticContainer>

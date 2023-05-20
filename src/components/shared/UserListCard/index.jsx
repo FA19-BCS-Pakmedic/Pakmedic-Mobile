@@ -206,5 +206,6 @@ const styles = role =>
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
+      marginVertical: dimensions.Height / 200,
     },
   });
