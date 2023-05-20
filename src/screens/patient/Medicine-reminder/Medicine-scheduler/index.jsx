@@ -25,7 +25,6 @@ import {useEffect} from 'react';
 
 import NotFound from '../../../../components/shared/NotFound';
 import Loader from '../../../../components/shared/Loader';
-import notifee, {TriggerType} from '@notifee/react-native';
 
 import {getReminders} from '../../../../services/patientServices';
 const MedicineScheduler = () => {
@@ -79,35 +78,6 @@ const MedicineScheduler = () => {
     }
     setWeekDates(dates);
   };
-
-  async function onCreateTriggerNotification() {
-    const date = new Date(Date.now());
-    // date.setHours(11);
-    // date.setMinutes(10);
-
-    // Create a time-based trigger
-    const trigger = {
-      type: TriggerType.TIMESTAMP,
-      timestamp: date.getTime() + 1000, // fire at 11:10am (10 minutes before meeting)
-    };
-
-    const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
-    });
-
-    // Create a trigger notification
-    await notifee.createTriggerNotification(
-      {
-        title: 'Meeting with Jane',
-        body: 'Today at 11:20am',
-        android: {
-          channelId: channelId,
-        },
-      },
-      trigger,
-    );
-  }
 
   return (
     <StaticContainer
@@ -166,13 +136,6 @@ const MedicineScheduler = () => {
             />
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          onPress={() => {
-            onCreateTriggerNotification();
-          }}>
-          <Text style={{color: 'red'}}>Click me</Text>
-        </TouchableOpacity>
 
         {loading ? (
           <Loader />
