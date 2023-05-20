@@ -75,7 +75,7 @@ export default TicketAddModal = props => {
   const getPatientsData = async () => {
     try {
       const res = await getPatients();
-      console.log(res.data);
+      //console.log(res.data);
 
       const data = Object.values(res.data.data.patients).map(item => {
         return {
@@ -83,7 +83,7 @@ export default TicketAddModal = props => {
           value: item._id,
         };
       });
-      console.log(data);
+      //console.log(data);
       setItems(data);
     } catch (error) {
       console.log(error);
@@ -93,15 +93,15 @@ export default TicketAddModal = props => {
   const getDoctorsData = async () => {
     try {
       const res = await getDoctors();
-      console.log(res);
-      const data = Object.values(res.data.data).map(item => {
-        console.log(item);
+      //console.log(res.data.data);
+      const data = Object.values(res.data.data.data).map(item => {
+        //console.log('ITEM', item);
         return {
           label: item.name,
           value: item._id,
         };
       });
-      console.log(data);
+      //console.log('DATA', data);
       setItems(data);
     } catch (error) {
       console.log(error);

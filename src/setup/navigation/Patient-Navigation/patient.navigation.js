@@ -36,6 +36,9 @@ import CancelAppointment from '../../../screens/shared/Appointment-management/Ca
 
 import MedicineScheduler from '../../../screens/patient/Medicine-reminder/Medicine-scheduler';
 import MedicineDetails from '../../../screens/patient/Medicine-reminder/Medicine-details';
+import Complaint from '../../../screens/shared/Complaint-desk/Complaint';
+import ComplaintDesk from '../../../screens/shared/Complaint-desk/Home';
+import PrescriptionDetail from '../../../screens/shared/E-health-records/PrescriptionDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -83,7 +86,10 @@ const PatientNavigation = () => {
       screenOptions={{headerShown: false}}
       initialRouteName="PatientTabStack">
       <Stack.Screen name="PatientTabStack" component={PatientTabStack} />
+      <Stack.Screen name="PrescriptionDetail" component={PrescriptionDetail} />
       <Stack.Screen name="Support Communities" component={Support} />
+      <Stack.Screen name="ComplaintDesk" component={ComplaintDesk} />
+      <Stack.Screen name="Complaint" component={Complaint} />
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="OngoingCall" component={OngoingCall} />

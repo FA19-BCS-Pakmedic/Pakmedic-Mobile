@@ -54,7 +54,7 @@ const Complaint = props => {
                 />
               </View>
               <View style={styles.detailRight}>
-                <Text style={styles.text}>{item?.complainee}</Text>
+                <Text style={styles.text}>{item?.complainee.name}</Text>
                 <Text style={styles.text}>+92-332-xxxxx</Text>
               </View>
             </View>

@@ -102,7 +102,7 @@ const Home = props => {
     try {
       const res = await getAllComplaints();
       if (res) {
-        //console.log(res.data.data.data);
+        //console.log('Complaints', res.data.data.data);
         setComplaints(
           res.data.data.data.filter(item => item.complainantType === role),
         );
@@ -116,7 +116,7 @@ const Home = props => {
 
   React.useEffect(() => {
     getComplaints();
-    //console.log(complaints);
+    console.log(complaints);
   }, [OptionModalVisible, AddModalVisible]);
 
   return (
