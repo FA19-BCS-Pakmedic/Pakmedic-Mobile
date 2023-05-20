@@ -64,7 +64,7 @@ const MedicineScheduler = ({route}) => {
           <View style={styles.content}>
             <View style={styles.contentItem}>
               <Text style={styles.contentText}>Dosage</Text>
-              <Text style={styles.contentItemText}>{item.dosageAmount}</Text>
+              <Text style={styles.contentItemText}>{item.dosage}</Text>
             </View>
             <View style={styles.contentItem}>
               <Text style={styles.contentText}>Duration</Text>

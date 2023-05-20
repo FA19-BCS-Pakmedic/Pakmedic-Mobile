@@ -10,8 +10,8 @@ import fonts from '../../../utils/styles/themes/fonts';
 import DropDownPicker from 'react-native-dropdown-picker';
 DropDownPicker.setListMode('SCROLLVIEW');
 
-import {getDoctor} from '../../../services/doctorServices';
-import {getPatient} from '../../../services/patientServices';
+import {getDoctors} from '../../../services/doctorServices';
+import {getPatients} from '../../../services/patientServices';
 import {
   createComplaint,
   updateComplaint,
@@ -72,37 +72,36 @@ export default TicketAddModal = props => {
     }
   }, [edit, item]);
 
-  const getPatients = async () => {
+  const getPatientsData = async () => {
     try {
-      const res = await getPatient();
-      console.log(res.data);
+      const res = await getPatients();
+      //console.log(res.data);
 
-      const data = Object.values(res.data.data).map(item => {
+      const data = Object.values(res.data.data.patients).map(item => {
         return {
           label: item.name,
           value: item._id,
         };
       });
-      console.log(data);
+      //console.log(data);
       setItems(data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getDoctors = async () => {
+  const getDoctorsData = async () => {
     try {
-      const res = await getDoctor();
-      console.log(res.data);
-
-      const data = Object.values(res.data.data).map(item => {
-        console.log(item);
+      const res = await getDoctors();
+      //console.log(res.data.data);
+      const data = Object.values(res.data.data.data).map(item => {
+        //console.log('ITEM', item);
         return {
           label: item.name,
           value: item._id,
         };
       });
-      console.log(data);
+      //console.log('DATA', data);
       setItems(data);
     } catch (error) {
       console.log(error);
@@ -111,10 +110,10 @@ export default TicketAddModal = props => {
 
   React.useEffect(() => {
     if (role === 'Doctor') {
-      getPatients();
+      getPatientsData();
       console.log('getPatients');
     } else {
-      getDoctors();
+      getDoctorsData();
     }
   }, [setModalVisible]);
 
@@ -159,6 +158,7 @@ export default TicketAddModal = props => {
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
       bgColor={colors.white}
+      back={false}
       borderColor={colors.primary1}>
       <View style={styles.container}>
         <View style={styles.header}>
@@ -214,6 +214,7 @@ export default TicketAddModal = props => {
               setValue={setVal}
               setItems={setItems}
               searchable
+              dropDownDirection="TOP"
               style={styles.dropDown}
               dropDownContainerStyle={styles.dropDownContainer}
               placeholder={'Select Complainee'}
