@@ -18,6 +18,7 @@ import {getPatientById} from '../../../../services/patientServices';
 import getVoxUsername from '../../../../utils/helpers/getVoxUsername';
 import {requestPermissions} from '../../../../services/voxServices';
 import {baseUrl} from '../../../../utils/constants/APIendpoint';
+import Loader from '../../../../components/shared/Loader';
 
 const Chat = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
@@ -26,14 +27,16 @@ const Chat = ({route, navigation}) => {
   const [socket, setSocket] = useState();
 
   // console.log(route.params);
-  const receiverId = route.params.receiver._id;
+  const receiverId = route.params.data;
 
-  console.log(route.params.receiver);
+  console.log(receiverId, "RECEIVER ID");
 
-  const [receiver] = useState(route.params.receiver);
+  const [receiver, setReceiver] = useState(null);
 
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user);
+
+  const [loading, setLoading] = useState(true);
 
   const userId = user._id;
 
@@ -57,6 +60,29 @@ const Chat = ({route, navigation}) => {
 
     return roomId.slice(10, 34);
   });
+
+  const getReceiver = async () => {
+
+    console.log("GET RECEIVER CALLED");
+    try {
+      const response =
+        role === ROLES.doctor
+          ? await getPatientById(receiverId)
+          : await getDoctorById(receiverId);
+
+      console.log(response.data, "REPONSE DATA");
+
+      setReceiver(response.data.data.user);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getReceiver();
+  }, [receiverId]);
 
   useEffect(() => {
     console.log(baseUrl);
@@ -149,8 +175,14 @@ const Chat = ({route, navigation}) => {
     }
   };
 
+  
+
   return (
-    <View style={styles.container}>
+    <>
+      {loading ? 
+        <Loader />
+      : 
+      <View style={styles.container}>
       <ChatHeader
         role={role}
         user={receiver}
@@ -171,7 +203,11 @@ const Chat = ({route, navigation}) => {
         isTyping={isTyping}
       />
     </View>
-  );
+
+      }
+    
+    </>
+    );
 };
 
 export default Chat;

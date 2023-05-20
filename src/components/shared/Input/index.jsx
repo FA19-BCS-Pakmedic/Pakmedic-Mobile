@@ -316,6 +316,7 @@ const styles = (
       alignItems: `${isFlexStart ? 'flex-start' : 'center'}`,
       // justifyContent: 'center',
       fontSize: fonts.size.font24,
+      paddingHorizontal: dimensions.Width * 0.02,
     },
 
     title: {

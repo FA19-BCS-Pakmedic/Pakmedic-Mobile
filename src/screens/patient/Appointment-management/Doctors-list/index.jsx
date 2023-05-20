@@ -16,6 +16,9 @@ import NextIcon from '../../../../assets/svgs/Backicon.svg';
 
 import {filterDoctors} from '../../../../services/doctorServices';
 import DoctorCard from '../../../../components/patient/DoctorCard';
+import useCustomApi from '../../../../hooks/useCustomApi';
+import Loader from '../../../../components/shared/Loader';
+import NotFound from '../../../../components/shared/NotFound';
 
 const DoctorsList = ({navigation, route}) => {
   console.log(route.params);
@@ -23,6 +26,8 @@ const DoctorsList = ({navigation, route}) => {
   const [speciality, setSpeciality] = useState(route.params.speciality);
   const [location, setLocation] = useState(route.params.location);
   const [keyword, setKeyword] = useState('');
+
+  const {callApi, isLoading} = useCustomApi();
 
   const [visible, setVisible] = useState(false);
 
@@ -41,9 +46,10 @@ const DoctorsList = ({navigation, route}) => {
     const getDoctors = async query => {
       try {
         console.log(query);
-        const response = await filterDoctors(query);
-        console.log(response.data.data.data);
-        setDoctors(response.data.data.data);
+        // const response = await filterDoctors(query);
+        const data = await callApi(filterDoctors, query);
+        // console.log(response.data.data.data);
+        setDoctors(data.data.data);
       } catch (err) {
         console.log(err);
       }
@@ -95,6 +101,7 @@ const DoctorsList = ({navigation, route}) => {
   return (
     <>
       {openLocationModal()}
+
       <StaticContainer
         customHeaderName={'Speciality'}
         customHeaderEnable={true}
@@ -105,14 +112,30 @@ const DoctorsList = ({navigation, route}) => {
           keyword={keyword}
           location={location}
         />
-        <ScrollView style={styles.scrollContainer}>
-          <View styles={styles.content}>
-            {doctors.length > 0 &&
-              doctors.map((doctor, index) => {
-                return <DoctorCard key={index} doctor={doctor} />;
-              })}
-          </View>
-        </ScrollView>
+        <>
+          {isLoading ? (
+            <Loader title="Loading Doctors" />
+          ) : doctors.length > 0 ? (
+            <ScrollView style={styles.scrollContainer}>
+              <View styles={styles.content}>
+                {doctors.length > 0 &&
+                  doctors.map((doctor, index) => {
+                    return <DoctorCard key={index} doctor={doctor} />;
+                  })}
+              </View>
+            </ScrollView>
+          ) : (
+            <View style={styles.notFoundContainer}>
+              <NotFound
+                title={'No Doctors Found'}
+                text={
+                  'Sorry, it seems like we don’t have any doctors registered for this speciality'
+                }
+                center
+              />
+            </View>
+          )}
+        </>
       </StaticContainer>
     </>
   );

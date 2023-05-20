@@ -44,7 +44,7 @@ const AppointmentCard = ({appointment}) => {
         navigation.navigate('App', {
           screen: 'AppointmentDetails',
           params: {
-            appointment: appointment,
+            data: appointment._id,
           },
         });
       }}>

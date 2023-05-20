@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
     fontSize: fonts.size.font16,
     fontWeight: 'bold',
     color: colors.secondary1,
+    width: dimensions.Width / 1.075,
   },
   text2: {
     fontSize: fonts.size.font14,

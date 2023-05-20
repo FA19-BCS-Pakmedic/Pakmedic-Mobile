@@ -54,27 +54,34 @@ const onMessageReceived = async message => {
   await notifee.displayNotification(JSON.parse(message.data.notifee));
 };
 
+
+const navigateToScreen = async (notification, navigation, type) => {
+  if (type === EventType.PRESS) {
+    // Update external API
+    if (notification?.data?.navigate) {
+      navigation.navigate('App', {
+        screen: notification?.data?.navigate,
+        params: {image: notification?.data?.image, data: notification?.data?.data},
+      });
+    }
+
+    // Remove the notification
+    await notifee.cancelNotification(notification.id);
+  }
+}
+
+
+const onForegroundMessage = navigation => {
+  notifee.onForegroundEvent(({type, detail}) => {
+    const {notification, pressAction} = detail;
+    navigateToScreen(notification, navigation, type);
+  });
+}
+
 const onBackgroundMessage = navigation => {
   notifee.onBackgroundEvent(async ({type, detail}) => {
     const {notification, pressAction} = detail;
-
-    // Check if the user pressed the "Mark as read" action
-
-    console.log('Inside onBackgroundEvent');
-    if (type === EventType.PRESS) {
-      // Update external API
-      console.log('Pressed Notification');
-
-      if (notification?.data?.navigate) {
-        navigation.navigate('App', {
-          screen: notification?.data?.navigate,
-          params: {image: notification?.data?.image},
-        });
-      }
-
-      // Remove the notification
-      await notifee.cancelNotification(notification.id);
-    }
+    navigateToScreen(notification, navigation, type);
   });
 };
 
@@ -84,12 +91,13 @@ const DoctorNavigation = () => {
     messaging().onMessage(onMessageReceived);
     messaging().setBackgroundMessageHandler(onMessageReceived);
     onBackgroundMessage(navigation);
+    onForegroundMessage(navigation);
   }, []);
 
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="ComplaintDesk">
+      initialRouteName="DoctorTabStack">
       <Stack.Screen name="DoctorTabStack" component={DoctorTabStack} />
       <Stack.Screen name="FinanceHome" component={FinanceHome} />
       <Stack.Screen name="Support Communities" component={Support} />

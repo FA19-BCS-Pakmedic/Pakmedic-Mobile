@@ -37,6 +37,7 @@ import ConfirmationAlert from '../ConfirmationAlert';
 import {ValidateDropdown} from '../Dropdown';
 import {downloadFile} from '../../../utils/helpers/downloadFile';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
+import NotFound from '../NotFound';
 
 const Reports = ({
   reports,
@@ -182,6 +183,8 @@ const Reports = ({
                     `${apiEndpoint}files/${selectedReport.file}`,
                     selectedReport.file,
                   );
+                  setOpen(false);
+
                   // console.log(`${apiEndpoint}files/${selectedReport.file}`);
                 }}>
                 <Text style={styles.optionText}>Download</Text>
@@ -406,17 +409,25 @@ const Reports = ({
         style={styles.scrollContainer}
         contentContainer={styles.scrollContentContainer}>
         <View style={styles.contentContainer}>
-          {reports.length > 0
-            ? reports.map((report, index) => (
-                <View style={styles.reportContainer} key={index}>
-                  <ReportCard
-                    setOpenOptions={setOpenOptions}
-                    setSelectedReport={setSelectedReport}
-                    report={report}
-                  />
-                </View>
-              ))
-            : null}
+          {reports.length > 0 ? (
+            reports.map((report, index) => (
+              <View style={styles.reportContainer} key={index}>
+                <ReportCard
+                  setOpenOptions={setOpenOptions}
+                  setSelectedReport={setSelectedReport}
+                  report={report}
+                />
+              </View>
+            ))
+          ) : (
+            <View style={styles.notFoundContainer}>
+              <NotFound
+                title={'No scans found'}
+                text={'There are no scans added by the user'}
+                center
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
     </>
@@ -426,6 +437,10 @@ const Reports = ({
 export default Reports;
 
 const styles = StyleSheet.create({
+  notFoundContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   scrollContainer: {
     width: '100%',
   },
