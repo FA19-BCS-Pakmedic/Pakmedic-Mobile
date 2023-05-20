@@ -64,7 +64,7 @@ const MedicineScheduler = ({route}) => {
           <View style={styles.content}>
             <View style={styles.contentItem}>
               <Text style={styles.contentText}>Dosage</Text>
-              <Text style={styles.contentItemText}>{item.dosage}</Text>
+              <Text style={styles.contentItemText}>{item.dosageAmount}</Text>
             </View>
             <View style={styles.contentItem}>
               <Text style={styles.contentText}>Duration</Text>
@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
   },
   Icon: {
     height: dimensions.Height / 3.5,
-
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',

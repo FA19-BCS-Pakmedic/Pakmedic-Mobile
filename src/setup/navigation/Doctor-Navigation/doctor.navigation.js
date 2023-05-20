@@ -43,55 +43,23 @@ import AppointmentDetails from '../../../screens/shared/Appointment-management/A
 
 import PrescriptionManagement from '../../../screens/doctor/Prescription/Prescription-management';
 import FinanceHome from '../../../screens/shared/Finance/Home';
+import {eventEmitter} from '../../../../index.js';
 
 const Stack = createNativeStackNavigator();
-
-const onMessageReceived = async message => {
-  notifee.createChannel({
-    id: 'default',
-    name: 'Default Channel',
-  });
-  await notifee.displayNotification(JSON.parse(message.data.notifee));
-};
-
-
-const navigateToScreen = async (notification, navigation, type) => {
-  if (type === EventType.PRESS) {
-    // Update external API
-    if (notification?.data?.navigate) {
-      navigation.navigate('App', {
-        screen: notification?.data?.navigate,
-        params: {image: notification?.data?.image, data: notification?.data?.data},
-      });
-    }
-
-    // Remove the notification
-    await notifee.cancelNotification(notification.id);
-  }
-}
-
-
-const onForegroundMessage = navigation => {
-  notifee.onForegroundEvent(({type, detail}) => {
-    const {notification, pressAction} = detail;
-    navigateToScreen(notification, navigation, type);
-  });
-}
-
-const onBackgroundMessage = navigation => {
-  notifee.onBackgroundEvent(async ({type, detail}) => {
-    const {notification, pressAction} = detail;
-    navigateToScreen(notification, navigation, type);
-  });
-};
 
 const DoctorNavigation = () => {
   const navigation = useNavigation();
   useEffect(() => {
-    messaging().onMessage(onMessageReceived);
-    messaging().setBackgroundMessageHandler(onMessageReceived);
-    onBackgroundMessage(navigation);
-    onForegroundMessage(navigation);
+    eventEmitter.on('notificationReceived', notification => {
+      if (notification?.data?.navigate) {
+        navigation.navigate(notification?.data?.navigate, {
+          params: {
+            image: notification?.data?.image,
+            data: notification?.data?.data,
+          },
+        });
+      }
+    });
   }, []);
 
   return (
