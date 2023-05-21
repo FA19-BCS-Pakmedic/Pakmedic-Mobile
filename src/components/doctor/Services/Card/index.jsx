@@ -14,8 +14,9 @@ import MenuDropdown from '../../../shared/MenuDropdown';
 import ConfirmationAlert from '../../../shared/ConfirmationAlert';
 import {useState} from 'react';
 
-export default function ServiceCard({service, onEdit, onDelete}) {
+export default function ServiceCard({service, onEdit, onDelete, isViewing}) {
   const [visible, setVisible] = useState(false);
+
 
   const menuDropDownOptions = [
     {text: 'Edit', onSelect: () => onEdit(service._id)},
@@ -93,9 +94,12 @@ export default function ServiceCard({service, onEdit, onDelete}) {
             )}
           </View>
         </View>
-        <MenuDropdown options={menuDropDownOptions}>
+
+        {!isViewing && <MenuDropdown options={menuDropDownOptions}>
           <View style={styles.optionsIconContainer}>{icons[`options`]}</View>
         </MenuDropdown>
+        }
+
       </View>
 
       {/* Fees */}
@@ -129,7 +133,7 @@ export default function ServiceCard({service, onEdit, onDelete}) {
           <View style={styles.infoIconContainer}>{icons[`clock`]}</View>
           <Text style={styles.infoLabel}>Time</Text>
         </View>
-        <Text style={styles.infoValue}>5:00pm - 5:00pm</Text>
+        <Text style={styles.infoValue}>{service.availFrom} - {service.availTo}</Text>
       </View>
     </View>
   );

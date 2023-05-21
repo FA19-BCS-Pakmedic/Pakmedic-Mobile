@@ -11,8 +11,9 @@ import {updatePatient} from '../../../services/patientServices';
 import GeneticCard from './Card';
 import ModalContainer from '../../../containers/ModalContainer';
 import {useCustomToast} from '../../../hooks/useCustomToast';
+import NotFound from '../../shared/NotFound';
 
-const geneticDiseases = ({updateUser, geneDis}) => {
+const geneticDiseases = ({updateUser, geneDis, isViewing}) => {
   const {showToast} = useCustomToast();
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -155,6 +156,7 @@ const geneticDiseases = ({updateUser, geneDis}) => {
     <View style={styles.container}>
       {openModal()}
       {/* Add Services Button */}
+      {!isViewing && 
       <View style={styles.btnContainer}>
         <AddMore
           type={'outlined'}
@@ -166,7 +168,7 @@ const geneticDiseases = ({updateUser, geneDis}) => {
             });
           }}
         />
-      </View>
+      </View>}
       <ScrollView style={styles.contentContainer}>
         {geneticDiseases?.length > 0 ? (
           geneticDiseases?.map((disease, index) => {
@@ -177,11 +179,15 @@ const geneticDiseases = ({updateUser, geneDis}) => {
                 disease={disease}
                 onEdit={onEditPress}
                 onDelete={onDeletePress}
+                isViewing={isViewing}
               />
             );
           })
         ) : (
-          <Text>No Genetic diseases found</Text>
+          <NotFound
+            title='No Genetic Diseases Found'
+            text='Please add genetic diseases to your profile'
+          />
         )}
       </ScrollView>
     </View>

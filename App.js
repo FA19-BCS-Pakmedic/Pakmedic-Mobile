@@ -124,14 +124,6 @@ const App = () => {
         </PaperProvider>
       </MenuProvider>
     </Provider>
-    // <NavigationContainer>
-    //   <StackNavigate.Navigator initialRouteName="Home">
-    //     <StackNavigate.Screen name="Home" component={CallHome} />
-    //     <StackNavigate.Screen name="History" component={History} />
-    //     <StackNavigate.Screen name="IncomingCall" component={IncomingCall} />
-    //     <StackNavigate.Screen name="OngoingCall" component={OngoingCall} />
-    //   </StackNavigate.Navigator>
-    // </NavigationContainer>
   );
 };
 

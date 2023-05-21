@@ -97,4 +97,15 @@ export const styles = StyleSheet.create({
     color: colors.secondary1,
     fontWeight: 'bold',
   },
+  noCommunityContainer: {
+    width: '100%',
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },  
+  noCommunity: {
+    fontSize: fonts.size.font20,
+    color: colors.secondary1,
+    fontWeight: 'bold',
+  }
 });

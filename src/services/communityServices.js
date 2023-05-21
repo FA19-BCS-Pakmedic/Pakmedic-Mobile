@@ -1,12 +1,4 @@
-import axios from 'axios';
-
-//import api end point
-import {apiEndpoint} from '../utils/constants/APIendpoint';
-
-const API = axios.create({
-  baseURL: `${apiEndpoint}`,
-  withCredentials: true,
-});
+import API from '../utils/helpers/axios';
 
 //COMMUNITY API
 
@@ -41,3 +33,5 @@ export const deletePost = id => API.delete(`posts/${id}`);
 //add comment
 export const addComment = (pid, cid, data) =>
   API.post(`comments/${pid}/${cid}`, data);
+
+export const deleteComment = (id) => API.delete(`comments/${id}`);

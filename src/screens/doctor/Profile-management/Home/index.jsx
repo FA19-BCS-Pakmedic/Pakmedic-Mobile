@@ -34,6 +34,7 @@ const ProfileManagement = ({route}) => {
   const [loading, setLoading] = useState(false);
 
   const userId = route.params.userId;
+  const isViewing = route.params.isViewing;
 
   const dispatch = useDispatch();
 
@@ -42,7 +43,8 @@ const ProfileManagement = ({route}) => {
     try {
       const response = await getDoctorById(userId);
       setStoredUser(response.data.data.user);
-      dispatch(authUpdate({user: response.data.data.user}));
+      if(!isViewing)
+        dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
       console.log(err);
       showToast("Can't load user data", 'danger');
@@ -57,14 +59,9 @@ const ProfileManagement = ({route}) => {
 
   useEffect(() => {
     if (storedUser) {
-      // console.log(storedUser);
       setInformation(getDoctorInfo(storedUser));
     }
   }, [storedUser]);
-
-  // useEffect(() => {
-  //   setLoadProfile(true);
-  // }, [information]);
 
   const onOptionClick = index => {
     setProfileOptions(prevState => {
@@ -79,20 +76,17 @@ const ProfileManagement = ({route}) => {
     });
   };
 
-  // useEffect(() => {
-  //   storedUser && console.log('STORED USER', storedUser);
-  // }, [setStoredUser]);
-
   const getActiveComponent = () => {
     console.log(activeOption);
     switch (activeOption) {
       case 'ProfileInformation':
-        return <ProfileInformation information={information} />;
+        return <ProfileInformation information={information} isViewing={isViewing}/>;
       case 'Services':
         return (
           <Services
             services={storedUser.services}
             setStoredUser={setStoredUser}
+            isViewing={isViewing}
           />
         );
       case 'AvailableTreatments':
@@ -100,6 +94,7 @@ const ProfileManagement = ({route}) => {
           <AvailableTreatments
             setStoredUser={setStoredUser}
             treatments={storedUser.treatments}
+            isViewing={isViewing}
           />
         );
       case 'Experiences':
@@ -107,13 +102,14 @@ const ProfileManagement = ({route}) => {
           <Experiences
             setStoredUser={setStoredUser}
             experiences={storedUser?.experiences}
+            isViewing={isViewing}
           />
         );
       case 'Reviews':
-        return <Reviews />;
+        return <Reviews/>;
       case 'About':
         return (
-          <About about={storedUser?.about} setStoredUser={setStoredUser} />
+          <About about={storedUser?.about} setStoredUser={setStoredUser} isViewing={isViewing}/>
         );
       case 'Signature':
         return <Signature />;
@@ -130,9 +126,9 @@ const ProfileManagement = ({route}) => {
       ) : (
         
         <View style={styles.root}>
-          <ProfileCard user={storedUser} />
+          <ProfileCard user={storedUser} isViewing={isViewing}/>
 
-          <ProfileOptions options={profileOptions} onClick={onOptionClick} />
+          <ProfileOptions options={profileOptions} onClick={onOptionClick} isViewing={isViewing}/>
           {getActiveComponent()}
         </View>
       )}
