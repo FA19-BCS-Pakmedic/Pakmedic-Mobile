@@ -44,7 +44,7 @@ export const updateFamilyMember = (id, data) =>
 export const deleteFamilyMember = id => API.delete(`families/${id}`);
 
 export const addReminder = data => {
-  console.log(data);
+  console.log('Add REMINDERRRRRRRRRR', data);
   return API.post('reminder', data);
 };
 

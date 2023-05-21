@@ -28,6 +28,10 @@ import fonts from '../../../../utils/styles/themes/fonts';
 import {useSelector} from 'react-redux';
 import ConfirmationAlert from '../../../../components/shared/ConfirmationAlert';
 
+import {deletePost} from '../../../../services/communityServices';
+
+import {createComplaint} from '../../../../services/complaintServices';
+
 const Post = props => {
   const {control, handleSubmit, watch, resetField} = useForm({
     mode: 'onChange',
@@ -44,6 +48,8 @@ const Post = props => {
   const [confirmationShow, setConfirmationShow] = React.useState(false);
 
   const [comments, setComments] = React.useState([]);
+
+  const [AddModalVisible, setAddVisible] = React.useState(false);
 
   const item = props.route.params;
 
@@ -142,6 +148,15 @@ const Post = props => {
               width={dimensions.Width / 4}
               height={dimensions.Height / 20}
               fontSize={fonts.size.font12}
+              onPress={() => {
+                try {
+                  const res = deletePost(item._id);
+
+                  props.navigation.goBack();
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
             />
           ) : (
             <Button
@@ -150,6 +165,9 @@ const Post = props => {
               width={dimensions.Width / 4}
               height={dimensions.Height / 20}
               fontSize={fonts.size.font12}
+              onPress={() => {
+                setAddVisible(true);
+              }}
             />
           )}
         </View>
@@ -309,6 +327,16 @@ const Post = props => {
           </View>
         </View>
       </View>
+      <TicketAddModal
+        Visible={AddModalVisible}
+        setModalVisible={setAddVisible}
+        edit={false}
+        report={'Post'}
+        userData={{
+          complainee: item.author?._id,
+          complaineeType: item.author?.role,
+        }}
+      />
     </ScrollContainer>
   );
 };

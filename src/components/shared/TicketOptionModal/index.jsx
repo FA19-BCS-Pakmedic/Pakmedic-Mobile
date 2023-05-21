@@ -19,7 +19,7 @@ const TicketOptionModal = props => {
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
       height={
-        item?.status === 'Pending'
+        item?.status === 'Pending' && item?.type === 'General'
           ? dimensions.Height / 3.5
           : dimensions.Height / 5
       }
@@ -39,7 +39,7 @@ const TicketOptionModal = props => {
           <Text style={styles.text}>View Details</Text>
         </TouchableOpacity>
         <View style={styles.line} />
-        {item?.status === 'Pending' && (
+        {item?.status === 'Pending' && item?.type === 'General' && (
           <>
             <TouchableOpacity
               style={styles.button}

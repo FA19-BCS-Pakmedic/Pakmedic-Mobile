@@ -31,7 +31,7 @@ import {useSelector} from 'react-redux';
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 
 export default ReminderAddModal = props => {
-  const {Visible, setModalVisible, navigation, date} = props;
+  const {Visible, setModalVisible, navigation, date, onAdd} = props;
   const {showToast} = useCustomToast();
   const [loading, setLoading] = useState();
   const user = useSelector(state => state.auth.user);
@@ -51,10 +51,12 @@ export default ReminderAddModal = props => {
     const res = await addReminder(data);
     try {
       if (res?.data?.status == 'success') {
-        setModalVisible(false);
         showToast('Successfully Added Reminder');
+        onAdd(true);
+        setModalVisible(false);
       }
-    } catch {
+    } catch (err) {
+      console.log(err);
       showToast('Something went wrong', 'danger');
     } finally {
       setLoading(false);

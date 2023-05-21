@@ -38,6 +38,10 @@ import Toast from 'react-native-toast-notifications';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {googleConfig} from './src/utils/helpers/googleConfig';
 
+//ignore warnings
+import {LogBox} from 'react-native';
+LogBox.ignoreLogs(['Require cycle: index.js']);
+
 const StackNavigate = createNativeStackNavigator();
 
 const registerDeviceForMessaging = async () => {

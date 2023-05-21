@@ -24,14 +24,20 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import PostLoader from './PostLoader';
 import ROLES from '../../../../utils/constants/ROLES';
 
-const CommunityDetails = ({route}) => {
+//refresh on Focus
+import {useIsFocused} from '@react-navigation/native';
 
-  const {item} = route.params;
+const CommunityDetails = props => {
+  const {item} = props.route.params;
   const [isModalVisible, setModalVisible] = React.useState(false);
   const [checkDelete, setCheckDelete] = React.useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
+
+  const isFocused = useIsFocused();
+
+  const [refresh, setRefresh] = useState(false);
 
   const role = useSelector(state => state.role.role);
 
@@ -47,7 +53,7 @@ const CommunityDetails = ({route}) => {
   };
   useEffect(() => {
     getPost();
-  }, [isModalVisible, checkDelete]);
+  }, [isModalVisible, checkDelete, isFocused]);
 
   // const communityCards = [
   //   {
