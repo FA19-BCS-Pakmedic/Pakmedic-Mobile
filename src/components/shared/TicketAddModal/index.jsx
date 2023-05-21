@@ -26,7 +26,8 @@ import {useForm} from 'react-hook-form';
 import {useSelector} from 'react-redux';
 
 export default TicketAddModal = props => {
-  const {Visible, setModalVisible, navigation, item, edit} = props;
+  const {Visible, setModalVisible, navigation, item, edit, report, userData} =
+    props;
   const role = useSelector(state => state.role.role);
   const id = useSelector(state => state.auth.user._id);
 
@@ -118,19 +119,25 @@ export default TicketAddModal = props => {
   }, [setModalVisible]);
 
   const onSubmit = async data => {
-    console.log(data);
-    if (value === null) {
+    if (value === null && !report) {
       alert('Please select complainee');
     } else {
-      console.log('value', value);
-      data.complainee = value;
-      data.complaineeType = role === 'Doctor' ? 'Patient' : 'Doctor';
-      data.complainantType = role === 'Doctor' ? 'Doctor' : 'Patient';
+      if (report) {
+        data.subject = `${report} Report`;
+        data.complainee = userData.complainee;
+        data.complaineeType = userData.complaineeType;
+        data.type = report;
+      } else {
+        data.complainee = value;
+        data.complaineeType = role === 'Doctor' ? 'Patient' : 'Doctor';
+      }
       data.complainant = id;
 
+      data.complainantType = role === 'Doctor' ? 'Doctor' : 'Patient';
       console.log('storing this data', data);
-      setLoading(true);
+
       try {
+        setLoading(true);
         if (!edit) {
           const res = await createComplaint(data);
           console.log(res.data);
@@ -153,7 +160,7 @@ export default TicketAddModal = props => {
     <ModalContainer
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
-      height={dimensions.Height / 1.6}
+      height={report ? dimensions.Height * 0.37 : dimensions.Height / 1.6}
       width={dimensions.Width * 0.9}
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
@@ -162,29 +169,42 @@ export default TicketAddModal = props => {
       borderColor={colors.primary1}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Create Ticket</Text>
+          <Text style={styles.headerText}>
+            {edit
+              ? 'Edit Ticket'
+              : report
+              ? `Report ${report}`
+              : 'Create Ticket'}
+          </Text>
         </View>
         <View style={styles.body}>
+          {!report && (
+            <ValidateInputField
+              placeholder="Enter Subject"
+              placeholderTextColor={colors.secondary1}
+              control={control}
+              name="subject"
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Subject is required',
+                },
+              }}
+              containerWidth={dimensions.Width * 0.8}
+              inputHeight={dimensions.Height / 20}
+              fontSize={fonts.size.font14}
+              text={watch('subject')}
+              title="Subject"
+              type="outlined"
+            />
+          )}
+
           <ValidateInputField
-            placeholder="Enter Subject"
-            placeholderTextColor={colors.secondary1}
-            control={control}
-            name="subject"
-            rules={{
-              required: {
-                value: true,
-                message: 'Subject is required',
-              },
-            }}
-            containerWidth={dimensions.Width * 0.8}
-            inputHeight={dimensions.Height / 20}
-            fontSize={fonts.size.font14}
-            text={watch('subject')}
-            title="Subject"
-            type="outlined"
-          />
-          <ValidateInputField
-            placeholder="Write complaint details"
+            placeholder={
+              report
+                ? 'Write reason(s) for reporting'
+                : 'Write Complaint details'
+            }
             placeholderTextColor={colors.secondary1}
             control={control}
             name="complaint"
@@ -200,30 +220,31 @@ export default TicketAddModal = props => {
             text={watch('complaint')}
             multiline
             isFlexStart
-            title="Complaint"
+            title={report ? 'Reason' : 'Complaint'}
             type="outlined"
-            watch={watch('complaint')}
           />
-          <View style={styles.complaineeContainer}>
-            <Text style={styles.Text}>Complainee</Text>
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setVal}
-              setItems={setItems}
-              searchable
-              dropDownDirection="TOP"
-              style={styles.dropDown}
-              dropDownContainerStyle={styles.dropDownContainer}
-              placeholder={'Select Complainee'}
-              textStyle={{
-                fontSize: 12,
-              }}
-              maxHeight={dimensions.Height * 0.2}
-            />
-          </View>
+          {!report && (
+            <View style={styles.complaineeContainer}>
+              <Text style={styles.Text}>Complainee</Text>
+              <DropDownPicker
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setVal}
+                setItems={setItems}
+                searchable
+                dropDownDirection="TOP"
+                style={styles.dropDown}
+                dropDownContainerStyle={styles.dropDownContainer}
+                placeholder={'Select Complainee'}
+                textStyle={{
+                  fontSize: 12,
+                }}
+                maxHeight={dimensions.Height * 0.2}
+              />
+            </View>
+          )}
         </View>
 
         <View style={styles.ButtonContainer}>
@@ -233,10 +254,12 @@ export default TicketAddModal = props => {
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
             fontSize={fonts.size.font14}
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              setModalVisible(false);
+            }}
           />
           <Button
-            label={edit ? 'Update' : 'Create'}
+            label={report ? 'Report' : edit ? 'Update' : 'Create'}
             type="filled"
             width={dimensions.Width / 3.5}
             height={dimensions.Height / 25}
