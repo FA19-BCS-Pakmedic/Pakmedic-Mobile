@@ -12,6 +12,7 @@ import {ModalInputField, ValidateInputField} from '../../shared/Input';
 import AvailableTreatmentsCard from './Card';
 
 import {useCustomToast} from '../../../hooks/useCustomToast';
+import NotFound from '../../shared/NotFound';
 
 export default function AvailableTreatments({setStoredUser, treatments}) {
   const [visible, setVisible] = useState(false);
@@ -177,7 +178,10 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
             );
           })
         ) : (
-          <Text>No treatments added</Text>
+          <NotFound
+                  title="No treatments"
+                  text='No treatments are added yet'
+                />
         )}
       </ScrollView>
     </View>

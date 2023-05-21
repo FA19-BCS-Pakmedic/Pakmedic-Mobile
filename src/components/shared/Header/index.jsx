@@ -163,8 +163,8 @@ const Header = ({color}) => {
             title="Profile"
           />
           <Divider />
-          <Menu.Item onPress={() => {
-            logout(dispatch, authLogout, navigation);
+          <Menu.Item onPress={async () => {
+            await logout(dispatch, authLogout, navigation);
           }} title="Logout" />
           <Divider />
           <Menu.Item

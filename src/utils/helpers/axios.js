@@ -17,7 +17,6 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error.response.data.message);
     if (error.response && (error.response.status === 401 || error.response.data.message === 'You are not logged in! Please log in to get access.')) {
       eventEmitter.emit('logout');
     }

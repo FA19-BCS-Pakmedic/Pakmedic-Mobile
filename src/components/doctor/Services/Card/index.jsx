@@ -17,6 +17,7 @@ import {useState} from 'react';
 export default function ServiceCard({service, onEdit, onDelete}) {
   const [visible, setVisible] = useState(false);
 
+
   const menuDropDownOptions = [
     {text: 'Edit', onSelect: () => onEdit(service._id)},
     {text: 'Delete', onSelect: () => setVisible(true)},
@@ -129,7 +130,7 @@ export default function ServiceCard({service, onEdit, onDelete}) {
           <View style={styles.infoIconContainer}>{icons[`clock`]}</View>
           <Text style={styles.infoLabel}>Time</Text>
         </View>
-        <Text style={styles.infoValue}>5:00pm - 5:00pm</Text>
+        <Text style={styles.infoValue}>{service.availFrom} - {service.availTo}</Text>
       </View>
     </View>
   );

@@ -99,21 +99,14 @@ const DoctorNavigation = () => {
 
   const dispatch = useDispatch();
   
-
-
   useEffect(() => {
     messaging().onMessage(onMessageReceived);
     messaging().setBackgroundMessageHandler(onMessageReceived);
     onBackgroundMessage(navigation);
     onForegroundMessage(navigation);
-
     eventEmitter.on("logout", () => {
-
       logout(dispatch, authLogout, navigation);
-
     });
-    
-
   }, []);
 
   return (

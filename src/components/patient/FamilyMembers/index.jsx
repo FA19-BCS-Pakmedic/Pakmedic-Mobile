@@ -29,6 +29,7 @@ import {
   updateFamilyMember,
 } from '../../../services/patientServices';
 import {useCustomToast} from '../../../hooks/useCustomToast';
+import NotFound from '../../shared/NotFound';
 
 const FamilyMembers = ({familyMembers, updateUser}) => {
   const [selectedMember, setSelectedMember] = useState(null);
@@ -287,7 +288,7 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
               keyboardType={'numeric'}
               height={dimensions.Height / 20}
               title={'Height'}
-              text={watch('height')}
+              text={watch('height').toString()}
             />
           </View>
 
@@ -318,7 +319,7 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
               keyboardType={'numeric'}
               height={dimensions.Height / 20} 
               title={'Weight'}
-              text={watch('weight')}
+              text={watch('weight').toString()}
             />
           </View>
 
@@ -391,7 +392,11 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
             );
           })
         ) : (
-          <Text>No family members</Text>
+          <NotFound
+            text='No family members are added'
+            height={dimensions.Height / 2}
+            title="No family members found"
+          />
         )}
       </ScrollView>
     </View>

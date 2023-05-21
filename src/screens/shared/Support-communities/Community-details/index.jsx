@@ -22,8 +22,10 @@ import NotFound from '../../../../components/shared/NotFound';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import PostLoader from './PostLoader';
+import ROLES from '../../../../utils/constants/ROLES';
 
 const CommunityDetails = ({route}) => {
+
   const {item} = route.params;
   const [isModalVisible, setModalVisible] = React.useState(false);
   const [checkDelete, setCheckDelete] = React.useState(false);
@@ -98,7 +100,7 @@ const CommunityDetails = ({route}) => {
               setOpen={setOpen}
               setValue={setValue}
               setItems={setItems}
-              style={styles.dropDown}
+              style={[styles.dropDown, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}
               dropDownContainerStyle={styles.dropDownContainer}
               placeholder={item.name}
               textStyle={{

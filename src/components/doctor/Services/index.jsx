@@ -39,6 +39,7 @@ import {
   updateService,
 } from '../../../services/doctorServices';
 import {DAYS} from '../../../utils/constants/Days';
+import NotFound from '../../shared/NotFound';
 
 const initialState = {
   name: '',
@@ -576,7 +577,7 @@ const Services = ({services, setStoredUser}) => {
       <ScrollView style={styles.contentContainer}>
         {/* Services */}
         <View style={styles.serviceContainer}>
-          {services.length > 0 &&
+          {services.length > 0 ?
             services.map((service, index) => {
               return (
                 <ServiceCard
@@ -586,7 +587,12 @@ const Services = ({services, setStoredUser}) => {
                   onDelete={onDeletePress}
                 />
               );
-            })}
+            }) : (
+              <NotFound
+                  title="No services"
+                  text='No services are added yet'
+                />
+            )}
         </View>
       </ScrollView>
     </View>

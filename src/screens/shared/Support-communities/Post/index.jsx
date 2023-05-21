@@ -18,7 +18,7 @@ import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 
 import {set, useForm} from 'react-hook-form';
 
-import {addComment, getPostById} from '../../../../services/communityServices';
+import {addComment, deleteComment, getPostById} from '../../../../services/communityServices';
 
 import {formatDate} from '../../../../utils/helpers/formatDate';
 
@@ -26,6 +26,7 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
 import {useSelector} from 'react-redux';
+import ConfirmationAlert from '../../../../components/shared/ConfirmationAlert';
 
 const Post = props => {
   const {control, handleSubmit, watch, resetField} = useForm({
@@ -40,94 +41,37 @@ const Post = props => {
   const [cid, setCid] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
+  const [confirmationShow, setConfirmationShow] = React.useState(false);
+
   const [comments, setComments] = React.useState([]);
 
   const item = props.route.params;
 
-  //json containing comments and replies
-  // const comment = [
-  //   {
-  //     id: 1,
-  //     user: 'jane',
-  //     comment: 'This is a great post!',
-  //     time: '5 hours ago',
-  //     replies: [
-  //       {
-  //         id: 1,
-  //         reply: 'Thanks for your comment!',
-  //         time: '4 hours ago',
-  //         user: 'john',
-  //       },
-  //       {
-  //         id: 2,
-  //         reply: 'I agree, this post is amazing!',
-  //         time: '3 hours ago',
-  //         user: 'sarah',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     user: 'joe',
-  //     comment: "I don't really understand this topic",
-  //     time: '1 hour ago',
-  //     replies: [],
-  //   },
-  //   {
-  //     id: 3,
-  //     user: 'kate',
-  //     comment: 'Can you provide more examples?',
-  //     time: '3 hours ago',
-  //     replies: [
-  //       {
-  //         id: 1,
-  //         reply: 'Sure, here are a few examples...',
-  //         time: '2 hours ago',
-  //         user: 'tim',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 4,
-  //     user: 'dave',
-  //     comment: 'I disagree with your conclusion',
-  //     time: '4 hours ago',
-  //     replies: [
-  //       {
-  //         id: 1,
-  //         reply: 'Can you explain why?',
-  //         time: '3 hours ago',
-  //         user: 'lisa',
-  //       },
-  //       {
-  //         id: 2,
-  //         reply: "I'm interested in hearing your perspective",
-  //         time: '2 hours ago',
-  //         user: 'paul',
-  //       },
-  //       {
-  //         id: 3,
-  //         reply: 'I respectfully disagree',
-  //         time: '1 hour ago',
-  //         user: 'alice',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 5,
-  //     user: 'sam',
-  //     comment: 'This post is very informative',
-  //     time: '6 hours ago',
-  //     replies: [
-  //       {
-  //         id: 1,
-  //         reply: 'Glad you found it helpful!',
-  //         time: '5 hours ago',
-  //         user: 'jim',
-  //       },
-  //     ],
-  //   },
-  // ];
+  const getConfirmationMessage = () => {
+    return (
+      <ConfirmationAlert
+        isModalVisible={confirmationShow}
+        setModalVisible={setConfirmationShow}
+        alertText={"Are you sure you want to delete this comment/reply"}
+        confirmText={"Delete"}
+        cancelText={"Cancel"}
+        onConfirm={() => handleDeleteComment()}
+        onCancel={() => setConfirmationShow(false)}
+      />
+    )
+  }
+
+
+  const handleDeleteComment = async(id) => {
+    try {
+      setLoading(true);
+      await deleteComment(id);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const inputRef = React.useRef(null);
 
@@ -321,21 +265,14 @@ const Post = props => {
                         }}
                       />
 
-                      {item.author?._id === user._id ? (
+                      {item.author?._id === user._id && (
                         <Button
                           label="Delete"
                           type="outlined"
                           width={dimensions.Width / 5}
                           height={dimensions.Height / 30}
                           fontSize={fonts.size.font12}
-                        />
-                      ) : (
-                        <Button
-                          label="Report"
-                          type="outlined"
-                          width={dimensions.Width / 5}
-                          height={dimensions.Height / 30}
-                          fontSize={fonts.size.font12}
+                          onPress={() => handleDeleteComment(item._id)}
                         />
                       )}
                     </View>
@@ -354,12 +291,13 @@ const Post = props => {
                             </Text>
                           </View>
                           <Button
-                            label="Report reply"
+                            label="Delete Reply"
                             type="outlined"
                             width={dimensions.Width / 5}
                             height={dimensions.Height / 30}
                             fontSize={fonts.size.font12}
                             borderColor={colors.white}
+                            onPress={() => handleDeleteComment(item._id)}
                           />
                         </View>
                       </View>

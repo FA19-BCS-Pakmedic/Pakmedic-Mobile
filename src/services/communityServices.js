@@ -33,3 +33,5 @@ export const deletePost = id => API.delete(`posts/${id}`);
 //add comment
 export const addComment = (pid, cid, data) =>
   API.post(`comments/${pid}/${cid}`, data);
+
+export const deleteComment = (id) => API.delete(`comments/${id}`);

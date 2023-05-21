@@ -11,9 +11,8 @@ import ProfileInformation from '../../../../components/shared/ProfileInformation
 import FamilyMembers from '../../../../components/patient/FamilyMembers';
 import Allergies from '../../../../components/patient/Allergies';
 import GeneticDiseases from '../../../../components/patient/GeneticDiseases';
-import Biography from '../../../../components/patient/Biography';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {getPatientById} from '../../../../services/patientServices';
 import {getPatientInfo} from '../../../../utils/helpers/getProfileInfo';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';

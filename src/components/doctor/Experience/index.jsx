@@ -35,6 +35,7 @@ import {
 } from '../../../services/doctorServices';
 
 import {useCustomToast} from '../../../hooks/useCustomToast';
+import NotFound from '../../shared/NotFound';
 
 const Experiences = ({setStoredUser, experiences}) => {
   const [visible, setVisible] = useState(false);
@@ -365,7 +366,10 @@ const Experiences = ({setStoredUser, experiences}) => {
                   />
                 );
               })
-            : null}
+            : <NotFound
+            title="No experience"
+            text='No experiences are added yet'
+          />}
         </View>
       </ScrollView>
     </View>

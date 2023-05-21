@@ -110,25 +110,12 @@ const About = ({about, setStoredUser}) => {
 
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <View style={styles.scrollContainer}>
-            {about === '' ? (
+            {!about ? (
               <Text style={[styles.headerText, {textAlign: 'center'}]}>
                 No About Added
               </Text>
             ) : (
               <Text style={styles.text}>
-                {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Commodo
-              arcu arcu duis quis tellus, eget. Ac et tristique egestas ac,
-              ullamcorper nec sit egestas risus. Quam nunc tristique scelerisque
-              blandit turpis sit aliquet sed. Nunc scelerisque orci sed id purus
-              dignissim. Placerat at pulvinar dignissim mauris purus netus.
-              Morbi nulla pretium eu fringilla congue non faucibus eros, nunc.
-              Sit eu convallis maecenas Nunc scelerisque orci sed id purus
-              dignissim. Placerat at pulvinar dignissim mauris purus netus.
-              Morbi nulla pretium eu fringilla congue non faucibus eros, nunc.
-              Sit eu convallis maecenas Nunc scelerisque orci sed id purus
-              dignissim. Placerat at pulvinar dignissim mauris purus netus.
-              Morbi nulla pretium eu fringilla congue non faucibus eros, nunc.
-            Sit eu convallis maecenas */}
                 {about}
               </Text>
             )}

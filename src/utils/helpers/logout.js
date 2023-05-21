@@ -3,12 +3,12 @@ import { voximplant } from '../../services/voxServices';
 
 
 const logout = async (dispatch, authLogout, navigation) => {
-    await deviceStorage.deleteItem('jwtToken');
-    await voximplant.disconnect();
-    dispatch(authLogout());
     navigation.replace('Auth', {
       screen: 'Login',
     });
+    await deviceStorage.deleteItem('jwtToken');
+    await voximplant.disconnect();
+    dispatch(authLogout());
   };
 
 export default logout;

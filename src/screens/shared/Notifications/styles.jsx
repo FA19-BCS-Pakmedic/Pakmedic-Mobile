@@ -45,4 +45,11 @@ export const styles = StyleSheet.create({
     borderColor: colors.secondary3,
     borderWidth: 2,
   },
+
+  notFoundContainer: {
+    width: "100%",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });
