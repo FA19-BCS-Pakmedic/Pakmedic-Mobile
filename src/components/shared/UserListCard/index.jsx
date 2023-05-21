@@ -12,11 +12,14 @@ import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 import ReviewAddModal from '../../patient/ReviewAddModal';
 
-const UserListCard = ({role, appointment, onPressContact}) => {
+const UserListCard = ({
+  role,
+  appointment,
+  onPressContact,
+  onPressViewProfile,
+}) => {
   const receiver =
     role === ROLES.doctor ? appointment?.patient : appointment?.doctor;
-
-  console.log(receiver);
 
   const [visible, setVisible] = React.useState(false);
 
@@ -28,12 +31,12 @@ const UserListCard = ({role, appointment, onPressContact}) => {
             <View style={styles().controls}>
               <Button
                 label="View Profile"
-                onPress={() => {}}
                 type="filled"
                 width="48%"
                 height={dimensions.Height / 20}
                 marginVertical={dimensions.Height / 1000}
                 fontSize={fonts.size.font14}
+                onPress={() => onPressViewProfile(receiver._id)}
               />
               <Button
                 label="Contact"
@@ -94,9 +97,17 @@ const UserListCard = ({role, appointment, onPressContact}) => {
                   label="Write Prescription"
                   onPress={() => {}}
                   type="filled"
-                  width="100%"
+                  width="48%"
                   height={dimensions.Height / 20}
                   marginVertical={dimensions.Height / 1000}
+                />
+                <Button
+                  label="View Profile"
+                  type="filled"
+                  width="48%"
+                  height={dimensions.Height / 20}
+                  marginVertical={dimensions.Height / 1000}
+                  onPress={() => onPressViewProfile(receiver._id)}
                 />
               </View>
             </>

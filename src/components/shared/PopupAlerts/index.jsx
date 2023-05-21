@@ -1,6 +1,5 @@
-import React from 'react';
 import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
 
 import ModalContainer from '../../../containers/ModalContainer';
 import dimensions from '../../../utils/styles/themes/dimensions';

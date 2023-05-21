@@ -1,22 +1,4 @@
-import axios from 'axios';
-
-//import helper function
-import deviceStorage from '../utils/helpers/deviceStorage';
-
-//import api end point
-import {apiEndpoint} from '../utils/constants/APIendpoint';
-
-const getToken = async () => {
-  return await deviceStorage.loadItem('jwtToken');
-};
-
-// axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
-
-const API = axios.create({
-  baseURL: `${apiEndpoint}`,
-
-  withCredentials: true,
-});
+import API from '../utils/helpers/axios';
 
 //endpoint for doctor pmc id verification
 export const pmcIdVerifyDoctor = data => API.post('doctors/pmc/verify', data);
@@ -158,4 +140,8 @@ export const BrainMRI = data => {
 
 export const getNotifications = data => {
   return API.get(`notifications/?user=${data}`);
+};
+
+export const getScans = (data, type) => {
+  return API.get(`scans/patient/${data}`);
 };

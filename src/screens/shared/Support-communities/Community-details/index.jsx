@@ -22,6 +22,7 @@ import NotFound from '../../../../components/shared/NotFound';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import PostLoader from './PostLoader';
+import ROLES from '../../../../utils/constants/ROLES';
 
 //refresh on Focus
 import {useIsFocused} from '@react-navigation/native';
@@ -105,7 +106,7 @@ const CommunityDetails = props => {
               setOpen={setOpen}
               setValue={setValue}
               setItems={setItems}
-              style={styles.dropDown}
+              style={[styles.dropDown, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}
               dropDownContainerStyle={styles.dropDownContainer}
               placeholder={item.name}
               textStyle={{

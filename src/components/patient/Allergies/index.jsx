@@ -11,8 +11,9 @@ import {updatePatient} from '../../../services/patientServices';
 import AllergyCard from './Card';
 import ModalContainer from '../../../containers/ModalContainer';
 import {useCustomToast} from '../../../hooks/useCustomToast';
+import NotFound from '../../shared/NotFound';
 
-const allergies = ({updateUser, allergys}) => {
+const allergies = ({updateUser, allergys, isViewing}) => {
   const {showToast} = useCustomToast();
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -155,6 +156,7 @@ const allergies = ({updateUser, allergys}) => {
     <View style={styles.container}>
       {openModal()}
       {/* Add Services Button */}
+      {!isViewing && 
       <View style={styles.btnContainer}>
         <AddMore
           type={'outlined'}
@@ -166,7 +168,7 @@ const allergies = ({updateUser, allergys}) => {
             });
           }}
         />
-      </View>
+      </View>}
       <ScrollView style={styles.contentContainer}>
         {allergies?.length > 0 ? (
           allergies?.map((allergy, index) => {
@@ -177,11 +179,15 @@ const allergies = ({updateUser, allergys}) => {
                 allergy={allergy}
                 onEdit={onEditPress}
                 onDelete={onDeletePress}
+                isViewing={isViewing}
               />
             );
           })
         ) : (
-          <Text>No allergies found</Text>
+          <NotFound
+            title='No Allergies Found'
+            text="Please add allergies to your profile"
+            />
         )}
       </ScrollView>
     </View>

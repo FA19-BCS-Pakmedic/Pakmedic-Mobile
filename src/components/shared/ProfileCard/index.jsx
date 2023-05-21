@@ -13,7 +13,7 @@ import {useSelector} from 'react-redux';
 import ROLES from '../../../utils/constants/ROLES';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
-const ProfileCard = ({user}) => {
+const ProfileCard = ({user, isViewing}) => {
   const role = useSelector(state => state.role.role);
 
   const navigation = useNavigation();
@@ -42,7 +42,7 @@ const ProfileCard = ({user}) => {
           <LocationSvg width={dimensions.Width / 20} />
           <Text style={styles().otherInfo}>{user?.location}</Text>
         </View>
-        {role !== ROLES.patient && (
+        {role !== ROLES.patient || isViewing && (
           <>
             <View style={styles().iconTextContainer}>
               <SpecialistSvg width={dimensions.Width / 20} />
@@ -65,13 +65,22 @@ const ProfileCard = ({user}) => {
         )}
       </View>
       <View style={styles().buttonContainer}>
+        {!isViewing ? (
         <Button
           label="Edit Profile"
           width={dimensions.Width / 3}
           type="filled"
           onPress={navigateToEditProfile}
           height={dimensions.Height / 20}
-        />
+        />) : (
+          <Button
+            label="Report User"
+            width={dimensions.Width / 3}
+            type="filled"
+            onPress={() => {}}
+            height={dimensions.Height / 20}
+          />
+        )}
       </View>
     </View>
   );

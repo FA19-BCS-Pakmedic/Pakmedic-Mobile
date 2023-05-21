@@ -29,8 +29,9 @@ import {
   updateFamilyMember,
 } from '../../../services/patientServices';
 import {useCustomToast} from '../../../hooks/useCustomToast';
+import NotFound from '../../shared/NotFound';
 
-const FamilyMembers = ({familyMembers, updateUser}) => {
+const FamilyMembers = ({familyMembers, updateUser, isViewing}) => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [openOptions, setOpenOptions] = useState(false);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
@@ -287,7 +288,7 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
               keyboardType={'numeric'}
               height={dimensions.Height / 20}
               title={'Height'}
-              text={watch('height')}
+              text={watch('height').toString()}
             />
           </View>
 
@@ -318,7 +319,7 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
               keyboardType={'numeric'}
               height={dimensions.Height / 20} 
               title={'Weight'}
-              text={watch('weight')}
+              text={watch('weight').toString()}
             />
           </View>
 
@@ -366,7 +367,8 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
       {openConfirmationalModal()}
       {openOptionsModal()}
       {/* Add Services Button */}
-      <View style={styles.btnContainer}>
+      {!isViewing && <View style={styles.btnContainer}>
+
         <AddMore
           type={'outlined'}
           label={'Add More'}
@@ -377,7 +379,7 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
             });
           }}
         />
-      </View>
+      </View>}
       <ScrollView style={styles.contentContainer}>
         {familyMembers.length > 0 ? (
           familyMembers.map((familyMember, index) => {
@@ -387,11 +389,16 @@ const FamilyMembers = ({familyMembers, updateUser}) => {
                 familyMember={familyMember}
                 setOpenOptions={setOpenOptions}
                 setSelectedMember={setSelectedMember}
+                isViewing={isViewing}
               />
             );
           })
         ) : (
-          <Text>No family members</Text>
+          <NotFound
+            text='No family members are added'
+            height={dimensions.Height / 2}
+            title="No family members found"
+          />
         )}
       </ScrollView>
     </View>

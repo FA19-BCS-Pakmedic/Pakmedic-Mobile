@@ -31,10 +31,8 @@ const MedicineScheduler = () => {
   const navigation = useNavigation();
   const user = useSelector(state => state.auth.user);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [date, setDate] = useState(moment().format('D/MM/YYYY'));
-
   const [day, setDay] = useState(moment().format('dddd').substring(0, 3));
-
+  const [date, setDate] = useState(moment().format('DD/MM/YYYY'));
   const [weekDates, setWeekDates] = useState([]);
   const [dateModal, setDateModal] = useState(false);
   const [reminders, setReminders] = useState([]);
@@ -66,15 +64,15 @@ const MedicineScheduler = () => {
   }, [date]);
 
   const getWeekDates = () => {
-    const weekStart = moment.utc(date, 'D/MM/YYYY').startOf('week');
-    const weekEnd = moment.utc(date, 'D/MM/YYYY').endOf('week');
+    const weekStart = moment.utc(date, 'DD/MM/YYYY').startOf('week');
+    const weekEnd = moment.utc(date, 'DD/MM/YYYY').endOf('week');
     const dates = [];
     for (
       let date = moment(weekStart);
       date <= weekEnd;
       date = date.clone().add(1, 'day')
     ) {
-      dates.push(date.format('D/MM/YYYY'));
+      dates.push(date.format('DD/MM/YYYY'));
     }
     setWeekDates(dates);
   };
@@ -191,16 +189,8 @@ const MedicineScheduler = () => {
         setModalVisible={setModalVisible}
         date={date}
         onAdd={bool => {
-          reminder();
+          if (bool) reminder();
         }}
-      />
-
-      <DateModal
-        Visible={dateModal}
-        setModalVisible={setDateModal}
-        date={date}
-        setDate={setDate}
-        setDay={setDay}
       />
 
       <DateModal
@@ -248,6 +238,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  button: {
+    marginTop: dimensions.Height / 50,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: colors.primary1,
+    width: dimensions.Width * 0.4,
+    width: dimensions.Width * 0.1,
+    textAlign: 'center',
+  },
   button: {
     marginTop: dimensions.Height / 50,
     flexDirection: 'row',

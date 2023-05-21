@@ -28,6 +28,7 @@ import deviceStorage from '../../../../utils/helpers/deviceStorage';
 import PopupAlerts from '../../../../components/shared/PopupAlerts';
 
 import {useSelector} from 'react-redux';
+import {useEffect} from 'react';
 
 const XrayScreen = navigation => {
   const user = useSelector(state => state.auth.user);

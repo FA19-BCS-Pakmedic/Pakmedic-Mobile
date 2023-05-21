@@ -34,10 +34,8 @@ notifee.onBackgroundEvent(async ({type, detail}) => {
 
   // Check if the user pressed the "Mark as read" action
 
-  console.log('Inside onBackgroundEvent');
   if (type === EventType.PRESS) {
     // Update external API
-    console.log('Pressed Notification');
 
     eventEmitter.emit('notificationReceived', notification);
 

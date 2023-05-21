@@ -10,11 +10,10 @@ import {getDate} from '@/utils/helpers/getDate';
 import fonts from '../../../../utils/styles/themes/fonts';
 import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 
-const ScanCard = ({scan, setOpenOptions, setSelectedScan}) => {
+const ScanCard = ({scan, setOpenOptions, setSelectedScan, buttonHide}) => {
   const imageURI = `${apiEndpoint}files/${scan.image}`; //TODO: replace the link with a variable that fetches images from the backend
-
   return (
-    <View style={styles().container}>
+    <View style={styles(buttonHide).container}>
       <View style={styles().imageContainer}>
         <Image
           source={{
@@ -39,29 +38,31 @@ const ScanCard = ({scan, setOpenOptions, setSelectedScan}) => {
           </Text>
         </View>
       </View>
-      <View style={styles().control}>
-        <Button
-          height={dimensions.Height / 20}
-          width={dimensions.Width / 3}
-          label="More options"
-          type="filled"
-          onPress={() => {
-            setSelectedScan(scan);
-            setOpenOptions(true);
-          }}
-        />
-      </View>
+      {buttonHide === false && (
+        <View style={styles().control}>
+          <Button
+            height={dimensions.Height / 20}
+            width={dimensions.Width / 3}
+            label="More options"
+            type="filled"
+            onPress={() => {
+              setSelectedScan(scan);
+              setOpenOptions(true);
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };
 
 export default ScanCard;
 
-const styles = () =>
+const styles = buttonHide =>
   StyleSheet.create({
     container: {
       width: dimensions.Width / 2.4,
-      height: dimensions.Height / 3.2,
+      height: buttonHide ? dimensions.Height / 4.2 : dimensions.Height / 3.2,
       borderWidth: 1,
       borderColor: colors.primary1,
       borderRadius: dimensions.Width / 30,
