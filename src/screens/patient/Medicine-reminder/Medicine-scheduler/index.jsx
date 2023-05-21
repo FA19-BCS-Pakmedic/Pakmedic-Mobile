@@ -13,12 +13,10 @@ import Syringe from '../../../../assets/svgs/syringeIcon.svg';
 import Syrup from '../../../../assets/svgs/syrupIcon.svg';
 import Tick from '../../../../assets/svgs/tick.svg';
 import Calendar from '../../../../assets/svgs/Calendar.svg';
-import Calendar from '../../../../assets/svgs/Calendar.svg';
 
 import StaticContainer from '../../../../containers/StaticContainer';
 import AddMore from '../../../../components/shared/AddMore';
 import ReminderAddModal from '../../../../components/patient/MedicineReminder/ReminderAddModal';
-import moment from 'moment';
 import moment from 'moment';
 
 import {useNavigation} from '@react-navigation/native';
@@ -29,25 +27,12 @@ import NotFound from '../../../../components/shared/NotFound';
 import Loader from '../../../../components/shared/Loader';
 
 import {getReminders} from '../../../../services/patientServices';
-import {getReminders} from '../../../../services/patientServices';
 const MedicineScheduler = () => {
   const navigation = useNavigation();
   const user = useSelector(state => state.auth.user);
-  const user = useSelector(state => state.auth.user);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [date, setDate] = useState(moment().format('D/MM/YYYY'));
-
   const [day, setDay] = useState(moment().format('dddd').substring(0, 3));
-
-  const [weekDates, setWeekDates] = useState([]);
-  const [dateModal, setDateModal] = useState(false);
-  const [reminders, setReminders] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [date, setDate] = useState(moment().format('D/MM/YYYY'));
-
-  const [day, setDay] = useState(
-    moment.utc(new Date(), 'YYYY-MM-DD').format('dddd').substring(0, 3),
-  );
+  const [date, setDate] = useState(moment().format('DD/MM/YYYY'));
   const [weekDates, setWeekDates] = useState([]);
   const [dateModal, setDateModal] = useState(false);
   const [reminders, setReminders] = useState([]);
@@ -79,15 +64,15 @@ const MedicineScheduler = () => {
   }, [date]);
 
   const getWeekDates = () => {
-    const weekStart = moment.utc(date, 'D/MM/YYYY').startOf('week');
-    const weekEnd = moment.utc(date, 'D/MM/YYYY').endOf('week');
+    const weekStart = moment.utc(date, 'DD/MM/YYYY').startOf('week');
+    const weekEnd = moment.utc(date, 'DD/MM/YYYY').endOf('week');
     const dates = [];
     for (
       let date = moment(weekStart);
       date <= weekEnd;
       date = date.clone().add(1, 'day')
     ) {
-      dates.push(date.format('D/MM/YYYY'));
+      dates.push(date.format('DD/MM/YYYY'));
     }
     setWeekDates(dates);
   };
@@ -95,7 +80,6 @@ const MedicineScheduler = () => {
   return (
     <StaticContainer
       customHeaderEnable
-      customHeaderName="Medicine Reminder"
       customHeaderName="Medicine Reminder"
       isBack
       isHorizontalPadding={false}>
@@ -116,23 +100,6 @@ const MedicineScheduler = () => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => {
               return (
-                <TouchableOpacity
-                  style={styles.week}
-                  onPress={() => {
-                    setDate(weekDates[weekdays.indexOf(item)]);
-                    setDay(item);
-                  }}>
-                  <Text
-                    style={[
-                      styles.weekText,
-                      {
-                        color:
-                          item === day ? colors.secondary1 : colors.primary1,
-                      },
-                    ]}>
-                    {item}
-                  </Text>
-                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.week}
                   onPress={() => {
@@ -222,7 +189,7 @@ const MedicineScheduler = () => {
         setModalVisible={setModalVisible}
         date={date}
         onAdd={bool => {
-          reminder();
+          if (bool) reminder();
         }}
       />
 
@@ -232,15 +199,6 @@ const MedicineScheduler = () => {
         date={date}
         setDate={setDate}
         setDay={setDay}
-      />
-
-      <DateModal
-        Visible={dateModal}
-        setModalVisible={setDateModal}
-        date={date}
-        setDate={setDate}
-        setDay={setDay}
-        date={date}
       />
 
       <DateModal
