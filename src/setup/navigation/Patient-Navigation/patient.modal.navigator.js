@@ -19,7 +19,7 @@ const PatientModalNavigator = props => {
     <ModalContainer
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
-      height={dimensions.Height / 2}
+      height={dimensions.Height / 1.8}
       width={dimensions.Width}
       type="bottom"
       backDropOpacity={0.5}
@@ -46,7 +46,12 @@ const PatientModalNavigator = props => {
         </TouchableOpacity>
         <View style={styles.line} />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setModalVisible(false);
+            navigation.navigate('ComplaintDesk');
+          }}>
           <Text style={styles.text}>Complaint Desk</Text>
         </TouchableOpacity>
         <View style={styles.line} />
@@ -67,6 +72,14 @@ const PatientModalNavigator = props => {
             navigation.navigate('EHR', {id: user._id});
           }}>
           <Text style={styles.text}>EHR</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setModalVisible(false);
+            navigation.navigate('MedicineScheduler', {id: user._id});
+          }}>
+          <Text style={styles.text}>Reminders</Text>
         </TouchableOpacity>
       </View>
     </ModalContainer>

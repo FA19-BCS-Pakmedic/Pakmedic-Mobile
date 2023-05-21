@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 
-import {Text} from 'react-native';
+import {Text, Alert} from 'react-native';
 //import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -36,54 +36,37 @@ import CancelAppointment from '../../../screens/shared/Appointment-management/Ca
 
 import MedicineScheduler from '../../../screens/patient/Medicine-reminder/Medicine-scheduler';
 import MedicineDetails from '../../../screens/patient/Medicine-reminder/Medicine-details';
+import PrescriptionDetail from '../../../screens/shared/E-health-records/PrescriptionDetail';
+import Complaint from '../../../screens/shared/Complaint-desk/Complaint';
+import ComplaintDesk from '../../../screens/shared/Complaint-desk/Home';
+import {eventEmitter} from '../../../../index.js';
 
 const Stack = createNativeStackNavigator();
-
-const onMessageReceived = async message => {
-  notifee.createChannel({
-    id: 'default',
-    name: 'Default Channel',
-  });
-  await notifee.displayNotification(JSON.parse(message.data.notifee));
-};
-
-const onBackgroundMessage = navigation => {
-  notifee.onBackgroundEvent(async ({type, detail}) => {
-    const {notification, pressAction} = detail;
-
-    // Check if the user pressed the "Mark as read" action
-
-    console.log('Inside onBackgroundEvent');
-    if (type === EventType.PRESS) {
-      // Update external API
-      console.log('Pressed Notification');
-
-      if (notification?.data?.navigate) {
-        navigation.navigate(notification?.data?.navigate, {
-          params: {image: notification?.data?.image},
-        });
-      }
-
-      // Remove the notification
-      await notifee.cancelNotification(notification.id);
-    }
-  });
-};
 
 const PatientNavigation = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    messaging().onMessage(onMessageReceived);
-    messaging().setBackgroundMessageHandler(onMessageReceived);
-    onBackgroundMessage(navigation);
+    eventEmitter.on('notificationReceived', notification => {
+      if (notification?.data?.navigate) {
+        navigation.navigate(notification?.data?.navigate, {
+          params: {
+            image: notification?.data?.image,
+            data: notification?.data?.data,
+          },
+        });
+      }
+    });
   }, []);
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
       initialRouteName="PatientTabStack">
       <Stack.Screen name="PatientTabStack" component={PatientTabStack} />
+      <Stack.Screen name="PrescriptionDetail" component={PrescriptionDetail} />
       <Stack.Screen name="Support Communities" component={Support} />
+      <Stack.Screen name="ComplaintDesk" component={ComplaintDesk} />
+      <Stack.Screen name="Complaint" component={Complaint} />
       <Stack.Screen name="CommunityDetails" component={CommunityDetails} />
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="OngoingCall" component={OngoingCall} />

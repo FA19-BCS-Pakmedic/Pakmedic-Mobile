@@ -27,14 +27,16 @@ import ElectronicHealthRecords from './src/screens/shared/E-health-records/Home'
 
 import {Provider as PaperProvider, MD2LightTheme} from 'react-native-paper';
 
+import {Alert} from 'react-native';
+
 import notifee, {EventType} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 
 // import {register} from './src/services/notificationService';
 import deviceStorage from './src/utils/helpers/deviceStorage';
 import Toast from 'react-native-toast-notifications';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { googleConfig } from './src/utils/helpers/googleConfig';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {googleConfig} from './src/utils/helpers/googleConfig';
 
 const StackNavigate = createNativeStackNavigator();
 
@@ -51,8 +53,59 @@ const registerDeviceForMessaging = async () => {
 
 enableLatestRenderer();
 
+const battery = async () => {
+  const batteryOptimizationEnabled =
+    await notifee.isBatteryOptimizationEnabled();
+  if (batteryOptimizationEnabled) {
+    // 2. ask your users to disable the feature
+    Alert.alert(
+      'Restrictions Detected',
+      'To ensure notifications are delivered, please disable battery optimization for the app.',
+      [
+        // 3. launch intent to navigate the user to the appropriate screen
+        {
+          text: 'OK, open settings',
+          onPress: async () => await notifee.openBatteryOptimizationSettings(),
+        },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
+  }
+};
+
+const power = async () => {
+  const powerManagerInfo = await notifee.getPowerManagerInfo();
+  if (powerManagerInfo.activity) {
+    // 2. ask your users to adjust their settings
+    Alert.alert(
+      'Restrictions Detected',
+      'To ensure notifications are delivered, please adjust your settings to prevent the app from being killed',
+      [
+        // 3. launch intent to navigate the user to the appropriate screen
+        {
+          text: 'OK, open settings',
+          onPress: async () => await notifee.openPowerManagerSettings(),
+        },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
+  }
+};
+
 const App = () => {
   useEffect(() => {
+    battery();
+    power();
     registerDeviceForMessaging();
     GoogleSignin.configure(googleConfig);
   }, []);
@@ -67,14 +120,6 @@ const App = () => {
         </PaperProvider>
       </MenuProvider>
     </Provider>
-    // <NavigationContainer>
-    //   <StackNavigate.Navigator initialRouteName="Home">
-    //     <StackNavigate.Screen name="Home" component={CallHome} />
-    //     <StackNavigate.Screen name="History" component={History} />
-    //     <StackNavigate.Screen name="IncomingCall" component={IncomingCall} />
-    //     <StackNavigate.Screen name="OngoingCall" component={OngoingCall} />
-    //   </StackNavigate.Navigator>
-    // </NavigationContainer>
   );
 };
 

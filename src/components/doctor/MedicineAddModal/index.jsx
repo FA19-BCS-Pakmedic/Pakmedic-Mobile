@@ -75,7 +75,7 @@ export default MedicineAddModal = props => {
 
   const onSubmit = data => {
     setLoading(true);
-    data.frequency = frequency;
+    data.frequency = frequency.toString();
 
     onAdd({
       name: data.name,

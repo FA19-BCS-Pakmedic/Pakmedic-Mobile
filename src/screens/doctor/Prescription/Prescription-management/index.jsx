@@ -28,13 +28,29 @@ const PrescriptionManagement = () => {
 
   const [medicines, setMedicines] = useState([]);
 
-  const onSubmit = () => {
-    setLoading(true);
-  };
+  const onSubmit = async () => {
+    if (medicines.length === 0) {
+      alert('Please add medicines');
+      return;
+    }
 
-  React.useEffect(() => {
-    console.log(medicines);
-  }, [medicines]);
+    patientID = '6405db9b9484cf19e3e22b80';
+    const data = {
+      patient: patientID,
+      medicines: medicines,
+    };
+    try {
+      setLoading(true);
+      const response = await addPrescription(data);
+      if (response.status === 200) {
+        alert('Prescription added successfully');
+        //navigation.navigate('Home');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+  };
 
   return (
     <StaticContainer
@@ -175,7 +191,7 @@ const PrescriptionManagement = () => {
           medicine={{
             name: medicine.name,
             dosageForm: medicine.dosage_form,
-            frequency: medicine.dosage_frequency,
+            frequency: Number(medicine.dosage_frequency),
             dosageSize: medicine.dosage_size,
             duration: medicine.days,
             addDays: medicine.additional_days,
