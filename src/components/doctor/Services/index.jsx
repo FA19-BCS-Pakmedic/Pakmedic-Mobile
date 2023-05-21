@@ -55,7 +55,7 @@ const initialState = {
   isOnline: false,
 };
 
-const Services = ({services, setStoredUser}) => {
+const Services = ({services, setStoredUser, isViewing}) => {
   const [visible, setVisible] = useState(false);
   // const [isOnline, setIsOnline] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
@@ -561,6 +561,7 @@ const Services = ({services, setStoredUser}) => {
       {openModal()}
 
       {/* Add Services Button */}
+      {!isViewing && 
       <View style={styles.btnContainer}>
         <AddMore
           type={'outlined'}
@@ -572,7 +573,7 @@ const Services = ({services, setStoredUser}) => {
             });
           }}
         />
-      </View>
+      </View>}
 
       <ScrollView style={styles.contentContainer}>
         {/* Services */}
@@ -585,6 +586,7 @@ const Services = ({services, setStoredUser}) => {
                   key={index}
                   onEdit={onPressEdit}
                   onDelete={onDeletePress}
+                  isViewing={isViewing}
                 />
               );
             }) : (

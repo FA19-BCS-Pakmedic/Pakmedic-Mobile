@@ -31,6 +31,8 @@ const ProfileManagement = ({navigation, route}) => {
 
   const userId = route.params.userId;
 
+  const isViewing = route.params.isViewing;
+
   const dispatch = useDispatch();
 
   const getUserData = async () => {
@@ -38,7 +40,7 @@ const ProfileManagement = ({navigation, route}) => {
     try {
       const response = await getPatientById(userId);
       setStoredUser(response.data.data.user);
-      dispatch(authUpdate({user: response.data.data.user}));
+      !isViewing && dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
       console.log(err);
       showToast("Can't load user data", 'danger');
@@ -75,12 +77,13 @@ const ProfileManagement = ({navigation, route}) => {
     console.log(activeOption);
     switch (activeOption) {
       case 'General Info':
-        return <ProfileInformation information={information} />;
+        return <ProfileInformation information={information} isViewing={isViewing}/>;
       case 'Genetic diseases':
         return (
           <GeneticDiseases
             geneDis={storedUser?.medical?.geneticDiseases}
             updateUser={getUserData}
+            isViewing={isViewing}
           />
         );
       case 'Allergies':
@@ -88,6 +91,7 @@ const ProfileManagement = ({navigation, route}) => {
           <Allergies
             allergys={storedUser?.medical?.allergies}
             updateUser={getUserData}
+            isViewing={isViewing}
           />
         );
       case 'Family members':
@@ -95,11 +99,12 @@ const ProfileManagement = ({navigation, route}) => {
           <FamilyMembers
             familyMembers={storedUser?.familyMembers}
             updateUser={getUserData}
+            isViewing={isViewing}
           />
         );
 
       default:
-        return <ProfileInformation information={information} />;
+        return <ProfileInformation information={information} isViewing={isViewing}/>;
     }
   };
 
@@ -109,12 +114,12 @@ const ProfileManagement = ({navigation, route}) => {
         <Loader title={'Loading'} />
       ) : (
         <View style={styles.root}>
-          <ProfileCard user={storedUser} />
+          <ProfileCard user={storedUser} isViewing={isViewing}/>
 
           <ProfileOptions options={profileOptions} onClick={onOptionClick} />
           {getActiveComponent()}
         </View>
-      )}
+      )} 
     </StaticContainer>
   );
 };

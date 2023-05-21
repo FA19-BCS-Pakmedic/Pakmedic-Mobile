@@ -8,7 +8,7 @@ import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
 import ConfirmationAlert from '../../../shared/ConfirmationAlert';
 
-export default function AllergiesCard({allergy, onEdit, onDelete, index}) {
+export default function AllergiesCard({allergy, onEdit, onDelete, index, isViewing}) {
   const [visible, setVisible] = useState(false);
 
   const openConfirmationalModal = () => {
@@ -41,6 +41,7 @@ export default function AllergiesCard({allergy, onEdit, onDelete, index}) {
     <View style={styles().container}>
       {openConfirmationalModal()}
       <Text style={styles().label}>{allergy}</Text>
+      {!isViewing && 
       <View style={styles().controls}>
         <Button
           type={'outlined'}
@@ -62,7 +63,7 @@ export default function AllergiesCard({allergy, onEdit, onDelete, index}) {
             setVisible(true);
           }}
         />
-      </View>
+      </View>}
     </View>
   );
 }
@@ -72,12 +73,13 @@ const styles = () =>
     container: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
       paddingVertical: dimensions.Height / 300,
       paddingHorizontal: dimensions.Width / 50,
       marginBottom: dimensions.Height / 50,
       backgroundColor: colors.primaryMonoChrome100,
       borderRadius: dimensions.Height / 100,
+      minHeight: dimensions.Height / 11,
     },
 
     label: {

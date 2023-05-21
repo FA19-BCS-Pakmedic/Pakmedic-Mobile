@@ -11,7 +11,7 @@ import {getDate} from '../../../../utils/helpers/getDate';
 import MenuDropDown from '../../../shared/MenuDropdown';
 import ConfirmationAlert from '../../../shared/ConfirmationAlert';
 
-const ExperienceCard = ({experience, onEdit, onDelete}) => {
+const ExperienceCard = ({experience, onEdit, onDelete, isViewing}) => {
   const [visible, setVisible] = useState(false);
 
   const menuDropDownOptions = [
@@ -50,11 +50,12 @@ const ExperienceCard = ({experience, onEdit, onDelete}) => {
       {openConfirmationalModal()}
       <View style={styles().headerContainer}>
         <Text style={styles().headerText}>{experience.title}</Text>
-        <MenuDropDown options={menuDropDownOptions}>
+        
+        {!isViewing && <MenuDropDown options={menuDropDownOptions}>
           <View style={styles().optionsIconContainer}>
             <OptionsIcon />
           </View>
-        </MenuDropDown>
+        </MenuDropDown>}
       </View>
 
       <View style={styles().contentContainer}>

@@ -25,6 +25,7 @@ import {useEffect} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 import ProfileManagement from '../../../screens/patient/Profile-management/Home';
+import DoctorProfile from '../../../screens/doctor/Profile-management/Home';
 import EditProfile from '../../../screens/patient/Profile-management/Edit-Profile';
 
 import SpecialistCategory from '../../../screens/patient/Appointment-management/Specialist-category';
@@ -40,11 +41,16 @@ import PrescriptionDetail from '../../../screens/shared/E-health-records/Prescri
 import Complaint from '../../../screens/shared/Complaint-desk/Complaint';
 import ComplaintDesk from '../../../screens/shared/Complaint-desk/Home';
 import {eventEmitter} from '../../../../index.js';
+import { authLogout } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
+import logout from '../../../utils/helpers/logout';
 
 const Stack = createNativeStackNavigator();
 
 const PatientNavigation = () => {
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     eventEmitter.on('notificationReceived', notification => {
@@ -57,6 +63,10 @@ const PatientNavigation = () => {
         });
       }
     });
+    
+    eventEmitter.on('logout', () => {
+      logout(dispatch, authLogout, navigation);
+    })
   }, []);
   return (
     <Stack.Navigator
@@ -87,6 +97,7 @@ const PatientNavigation = () => {
       <Stack.Screen name="CancelAppointment" component={CancelAppointment} />
       <Stack.Screen name="MedicineScheduler" component={MedicineScheduler} />
       <Stack.Screen name="MedicineDetails" component={MedicineDetails} />
+      <Stack.Screen name="ViewProfile" component={DoctorProfile} />
     </Stack.Navigator>
   );
 };

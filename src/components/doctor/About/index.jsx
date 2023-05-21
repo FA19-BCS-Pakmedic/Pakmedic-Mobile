@@ -9,7 +9,7 @@ import {useForm} from 'react-hook-form';
 import fonts from '../../../utils/styles/themes/fonts';
 import {updateDoctor} from '../../../services/doctorServices';
 
-const About = ({about, setStoredUser}) => {
+const About = ({about, setStoredUser, isViewing}) => {
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -121,7 +121,7 @@ const About = ({about, setStoredUser}) => {
             )}
           </View>
         </ScrollView>
-
+      {!isViewing &&
         <View style={styles.btnContainer}>
           <Button
             type="filled"
@@ -132,7 +132,7 @@ const About = ({about, setStoredUser}) => {
             }}
             width={dimensions.Width / 2}
           />
-        </View>
+        </View>}
       </View>
     </View>
   );

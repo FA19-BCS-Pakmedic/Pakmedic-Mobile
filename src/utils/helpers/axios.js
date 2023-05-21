@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-import {EventEmitter} from 'eventemitter3';
+// import {EventEmitter} from 'eventemitter3';
+
+import { eventEmitter } from '../../..';
+
 
 //import api end point
 import {apiEndpoint} from '@/utils/constants/APIendpoint';
@@ -10,7 +13,7 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-export const eventEmitter = new EventEmitter();
+// export const eventEmitter = new EventEmitter();
 
 instance.interceptors.response.use(
   (response) => {

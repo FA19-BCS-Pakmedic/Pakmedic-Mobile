@@ -14,7 +14,7 @@ import AvailableTreatmentsCard from './Card';
 import {useCustomToast} from '../../../hooks/useCustomToast';
 import NotFound from '../../shared/NotFound';
 
-export default function AvailableTreatments({setStoredUser, treatments}) {
+export default function AvailableTreatments({setStoredUser, treatments, isViewing}) {
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editIdx, setEditIdx] = useState(-1);
@@ -152,7 +152,8 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
     <View style={styles.container}>
       {openModal()}
       {/* Add Services Button */}
-      <View style={styles.btnContainer}>
+      
+      {!isViewing && <View style={styles.btnContainer}>
         <AddMore
           type={'outlined'}
           label={'Add More'}
@@ -163,7 +164,7 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
             });
           }}
         />
-      </View>
+      </View>}
       <ScrollView style={styles.contentContainer}>
         {treatments.length > 0 ? (
           treatments.map((treatment, index) => {
@@ -174,6 +175,7 @@ export default function AvailableTreatments({setStoredUser, treatments}) {
                 treatment={treatment}
                 onEdit={onEditPress}
                 onDelete={onDeletePress}
+                isViewing={isViewing}
               />
             );
           })

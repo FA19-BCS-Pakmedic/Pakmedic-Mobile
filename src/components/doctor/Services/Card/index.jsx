@@ -14,7 +14,7 @@ import MenuDropdown from '../../../shared/MenuDropdown';
 import ConfirmationAlert from '../../../shared/ConfirmationAlert';
 import {useState} from 'react';
 
-export default function ServiceCard({service, onEdit, onDelete}) {
+export default function ServiceCard({service, onEdit, onDelete, isViewing}) {
   const [visible, setVisible] = useState(false);
 
 
@@ -94,9 +94,12 @@ export default function ServiceCard({service, onEdit, onDelete}) {
             )}
           </View>
         </View>
-        <MenuDropdown options={menuDropDownOptions}>
+
+        {!isViewing && <MenuDropdown options={menuDropDownOptions}>
           <View style={styles.optionsIconContainer}>{icons[`options`]}</View>
         </MenuDropdown>
+        }
+
       </View>
 
       {/* Fees */}

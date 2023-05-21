@@ -16,6 +16,7 @@ import Complaint from '../../../screens/shared/Complaint-desk/Complaint';
 import CommunityDetails from '../../../screens/shared/Support-communities/Community-details';
 import Post from '../../../screens/shared/Support-communities/Post';
 import ProfileManagement from '../../../screens/doctor/Profile-management/Home';
+import PatientProfile from '../../../screens/patient/Profile-management/Home';
 import EditProfile from '../../../screens/doctor/Profile-management/Edit-Profile';
 import Chat from '../../../screens/shared/Telemedicine/Chat';
 import OngoingCall from '../../../screens/shared/Telemedicine/Ongoing-call';
@@ -46,7 +47,6 @@ import PrescriptionManagement from '../../../screens/doctor/Prescription/Prescri
 import FinanceHome from '../../../screens/shared/Finance/Home';
 import {eventEmitter} from '../../../../index.js';
 
-import { eventEmitter } from '../../../utils/helpers/axios';
 import logout from '../../../utils/helpers/logout';
 import { useDispatch } from 'react-redux';
 import { authLogout } from '../../redux/actions';
@@ -70,6 +70,10 @@ const DoctorNavigation = () => {
         });
       }
     });
+
+    eventEmitter.on('logout', () => {
+      logout(dispatch, authLogout, navigation);
+    })
   }, []);
 
   return (
@@ -109,6 +113,7 @@ const DoctorNavigation = () => {
         component={PrescriptionManagement}
       />
       <Stack.Screen name="CancelAppointment" component={CancelAppointment} />
+      <Stack.Screen name="ViewProfile" component={PatientProfile} />
     </Stack.Navigator>
   );
 };
