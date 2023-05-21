@@ -1,12 +1,4 @@
-import axios from 'axios';
-
-import {apiEndpoint} from '../utils/constants/APIendpoint';
-
-const API = axios.create({
-  baseURL: `${apiEndpoint}`,
-
-  withCredentials: true,
-});
+import API from '../utils/helpers/axios';
 
 export const createAppointment = data => {
   return API.post('/appointments', data);

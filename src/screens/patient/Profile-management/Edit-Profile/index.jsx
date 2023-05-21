@@ -51,6 +51,8 @@ const EditProfile = () => {
 
   const user = useSelector(state => state.auth.user);
 
+  console.log(user.bio);
+
   const dispatch = useDispatch();
 
   const [storedUser, setStoredUser] = useState(user);
@@ -68,13 +70,13 @@ const EditProfile = () => {
     mode: 'all',
     revalidate: 'all',
     defaultValues: {
-      name: user?.name || '',
-      email: user?.email || '',
-      phone: user?.phone || '',
-      location: user?.location || '',
-      weight: user?.weight || '',
-      height: user?.height || '',
-      bloodGroup: user?.bloodGroup || '',
+      name: storedUser?.name || '',
+      email: storedUser?.email || '',
+      phone: storedUser?.phone || '',
+      location: storedUser?.location || '',
+      weight: storedUser.bio?.weight.toString() || '',
+      height: storedUser.bio?.height.toString() || '',
+      bloodGroup: storedUser.bio?.bloodGroup || '',
     },
   });
 
@@ -83,7 +85,7 @@ const EditProfile = () => {
 
   const uploadImage = async formData => {
     try {
-      const response = await addAvatar(formData);
+      await addAvatar(formData);
       updateUser();
     } catch (err) {
       console.log(err);
@@ -93,8 +95,6 @@ const EditProfile = () => {
   const updateUser = async () => {
     try {
       const response = await getPatient();
-      console.log(response.data.data);
-
       setStoredUser(response.data.data.user);
       dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
@@ -138,7 +138,17 @@ const EditProfile = () => {
   const onSubmit = async formData => {
     console.log(formData);
     try {
-      const response = await updatePatient(formData);
+      const data = {
+        name: formData.name,
+        phone: formData.phone,
+        location: formData.location,
+        bio: {
+          weight: formData.weight,
+          height: formData.height,
+          bloodGroup: formData.bloodGroup,
+        }
+      }
+      const response = await updatePatient(data);
       updateUser();
       showToast('Profile Updated Successfully', 'success');
     } catch (err) {

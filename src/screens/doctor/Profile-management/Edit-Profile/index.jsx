@@ -9,8 +9,6 @@ import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 
 import DocumentPicker, {
-  DirectoryPickerResponse,
-  DocumentPickerResponse,
   isInProgress,
   types,
 } from 'react-native-document-picker';
@@ -38,19 +36,51 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
-import {Specialists} from '../../../../utils/constants/Specialists';
+// import {Specialists} from '../../../../utils/constants/Specialists';
 import {useCustomToast} from '../../../../hooks/useCustomToast';
 import Loader from '../../../../components/shared/Loader';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 const EditProfile = () => {
+
+  const Specialists = [
+    {label: 'Cardiologist', value: 'Cardiologist'},
+    {label: 'Dermatologist', value: 'Dermatologist'},
+    {label: 'Endocrinologist', value: 'Endocrinologist'},
+    {
+      label: 'Gastroenterologist',
+      value: 'Gastroenterologist',
+    },
+    {label: 'Hematologist', value: 'Hematologist'},
+    {label: 'Neurologist', value: 'Neurologist'},
+    {label: 'Gynecologist', value: 'Gynecologist'},
+    {label: 'Oncologist', value: 'Oncologist'},
+    {label: 'Ophthalmologist', value: 'Ophthalmologist'},
+
+    {
+      label: 'Otolaryngologist',
+      value: 'Otolaryngologist',
+    },
+    {label: 'Pediatrician', value: 'Pediatrician'},
+    {label: 'Psychiatrist', value: 'Psychiatrist'},
+    {label: 'Pulmonologist', value: 'Pulmonologist'},
+    {label: 'Radiologist', value: 'Radiologist'},
+    {label: 'Rheumatologist', value: 'Rheumatologist'},
+    {label: 'Urologist', value: 'Urologist'},
+    {label: 'Allergist', value: 'Allergist'},
+    {label: 'Dentist', value: 'Dentist'},
+    {label: 'Dietitian', value: 'Dietitian'},
+    {label: 'Nephrologist', value: 'Nephrologist'},
+    {label: 'Obstetrician', value: 'Obstetrician'},
+    {label: 'Orthopedist', value: 'Orthopedist'},
+  ];
   const [open, setOpen] = useState(false);
   const [specialistOpen, setSpecialistOpen] = useState(false);
   const [visible, setVisible] = useState(false);
 
   const user = useSelector(state => state.auth.user);
   const navigation = useNavigation();
-  const route = useRoute();
+  // const route = useRoute();
 
   const dispatch = useDispatch();
 
@@ -60,12 +90,12 @@ const EditProfile = () => {
 
   const [loading, setLoading] = useState(false);
 
-  console.log(user?.speciality);
+  // console.log(user?.speciality);
 
   const {
     control,
     handleSubmit,
-    formState: {errors, isValid},
+    // formState: {errors, isValid},
     setValue,
     clearErrors,
     watch,

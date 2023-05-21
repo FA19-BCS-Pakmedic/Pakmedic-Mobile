@@ -11,13 +11,13 @@ const FamilyMemberCard = ({
   familyMember,
   setOpenOptions,
   setSelectedMember,
+  isViewing
 }) => {
   const icons = {
     Son: <SonIcon />,
     Daughter: <DaughterIcon />,
   };
 
-  console.log(familyMember);
   return (
     <View style={styles.container}>
       <View>{icons[familyMember.relation]}</View>
@@ -58,6 +58,7 @@ const FamilyMemberCard = ({
         </View>
       </View>
 
+    {!isViewing &&
       <Button
         height={dimensions.Height / 20}
         width={dimensions.Width / 3}
@@ -67,7 +68,7 @@ const FamilyMemberCard = ({
           setSelectedMember(familyMember);
           setOpenOptions(true);
         }}
-      />
+      />}
     </View>
   );
 };
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.primaryMonoChrome100,
     paddingTop: dimensions.Height / 100,
+    paddingBottom: dimensions.Height / 100,
     paddingHorizontal: dimensions.Width / 50,
     borderRadius: dimensions.Width / 30,
   },

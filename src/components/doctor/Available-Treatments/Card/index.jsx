@@ -13,6 +13,7 @@ export default function AvailableTreatmentsCard({
   onEdit,
   onDelete,
   index,
+  isViewing
 }) {
   console.log('HERE', treatment);
 
@@ -48,7 +49,7 @@ export default function AvailableTreatmentsCard({
     <View style={styles().container}>
       {openConfirmationalModal()}
       <Text style={styles().label}>{treatment}</Text>
-      <View style={styles().controls}>
+      {!isViewing && <View style={styles().controls}>
         <Button
           type={'outlined'}
           label={'Edit'}
@@ -69,7 +70,7 @@ export default function AvailableTreatmentsCard({
             setVisible(true);
           }}
         />
-      </View>
+      </View>}
     </View>
   );
 }
@@ -79,7 +80,8 @@ const styles = () =>
     container: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
+      minHeight: dimensions.Height / 11,
       paddingVertical: dimensions.Height / 300,
       paddingHorizontal: dimensions.Width / 50,
       marginBottom: dimensions.Height / 50,

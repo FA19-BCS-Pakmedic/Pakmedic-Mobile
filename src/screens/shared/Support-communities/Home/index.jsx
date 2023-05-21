@@ -12,6 +12,8 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import StaticContainer from '../../../../containers/StaticContainer';
 import Search from '../../../../components/shared/CommunitySearch';
 import Logo from '../../../../assets/svgs/community-logo';
+import Loader from '../../../../components/shared/Loader';
+
 
 import DropDownPicker from 'react-native-dropdown-picker';
 DropDownPicker.setListMode('SCROLLVIEW');
@@ -26,6 +28,7 @@ import {
 } from '../../../../services/communityServices';
 import {useEffect} from 'react';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
+import ROLES from '../../../../utils/constants/ROLES';
 
 const Home = ({navigation}) => {
   const [open, setOpen] = useState(false);
@@ -44,6 +47,8 @@ const Home = ({navigation}) => {
   //user
   const [user, setUser] = useState(useSelector(state => state.auth.user));
   const userCommunities = user.communities;
+
+  const role = useSelector(state => state.role.role);
 
   const dispatch = useDispatch();
 
@@ -69,10 +74,24 @@ const Home = ({navigation}) => {
     getCommunities();
   }, [user]);
 
+
+  getNoCommunityItem = (title) => {
+      return (
+        <View style={styles.noCommunityContainer}><Text style={styles.noCommunity}>{title}</Text></View>
+      )
+  }
+
+  if(loading) return (
+    <Loader
+      title={'Loading Communities...'}
+      />
+  )
+
   return (
     <StaticContainer
       customHeaderEnable={true}
       customHeaderName={'Support Community'}>
+
       <View style={styles.container}>
         <View style={styles.search}>
           <View>
@@ -83,8 +102,9 @@ const Home = ({navigation}) => {
               setOpen={setOpen}
               setValue={setValue}
               setItems={setItems}
-              style={styles.dropDown}
-              dropDownContainerStyle={styles.dropDownContainer}
+              style={[styles.dropDown, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}
+              dropDownContainerStyle={[styles.dropDownContainer]}
+              
               placeholder="Home"
               textStyle={{
                 fontSize: 12,
@@ -94,19 +114,11 @@ const Home = ({navigation}) => {
           </View>
           <Search />
         </View>
-        <View style={styles.communityContainer}>
-          <View style={styles.joinedCommunity}>
+        <View style={[styles.communityContainer, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}>
+          <View style={[styles.joinedCommunity, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}>
             <Text style={styles.communityText}>Joined Communities</Text>
             <View style={styles.line} />
-            {loading ? (
-              <ActivityIndicator
-                size="large"
-                color={colors.primary1}
-                style={{
-                  flex: 1,
-                }}
-              />
-            ) : (
+            {!jcommunities.length ? getNoCommunityItem('No Joined Communities') :
               <FlatList
                 data={jcommunities}
                 renderItem={({item}) => (
@@ -143,21 +155,13 @@ const Home = ({navigation}) => {
                   </TouchableOpacity>
                 )}
                 keyExtractor={item => item._id}
-              />
-            )}
+              />}
           </View>
-          <View style={styles.otherCommunity}>
+          <View style={[styles.otherCommunity, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}>
             <Text style={styles.communityText}>Other Communities</Text>
             <View style={styles.line} />
-            {loading ? (
-              <ActivityIndicator
-                size="large"
-                color={colors.primary1}
-                style={{
-                  flex: 1,
-                }}
-              />
-            ) : (
+            {
+              !communities.length ? getNoCommunityItem('No Other Communities') :
               <FlatList
                 data={communities}
                 renderItem={({item}) => (
@@ -191,7 +195,7 @@ const Home = ({navigation}) => {
                 )}
                 keyExtractor={item => item._id}
               />
-            )}
+            }
           </View>
         </View>
       </View>

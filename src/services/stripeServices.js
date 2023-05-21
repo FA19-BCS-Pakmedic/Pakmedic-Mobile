@@ -1,4 +1,4 @@
-import axios from '../utils/helpers/axios';
+import API from '../utils/helpers/axios';
 
 export const createPaymentMethod = data => {
   return axios.post('/stripe/create-payment-method', data);

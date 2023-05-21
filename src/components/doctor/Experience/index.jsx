@@ -35,8 +35,9 @@ import {
 } from '../../../services/doctorServices';
 
 import {useCustomToast} from '../../../hooks/useCustomToast';
+import NotFound from '../../shared/NotFound';
 
-const Experiences = ({setStoredUser, experiences}) => {
+const Experiences = ({setStoredUser, experiences, isViewing}) => {
   const [visible, setVisible] = useState(false);
 
   const [cityOpen, setCityOpen] = useState(false);
@@ -75,7 +76,6 @@ const Experiences = ({setStoredUser, experiences}) => {
     },
   });
 
-  console.log(experiences);
 
   const onChangeDate = (date, name) => {
     // console.log(date);
@@ -337,7 +337,7 @@ const Experiences = ({setStoredUser, experiences}) => {
       {openModal()}
 
       {/* Add Services Button */}
-      <View style={styles.btnContainer}>
+     {!isViewing && <View style={styles.btnContainer}>
         <AddMore
           type={'outlined'}
           label={'Add More'}
@@ -348,7 +348,7 @@ const Experiences = ({setStoredUser, experiences}) => {
             });
           }}
         />
-      </View>
+      </View>}
 
       <ScrollView style={styles.contentContainer}>
         {/* Experiences */}
@@ -362,10 +362,14 @@ const Experiences = ({setStoredUser, experiences}) => {
                     index={index}
                     onEdit={onPressEdit}
                     onDelete={onPressDelete}
+                    isViewing={isViewing}
                   />
                 );
               })
-            : null}
+            : <NotFound
+            title="No experience"
+            text='No experiences are added yet'
+          />}
         </View>
       </ScrollView>
     </View>

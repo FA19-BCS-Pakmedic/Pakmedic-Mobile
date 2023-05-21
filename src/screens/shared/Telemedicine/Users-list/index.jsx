@@ -57,6 +57,20 @@ const UsersList = ({navigation}) => {
     });
   };
 
+
+  const navigateToProfile = (id) => {
+    
+    console.log("ID", id);
+
+    navigation.navigate('App', {
+      screen: "ViewProfile",
+      params: {
+        isViewing: true,
+        userId: id
+      }
+    })  
+  }
+
   return (
     <>
       <StaticContainer isHorizontalPadding={false}>
@@ -82,6 +96,7 @@ const UsersList = ({navigation}) => {
                           role={role}
                           appointment={appointment}
                           onPressContact={navigateToChat}
+                          onPressViewProfile={navigateToProfile}
                         />
                       </View>
                     ))}

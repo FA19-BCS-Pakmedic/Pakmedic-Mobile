@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   },
   flexVertical: {
     flexDirection: 'column',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 10,
   },
@@ -48,5 +48,12 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     width: dimensions.Width / 5,
     height: dimensions.Height / 13,
+  },
+
+  notFoundContainer: {
+    width: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

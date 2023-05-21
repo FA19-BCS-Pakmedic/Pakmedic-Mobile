@@ -100,10 +100,10 @@ const PrescriptionDetail = props => {
                 return (
                   <View style={styles.itemContainer}>
                     <View style={styles.icon}>
-                      {item.dosage_form === 'tablet' && <Tablet />}
-                      {item.dosage_form === 'capsule' && <Capsule />}
-                      {item.dosage_form === 'syringe' && <Syringe />}
-                      {item.dosage_form === 'syrup' && <Syrup />}
+                      {item.dosage_form.toLowerCase() === 'tablet' && <Tablet />}
+                      {item.dosage_form.toLowerCase() === 'capsule' && <Capsule />}
+                      {item.dosage_form.toLowerCase() === 'syringe' && <Syringe />}
+                      {item.dosage_form.toLowerCase() === 'syrup' && <Syrup />}
                     </View>
 
                     <View style={styles.itemBody}>

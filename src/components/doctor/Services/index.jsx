@@ -39,6 +39,7 @@ import {
   updateService,
 } from '../../../services/doctorServices';
 import {DAYS} from '../../../utils/constants/Days';
+import NotFound from '../../shared/NotFound';
 
 const initialState = {
   name: '',
@@ -54,7 +55,7 @@ const initialState = {
   isOnline: false,
 };
 
-const Services = ({services, setStoredUser}) => {
+const Services = ({services, setStoredUser, isViewing}) => {
   const [visible, setVisible] = useState(false);
   // const [isOnline, setIsOnline] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
@@ -560,6 +561,7 @@ const Services = ({services, setStoredUser}) => {
       {openModal()}
 
       {/* Add Services Button */}
+      {!isViewing && 
       <View style={styles.btnContainer}>
         <AddMore
           type={'outlined'}
@@ -571,12 +573,12 @@ const Services = ({services, setStoredUser}) => {
             });
           }}
         />
-      </View>
+      </View>}
 
       <ScrollView style={styles.contentContainer}>
         {/* Services */}
         <View style={styles.serviceContainer}>
-          {services.length > 0 &&
+          {services.length > 0 ?
             services.map((service, index) => {
               return (
                 <ServiceCard
@@ -584,9 +586,15 @@ const Services = ({services, setStoredUser}) => {
                   key={index}
                   onEdit={onPressEdit}
                   onDelete={onDeletePress}
+                  isViewing={isViewing}
                 />
               );
-            })}
+            }) : (
+              <NotFound
+                  title="No services"
+                  text='No services are added yet'
+                />
+            )}
         </View>
       </ScrollView>
     </View>
