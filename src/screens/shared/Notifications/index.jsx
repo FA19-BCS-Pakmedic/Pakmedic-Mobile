@@ -34,7 +34,12 @@ const Notification = () => {
           params: {image: item?.data?.image, data: item?.data?.data},
         });
       }}>
-      <View style={{flexDirection: 'row'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '97%',
+        }}>
         <View style={styles.flexVertical}>
           <Text style={styles.text}>{item?.title}</Text>
           <Text style={styles.text2}>{item?.body}</Text>
@@ -60,7 +65,6 @@ const Notification = () => {
       disableHeader={true}>
       <FlatList
         data={notifications.reverse()}
-
         renderItem={item => renderItem(item, navigation)}
         keyExtractor={(item, index) => index}
         style={styles.flatList}
