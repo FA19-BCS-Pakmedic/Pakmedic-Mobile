@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
 import React from 'react';
 
 //import {styles} from './styles';
@@ -14,76 +14,104 @@ import StatusY from '../../../../assets/svgs/statusY.svg';
 import ScrollContainer from '../../../../containers/ScrollContainer';
 import Button from '../../../../components/shared/Button';
 
+import {getComplaintById} from '../../../../services/complaintServices';
+
 const Complaint = props => {
-  const {item} = props.route.params;
+  const {data} = props.route.params;
+  console.log(data);
+  const [item, setItem] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  const getComplaint = async () => {
+    try {
+      setLoading(true);
+      const res = await getComplaintById(data);
+      console.log(res.data.data.data);
+      setItem(res.data.data.data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    getComplaint();
+  }, []);
+
   return (
     <ScrollContainer
       customHeaderEnable
       customHeaderName={`Ticket # ${item?.ticketNumber}`}
       isBack
       isHorizontalPadding>
-      <View style={styles.container}>
-        <View style={styles.subjContainer}>
-          <View style={styles.Left}>
-            <Text style={styles.Heading}>Subject</Text>
-            <Text style={styles.text}>{item?.subject}</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.primary1} />
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.subjContainer}>
+            <View style={styles.Left}>
+              <Text style={styles.Heading}>Subject</Text>
+              <Text style={styles.text}>{item?.subject}</Text>
+            </View>
+            <View style={styles.Right}>
+              {item?.status === 'on Hold' ? (
+                <StatusR />
+              ) : item?.status === 'Pending' ? (
+                <StatusY />
+              ) : (
+                <StatusG />
+              )}
+              <Text style={styles.statusText}>{item?.status}</Text>
+            </View>
           </View>
-          <View style={styles.Right}>
-            {item?.status === 'on Hold' ? (
-              <StatusR />
-            ) : item?.status === 'Pending' ? (
-              <StatusY />
-            ) : (
-              <StatusG />
-            )}
-            <Text style={styles.statusText}>{item?.status}</Text>
+          <View style={styles.detailContainer}>
+            <Text style={styles.Heading}>Complaint</Text>
+            <Text style={styles.complainText}>{item?.complaint}</Text>
           </View>
-        </View>
-        <View style={styles.detailContainer}>
-          <Text style={styles.Heading}>Complaint</Text>
-          <Text style={styles.complainText}>{item?.complaint}</Text>
-        </View>
-        <View style={styles.complaineeContainer}>
-          <Text style={styles.Heading}>Complainee</Text>
-          <View style={styles.complaineeCard}>
-            <View style={styles.cardLeft}>
-              <View style={styles.detailLeft}>
-                <Image
-                  style={styles.img}
-                  source={require('../../../../assets/images/default-avatar.png')}
+          <View style={styles.complaineeContainer}>
+            <Text style={styles.Heading}>Complainee</Text>
+            <View style={styles.complaineeCard}>
+              <View style={styles.cardLeft}>
+                <View style={styles.detailLeft}>
+                  <Image
+                    style={styles.img}
+                    source={require('../../../../assets/images/default-avatar.png')}
+                  />
+                </View>
+                <View style={styles.detailRight}>
+                  <Text style={styles.text}>{item?.complainee.name}</Text>
+                  <Text style={styles.text}>+92-332-xxxxx</Text>
+                </View>
+              </View>
+              <View style={styles.cardRight}>
+                <Button
+                  label={'View Profile'}
+                  type={'filled'}
+                  width={dimensions.Width * 0.3}
+                  height={dimensions.Height * 0.04}
+                  fontSize={fonts.size.font12}
+                  color={colors.primary1}
+                  onPress={() => {}}
                 />
               </View>
-              <View style={styles.detailRight}>
-                <Text style={styles.text}>{item?.complainee}</Text>
-                <Text style={styles.text}>+92-332-xxxxx</Text>
-              </View>
-            </View>
-            <View style={styles.cardRight}>
-              <Button
-                label={'View Profile'}
-                type={'filled'}
-                width={dimensions.Width * 0.3}
-                height={dimensions.Height * 0.04}
-                fontSize={fonts.size.font12}
-                color={colors.primary1}
-                onPress={() => {}}
-              />
             </View>
           </View>
-        </View>
 
-        <View style={styles.reviewContainer}>
-          <Text style={styles.Heading}>Review Comment</Text>
-          {item?.status === 'Pending' ? (
-            <Text style={styles.reviewText}>No review comment yet</Text>
-          ) : (
-            <Text style={styles.reviewText}>
-              We have received your complaint and will get back to you soon and
-              will resolve your issue as soon as possible. please be patient.
-            </Text>
-          )}
+          <View style={styles.reviewContainer}>
+            <Text style={styles.Heading}>Review Comment</Text>
+            {item?.status === 'Pending' ? (
+              <Text style={styles.reviewText}>No review comment yet</Text>
+            ) : (
+              <Text style={styles.reviewText}>
+                We have received your complaint and will get back to you soon
+                and will resolve your issue as soon as possible. please be
+                patient.
+              </Text>
+            )}
+          </View>
         </View>
-      </View>
+      )}
     </ScrollContainer>
   );
 };

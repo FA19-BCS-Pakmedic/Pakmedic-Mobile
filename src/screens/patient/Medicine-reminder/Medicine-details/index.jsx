@@ -83,13 +83,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   Icon: {
-    height: dimensions.Height / 3.5,
+    height: dimensions.Height / 2.8,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: dimensions.Height * 0.05,
   },
   data: {
+    marginTop: dimensions.Height * 0.04,
     height: dimensions.Height / 1.8,
     borderRadius: 50,
     width: dimensions.Width,

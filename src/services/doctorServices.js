@@ -42,6 +42,8 @@ export const resetForgotPasswordDoctor = data =>
 //get doctor if he is logged in
 export const getDoctor = () => API.get('doctors');
 
+export const getDoctors = () => API.get('doctors/all');
+
 //get doctor by id
 export const getDoctorById = id => API.get(`doctors/${id}`);
 

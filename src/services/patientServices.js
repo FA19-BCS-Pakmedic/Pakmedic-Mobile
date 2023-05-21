@@ -38,6 +38,7 @@ export const resetForgotPasswordPatient = data =>
 //get patient if he is logged in
 export const getPatient = () => API.get('patients/');
 
+export const getPatients = () => API.get('patients/all');
 // add avatar
 export const addAvatar = data => API.post('patients/avatar', data);
 
@@ -58,7 +59,7 @@ export const updateFamilyMember = (id, data) =>
 export const deleteFamilyMember = id => API.delete(`families/${id}`);
 
 export const addReminder = data => {
-  console.log(data);
+  console.log('Add REMINDERRRRRRRRRR', data);
   return API.post('reminder', data);
 };
 

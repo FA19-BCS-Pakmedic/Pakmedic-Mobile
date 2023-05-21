@@ -30,8 +30,17 @@ export default Button = ({
     <TouchableOpacity
       style={
         isDisabled
-          ? styles(type, width, null, height, null, null, marginVertical)
-              .disabled
+          ? styles(
+              type,
+              width,
+              null,
+              height,
+              null,
+              null,
+              marginVertical,
+              null,
+              radius,
+            ).disabled
           : styles(
               type,
               width,
@@ -99,9 +108,12 @@ const styles = (
       height: height ? height : dimensions.Height / 17,
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 50,
-      // marginVertical: dimensions.Height / 60,
+      borderRadius: radius,
+      //borderWidth: 1,
+      marginVertical: marginVertical ? marginVertical : dimensions.Height / 60,
       backgroundColor: colors.gray1,
+      borderWidth: 2,
+      borderColor: colors.gray1,
       width: width,
     },
 

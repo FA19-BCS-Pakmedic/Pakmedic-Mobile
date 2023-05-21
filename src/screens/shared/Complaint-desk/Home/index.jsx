@@ -102,7 +102,7 @@ const Home = props => {
     try {
       const res = await getAllComplaints();
       if (res) {
-        //console.log(res.data.data.data);
+        //console.log('Complaints', res.data.data.data);
         setComplaints(
           res.data.data.data.filter(item => item.complainantType === role),
         );
@@ -259,7 +259,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   addTicket: {
-    //zIndex: -1000,
     alignItems: 'flex-end',
     marginRight: dimensions.Width / 20,
     marginTop: dimensions.Height * 0.02,

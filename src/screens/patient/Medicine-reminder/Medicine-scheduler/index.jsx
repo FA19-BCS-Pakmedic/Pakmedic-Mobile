@@ -37,9 +37,8 @@ const MedicineScheduler = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(moment().format('D/MM/YYYY'));
 
-  const [day, setDay] = useState(
-    moment.utc(new Date(), 'YYYY-MM-DD').format('dddd').substring(0, 3),
-  );
+  const [day, setDay] = useState(moment().format('dddd').substring(0, 3));
+
   const [weekDates, setWeekDates] = useState([]);
   const [dateModal, setDateModal] = useState(false);
   const [reminders, setReminders] = useState([]);
@@ -59,8 +58,9 @@ const MedicineScheduler = () => {
 
   useEffect(() => {
     const getDates = async () => {
-      await getWeekDates();
+      getWeekDates();
     };
+    console.log('weekdate', weekDates, '\nDate', date, '\nday', day);
     getDates();
   }, [date]);
 
@@ -221,6 +221,17 @@ const MedicineScheduler = () => {
         Visible={isModalVisible}
         setModalVisible={setModalVisible}
         date={date}
+        onAdd={bool => {
+          reminder();
+        }}
+      />
+
+      <DateModal
+        Visible={dateModal}
+        setModalVisible={setDateModal}
+        date={date}
+        setDate={setDate}
+        setDay={setDay}
       />
 
       <DateModal
@@ -280,6 +291,7 @@ const styles = StyleSheet.create({
     width: dimensions.Width * 0.1,
     textAlign: 'center',
   },
+
   button: {
     marginTop: dimensions.Height / 50,
     flexDirection: 'row',
