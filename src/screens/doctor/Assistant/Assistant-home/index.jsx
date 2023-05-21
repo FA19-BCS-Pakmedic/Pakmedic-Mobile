@@ -17,7 +17,7 @@ const elements = [
     name: 'X-Ray',
     description: 'Get Analysis of Edema Cardiomegaly Mass Pneumothorax',
     icon: <Xray width={dimensions.Width / 5} height={dimensions.Height / 7} />,
-    screen: 'Xray',
+    screen: 'PatientList',
   },
   {
     name: 'Brain MRI',
@@ -25,7 +25,7 @@ const elements = [
     icon: (
       <BrainMri width={dimensions.Width / 5} height={dimensions.Height / 7} />
     ),
-    screen: 'BrainMri',
+    screen: 'PatientList',
   },
   {
     name: 'Retinopathy',
@@ -66,7 +66,10 @@ const renderItem = ({item}, navigation) => (
   <TouchableOpacity
     style={styles.flex}
     onPress={() => {
-      navigation.navigate('App', {screen: item.screen});
+      navigation.navigate('App', {
+        screen: item.screen,
+        params: {screenName: item.name},
+      });
     }}>
     {item.icon}
     <View style={styles.flexVertical}>
@@ -86,9 +89,6 @@ const renderItem = ({item}, navigation) => (
 );
 
 const AssistantHome = ({navigation}) => {
-  useEffect(() => {
-    // console.log(navigation);
-  });
   return (
     <StaticContainer>
       <View>

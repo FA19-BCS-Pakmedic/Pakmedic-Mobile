@@ -141,3 +141,7 @@ export const BrainMRI = data => {
 export const getNotifications = data => {
   return API.get(`notifications/?user=${data}`);
 };
+
+export const getScans = (data, type) => {
+  return API.get(`scans/patient/${data}`);
+};
