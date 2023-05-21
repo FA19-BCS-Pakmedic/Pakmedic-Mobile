@@ -19,18 +19,13 @@ const PatientModalNavigator = props => {
     <ModalContainer
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
-      height={dimensions.Height / 1.8}
+      height={dimensions.Height / 2.5}
       width={dimensions.Width}
       type="bottom"
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
       bgColor={colors.primaryMonoChrome100}>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.text}>Services</Text>
-        </TouchableOpacity>
-        <View style={styles.line} />
-
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
@@ -38,11 +33,6 @@ const PatientModalNavigator = props => {
             navigation.navigate('Support Communities');
           }}>
           <Text style={styles.text}>Support Communities</Text>
-        </TouchableOpacity>
-        <View style={styles.line} />
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.text}>Contact</Text>
         </TouchableOpacity>
         <View style={styles.line} />
 
@@ -55,15 +45,6 @@ const PatientModalNavigator = props => {
           <Text style={styles.text}>Complaint Desk</Text>
         </TouchableOpacity>
         <View style={styles.line} />
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.text}>Analytics</Text>
-        </TouchableOpacity>
-        <View style={styles.line} />
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.text}>Finance</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
@@ -94,7 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryMonoChrome100,
   },
   button: {
-    width: dimensions.Width,
+    width: dimensions.Width * 0.9,
     height: dimensions.Height / 15,
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,4 +1,5 @@
 import {TouchableOpacity, Text, StyleSheet, View, Image} from 'react-native';
+import React from 'react';
 
 import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
@@ -19,6 +20,8 @@ export default CommunityPostCard = props => {
   const navigation = useNavigation();
   const {item, Delete, setDelete} = props;
   const user = useSelector(state => state.auth.user);
+
+  const [AddModalVisible, setAddVisible] = React.useState(false);
 
   return (
     <TouchableOpacity
@@ -88,7 +91,9 @@ export default CommunityPostCard = props => {
             type="empty"
             width={dimensions.Width / 4}
             height={dimensions.Height / 20}
-            onPress={() => {}}
+            onPress={() => {
+              setAddVisible(true);
+            }}
           />
         )}
         <Button
@@ -99,6 +104,16 @@ export default CommunityPostCard = props => {
           onPress={() => navigation.navigate('Post', item)}
         />
       </View>
+      <TicketAddModal
+        Visible={AddModalVisible}
+        setModalVisible={setAddVisible}
+        edit={false}
+        report={'Post'}
+        userData={{
+          complainee: item.author?._id,
+          complaineeType: item.author?.role,
+        }}
+      />
     </TouchableOpacity>
   );
 };
