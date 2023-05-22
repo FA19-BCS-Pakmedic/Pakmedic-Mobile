@@ -45,6 +45,8 @@ import { authLogout } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import logout from '../../../utils/helpers/logout';
 import EhrAccess from '../../../screens/patient/Ehr';
+import Notifications from '../../../screens/shared/Notifications';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -89,6 +91,8 @@ const PatientNavigation = () => {
       <Stack.Screen name="Specialists" component={SpecialistCategory} />
       <Stack.Screen name="BookAppointment" component={BookAppointment} />
       <Stack.Screen name="OnlinePayment" component={OnlinePayment} />
+      <Stack.Screen name="Notifications" component={Notifications} />
+
       <Stack.Screen name="AppointmentDetails" component={AppointmentDetails} />
       <Stack.Screen
         name="RescheduleAppointment"
