@@ -38,6 +38,7 @@ const AppointmentDetails = () => {
   const navigation = useNavigation();
   const travelType = 'drive';
   const address = appointment?.service?.hospital?.address;
+  console.log(address);
 
   const { showToast } = useCustomToast(); 
 
@@ -69,9 +70,11 @@ const AppointmentDetails = () => {
 
 
 
-  const [end] = useState(
-    address ? `${address?.address} ${address?.city} ${address?.country}` : null,
-  );
+  const end = 
+    address ? `${address?.address}, ${address?.city}, ${address?.country}` : null
+  
+  console.log(end);
+
 
   const role = useSelector(state => state.role.role);
 
@@ -92,9 +95,12 @@ const AppointmentDetails = () => {
     });
   };
 
-  const _openMaps = () => {
-    return createOpenLink({travelType, end, provider: 'google'});
-  };
+  
+
+
+  const _openMaps = () => createOpenLink({provider: 'google', end, travelType: 'drive'});
+  // const _openMaps = () => createOpenLink(address && address.lat && address.lng ? {latitude: address.lat, longitude: address.lng, navigate: true} : {travelType, end, provider: 'google', navigate: true});
+  
 
   const getServiceInfo = () => {
     return appointment?.service.isOnline ? (

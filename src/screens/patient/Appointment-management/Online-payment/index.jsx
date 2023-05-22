@@ -143,7 +143,7 @@ const OnlinePayment = () => {
     let response;
     setBtnLoading(true);
     try {
-      response = await createPaymentMethod(data);
+      response = await createPaymentMethod(data, user.stripeCustomerId);
 
       console.log(response.data.data.paymentMethod)
 
