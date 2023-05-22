@@ -59,7 +59,7 @@ const DoctorCard = ({doctor}) => {
             {doctor ? doctor?.location : 'Location'}
           </Text>
           <View style={styles.ratingsContainer}>
-            <StarIcon />
+            <StarIcon fill="#FBBC04" />
             <Text style={[styles.text, {marginLeft: dimensions.Width / 100}]}>
               4.5/5 674 reviews
             </Text>

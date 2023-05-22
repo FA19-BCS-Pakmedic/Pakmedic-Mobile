@@ -1,7 +1,7 @@
 import API from '../utils/helpers/axios';
 
-export const createPaymentMethod = data => {
-  return axios.post('/stripe/create-payment-method', data);
+export const createPaymentMethod = (data, id) => {
+  return axios.post(`/stripe/create-payment-method/${id}`, data);
 };
 
 // export const createCustomer = data => {
@@ -15,4 +15,4 @@ export const getCustomer = id => {
 
 export const payForService = (id, data) => {
   return axios.post(`/stripe/pay-for-service/${id}`, data);
-}
+};

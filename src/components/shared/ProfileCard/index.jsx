@@ -49,7 +49,7 @@ const ProfileCard = ({user, isViewing}) => {
               <Text style={styles().otherInfo}>{user?.speciality}</Text>
             </View>
             <View style={styles().iconTextContainer}>
-              <StarSvg width={dimensions.Width / 20} />
+              <StarSvg width={dimensions.Width / 20} fill="#FBBC04" />
               <Text
                 style={[
                   styles().otherInfo,

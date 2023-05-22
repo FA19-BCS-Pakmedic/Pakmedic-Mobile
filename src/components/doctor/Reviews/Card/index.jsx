@@ -9,7 +9,11 @@ import dimensions from '../../../../utils/styles/themes/dimensions';
 import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
 
-const ReviewCard = ({setOpen}) => {
+import {formatDate} from '../../../../utils/helpers/formatDate';
+
+const ReviewCard = props => {
+  const {review} = props;
+
   return (
     <View style={styles().container}>
       <View style={styles().headerContainer}>
@@ -20,40 +24,23 @@ const ReviewCard = ({setOpen}) => {
 
           <View>
             <Text style={styles().verificationText}>Verified Patient</Text>
-            <Text style={styles().text}>Haris</Text>
-            <Text style={styles().postedDateText}>Posted 2 days ago</Text>
+            <Text style={styles().text}>{review?.patient.name}</Text>
+            <Text style={styles().postedDateText}>
+              {formatDate(review?.createdAt)}
+            </Text>
           </View>
         </View>
 
-        <View style={styles().headerRightContainer}>
+        {/* <View style={styles().headerRightContainer}>
           <View style={styles().typeIconContainer}>
             <VideoCameraIcon />
           </View>
           <Text style={styles().text}>Online Consultation</Text>
-        </View>
+        </View> */}
       </View>
 
       <View style={styles().contentContainer}>
-        <Text style={styles().text}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sapien
-          suspendisse. Nunc ac ante turpis vestibulum neque sit. Risus, auctor
-          neque venenatis, quis amet neque. Neque sit pellentesque augue sapien.
-          Vestibulum in enim purus purus dictumst vitae scelerisque nisi. Eget
-          eget in malesuada sit gravida eros gravidfermentum nulla viverra. T
-        </Text>
-      </View>
-
-      <View style={styles().controls}>
-        <Button
-          type="filled"
-          label="Report Review"
-          onPress={() => {
-            setOpen(prevState => {
-              return !prevState;
-            });
-          }}
-          width={dimensions.Width / 2.6}
-        />
+        <Text style={styles().text2}>{review?.review}</Text>
       </View>
     </View>
   );
@@ -94,6 +81,12 @@ const styles = () =>
 
     text: {
       fontSize: fonts.size.font14,
+      //maxWidth: dimensions.Width * 0.3,
+    },
+    text2: {
+      fontSize: fonts.size.font14,
+      textAlign: 'justify',
+      //maxWidth: dimensions.Width * 0.9,
     },
 
     postedDateText: {

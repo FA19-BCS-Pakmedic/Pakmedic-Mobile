@@ -201,7 +201,7 @@ export const subscribeToCallEvents = (
  * function to hangup the call
  */
 export const onHangupPress = call => {
-  call.current.hangup();
+  if (call.current) call.current.hangup();
 };
 
 /**

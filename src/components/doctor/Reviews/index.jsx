@@ -1,120 +1,68 @@
 import React, {useState} from 'react';
-import {useForm} from 'react-hook-form';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import ModalContainer from '../../../containers/ModalContainer';
-import {REASONS} from '../../../utils/constants/Reasons';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {useSelector} from 'react-redux';
+
 import colors from '../../../utils/styles/themes/colors';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import fonts from '../../../utils/styles/themes/fonts';
-import AddMore from '../../shared/AddMore';
-import Button from '../../shared/Button';
-import {Dropdown} from '../../shared/Dropdown';
-import {ModalInputField} from '../../shared/Input';
+
 import ReviewCard from './Card';
 
+import {getAllReviews} from '../../../services/reviewServices';
+
+import NotFound from '../../shared/NotFound';
+
 export default function Reviews() {
-  const [visible, setVisible] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [reportOpen, setReportOpen] = useState(false);
+  const id = useSelector(state => state.auth.user._id);
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-    setValue,
-    clearErrors,
-    watch,
-  } = useForm({
-    mode: 'all',
-    revalidate: 'all',
-    defaultValues: {
-      reportReason: '',
-    },
-  });
-
-  const openModal = () => {
-    return (
-      <>
-        <ModalContainer
-          isModalVisible={visible}
-          setModalVisible={setVisible}
-          width={dimensions.Width / 1.1}
-          type="center"
-          backDropOpacity={0.5}
-          padding={dimensions.Height / 50}
-          height={dimensions.Height / 3.2}
-          bgColor={'white'}
-          borderColor={colors.primary1}>
-          <View style={styles.modalContainer}>
-            <View style={styles.headingContainer}>
-              <Text style={styles.heading}>Report Review</Text>
-            </View>
-            <View style={styles.infoContainer}>
-              <View style={styles.dropdownContainer}>
-                <Dropdown
-                  open={reportOpen}
-                  setOpen={setReportOpen}
-                  items={REASONS}
-                  control={control}
-                  title="Reason"
-                  setValue={callback => {
-                    setValue('reportReason', callback());
-                  }}
-                  value={watch('reportReason')}
-                  minHeight={dimensions.Height / 18}
-                  name="reportReason"
-                  placeholder="Reason"
-                  width={dimensions.Width / 1.2}
-                  rules={{
-                    required: 'Please select a reason',
-                    validate: value =>
-                      value !== null || 'Please select a reason',
-                  }}
-                />
-              </View>
-            </View>
-            <View style={styles.controls}>
-              <Button
-                type="outlined"
-                label="Cancel"
-                onPress={() => {}}
-                width={dimensions.Width / 2.6}
-              />
-              <Button
-                type="filled"
-                label="Submit"
-                onPress={() => {}}
-                width={dimensions.Width / 2.6}
-              />
-            </View>
-          </View>
-        </ModalContainer>
-      </>
-    );
+  const getReviews = async () => {
+    try {
+      setIsLoading(true);
+      query = `doctor=${id}`;
+      const response = await getAllReviews(query);
+      setReviews(response.data.data.data);
+      //console.log(response.data.data.data);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
   };
+
+  React.useEffect(() => {
+    getReviews();
+  }, []);
 
   return (
     <View style={styles.container}>
-      {openModal()}
-      <View style={styles.reviewCountContainer}>
-        <Text style={styles.reviewCount}>674 Reviews</Text>
-      </View>
-      <ScrollView style={styles.contentContainer}>
-        <ReviewCard setOpen={setVisible} />
-        <ReviewCard setOpen={setVisible} />
-        <ReviewCard setOpen={setVisible} />
-        <ReviewCard setOpen={setVisible} />
-        <ReviewCard setOpen={setVisible} />
-
-        <View style={styles.btnContainer}>
-          <Button
-            type="filled"
-            label="View All Reviews"
-            onPress={() => {}}
-            width={dimensions.Width / 2}
-          />
-        </View>
-      </ScrollView>
+      {isLoading ? (
+        <ActivityIndicator size="large" color={colors.primary1} />
+      ) : reviews.length > 0 ? (
+        <>
+          <View style={styles.reviewCountContainer}>
+            <Text
+              style={styles.reviewCount}>{`${reviews.length} Reviews`}</Text>
+          </View>
+          <ScrollView
+            style={styles.contentContainer}
+            showsVerticalScrollIndicator={false}>
+            {reviews.map((review, index) => {
+              return <ReviewCard key={index} review={review} />;
+            })}
+          </ScrollView>
+        </>
+      ) : (
+        <NotFound text="No reviews found" />
+      )}
     </View>
   );
 }
