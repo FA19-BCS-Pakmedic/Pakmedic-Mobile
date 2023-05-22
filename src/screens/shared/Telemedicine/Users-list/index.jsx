@@ -12,34 +12,41 @@ import {getAppointmentsByUserId} from '../../../../services/appointmentServices'
 import useCustomApi from '../../../../hooks/useCustomApi';
 import Loader from '../../../../components/shared/Loader';
 import NotFound from '../../../../components/shared/NotFound';
+import { handleEhrRequest, requestEhrAccess } from '../../../../services/ehrServices';
+import { useCustomToast } from '../../../../hooks/useCustomToast';
 
 const UsersList = ({navigation}) => {
   const role = useSelector(state => state.role.role);
   const user = useSelector(state => state.auth.user);
 
+  const {showToast} = useCustomToast();
+
   const [appointments, setAppointments] = useState([]);
 
   const {callApi, isLoading} = useCustomApi();
 
+
+  const getAppointments = async () => {
+    try {
+      // const response = await getAppointmentsByUserId(
+      //   `${role.toLowerCase()}=${user._id}`,
+      // );
+
+      const data = await callApi(
+        getAppointmentsByUserId,
+        `${role.toLowerCase()}=${user._id}`,
+      );
+
+      console.log(isLoading);
+
+      setAppointments(data.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    const getAppointments = async () => {
-      try {
-        // const response = await getAppointmentsByUserId(
-        //   `${role.toLowerCase()}=${user._id}`,
-        // );
-
-        const data = await callApi(
-          getAppointmentsByUserId,
-          `${role.toLowerCase()}=${user._id}`,
-        );
-
-        console.log(isLoading);
-
-        setAppointments(data.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    
 
     if (user && role) {
       getAppointments();
@@ -70,6 +77,34 @@ const UsersList = ({navigation}) => {
     })  
   }
 
+  const handleRequestEhr = async (patientId) => {
+    try{
+      const response = await requestEhrAccess(patientId);
+      showToast(response.data.message, "success");
+    }catch(err) {
+      showToast("Error requesting EHR", "danger");
+    }finally {  
+    }
+  }
+
+  const handleRevokeEhr = async (doctorId) => {
+    
+    const data = {
+        status: "Revoke",
+        doctorId,
+    }
+    try {
+        await handleEhrRequest(data);
+        showToast("Ehr access revoked", "success");
+    } catch(err) {
+        console.log(err);
+        showToast(err.response.data.message, 'danger');
+    } finally {
+        getAppointments();
+      }
+}
+
+
   return (
     <>
       <StaticContainer isHorizontalPadding={false}>
@@ -96,6 +131,8 @@ const UsersList = ({navigation}) => {
                           appointment={appointment}
                           onPressContact={navigateToChat}
                           onPressViewProfile={navigateToProfile}
+                          handleRequestEHR={handleRequestEhr}
+                          handleRevokeEhr={handleRevokeEhr}
                         />
                       </View>
                     ))}

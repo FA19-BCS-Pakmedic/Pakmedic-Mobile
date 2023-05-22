@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import dimensions from '../../../utils/styles/themes/dimensions';
 import ROLES from '../../../utils/constants/ROLES';
 import colors from '../../../utils/styles/themes/colors';
@@ -11,17 +11,37 @@ import {getDate} from '../../../utils/helpers/getDate';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
 import ReviewAddModal from '../../patient/ReviewAddModal';
+import { useSelector } from 'react-redux';
 
 const UserListCard = ({
   role,
   appointment,
   onPressContact,
   onPressViewProfile,
+  handleRequestEHR,
+  handleRevokeEhr
 }) => {
   const receiver =
     role === ROLES.doctor ? appointment?.patient : appointment?.doctor;
 
+  const user = useSelector(state => state.auth.user);
+
   const [visible, setVisible] = React.useState(false);
+
+
+  const [isEhrAccess, setIsEhrAccess] = React.useState(false);
+
+  const checkEhrAccess = (doctor, id) => {
+    if(doctor && doctor.accessList) {
+      return doctor.accessList.find(patient => patient._id === id);
+    }
+  }
+
+
+  // useEffect(() => {
+  //   setIsEhrAccess(checkEhrAccess());
+  // }, [receiver])
+
 
   const getControls = () => {
     switch (role) {
@@ -57,11 +77,27 @@ const UserListCard = ({
                   setVisible(true);
                 }}
                 type="filled"
-                width="100%"
+                width={checkEhrAccess(appointment.doctor, appointment.patient._id) ? '48%' : '100%'}
                 fontSize={fonts.size.font14}
                 height={dimensions.Height / 20}
                 marginVertical={dimensions.Height / 1000}
               />
+              {
+                checkEhrAccess(appointment.doctor, appointment.patient._id) && (
+                  <Button
+                    label="Revoke EHR Access"
+                    onPress={() => {
+                      handleRevokeEhr(appointment.doctor._id)
+                    }}
+                    type="filled"
+                    width={'48%'}
+                    fontSize={fonts.size.font14}
+                    height={dimensions.Height / 20}
+                    marginVertical={dimensions.Height / 1000}
+                  />
+                )
+                
+              }
             </View>
             <ReviewAddModal
               Visible={visible}
@@ -84,12 +120,15 @@ const UserListCard = ({
                   marginVertical={dimensions.Height / 1000}
                 />
                 <Button
-                  label="View EHR"
-                  onPress={() => {}}
+                  label="Request EHR"
+                  onPress={() => {
+                    handleRequestEHR(appointment.patient._id)
+                  }}
                   type="filled"
                   width="48%"
                   height={dimensions.Height / 20}
                   marginVertical={dimensions.Height / 1000}
+                  isDisabled={checkEhrAccess(appointment.doctor, appointment.patient._id)}
                 />
               </View>
               <View style={styles().controls}>
