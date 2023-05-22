@@ -75,6 +75,10 @@ const OnlinePayment = () => {
     }
   };
 
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
+
   const handleExpiryInput = value => {
     setValue('expiryDate', formatExpiryDate(value));
 
@@ -145,7 +149,7 @@ const OnlinePayment = () => {
     try {
       response = await createPaymentMethod(data, user.stripeCustomerId);
 
-      console.log(response.data.data.paymentMethod)
+      console.log(response.data.data.paymentMethod);
 
       const paymentMethod = response?.data?.data?.paymentMethod;
 

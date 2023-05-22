@@ -200,14 +200,6 @@ const MedicineScheduler = () => {
         setDate={setDate}
         setDay={setDay}
       />
-
-      <DateModal
-        Visible={dateModal}
-        setModalVisible={setDateModal}
-        date={date}
-        setDate={setDate}
-        setDay={setDay}
-      />
     </StaticContainer>
   );
 };
@@ -216,10 +208,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-  },
-  buttonLabel: {
-    fontSize: fonts.size.font16,
-    fontWeight: fonts.weight.bold,
   },
   buttonLabel: {
     fontSize: fonts.size.font16,

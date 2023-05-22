@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import StaticContainer from '../../../../containers/StaticContainer';
-
 import styles from './styles';
 import SearchFilterBar from '../../../../components/shared/SearchFilterBar';
 import UserListCard from '../../../../components/shared/UserListCard';
@@ -105,8 +104,8 @@ const UsersList = ({navigation}) => {
             ) : (
               <View style={styles.notFoundContainer}>
                 <NotFound
-                  title={'No Users Found'}
-                  text={'Sorry it seems like there are no users. '}
+                  title={'No User history Found'}
+                  text={'Sorry it seems like there is no user History'}
                   center
                 />
               </View>

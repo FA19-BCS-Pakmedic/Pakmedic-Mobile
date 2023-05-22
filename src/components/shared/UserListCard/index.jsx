@@ -10,9 +10,18 @@ import Button from '../Button';
 import {getDate} from '../../../utils/helpers/getDate';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
-const UserListCard = ({role, appointment, onPressContact, onPressViewProfile}) => {
+import ReviewAddModal from '../../patient/ReviewAddModal';
+
+const UserListCard = ({
+  role,
+  appointment,
+  onPressContact,
+  onPressViewProfile,
+}) => {
   const receiver =
     role === ROLES.doctor ? appointment?.patient : appointment?.doctor;
+
+  const [visible, setVisible] = React.useState(false);
 
   const getControls = () => {
     switch (role) {
@@ -26,6 +35,7 @@ const UserListCard = ({role, appointment, onPressContact, onPressViewProfile}) =
                 width="48%"
                 height={dimensions.Height / 20}
                 marginVertical={dimensions.Height / 1000}
+                fontSize={fonts.size.font14}
                 onPress={() => onPressViewProfile(receiver._id)}
               />
               <Button
@@ -37,18 +47,27 @@ const UserListCard = ({role, appointment, onPressContact, onPressViewProfile}) =
                 width="48%"
                 height={dimensions.Height / 20}
                 marginVertical={dimensions.Height / 1000}
+                fontSize={fonts.size.font14}
               />
             </View>
             <View style={styles().controls}>
               <Button
-                label="EHR Access"
-                onPress={() => {}}
+                label="Add Review"
+                onPress={() => {
+                  setVisible(true);
+                }}
                 type="filled"
                 width="100%"
+                fontSize={fonts.size.font14}
                 height={dimensions.Height / 20}
                 marginVertical={dimensions.Height / 1000}
               />
             </View>
+            <ReviewAddModal
+              Visible={visible}
+              setModalVisible={setVisible}
+              item={receiver}
+            />
           </>
         );
       case ROLES.doctor:
@@ -131,7 +150,9 @@ const UserListCard = ({role, appointment, onPressContact, onPressViewProfile}) =
             <View style={styles().information}>
               <Text style={styles().label}>Speciality:</Text>
               <Text style={styles().value}>
-                {/* {receiver?.speciality ? receiver.speciality : 'Dentist'} */}
+                {receiver?.speciality
+                  ? receiver.speciality
+                  : 'General Physician'}
               </Text>
             </View>
           )}
