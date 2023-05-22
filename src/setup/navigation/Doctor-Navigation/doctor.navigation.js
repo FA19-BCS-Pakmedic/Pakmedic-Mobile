@@ -27,6 +27,8 @@ import Xray from '../../../screens/doctor/Assistant/Xray';
 import RiskOfDeath from '../../../screens/doctor/Assistant/RiskOfDeath';
 import CompoundRecommendation from '../../../screens/doctor/Assistant/CompoundRecommendation';
 import CompoundResults from '../../../screens/doctor/Assistant/CompoundRecommendation/CompoundResults';
+import PatientList from '../../../screens/doctor/Assistant/PatientList';
+import ScanList from '../../../screens/doctor/Assistant/ScanList';
 
 import BrainMri from '../../../screens/doctor/Assistant/BrainMri';
 
@@ -90,6 +92,8 @@ const DoctorNavigation = () => {
       <Stack.Screen name="Retinopathy" component={Retinopathy} />
       <Stack.Screen name="Xray" component={Xray} />
       <Stack.Screen name="RiskOfDeath" component={RiskOfDeath} />
+      <Stack.Screen name="PatientList" component={PatientList} />
+      <Stack.Screen name="ScanList" component={ScanList} />
       <Stack.Screen
         name="CompoundRecommendation"
         component={CompoundRecommendation}

@@ -99,6 +99,7 @@ const PatientNavigation = () => {
       <Stack.Screen name="MedicineDetails" component={MedicineDetails} />
       <Stack.Screen name="ViewProfile" component={DoctorProfile} />
       <Stack.Screen name="EhrRequest" component={EhrAccess} />
+
     </Stack.Navigator>
   );
 };

@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
 
-import colors from '../../../utils/styles/themes/colors';
-import fonts from '../../../utils/styles/themes/fonts';
-import dimensions from '../../../utils/styles/themes/dimensions';
+import colors from '../../../../utils/styles/themes/colors';
+import fonts from '../../../../utils/styles/themes/fonts';
+import dimensions from '../../../../utils/styles/themes/dimensions';
 
 export const styles = StyleSheet.create({
   flex: {
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   },
   flexVertical: {
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     marginLeft: 10,
   },
@@ -49,18 +49,4 @@ export const styles = StyleSheet.create({
     width: dimensions.Width / 5,
     height: dimensions.Height / 13,
   },
-
-  notFoundContainer: {
-    width: '100%',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  notFoundContainer: {
-    width: "100%",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  }
 });
