@@ -17,7 +17,7 @@ import {addPrescription} from '../../../../services/prescriptionServices';
 
 //import {styles} from './styles'
 
-const PrescriptionManagement = () => {
+const PrescriptionManagement = ({route}) => {
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const role = useSelector(state => state.role.role);
@@ -28,13 +28,14 @@ const PrescriptionManagement = () => {
 
   const [medicines, setMedicines] = useState([]);
 
+  const patientID = route.params.data;
+
   const onSubmit = async () => {
     if (medicines.length === 0) {
       alert('Please add medicines');
       return;
     }
 
-    patientID = '6405db9b9484cf19e3e22b80';
     const data = {
       patient: patientID,
       medicines: medicines,

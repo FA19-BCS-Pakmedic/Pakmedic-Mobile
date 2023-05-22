@@ -19,7 +19,8 @@ const UserListCard = ({
   onPressContact,
   onPressViewProfile,
   handleRequestEHR,
-  handleRevokeEhr
+  handleRevokeEhr,
+  handleWritePrescription
 }) => {
   const receiver =
     role === ROLES.doctor ? appointment?.patient : appointment?.doctor;
@@ -134,11 +135,12 @@ const UserListCard = ({
               <View style={styles().controls}>
                 <Button
                   label="Write Prescription"
-                  onPress={() => {}}
+                  onPress={() => handleWritePrescription(appointment.patient._id)}
                   type="filled"
                   width="48%"
                   height={dimensions.Height / 20}
                   marginVertical={dimensions.Height / 1000}
+                  isDisabled={appointment.status.toLowerCase() !== 'completed'}
                 />
                 <Button
                   label="View Profile"

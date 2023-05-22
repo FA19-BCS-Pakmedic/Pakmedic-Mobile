@@ -102,7 +102,16 @@ const UsersList = ({navigation}) => {
     } finally {
         getAppointments();
       }
-}
+  }
+
+  const handleWritePrescription = (id) => {
+    navigation.navigate('App', {
+      screen: "PrescriptionManagement",
+      params: {
+        data: id
+      }
+    })
+  }
 
 
   return (
@@ -133,6 +142,7 @@ const UsersList = ({navigation}) => {
                           onPressViewProfile={navigateToProfile}
                           handleRequestEHR={handleRequestEhr}
                           handleRevokeEhr={handleRevokeEhr}
+                          handleWritePrescription={handleWritePrescription}
                         />
                       </View>
                     ))}
