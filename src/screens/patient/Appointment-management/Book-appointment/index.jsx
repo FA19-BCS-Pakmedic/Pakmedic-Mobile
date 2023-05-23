@@ -115,7 +115,7 @@ const BookAppointment = () => {
       setAlertName('LoginSuccess');
     } catch (err) {
       console.log(err);
-      setMessage('Appointment booking failed');
+      setMessage(err.response.data.message);
       setAlertName('LoginFailure');
     } finally {
       setModalVisible(true);
