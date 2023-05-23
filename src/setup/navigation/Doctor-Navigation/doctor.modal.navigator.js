@@ -12,7 +12,18 @@ import {useNavigation} from '@react-navigation/native';
 
 const DoctorModalNavigator = props => {
   const {Visible, setModalVisible, navigation} = props;
-  //const navigation = useNavigation();
+
+
+  const navigate = (screenName, data) => {
+    navigation.navigate('App', {
+      screen: screenName,
+      params: {
+        data
+      }
+    })
+  }
+
+
   return (
     <ModalContainer
       isModalVisible={Visible}
@@ -59,7 +70,7 @@ const DoctorModalNavigator = props => {
         </TouchableOpacity>
         <View style={styles.line} />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => navigate("FinanceHome")}>
           <Text style={styles.text}>Finance</Text>
         </TouchableOpacity>
       </View>
