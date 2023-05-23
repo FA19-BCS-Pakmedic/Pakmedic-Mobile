@@ -63,8 +63,11 @@ const DoctorNavigation = () => {
   
   useEffect(() => {
     eventEmitter.on('notificationReceived', notification => {
+
+      console.log(notification);
+
       if (notification?.data?.navigate) {
-        console.log(notification.data);
+        // console.log(notification.data);
         navigation.navigate(notification?.data?.navigate, {
             image: notification?.data?.image,
             data: notification?.data?.data,
