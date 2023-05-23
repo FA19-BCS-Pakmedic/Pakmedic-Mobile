@@ -176,14 +176,14 @@ const Login = ({navigation}) => {
           token: response?.data?.token,
         }),
       );
-      setMessage('User Logged In Successfully');
+      setMessage(response.data.message);
       setAlertName('LoginSuccess');
       // setIsLoading(false);
       reset();
     } catch (err) {
       dispatch(authLogout());
       console.log(err);
-      setMessage('Invalid email or password');
+      setMessage(err.response.data.message);
       setAlertName('LoginFailure');
     } finally {
       setIsLoading(false);

@@ -68,14 +68,14 @@ const AuthNavigation = ({navigation}) => {
               }),
             );
 
-            showToast('User has successfully logged in', 'success');
+            showToast(response.data.message, response.data.message.includes('warn') ? 'warning': 'success');
 
             //navigate to user app if the user is logged in
             navigation.replace('App');
           }
         } catch (err) {
           console.log(err);
-          showToast('User session has expired', 'danger');
+          showToast(err.response.data.message, 'danger');
           await deviceStorage.deleteItem('jwtToken');
         } finally {
           setLoading(false);
