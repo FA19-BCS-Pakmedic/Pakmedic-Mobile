@@ -49,7 +49,6 @@ const Appointments = () => {
   };
 
   useEffect(() => {
-    console.log(activeOption);
     getAppointments();
   }, [activeOption]);
 

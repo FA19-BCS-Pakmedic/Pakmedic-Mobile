@@ -31,3 +31,14 @@ export const updateReport = async (id, data) => {
 export const deleteReport = async id => {
   return API.delete(`reports/${id}`);
 };
+
+
+// request ehr access
+export const requestEhrAccess = async (id) => {
+  return API.post(`doctors/request-access/${id}`);
+}
+
+//handle ehr request
+export const handleEhrRequest = async (data) => {
+  return API.post(`patients/ehr-access`, data);
+}

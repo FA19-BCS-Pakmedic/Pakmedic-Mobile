@@ -1,4 +1,5 @@
 // app entry point
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import AppNavigation from './src/setup/navigation/app.navigation';
 
@@ -115,11 +116,14 @@ const App = () => {
   }, []);
 
   https: return (
+    
     <Provider store={store}>
       <MenuProvider>
         <PaperProvider theme={MD2LightTheme}>
           <ToastProvider>
-            <AppNavigation />
+            <GestureHandlerRootView style={{flex: 1}}>
+              <AppNavigation />
+            </GestureHandlerRootView>
           </ToastProvider>
         </PaperProvider>
       </MenuProvider>

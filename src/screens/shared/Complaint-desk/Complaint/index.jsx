@@ -55,7 +55,7 @@ const Complaint = props => {
               <Text style={styles.text}>{item?.subject}</Text>
             </View>
             <View style={styles.Right}>
-              {item?.status === 'on Hold' ? (
+              {item?.status === 'On Hold' ? (
                 <StatusR />
               ) : item?.status === 'Pending' ? (
                 <StatusY />
