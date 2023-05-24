@@ -12,7 +12,7 @@ import CommunityPostImage from '../../../../assets/images/CommunityPostImage.png
 
 import CommunityPostAdd from '../../../../components/shared/CommunityPostAdd';
 
-import {getPosts} from '../../../../services/communityServices';
+import {getPosts, getCommunity} from '../../../../services/communityServices';
 import {useEffect} from 'react';
 
 import colors from '../../../../utils/styles/themes/colors';
@@ -29,11 +29,17 @@ import {useIsFocused} from '@react-navigation/native';
 
 const CommunityDetails = props => {
   const {item} = props.route.params;
+  //console.log(item);
   const [isModalVisible, setModalVisible] = React.useState(false);
   const [checkDelete, setCheckDelete] = React.useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
+
+  //user
+  const [user, setUser] = useState(useSelector(state => state.auth.user));
+  const userCommunities = user.communities;
+  const [jcommunities, setjCommunities] = useState([]);
 
   const isFocused = useIsFocused();
 
@@ -51,8 +57,34 @@ const CommunityDetails = props => {
     setPosts(res.data.data.data);
     setLoading(false);
   };
+
+  const getCommunities = async () => {
+    setLoading(true);
+    const resp = await getCommunity();
+    //join communities
+    const joinedCommunities = resp.data.data.data.filter(community => {
+      return userCommunities.includes(community._id);
+    });
+    setjCommunities(joinedCommunities);
+
+    //add Home and all joined communities to dropdown
+    const dropdownItems = [
+      {label: 'Home', value: 'home'},
+      ...joinedCommunities.map(community => {
+        return {label: community.name, value: community._id};
+      }),
+    ];
+    setItems(dropdownItems);
+    setValue(item._id);
+    setLoading(false);
+  };
+
   useEffect(() => {
     getPost();
+  }, [isModalVisible, checkDelete, isFocused, refresh]);
+
+  useEffect(() => {
+    getCommunities();
   }, [isModalVisible, checkDelete, isFocused]);
 
   // const communityCards = [
@@ -95,7 +127,7 @@ const CommunityDetails = props => {
   // ];
 
   return (
-    <StaticContainer customHeaderEnable={true} customHeaderName={item.name}>
+    <StaticContainer customHeaderEnable={true} customHeaderName={item?.name}>
       <View style={styles.container}>
         <View style={styles.search}>
           <View>
@@ -106,9 +138,27 @@ const CommunityDetails = props => {
               setOpen={setOpen}
               setValue={setValue}
               setItems={setItems}
-              style={[styles.dropDown, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}
+              onChangeValue={value => {
+                if (value === 'home') {
+                  props.navigation.navigate('Support Communities');
+                  return;
+                }
+                props.navigation.navigate('CommunityDetails', {
+                  item: jcommunities.find(community => community._id === value),
+                });
+                setRefresh(!refresh);
+              }}
+              style={[
+                styles.dropDown,
+                {
+                  backgroundColor:
+                    role === ROLES.doctor
+                      ? colors.secondaryMonoChrome100
+                      : colors.primaryMonoChrome100,
+                },
+              ]}
               dropDownContainerStyle={styles.dropDownContainer}
-              placeholder={item.name}
+              //placeholder={item.name}
               textStyle={{
                 fontSize: 12,
               }}

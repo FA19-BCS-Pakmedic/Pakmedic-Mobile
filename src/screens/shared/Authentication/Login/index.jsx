@@ -272,7 +272,7 @@ const Login = ({navigation}) => {
           {/*SOCIAL BUTTONS */}
           <View style={styles.socialButtonContainer}>
             {/* facebook login button */}
-            <TouchableOpacity style={styles.socialButton}>
+            <TouchableOpacity style={styles.socialButton} disabled>
               <FaceBookLogo
                 width={dimensions.Width / 12}
                 height={dimensions.Height / 22}

@@ -14,7 +14,6 @@ import Search from '../../../../components/shared/CommunitySearch';
 import Logo from '../../../../assets/svgs/community-logo';
 import Loader from '../../../../components/shared/Loader';
 
-
 import DropDownPicker from 'react-native-dropdown-picker';
 DropDownPicker.setListMode('SCROLLVIEW');
 
@@ -30,16 +29,16 @@ import {useEffect} from 'react';
 import {authUpdate} from '../../../../setup/redux/slices/auth.slice';
 import ROLES from '../../../../utils/constants/ROLES';
 
+import {useIsFocused} from '@react-navigation/native';
+
 const Home = ({navigation}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'All', value: 'All'},
-    {label: 'On Hold', value: 'on Hold'},
-    {label: 'In Progress', value: 'In Progress'},
-    {label: 'Resolved', value: 'Resolved'},
-  ]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  //refresh on Focus
+  const isFocused = useIsFocused();
 
   const [jcommunities, setjCommunities] = useState([]);
   const [communities, setCommunities] = useState([]);
@@ -61,6 +60,15 @@ const Home = ({navigation}) => {
       return userCommunities.includes(community._id);
     });
     setjCommunities(joinedCommunities);
+    //add Home and all joined communities to dropdown
+    const dropdownItems = [
+      {label: 'Home', value: 'home'},
+      ...joinedCommunities.map(community => {
+        return {label: community.name, value: community._id};
+      }),
+    ];
+    setItems(dropdownItems);
+    setValue('home');
 
     //all communities
     const allCommunities = res.data.data.data.filter(community => {
@@ -72,26 +80,22 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     getCommunities();
-  }, [user]);
+  }, [user, isFocused]);
 
+  getNoCommunityItem = title => {
+    return (
+      <View style={styles.noCommunityContainer}>
+        <Text style={styles.noCommunity}>{title}</Text>
+      </View>
+    );
+  };
 
-  getNoCommunityItem = (title) => {
-      return (
-        <View style={styles.noCommunityContainer}><Text style={styles.noCommunity}>{title}</Text></View>
-      )
-  }
-
-  if(loading) return (
-    <Loader
-      title={'Loading Communities...'}
-      />
-  )
+  if (loading) return <Loader title={'Loading Communities...'} />;
 
   return (
     <StaticContainer
       customHeaderEnable={true}
       customHeaderName={'Support Community'}>
-
       <View style={styles.container}>
         <View style={styles.search}>
           <View>
@@ -102,9 +106,26 @@ const Home = ({navigation}) => {
               setOpen={setOpen}
               setValue={setValue}
               setItems={setItems}
-              style={[styles.dropDown, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}
+              onChangeValue={value => {
+                if (value === 'home') {
+                  navigation.navigate('Support Communities');
+                  return;
+                }
+                navigation.navigate('CommunityDetails', {
+                  item: jcommunities.find(community => community._id === value),
+                });
+                //setRefresh(!refresh);
+              }}
+              style={[
+                styles.dropDown,
+                {
+                  backgroundColor:
+                    role === ROLES.doctor
+                      ? colors.secondaryMonoChrome100
+                      : colors.primaryMonoChrome100,
+                },
+              ]}
               dropDownContainerStyle={[styles.dropDownContainer]}
-              
               placeholder="Home"
               textStyle={{
                 fontSize: 12,
@@ -114,11 +135,31 @@ const Home = ({navigation}) => {
           </View>
           <Search />
         </View>
-        <View style={[styles.communityContainer, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}>
-          <View style={[styles.joinedCommunity, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}>
+        <View
+          style={[
+            styles.communityContainer,
+            {
+              backgroundColor:
+                role === ROLES.doctor
+                  ? colors.secondaryMonoChrome100
+                  : colors.primaryMonoChrome100,
+            },
+          ]}>
+          <View
+            style={[
+              styles.joinedCommunity,
+              {
+                backgroundColor:
+                  role === ROLES.doctor
+                    ? colors.secondaryMonoChrome100
+                    : colors.primaryMonoChrome100,
+              },
+            ]}>
             <Text style={styles.communityText}>Joined Communities</Text>
             <View style={styles.line} />
-            {!jcommunities.length ? getNoCommunityItem('No Joined Communities') :
+            {!jcommunities.length ? (
+              getNoCommunityItem('No Joined Communities')
+            ) : (
               <FlatList
                 data={jcommunities}
                 renderItem={({item}) => (
@@ -155,13 +196,24 @@ const Home = ({navigation}) => {
                   </TouchableOpacity>
                 )}
                 keyExtractor={item => item._id}
-              />}
+              />
+            )}
           </View>
-          <View style={[styles.otherCommunity, {backgroundColor: role === ROLES.doctor ? colors.secondaryMonoChrome100 : colors.primaryMonoChrome100}]}>
+          <View
+            style={[
+              styles.otherCommunity,
+              {
+                backgroundColor:
+                  role === ROLES.doctor
+                    ? colors.secondaryMonoChrome100
+                    : colors.primaryMonoChrome100,
+              },
+            ]}>
             <Text style={styles.communityText}>Other Communities</Text>
             <View style={styles.line} />
-            {
-              !communities.length ? getNoCommunityItem('No Other Communities') :
+            {!communities.length ? (
+              getNoCommunityItem('No Other Communities')
+            ) : (
               <FlatList
                 data={communities}
                 renderItem={({item}) => (
@@ -195,7 +247,7 @@ const Home = ({navigation}) => {
                 )}
                 keyExtractor={item => item._id}
               />
-            }
+            )}
           </View>
         </View>
       </View>

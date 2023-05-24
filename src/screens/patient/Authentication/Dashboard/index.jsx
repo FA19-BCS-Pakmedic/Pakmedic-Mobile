@@ -30,6 +30,7 @@ import {
 
 const Dashboard = () => {
   const user = useSelector(state => state.auth.user);
+  console.log(user);
 
   const navigation = useNavigation();
 

@@ -68,6 +68,7 @@ const CustomDatePicker = ({
               onCancel={() => {
                 setOpen(false);
               }}
+              theme={'light'}
               style={{backgroundColor: colors.white}}
               maximumDate={maximumDate}
               textColor={colors.black}
