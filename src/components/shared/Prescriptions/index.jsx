@@ -18,6 +18,8 @@ import ModalContainer from '../../../containers/ModalContainer';
 import {useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
+import { downloadFile } from '../../../utils/helpers/downloadFile';
+import { apiEndpoint } from '../../../utils/constants/APIendpoint';
 
 const Prescriptions = ({prescriptions, visible, setVisible}) => {
   const [allPrescriptions, setAllPrescriptions] = React.useState([]);
@@ -80,7 +82,13 @@ const Prescriptions = ({prescriptions, visible, setVisible}) => {
           </TouchableOpacity>
           <View style={styles.line} />
 
-          <TouchableOpacity style={styles.button} onPress={() => {}}>
+          <TouchableOpacity style={styles.button} onPress={() => {
+            downloadFile(
+              `${apiEndpoint}files/${item.file}`,
+              item.file,
+            );
+            setModalVisible(false);
+          }}>
             <Text style={styles.text}>Download</Text>
           </TouchableOpacity>
         </View>

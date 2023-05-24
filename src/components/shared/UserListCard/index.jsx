@@ -4,7 +4,6 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import ROLES from '../../../utils/constants/ROLES';
 import colors from '../../../utils/styles/themes/colors';
 
-import DefaultImage from '../../../assets/images/default-avatar.png';
 import fonts from '../../../utils/styles/themes/fonts';
 import Button from '../Button';
 import {getDate} from '../../../utils/helpers/getDate';
@@ -54,7 +53,7 @@ const UserListCard = ({
                 height={dimensions.Height / 20}
                 marginVertical={dimensions.Height / 1000}
                 fontSize={fonts.size.font14}
-                onPress={() => onPressViewProfile(receiver._id)}
+                onPress={() => onPressViewProfile(receiver?._id)}
               />
               <Button
                 label="Contact"
@@ -151,7 +150,7 @@ const UserListCard = ({
                   width="48%"
                   height={dimensions.Height / 20}
                   marginVertical={dimensions.Height / 1000}
-                  onPress={() => onPressViewProfile(receiver._id)}
+                  onPress={() => onPressViewProfile(receiver?._id)}
                 />
               </View>
             </>
@@ -172,7 +171,7 @@ const UserListCard = ({
         <View style={styles().imageContainer}>
           <Image
             source={{
-              uri: `${apiEndpoint}files/${receiver.avatar}`,
+              uri: `${apiEndpoint}files/${receiver?.avatar ? receiver.avatar : 'default.png'}`,
             }}
             style={styles().image}
           />

@@ -23,7 +23,9 @@ const onMessageReceived = async message => {
     id: 'default',
     name: 'Default Channel',
   });
-  await notifee.displayNotification(JSON.parse(message.data.notifee));
+  console.log(JSON.parse(message.data.notifee));
+  const notification = JSON.parse(message.data.notifee);
+  await notifee.displayNotification(notification);
 };
 
 messaging().setBackgroundMessageHandler(onMessageReceived);
