@@ -142,8 +142,9 @@ const styles = role =>
     },
 
     name: {
-      fontSize: fonts.size.font20,
+      fontSize: fonts.size.font18,
       fontWeight: fonts.weight.semi,
+      maxWidth: dimensions.Width / 5,
     },
 
     iconContainer: {
