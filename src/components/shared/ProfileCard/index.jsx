@@ -13,7 +13,7 @@ import {useSelector} from 'react-redux';
 import ROLES from '../../../utils/constants/ROLES';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
-const ProfileCard = ({user, isViewing}) => {
+const ProfileCard = ({user, isViewing, totalReviews, avgRating}) => {
   const role = useSelector(state => state.role.role);
 
   const navigation = useNavigation();

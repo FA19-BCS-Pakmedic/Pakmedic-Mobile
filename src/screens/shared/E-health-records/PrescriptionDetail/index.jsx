@@ -86,7 +86,12 @@ const PrescriptionDetail = props => {
                   height={dimensions.Height * 0.04}
                   fontSize={fonts.size.font12}
                   color={colors.primary1}
-                  onPress={() => {}}
+                  onPress={() => {
+                    navigation.navigate('ViewProfile', {
+                      isViewing: true,
+                      userId: items?.doctor._id,
+                    })
+                  }}
                 />
               </View>
             </View>
