@@ -145,3 +145,7 @@ export const getNotifications = data => {
 export const getScans = (data, type) => {
   return API.get(`scans/patient/${data}`);
 };
+
+export const getDashboardData = (id) => {
+  return API.get(`doctors/dashboard/${id}`);
+}

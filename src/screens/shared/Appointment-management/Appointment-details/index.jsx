@@ -26,11 +26,8 @@ const AppointmentDetails = () => {
 
   let appointmentId = route.params?.data;
 
+  console.log(appointmentId);
 
-  // if(!appointment) {
-  //   console.log(route.params, "ROUTE PARAMS");
-  //   appointment = route.params.data.appointmentId;
-  // }
 
   const [appointment, setAppointment] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -48,8 +45,6 @@ const AppointmentDetails = () => {
       try {
         setLoading(true);
         const response = await getAppointmentById(appointmentId);
-
-      
 
         if(response.data && response.data.status === "success") {
           setAppointment(response.data.data.data);
@@ -72,8 +67,6 @@ const AppointmentDetails = () => {
 
   const end = 
     address ? `${address?.address}, ${address?.city}, ${address?.country}` : null
-  
-  console.log(end);
 
 
   const role = useSelector(state => state.role.role);
@@ -94,8 +87,6 @@ const AppointmentDetails = () => {
       },
     });
   };
-
-  
 
 
   const _openMaps = () => createOpenLink({provider: 'google', end, travelType: 'drive'});

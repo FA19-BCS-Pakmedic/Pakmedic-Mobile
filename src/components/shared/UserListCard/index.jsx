@@ -4,7 +4,6 @@ import dimensions from '../../../utils/styles/themes/dimensions';
 import ROLES from '../../../utils/constants/ROLES';
 import colors from '../../../utils/styles/themes/colors';
 
-import DefaultImage from '../../../assets/images/default-avatar.png';
 import fonts from '../../../utils/styles/themes/fonts';
 import Button from '../Button';
 import {getDate} from '../../../utils/helpers/getDate';
@@ -34,7 +33,7 @@ const UserListCard = ({
 
   const checkEhrAccess = (doctor, id) => {
     if(doctor && doctor.accessList) {
-      return doctor.accessList.find(patient => patient._id === id);
+      return doctor.accessList.find(patient => patient?._id === id);
     }
   }
 
@@ -57,7 +56,7 @@ const UserListCard = ({
                 height={dimensions.Height / 20}
                 marginVertical={dimensions.Height / 1000}
                 fontSize={fonts.size.font14}
-                onPress={() => onPressViewProfile(receiver._id)}
+                onPress={() => onPressViewProfile(receiver?._id)}
               />
               <Button
                 label="Contact"
@@ -78,17 +77,17 @@ const UserListCard = ({
                   setVisible(true);
                 }}
                 type="filled"
-                width={checkEhrAccess(appointment.doctor, appointment.patient._id) ? '48%' : '100%'}
+                width={checkEhrAccess(appointment.doctor, appointment.patient?._id) ? '48%' : '100%'}
                 fontSize={fonts.size.font14}
                 height={dimensions.Height / 20}
                 marginVertical={dimensions.Height / 1000}
               />
               {
-                checkEhrAccess(appointment.doctor, appointment.patient._id) && (
+                checkEhrAccess(appointment.doctor, appointment.patient?._id) && (
                   <Button
                     label="Revoke EHR Access"
                     onPress={() => {
-                      handleRevokeEhr(appointment.doctor._id)
+                      handleRevokeEhr(appointment.doctor?._id)
                     }}
                     type="filled"
                     width={'48%'}
@@ -123,19 +122,19 @@ const UserListCard = ({
                 <Button
                   label="Request EHR"
                   onPress={() => {
-                    handleRequestEHR(appointment.patient._id)
+                    handleRequestEHR(appointment.patient?._id)
                   }}
                   type="filled"
                   width="48%"
                   height={dimensions.Height / 20}
                   marginVertical={dimensions.Height / 1000}
-                  isDisabled={checkEhrAccess(appointment.doctor, appointment.patient._id)}
+                  isDisabled={checkEhrAccess(appointment.doctor, appointment.patient?._id)}
                 />
               </View>
               <View style={styles().controls}>
                 <Button
                   label="Write Prescription"
-                  onPress={() => handleWritePrescription(appointment.patient._id)}
+                  onPress={() => handleWritePrescription(appointment.patient?._id)}
                   type="filled"
                   width="48%"
                   height={dimensions.Height / 20}
@@ -148,7 +147,7 @@ const UserListCard = ({
                   width="48%"
                   height={dimensions.Height / 20}
                   marginVertical={dimensions.Height / 1000}
-                  onPress={() => onPressViewProfile(receiver._id)}
+                  onPress={() => onPressViewProfile(receiver?._id)}
                 />
               </View>
             </>
@@ -169,7 +168,7 @@ const UserListCard = ({
         <View style={styles().imageContainer}>
           <Image
             source={{
-              uri: `${apiEndpoint}files/${receiver.avatar}`,
+              uri: `${apiEndpoint}files/${receiver?.avatar ? receiver.avatar : 'default.png'}`,
             }}
             style={styles().image}
           />

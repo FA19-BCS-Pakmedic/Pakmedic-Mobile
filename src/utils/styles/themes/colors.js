@@ -25,7 +25,7 @@ const colors = {
   white: '#fff',
   gray: '#e4e4e4',
   gray1: '#808080',
-  gray2: '#484848',
+  jsgray2: '#484848',
   black: '#000',
   //valid color
   valid: '#32CD32',

@@ -49,19 +49,17 @@ const Dashboard = () => {
   const [latestPost, setLatestPost] = React.useState(null);
   const [data, setData] = React.useState(null);
 
+  
+  const {
+    callApi, error, isLoading, setMessage
+  } = useCustomApi();
+
   const statements = [
     "Get replies from verified doctors for free",
     "Join communities of your likeness",
     "Ask Questions anytime",
     "Ask Anonymously",
   ]
-
-  const {
-    callApi, error, isLoading, setMessage
-  } = useCustomApi();
-    
-
-  React.useEffect(() => {console.log(latestPost, "LATEST POST")}, [latestPost])
   
   React.useEffect(() => {
 
@@ -102,22 +100,22 @@ const Dashboard = () => {
     });
   };
 
-
-  if(isLoading) {
-    return (
-      <Loader
-        title="Loading Dashboard Data....."
-      />
-    )
-  }
-
+  
   const getRatings = (doctor) => {
     const ratings = doctor.reviews.map(review => review.ratings);
     const total = ratings.reduce((acc, curr) => acc + curr, 0);
     return (total / ratings.length || 0).toFixed(1);
   }
 
-
+  
+    if(isLoading) {
+      return (
+        <Loader
+          title="Loading Dashboard Data....."
+        />
+      )
+    }
+  
   return (
     <ScrollContainer isTab>
       <View style={styles.container}>
@@ -146,7 +144,7 @@ const Dashboard = () => {
                   <View style={styles.imgContainer}>
                     <Image
                       style={styles.img}
-                      source={{uri: `${apiEndpoint}files/${item.doctor.avatar}`}}
+                      source={{uri: `${apiEndpoint}files/${item.doctor.avatar ? item.doctor.avatar : 'default.png'}`}}
                     />
                   </View>
                   <View style={styles.timeContainer}>
@@ -161,9 +159,8 @@ const Dashboard = () => {
                       type={'filled'}
                       label={'View Details'}
                       onPress={() => {
-                        navigation.navigate('ViewProfile', {
-                          userId: item.doctor._id,
-                          isViewing: true,
+                        navigation.navigate('AppointmentDetails', {
+                          data: item._id
                         })
                       }}
                       height={dimensions.Height * 0.05}
@@ -190,7 +187,9 @@ const Dashboard = () => {
               <Text style={styles.viewAll}>View All</Text>
             </TouchableOpacity>
           </View>
-          <FlatList
+          {topSpecialities?.length === 0 ? (<Text style={styles.empty}>No specialities availibility</Text>) :
+
+          (<FlatList
             showsHorizontalScrollIndicator={false}
             horizontal={true}
             data={topSpecialities}
@@ -219,7 +218,8 @@ const Dashboard = () => {
             initialNumToRender={1}
             snapToInterval={dimensions.Width * 0.9}
             decelerationRate={0.5}
-          />
+          />)
+              }
         </View>
 
         <View style={styles.textContainer}>
@@ -235,7 +235,7 @@ const Dashboard = () => {
                 <View style={styles.appointment}>
                   <View style={styles.imgContainer}>
                     <Image
-                      source={{uri: `${apiEndpoint}files/${item.avatar}`}}
+                      source={{uri: `${apiEndpoint}files/${item.avatar ? item.avatar : "default.png"}`}}
                       style={styles.img}
                       width={100}
                       height={100}
@@ -278,8 +278,8 @@ const Dashboard = () => {
          ( <View style={styles.communityContainer}>
               <View style={styles.communityCard}>
                 <View style={{padding: dimensions.Height / 100}}>
-                    <View style={styles.header}>
-                      <Image source={{uri: `${apiEndpoint}files/${latestPost?.author?.avatar}`}} style={{width: dimensions.Width / 7, height: dimensions.Width / 7, borderRadius: dimensions.Width, marginRight: dimensions.Width / 50}} />
+                    <View style={styles.communityHeader}>
+                      <Image source={{uri: `${apiEndpoint}files/${latestPost?.author?.avatar ? latestPost?.author?.avatar : "default.png"}`}} style={{width: dimensions.Width / 7, height: dimensions.Width / 7, borderRadius: dimensions.Width, marginRight: dimensions.Width / 50}} />
                       <View style={styles.headerContent}>
                         <Text style={[styles.name, {fontSize: fonts.size.font20}]}>C/{latestPost?.community?.name}</Text>
                         <Text style={styles.userName}>u/{latestPost?.isAnonymous ? 'Anonymous' : latestPost?.author?.name}</Text>
@@ -309,7 +309,7 @@ const Dashboard = () => {
                           type={'filled'}
                           label={'View Communities'}
                           onPress={() => {
-                            navigation.navigate('Communities');
+                            navigation.navigate('Support Communities');
                           }}
                           width={'90%'}
                         />
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
     borderRadius: dimensions.Width / 50,
   }, 
 
-  header: {
+  communityHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: dimensions.Width / 50,
