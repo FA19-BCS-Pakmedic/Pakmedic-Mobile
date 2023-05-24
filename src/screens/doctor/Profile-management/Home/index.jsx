@@ -35,6 +35,7 @@ const ProfileManagement = ({route}) => {
 
   const userId = route.params.userId;
   const isViewing = route.params.isViewing;
+  const index = route.params.index;
 
   const dispatch = useDispatch();
 
@@ -43,8 +44,7 @@ const ProfileManagement = ({route}) => {
     try {
       const response = await getDoctorById(userId);
       setStoredUser(response.data.data.user);
-      if(!isViewing)
-        dispatch(authUpdate({user: response.data.data.user}));
+      if (!isViewing) dispatch(authUpdate({user: response.data.data.user}));
     } catch (err) {
       console.log(err);
       showToast("Can't load user data", 'danger');
@@ -52,6 +52,12 @@ const ProfileManagement = ({route}) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (index) {
+      onOptionClick(index);
+    }
+  }, []);
 
   useEffect(() => {
     if (userId) getUserData();
@@ -80,7 +86,9 @@ const ProfileManagement = ({route}) => {
     console.log(activeOption);
     switch (activeOption) {
       case 'ProfileInformation':
-        return <ProfileInformation information={information} isViewing={isViewing}/>;
+        return (
+          <ProfileInformation information={information} isViewing={isViewing} />
+        );
       case 'Services':
         return (
           <Services
@@ -106,10 +114,14 @@ const ProfileManagement = ({route}) => {
           />
         );
       case 'Reviews':
-        return <Reviews/>;
+        return <Reviews />;
       case 'About':
         return (
-          <About about={storedUser?.about} setStoredUser={setStoredUser} isViewing={isViewing}/>
+          <About
+            about={storedUser?.about}
+            setStoredUser={setStoredUser}
+            isViewing={isViewing}
+          />
         );
       case 'Signature':
         return <Signature />;
@@ -124,11 +136,14 @@ const ProfileManagement = ({route}) => {
       {loading ? (
         <Loader title={'Loading'} />
       ) : (
-        
         <View style={styles.root}>
-          <ProfileCard user={storedUser} isViewing={isViewing}/>
+          <ProfileCard user={storedUser} isViewing={isViewing} />
 
-          <ProfileOptions options={profileOptions} onClick={onOptionClick} isViewing={isViewing}/>
+          <ProfileOptions
+            options={profileOptions}
+            onClick={onOptionClick}
+            isViewing={isViewing}
+          />
           {getActiveComponent()}
         </View>
       )}

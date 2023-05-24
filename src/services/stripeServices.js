@@ -15,8 +15,8 @@ export const getCustomer = id => {
 
 export const payForService = (id, data) => {
   return API.post(`/stripe/pay-for-service/${id}`, data);
-}
+};
 
-export const getAllReceivedPayments = (id) => {
+export const getAllReceivedPayments = id => {
   return API.get(`/stripe/doctor-payments/${id}`);
-}
+};

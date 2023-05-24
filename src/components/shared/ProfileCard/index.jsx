@@ -1,3 +1,4 @@
+import React from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -13,6 +14,8 @@ import {useSelector} from 'react-redux';
 import ROLES from '../../../utils/constants/ROLES';
 import {apiEndpoint} from '../../../utils/constants/APIendpoint';
 
+import TicketAddModal from '../TicketAddModal';
+
 const ProfileCard = ({user, isViewing}) => {
   const role = useSelector(state => state.role.role);
 
@@ -24,6 +27,8 @@ const ProfileCard = ({user, isViewing}) => {
       params: {userId: user._id},
     });
   };
+
+  const [AddModalVisible, setAddVisible] = React.useState(false);
 
   return (
     <View style={styles(role).container}>
@@ -42,46 +47,60 @@ const ProfileCard = ({user, isViewing}) => {
           <LocationSvg width={dimensions.Width / 20} />
           <Text style={styles().otherInfo}>{user?.location}</Text>
         </View>
-        {role !== ROLES.patient || isViewing && (
-          <>
-            <View style={styles().iconTextContainer}>
-              <SpecialistSvg width={dimensions.Width / 20} />
-              <Text style={styles().otherInfo}>{user?.speciality}</Text>
-            </View>
-            <View style={styles().iconTextContainer}>
-              <StarSvg width={dimensions.Width / 20} fill="#FBBC04" />
-              <Text
-                style={[
-                  styles().otherInfo,
-                  {
-                    fontWeight: fonts.weight.low,
-                    color: colors.secondaryMonoChrome800,
-                  },
-                ]}>
-                4.5/5 (674 reviews)
-              </Text>
-            </View>
-          </>
-        )}
+        {role !== ROLES.patient ||
+          (isViewing && (
+            <>
+              <View style={styles().iconTextContainer}>
+                <SpecialistSvg width={dimensions.Width / 20} />
+                <Text style={styles().otherInfo}>{user?.speciality}</Text>
+              </View>
+              <View style={styles().iconTextContainer}>
+                <StarSvg width={dimensions.Width / 20} fill="#FBBC04" />
+                <Text
+                  style={[
+                    styles().otherInfo,
+                    {
+                      fontWeight: fonts.weight.low,
+                      color: colors.secondaryMonoChrome800,
+                    },
+                  ]}>
+                  4.5/5 (674 reviews)
+                </Text>
+              </View>
+            </>
+          ))}
       </View>
       <View style={styles().buttonContainer}>
         {!isViewing ? (
-        <Button
-          label="Edit Profile"
-          width={dimensions.Width / 3}
-          type="filled"
-          onPress={navigateToEditProfile}
-          height={dimensions.Height / 20}
-        />) : (
+          <Button
+            label="Edit Profile"
+            width={dimensions.Width / 3}
+            type="filled"
+            onPress={navigateToEditProfile}
+            height={dimensions.Height / 20}
+          />
+        ) : (
           <Button
             label="Report User"
             width={dimensions.Width / 3}
             type="filled"
-            onPress={() => {}}
+            onPress={() => {
+              setAddVisible(true);
+            }}
             height={dimensions.Height / 20}
           />
         )}
       </View>
+      <TicketAddModal
+        Visible={AddModalVisible}
+        setModalVisible={setAddVisible}
+        edit={false}
+        report={'User'}
+        userData={{
+          complainee: user?._id,
+          complaineeType: user?.role,
+        }}
+      />
     </View>
   );
 };

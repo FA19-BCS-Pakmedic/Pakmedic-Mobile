@@ -9,33 +9,41 @@ import fonts from '../../../utils/styles/themes/fonts';
 import colors from '../../../utils/styles/themes/colors';
 
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 const DoctorModalNavigator = props => {
   const {Visible, setModalVisible, navigation} = props;
-
+  const user = useSelector(state => state.auth.user);
 
   const navigate = (screenName, data) => {
     navigation.navigate('App', {
       screen: screenName,
       params: {
-        data
-      }
-    })
-  }
-
+        data,
+      },
+    });
+  };
 
   return (
     <ModalContainer
       isModalVisible={Visible}
       setModalVisible={setModalVisible}
-      height={dimensions.Height / 2}
+      height={dimensions.Height / 2.5}
       width={dimensions.Width}
       type="bottom"
       backDropOpacity={0.5}
       padding={dimensions.Height / 50}
       bgColor={colors.secondaryMonoChrome100}>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setModalVisible(false);
+            navigation.navigate('ProfileManagement', {
+              userId: user._id,
+              index: 1,
+            });
+          }}>
           <Text style={styles.text}>Services</Text>
         </TouchableOpacity>
         <View style={styles.line} />
@@ -50,10 +58,10 @@ const DoctorModalNavigator = props => {
         </TouchableOpacity>
         <View style={styles.line} />
 
-        <TouchableOpacity style={styles.button}>
+        {/* <TouchableOpacity style={styles.button}>
           <Text style={styles.text}>Contact</Text>
         </TouchableOpacity>
-        <View style={styles.line} />
+        <View style={styles.line} /> */}
 
         <TouchableOpacity
           style={styles.button}
@@ -65,12 +73,12 @@ const DoctorModalNavigator = props => {
         </TouchableOpacity>
         <View style={styles.line} />
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.text}>Analytics</Text>
-        </TouchableOpacity>
-        <View style={styles.line} />
-
-        <TouchableOpacity style={styles.button} onPress={() => navigate("FinanceHome")}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setModalVisible(false);
+            navigate('FinanceHome');
+          }}>
           <Text style={styles.text}>Finance</Text>
         </TouchableOpacity>
       </View>
@@ -86,7 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondaryMonoChrome100,
   },
   button: {
-    width: dimensions.Width,
+    width: dimensions.Width * 0.9,
     height: dimensions.Height / 15,
     justifyContent: 'center',
     alignItems: 'center',

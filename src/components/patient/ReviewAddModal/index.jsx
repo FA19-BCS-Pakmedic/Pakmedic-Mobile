@@ -33,7 +33,7 @@ export default ReviewAddModal = props => {
     mode: 'onChange',
     defaultValues: {
       review: '',
-      ratings: 0,
+      ratings: 1,
     },
   });
 

@@ -18,7 +18,11 @@ import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
 
 import {set, useForm} from 'react-hook-form';
 
-import {addComment, deleteComment, getPostById} from '../../../../services/communityServices';
+import {
+  addComment,
+  deleteComment,
+  getPostById,
+} from '../../../../services/communityServices';
 
 import {formatDate} from '../../../../utils/helpers/formatDate';
 
@@ -57,17 +61,16 @@ const Post = props => {
       <ConfirmationAlert
         isModalVisible={confirmationShow}
         setModalVisible={setConfirmationShow}
-        alertText={"Are you sure you want to delete this comment/reply"}
-        confirmText={"Delete"}
-        cancelText={"Cancel"}
+        alertText={'Are you sure you want to delete this comment/reply'}
+        confirmText={'Delete'}
+        cancelText={'Cancel'}
         onConfirm={() => handleDeleteComment()}
         onCancel={() => setConfirmationShow(false)}
       />
-    )
-  }
+    );
+  };
 
-
-  const handleDeleteComment = async(id) => {
+  const handleDeleteComment = async id => {
     try {
       setLoading(true);
       await deleteComment(id);
@@ -76,7 +79,7 @@ const Post = props => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const inputRef = React.useRef(null);
 
