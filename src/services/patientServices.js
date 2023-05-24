@@ -52,3 +52,8 @@ export const getReminders = (user, date) => {
   console.log(user, date);
   return API.get(`reminder?user=${user}&dosageDates=${date}`);
 };
+
+
+export const getDashboardData = (id) => {
+  return API.get(`patients/dashboard/${id}`);
+}

@@ -128,17 +128,26 @@ const Login = ({navigation}) => {
 
   //google login functionality
   const onPressGoogleLogin = async () => {
-    const email = 'awanmoeed2121@gmail.com'; //remove this line of code once the google api starts working
+    // const email = 'awanmoeed2121@gmail.com'; //remove this line of code once the google api starts working
     try {
-      const response = await GoogleSignin.signIn();
-      console.log(response);
+      GoogleSignin.configure({googleConfig});
+
+      const hasPlayService = await GoogleSignin.hasPlayServices();
+
+
+
+      if (hasPlayService) {
+        const response = await GoogleSignin.signIn();
+        console.log(response);
+        
+      }
 
       // TODO: Send the request to the backend api endpoint to check if the user exists and redirect them to dashboard if they have completed their profile
     } catch (err) {
       console.log(err);
       await GoogleSignin.signOut();
     }
-    onLogin({email, isThirdParty: true}); //this line of code will run after the user has successfully got a response from the google api
+    // onLogin({email, isThirdParty: true}); //this line of code will run after the user has successfully got a response from the google api
   };
 
   const onLogin = async data => {

@@ -77,6 +77,7 @@ export default CommunityPostAdd = props => {
       content: data?.post,
       isAnonymous: isCheck,
       file: data?.file,
+      
     });
   };
 

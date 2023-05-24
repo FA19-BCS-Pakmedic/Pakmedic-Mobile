@@ -5,6 +5,7 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  Touchable,
 } from 'react-native';
 //import {styles} from './styles';
 
@@ -18,6 +19,8 @@ import Button from '../../../../components/shared/Button';
 import dimensions from '../../../../utils/styles/themes/dimensions';
 import colors from '../../../../utils/styles/themes/colors';
 import fonts from '../../../../utils/styles/themes/fonts';
+import StarSvg from '../../../../assets/svgs/FullStarIcon.svg';
+
 
 import {
   LineChart,
@@ -27,129 +30,93 @@ import {
   ContributionGraph,
   StackedBarChart,
 } from 'react-native-chart-kit';
+import useCustomApi from '../../../../hooks/useCustomApi';
+import { getDashboardData } from '../../../../services/patientServices';
+import { apiEndpoint } from '../../../../utils/constants/APIendpoint';
+import { Specialists } from '../../../../utils/constants/Specialists';
+import Loader from '../../../../components/shared/Loader';
+import { formatDate } from '../../../../utils/helpers/formatDate';
+import TickIcon from '../../../../assets/svgs/tick2.svg'
 
 const Dashboard = () => {
   const user = useSelector(state => state.auth.user);
 
   const navigation = useNavigation();
 
-  const [appointments, setAppointments] = React.useState([
-    {
-      id: 1,
-      name: 'Kashaf',
-      time: '10:00 AM',
-      date: 'Feb, 24',
-      speciality: 'Dentist',
-    },
-    {
-      id: 2,
-      name: 'Moeed',
-      time: '12:00 PM',
-      date: 'Jan, 24',
-      speciality: 'Uroligist',
-    },
-    {
-      id: 3,
-      name: 'Haris',
-      time: '7:00 PM',
-      date: 'Aug, 31',
-      speciality: 'Dentist',
-    },
-  ]);
+  const [appointments, setAppointments] = React.useState([]);
+  const [topDoctors, setTopDoctors] = React.useState([]);
+  const [topSpecialities, setTopSpecialities] = React.useState([]);
+  const [latestPost, setLatestPost] = React.useState(null);
+  const [data, setData] = React.useState(null);
 
-  const Citydata = [
-    {
-      name: 'Karachi',
-      appointments: 70,
-      color: colors.primaryMonoChrome700,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-    {
-      name: 'Lahore',
-      appointments: 90,
-      color: colors.primaryMonoChrome300,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-    {
-      name: 'Islamabad',
-      appointments: 60,
-      color: colors.primary3,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-    {
-      name: 'Rawalpindi',
-      appointments: 28,
-      color: colors.primary1,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-    {
-      name: 'Peshawar',
-      appointments: 20,
-      color: colors.primaryMonoChrome500,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-  ];
+  const statements = [
+    "Get replies from verified doctors for free",
+    "Join communities of your likeness",
+    "Ask Questions anytime",
+    "Ask Anonymously",
+  ]
 
-  const chartConfig = {
-    backgroundGradientFrom: colors.secondaryMonoChrome100,
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: colors.secondaryMonoChrome500,
-    backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false, // optional
-  };
+  const {
+    callApi, error, isLoading, setMessage
+  } = useCustomApi();
+    
 
-  const moreAppointments = [
-    {
-      id: 1,
-      speciality: 'Dentist',
-    },
-    {
-      id: 2,
-      speciality: 'Uroligist',
-    },
-    {
-      id: 3,
-      speciality: 'Physician',
-    },
-    {
-      id: 13,
-      speciality: 'Theropist',
-    },
-    {
-      id: 24,
-      speciality: 'Gynecologist',
-    },
-    {
-      id: 31,
-      speciality: 'Neurologist',
-    },
-    {
-      id: 19,
-      speciality: 'Cardiologist',
-    },
-    {
-      id: 22,
-      speciality: 'ENT Specialist',
-    },
-    {
-      id: 36,
-      speciality: 'Dermatologist',
-    },
-  ];
+  React.useEffect(() => {console.log(latestPost, "LATEST POST")}, [latestPost])
+  
+  React.useEffect(() => {
+
+    if(data && data.data) {
+
+      const responseData = data.data;
+
+      setAppointments(responseData.appointments);
+
+      const specialties = Specialists.filter(specialty => {
+        return responseData.topSpecialities.includes(specialty.label);
+      })
+
+      setTopSpecialities(specialties);
+
+      setTopDoctors(responseData.topDoctors);
+
+      setLatestPost(responseData.latestPost[0]);
+
+    }
+  }, [data]);
+
+
+  React.useEffect(() => {
+    const getData = async () => {
+      const data = await callApi(getDashboardData, user._id);
+      setData(data);
+    }
+    if(user && user._id) {
+      getData();
+    }
+  }, [user]);
+
 
   const navigate = screenName => {
     navigation.navigate('App', {
       screen: screenName,
     });
   };
+
+
+  if(isLoading) {
+    return (
+      <Loader
+        title="Loading Dashboard Data....."
+      />
+    )
+  }
+
+  const getRatings = (doctor) => {
+    const ratings = doctor.reviews.map(review => review.ratings);
+    const total = ratings.reduce((acc, curr) => acc + curr, 0);
+    return (total / ratings.length || 0).toFixed(1);
+  }
+
 
   return (
     <ScrollContainer isTab>
@@ -161,10 +128,13 @@ const Dashboard = () => {
         <View style={styles.appContainer}>
           <View style={styles.textContainer}>
             <Text style={styles.appTitle}>Upcoming Appointments:</Text>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('AppointmentScreen');
+            }}>
               <Text style={styles.viewAll}>View All</Text>
             </TouchableOpacity>
           </View>
+          {appointments?.length === 0 ? <Text style={styles.empty}>No upcoming appointments</Text> :
           <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal={true}
@@ -176,20 +146,26 @@ const Dashboard = () => {
                   <View style={styles.imgContainer}>
                     <Image
                       style={styles.img}
-                      source={require('../../../../assets/images/default-avatar.png')}
+                      source={{uri: `${apiEndpoint}files/${item.doctor.avatar}`}}
                     />
                   </View>
                   <View style={styles.timeContainer}>
-                    <Text style={styles.name}>{item.name}</Text>
-                    <Text style={styles.speciality}>{item.speciality}</Text>
+                    <Text style={styles.name}>Dr.{item.doctor.name}</Text>
+                    <Text style={styles.speciality}>{item.doctor.speciality}</Text>
                     <Text style={styles.time}>
-                      {item.date}
+                      {new Date(item.date).toLocaleString().split(",")[0]}
                       {'  '}
                       {item.time}
                     </Text>
                     <Button
                       type={'filled'}
                       label={'View Details'}
+                      onPress={() => {
+                        navigation.navigate('ViewProfile', {
+                          userId: item.doctor._id,
+                          isViewing: true,
+                        })
+                      }}
                       height={dimensions.Height * 0.05}
                       width={dimensions.Width * 0.3}
                       fontSize={fonts.size.font14}
@@ -198,11 +174,13 @@ const Dashboard = () => {
                 </View>
               </View>
             )}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item._id.toString()}
             initialNumToRender={1}
             snapToInterval={dimensions.Width * 0.9}
             decelerationRate={0.5}
           />
+        }
+
           <View style={styles.textContainer}>
             <Text style={styles.appTitle}>Most Searched Specialists</Text>
             <TouchableOpacity
@@ -215,43 +193,130 @@ const Dashboard = () => {
           <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal={true}
-            data={moreAppointments}
+            data={topSpecialities}
             renderItem={({item}) => (
-              <View
-                style={{width: dimensions.Width * 0.3, alignItems: 'center'}}>
+              <TouchableOpacity
+                style={{width: dimensions.Width * 0.3, alignItems: 'center'}}
+                onPress={() => {
+                  navigation.navigate(
+                    'DoctorsList',
+                    {speciality: item.label},
+                  )
+                }}>
                 <View style={styles.appointments}>
                   <View style={styles.imgContainer}>
                     <Image
                       style={styles.imgs}
-                      source={require('../../../../assets/images/comms.png')}
+                      source={item.icon}
                     />
-                    <Text style={styles.speciality}>{item.speciality}</Text>
+                    <Text style={styles.speciality}>{item.label}</Text>
+
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             )}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item.label}
             initialNumToRender={1}
             snapToInterval={dimensions.Width * 0.9}
             decelerationRate={0.5}
           />
         </View>
 
-        <View style={styles.analyticsContainer}>
-          <View style={styles.chartContainer}>
-            <Text style={styles.appTitle}>Appointments by City:</Text>
-            <PieChart
-              data={Citydata}
-              width={dimensions.Width * 0.9}
-              height={dimensions.Height * 0.3}
-              chartConfig={chartConfig}
-              accessor={'appointments'}
-              backgroundColor={'transparent'}
-              paddingLeft={'15'}
-              absolute
-            />
+        <View style={styles.textContainer}>
+            <Text style={styles.appTitle}>Top Doctors</Text>
           </View>
-        </View>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={topDoctors}
+            renderItem={({item}) => (
+              <View
+                style={{width: dimensions.Width * 0.9, alignItems: 'center'}} key={item._id}>
+                <View style={styles.appointment}>
+                  <View style={styles.imgContainer}>
+                    <Image
+                      source={{uri: `${apiEndpoint}files/${item.avatar}`}}
+                      style={styles.img}
+                      width={100}
+                      height={100}
+                    />
+                  </View>
+                  <View style={styles.timeContainer}>
+                    <Text style={styles.name}>Dr.{item.name}</Text>
+                    <Text style={styles.speciality}>{item.speciality}</Text>
+                    <Text style={[styles.speciality, {fontWeight: fonts.weight.semi, alignItems: 'center', justifyContent: 'center'}]}><StarSvg />{getRatings(item)} / 5.0 ({item.reviews.length} review/s)</Text>
+                    <Button
+                      type={'filled'}
+                      label={'View Details'}
+                      onPress={() => {
+                        navigation.navigate('ViewProfile', {
+                          userId: item._id,
+                          isViewing: true,
+                        })
+                      }}
+                      height={dimensions.Height * 0.05}
+                      width={dimensions.Width * 0.3}
+                      fontSize={fonts.size.font14}
+                    />
+                  </View>
+                </View>
+              </View>
+            )}
+            keyExtractor={item => item._id}
+            initialNumToRender={1}
+            snapToInterval={dimensions.Width * 0.9}
+            decelerationRate={0.5}
+          />
+
+          <View style={styles.textContainer}>
+            <Text style={styles.appTitle}>Health Communities</Text>
+          </View>
+
+          {!latestPost ? 
+          (<Text style={styles.empty}>No community posts are available.</Text>)
+            :
+         ( <View style={styles.communityContainer}>
+              <View style={styles.communityCard}>
+                <View style={{padding: dimensions.Height / 100}}>
+                    <View style={styles.header}>
+                      <Image source={{uri: `${apiEndpoint}files/${latestPost?.author?.avatar}`}} style={{width: dimensions.Width / 7, height: dimensions.Width / 7, borderRadius: dimensions.Width, marginRight: dimensions.Width / 50}} />
+                      <View style={styles.headerContent}>
+                        <Text style={[styles.name, {fontSize: fonts.size.font20}]}>C/{latestPost?.community?.name}</Text>
+                        <Text style={styles.userName}>u/{latestPost?.isAnonymous ? 'Anonymous' : latestPost?.author?.name}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.post}>
+                      <Text style={[styles.title]}>{latestPost?.title}</Text>
+                      <Text style={styles.content}>{latestPost?.content}</Text>
+                      <Text style={styles.posted}>{formatDate(new Date(latestPost?.date))}</Text>
+                    </View>
+                  </View>
+                    <View style={styles.footer}>
+                      {
+                        statements.map((statement) => {
+                          return (
+                            <View style={styles.statementContainer}>
+                              <TickIcon />
+                              <Text style={styles.statement}>
+                                {statement}
+                              </Text>
+                            </View>
+                          )
+                        })
+                      }
+                      <View style={{alignItems: 'center'}}>
+                        <Button
+                          type={'filled'}
+                          label={'View Communities'}
+                          onPress={() => {
+                            navigation.navigate('Communities');
+                          }}
+                          width={'90%'}
+                        />
+                      </View>
+                    </View>
+              </View>
+          </View>)}
       </View>
     </ScrollContainer>
   );
@@ -281,10 +346,8 @@ const styles = StyleSheet.create({
     marginTop: dimensions.Height * 0.03,
   },
   appTitle: {
-    // marginHorizontal: dimensions.Width * 0.03,
     fontSize: fonts.size.font16,
     fontWeight: 'bold',
-    // borderWidth: 1,
   },
   appointment: {
     flexDirection: 'row',
@@ -295,6 +358,7 @@ const styles = StyleSheet.create({
     marginVertical: dimensions.Height * 0.03,
     borderWidth: 2,
     borderColor: colors.primary1,
+    borderRadius: dimensions.Width * 0.03,
   },
   appointments: {
     flexDirection: 'row',
@@ -366,6 +430,87 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+
+  empty: {
+    fontSize: fonts.size.font16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: colors.accent1,
+    width: '100%',
+    marginVertical: dimensions.Height,
+  },
+
+  doctorCardContainer: {
+    marginRight: dimensions.Width * 0.05,
+    width: dimensions.Width / 1.2,
+    marginTop: dimensions.Height *0.02,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: dimensions.Height / 5,
+  },
+
+  doctorCard: {
+    width: dimensions.Width / 1.3,
+    borderWidth: 2,
+    borderColor: colors.primary1,
+    height: dimensions.Height / 5,
+    borderRadius: dimensions.Width / 100,
+  },
+
+  communityContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: dimensions.Height / 30,
+    paddingBottom: dimensions.Height / 20,
+
+  },
+  
+  communityCard: {
+    width: dimensions.Width / 1.2,
+    borderWidth: 1,
+    borderColor: colors.primary1,
+    borderRadius: dimensions.Width / 50,
+  }, 
+
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: dimensions.Width / 50,
+    borderBottomWidth: 1,
+    borderColor: colors.gray,
+    marginBottom: dimensions.Height / 100,
+  },
+  headerContent: {
+    marginLeft: dimensions.Width / 50,
+  },
+  userName: {
+    marginTop: dimensions.Height / 500,
+  },
+  
+// title
+  content: {
+    fontSize: fonts.size.font14,
+    color: colors.secondary2,
+    marginVertical: dimensions.Height / 100
+  },
+  posted: {
+    color: colors.accent1,
+  },
+  footer: {
+    backgroundColor: colors.primaryMonoChrome100,
+    padding: dimensions.Width / 50,
+  },
+  statementContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: dimensions.Height / 100,
+  },
+  statement: {
+    marginLeft: dimensions.Width / 50,
+  }
+  
+
 });
 
 export default Dashboard;
