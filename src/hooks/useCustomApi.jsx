@@ -11,7 +11,7 @@ const useCustomApi = () => {
   const {showToast} = useCustomToast();
 
   useEffect(() => {
-    const type = error ? 'error' : 'success';
+    const type = error ? 'danger' : 'success';
     if (message) {
       showToast(message, type);
     }

@@ -68,7 +68,7 @@ const renderItem = ({item}, navigation) => (
     onPress={() => {
       navigation.navigate('App', {
         screen: item.screen,
-        params: {screenName: item.name},
+        params: {data: item.name},
       });
     }}>
     {item.icon}

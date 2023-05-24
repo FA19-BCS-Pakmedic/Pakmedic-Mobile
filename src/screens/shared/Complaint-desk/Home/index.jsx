@@ -29,7 +29,7 @@ const Home = props => {
   const [value, setValue] = useState('All');
   const [items, setItems] = useState([
     {label: 'All', value: 'All'},
-    {label: 'On Hold', value: 'on Hold'},
+    {label: 'On Hold', value: 'On Hold'},
     {label: 'Pending', value: 'Pending'},
     {label: 'Resolved', value: 'Resolved'},
   ]);
@@ -181,7 +181,7 @@ const Home = props => {
                     </Text>
                   </View>
                   <View style={styles.cardRight}>
-                    {item.status === 'on Hold' ? (
+                    {item.status === 'On Hold' ? (
                       <StatusR />
                     ) : item.status === 'Pending' ? (
                       <StatusY />

@@ -44,6 +44,9 @@ import {eventEmitter} from '../../../../index.js';
 import { authLogout } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import logout from '../../../utils/helpers/logout';
+import EhrAccess from '../../../screens/patient/Ehr';
+import Notifications from '../../../screens/shared/Notifications';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -55,11 +58,10 @@ const PatientNavigation = () => {
   useEffect(() => {
     eventEmitter.on('notificationReceived', notification => {
       if (notification?.data?.navigate) {
-        navigation.navigate(notification?.data?.navigate, {
-          params: {
+        navigation.navigate(notification?.data?.navigate, 
+          {
             image: notification?.data?.image,
             data: notification?.data?.data,
-          },
         });
       }
     });
@@ -89,6 +91,8 @@ const PatientNavigation = () => {
       <Stack.Screen name="Specialists" component={SpecialistCategory} />
       <Stack.Screen name="BookAppointment" component={BookAppointment} />
       <Stack.Screen name="OnlinePayment" component={OnlinePayment} />
+      <Stack.Screen name="Notifications" component={Notifications} />
+
       <Stack.Screen name="AppointmentDetails" component={AppointmentDetails} />
       <Stack.Screen
         name="RescheduleAppointment"
@@ -98,6 +102,8 @@ const PatientNavigation = () => {
       <Stack.Screen name="MedicineScheduler" component={MedicineScheduler} />
       <Stack.Screen name="MedicineDetails" component={MedicineDetails} />
       <Stack.Screen name="ViewProfile" component={DoctorProfile} />
+      <Stack.Screen name="EhrRequest" component={EhrAccess} />
+
     </Stack.Navigator>
   );
 };

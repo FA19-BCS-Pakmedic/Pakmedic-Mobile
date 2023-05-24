@@ -33,7 +33,6 @@ import {useSelector} from 'react-redux';
 import ConfirmationAlert from '../../../../components/shared/ConfirmationAlert';
 
 import {deletePost} from '../../../../services/communityServices';
-
 import {createComplaint} from '../../../../services/complaintServices';
 
 const Post = props => {

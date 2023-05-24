@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 
 import PhysicalIcon from '../../../assets/svgs/Physical-checkup.svg';
 import VideoIcon from '../../../assets/svgs/VideoOn.svg';
@@ -15,6 +15,8 @@ import fonts from '../../../utils/styles/themes/fonts';
 import {useSelector} from 'react-redux';
 import ROLES from '../../../utils/constants/ROLES';
 import {useNavigation} from '@react-navigation/native';
+import { useCustomToast } from '../../../hooks/useCustomToast';
+import { requestEhrAccess } from '../../../services/ehrServices';
 
 const AppointmentCard = ({appointment}) => {
   const doctor = appointment.doctor;
@@ -25,6 +27,9 @@ const AppointmentCard = ({appointment}) => {
   const navigation = useNavigation();
 
   const role = useSelector(state => state.role.role);
+  const [btnLoading, setBtnLoading] = useState(false);
+
+  const {showToast} = useCustomToast();
   //   const role = 'Doctor';
 
   const hasAccess = () => {
@@ -36,6 +41,18 @@ const AppointmentCard = ({appointment}) => {
 
     return false;
   };
+
+  const handleRequstEHR = async () => {
+    setBtnLoading(true);
+    try{
+      const response = await requestEhrAccess(patient._id);
+      showToast(response.data.message, "success");
+    }catch(err) {
+      showToast("Error requesting EHR", "danger");
+    }finally {  
+      setBtnLoading(false);
+    }
+  }
 
   return (
     <TouchableOpacity
@@ -88,7 +105,7 @@ const AppointmentCard = ({appointment}) => {
               width={dimensions.Width / 4}
               marginVertical={'5%'}
               label={'Request EHR'}
-              onPress={() => {}}
+              onPress={handleRequstEHR}
               type="filled">
               <HealthRecordIcon />
             </Button>

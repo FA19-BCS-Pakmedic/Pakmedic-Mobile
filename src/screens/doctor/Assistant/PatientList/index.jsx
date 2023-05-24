@@ -13,7 +13,7 @@ import {getDoctorById} from '../../../../services/doctorServices';
 
 const PatientsList = () => {
   const route = useRoute();
-  const {screenName} = route.params;
+  const {data: screenName} = route.params;
   const user = useSelector(state => state.auth.user);
   const [userList, setUserList] = useState([]);
   const [scanList, setScanList] = useState([]);

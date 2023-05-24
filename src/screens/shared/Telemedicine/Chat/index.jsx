@@ -29,7 +29,7 @@ const Chat = ({route, navigation}) => {
   // console.log(route.params);
   const receiverId = route.params.data;
 
-  console.log(receiverId, "RECEIVER ID");
+  console.log(route.params, "RECEIVER ID");
 
   const [receiver, setReceiver] = useState(null);
 
