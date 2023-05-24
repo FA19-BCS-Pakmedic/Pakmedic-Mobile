@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    marginBottom: dimensions.Height / 7,
+    marginBottom: dimensions.Height / 5,
   },
 });
 

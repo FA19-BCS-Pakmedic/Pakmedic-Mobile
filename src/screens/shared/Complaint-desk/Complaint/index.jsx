@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 //import {styles} from './styles';
 
@@ -15,12 +15,21 @@ import ScrollContainer from '../../../../containers/ScrollContainer';
 import Button from '../../../../components/shared/Button';
 
 import {getComplaintById} from '../../../../services/complaintServices';
+import { useNavigation } from '@react-navigation/native';
+import { apiEndpoint, baseUrl } from '../../../../utils/constants/APIendpoint';
 
 const Complaint = props => {
   const {data} = props.route.params;
   console.log(data);
   const [item, setItem] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+
+  const navigation = useNavigation();
+
+
+  useEffect(() => {
+      console.log(item);
+  }, [item]);
 
   const getComplaint = async () => {
     try {
@@ -76,12 +85,12 @@ const Complaint = props => {
                 <View style={styles.detailLeft}>
                   <Image
                     style={styles.img}
-                    source={require('../../../../assets/images/default-avatar.png')}
+                    source={{uri: `${apiEndpoint}files/${item?.complainee.avatar}`}}
                   />
                 </View>
                 <View style={styles.detailRight}>
                   <Text style={styles.text}>{item?.complainee.name}</Text>
-                  <Text style={styles.text}>+92-332-xxxxx</Text>
+                  <Text style={styles.text}>{item?.complainee.email}</Text>
                 </View>
               </View>
               <View style={styles.cardRight}>
@@ -92,7 +101,14 @@ const Complaint = props => {
                   height={dimensions.Height * 0.04}
                   fontSize={fonts.size.font12}
                   color={colors.primary1}
-                  onPress={() => {}}
+                  onPress={() => {
+                    navigation.navigate('ViewProfile', {
+                      
+                        isViewing: true,
+                        userId: item?.complainee._id.toString()
+                      
+                    })
+                  }}
                 />
               </View>
             </View>
@@ -104,9 +120,7 @@ const Complaint = props => {
               <Text style={styles.reviewText}>No review comment yet</Text>
             ) : (
               <Text style={styles.reviewText}>
-                We have received your complaint and will get back to you soon
-                and will resolve your issue as soon as possible. please be
-                patient.
+                {item?.review || 'No review comment yet'}
               </Text>
             )}
           </View>

@@ -1,4 +1,4 @@
-import {View, Text, Image, FlatList, StyleSheet} from 'react-native';
+import {View, Text, Image, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 //import {styles} from './styles';
 
 import {useSelector} from 'react-redux';
@@ -19,91 +19,129 @@ import {
   ContributionGraph,
   StackedBarChart,
 } from 'react-native-chart-kit';
+import useCustomApi from '../../../../hooks/useCustomApi';
+import { getDashboardData } from '../../../../services/doctorServices';
+import { apiEndpoint } from '../../../../utils/constants/APIendpoint';
+import { useNavigation } from '@react-navigation/native';
+import Loader from '../../../../components/shared/Loader';
 
 const Dashboard = () => {
   const user = useSelector(state => state.auth.user);
 
-  const [appointments, setAppointments] = React.useState([
-    {
-      id: 1,
-      name: 'Kashaf',
-      time: '10:00 AM',
-      date: '12/12/2020',
-      status: 'pending',
-    },
-    {
-      id: 2,
-      name: 'Moeed',
-      time: '12:00 PM',
-      date: '12/04/2023',
-      status: 'completed',
-    },
-    {
-      id: 3,
-      name: 'Haris',
-      time: '7:00 PM',
-      date: '02/05/2020',
-      status: 'pending',
-    },
-  ]);
-  const Appointmentdata = {
-    labels: ['pending', 'completed', 'cancelled'], // modified labels
-    data: [0.4, 0.8, 0.6],
-  };
+  const [appointments, setAppointments] = React.useState([]);
+  const [Citydata, setCitydata] = React.useState([]);
+  const [data, setData] = React.useState(null);
+  const [earning, setEarning] = React.useState(null);
 
-  const Citydata = [
-    {
-      name: 'Karachi',
-      appointments: 70,
-      color: colors.secondaryMonoChrome700,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-    {
-      name: 'Lahore',
-      appointments: 90,
-      color: colors.secondaryMonoChrome300,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-    {
-      name: 'Islamabad',
-      appointments: 60,
-      color: colors.secondary3,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-    {
-      name: 'Rawalpindi',
-      appointments: 28,
-      color: colors.secondary1,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-    {
-      name: 'Peshawar',
-      appointments: 20,
-      color: colors.secondaryMonoChrome500,
-      legendFontColor: colors.black,
-      legendFontSize: 15,
-    },
-  ];
 
-  const earning = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        data: [
-          10, // January
-          25, // February
-          14, // March
-          40, // April
-          7, // May
-          50, // June
-        ],
-      },
-    ],
-  };
+  const navigation = useNavigation();
+
+  const chartColors = {
+    secondary1: '#003762',
+    secondary2: '#005BA1',
+    secondary3: '#2087D6',
+    secondaryMonoChrome100: '#E0F1FF',
+    secondaryMonoChrome300: '#D2EAFF',
+    secondaryMonoChrome500: '#B6DEFF',
+    secondaryMonoChrome700: '#3D77A7',
+    secondaryMonoChrome800: '#005496',
+    secondaryMonoChrome900: '#004174',
+    secondaryMonoChrome1000: '#003056',
+  }
+  
+  const {
+    callApi, error, isLoading, setMessage
+  } = useCustomApi();
+
+
+  React.useEffect(() => {
+    console.log(earning);
+  }, [setEarning])
+
+  React.useEffect(() => {
+
+    if(data && data.success) {
+      setAppointments(data.data.appointments);
+      setCitydata(convertedData(data.data.locations));
+      setEarning(data.data.payments);
+    }
+
+  }, [data]);
+
+  
+  React.useEffect(() => {
+    const getData = async () => {
+      const data = await callApi(getDashboardData, user._id);
+      setData(data);
+    }
+    if(user && user._id) {
+      getData();
+    }
+  }, [user]);
+
+  const convertedData = (data) => data.map((item, index) => ({
+    name: item._id[0] || 'Unknown',
+    appointments: item.count,
+    color: Object.values(chartColors)[index % Object.values(chartColors).length],
+    legendFontColor: colors.black,
+    legendFontSize: 15
+  }));
+
+
+
+  // const Citydata = [
+  //   {
+  //     name: 'Karachi',
+  //     appointments: 70,
+  //     color: colors.secondaryMonoChrome700,
+  //     legendFontColor: colors.black,
+  //     legendFontSize: 15,
+  //   },
+  //   {
+  //     name: 'Lahore',
+  //     appointments: 90,
+  //     color: colors.secondaryMonoChrome300,
+  //     legendFontColor: colors.black,
+  //     legendFontSize: 15,
+  //   },
+  //   {
+  //     name: 'Islamabad',
+  //     appointments: 60,
+  //     color: colors.secondary3,
+  //     legendFontColor: colors.black,
+  //     legendFontSize: 15,
+  //   },
+  //   {
+  //     name: 'Rawalpindi',
+  //     appointments: 28,
+  //     color: colors.secondary1,
+  //     legendFontColor: colors.black,
+  //     legendFontSize: 15,
+  //   },
+  //   {
+  //     name: 'Peshawar',
+  //     appointments: 20,
+  //     color: colors.secondaryMonoChrome500,
+  //     legendFontColor: colors.black,
+  //     legendFontSize: 15,
+  //   },
+  // ];
+
+  // const earning = {
+  //   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  //   datasets: [
+  //     {
+  //       data: [
+  //         10, // January
+  //         25, // February
+  //         14, // March
+  //         40, // April
+  //         7, // May
+  //         50, // June
+  //       ],
+  //     },
+  //   ],
+  // };
 
   const chartConfig = {
     backgroundGradientFrom: colors.secondaryMonoChrome100,
@@ -116,6 +154,15 @@ const Dashboard = () => {
     useShadowColorFromDataset: false, // optional
   };
 
+  
+  if(isLoading) {
+    return (
+      <Loader
+        title="Loading Dashboard Data....."
+      />
+    )
+  }
+
   return (
     <ScrollContainer isTab>
       <View style={styles.container}>
@@ -123,7 +170,15 @@ const Dashboard = () => {
           <Text style={styles.title}>Doctor {user?.name}</Text>
         </View>
         <View style={styles.appContainer}>
-          <Text style={styles.appTitle}>Upcoming Appointments:</Text>
+        <View style={styles.textContainer}>
+            <Text style={styles.appTitle}>Upcoming Appointments:</Text>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('AppointmentScreen');
+            }}>
+              <Text style={styles.viewAll}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          {appointments?.length === 0 ? <Text style={styles.empty}>No upcoming appointments</Text> :
           <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal={true}
@@ -135,17 +190,24 @@ const Dashboard = () => {
                   <View style={styles.imgContainer}>
                     <Image
                       style={styles.img}
-                      source={require('../../../../assets/images/default-avatar.png')}
+                      source={{uri: `${apiEndpoint}files/${item?.patient?.avatar ? item.patient.avatar : 'default.png'}`}}
                     />
-                    <Text style={styles.name}>{item.name}</Text>
                   </View>
                   <View style={styles.timeContainer}>
-                    <Text style={styles.time}>{item.time}</Text>
-                    <Text style={styles.time}>{item.date}</Text>
-                    <Text style={styles.time}>{item.status}</Text>
+                    <Text style={styles.name}>{item?.patient?.name ? item.patient.name : 'Test User'}</Text>
+                    <Text style={styles.time}>
+                      {new Date(item.date).toLocaleString().split(",")[0]}
+                      {'  '}
+                      {item.time}
+                    </Text>
                     <Button
                       type={'filled'}
                       label={'View Details'}
+                      onPress={() => {
+                        navigation.navigate('AppointmentDetails', {
+                          data: item._id
+                        })
+                      }}
                       height={dimensions.Height * 0.05}
                       width={dimensions.Width * 0.3}
                       fontSize={fonts.size.font14}
@@ -154,11 +216,12 @@ const Dashboard = () => {
                 </View>
               </View>
             )}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item._id.toString()}
             initialNumToRender={1}
             snapToInterval={dimensions.Width * 0.9}
             decelerationRate={0.5}
           />
+        }
         </View>
         <View style={styles.analyticsContainer}>
           <View style={styles.chartContainer}>
@@ -176,8 +239,11 @@ const Dashboard = () => {
           </View>
           <View style={styles.chartContainer}>
             <Text style={styles.appTitle}>Earnings by months (Rs.):</Text>
+            {
+              earning &&
             <LineChart
               data={earning}
+            
               width={dimensions.Width * 0.9} // from react-native
               height={dimensions.Height * 0.25}
               yAxisSuffix="k"
@@ -202,7 +268,7 @@ const Dashboard = () => {
                 marginVertical: 8,
                 borderRadius: 16,
               }}
-            />
+            />}
           </View>
         </View>
       </View>
@@ -219,6 +285,11 @@ const styles = StyleSheet.create({
   header: {
     width: dimensions.Width * 0.9,
   },
+  subTitle: {
+    marginTop: dimensions.Height * 0.01,
+    fontSize: fonts.size.font14,
+    color: colors.secondary1,
+  },
   title: {
     alignSelf: 'flex-start',
     borderBottomWidth: 2,
@@ -226,10 +297,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   appContainer: {
-    marginTop: dimensions.Height * 0.05,
+    marginTop: dimensions.Height * 0.03,
   },
   appTitle: {
-    marginHorizontal: dimensions.Width * 0.05,
     fontSize: fonts.size.font16,
     fontWeight: 'bold',
   },
@@ -237,10 +307,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    width: dimensions.Width * 0.7,
-    height: dimensions.Height * 0.18,
+    width: dimensions.Width * 0.8,
+    height: dimensions.Height * 0.2,
     marginVertical: dimensions.Height * 0.03,
     borderWidth: 2,
+    borderColor: colors.primary1,
+    borderRadius: dimensions.Width * 0.03,
+  },
+  appointments: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    width: dimensions.Width * 0.25,
+    height: dimensions.Height * 0.15,
+    marginVertical: dimensions.Height * 0.03,
+    borderWidth: 2,
+    borderRadius: 10,
     borderColor: colors.primary1,
   },
   imgContainer: {
@@ -248,8 +330,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   img: {
-    height: dimensions.Height * 0.1,
-    width: dimensions.Height * 0.1,
+    height: dimensions.Height * 0.12,
+    width: dimensions.Height * 0.12,
+    elevation: 5,
+    borderRadius: 50,
+  },
+  imgs: {
+    height: dimensions.Height * 0.08,
+    width: dimensions.Height * 0.08,
     elevation: 5,
     borderRadius: 50,
   },
@@ -258,12 +346,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   timeContainer: {
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   time: {
     fontSize: fonts.size.font12,
     fontWeight: 'bold',
+    color: colors.accent1,
   },
   analyticsContainer: {
     //flexDirection: 'row',
@@ -283,6 +372,97 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: dimensions.Height * 0.02,
   },
+  name: {
+    fontSize: fonts.size.font16,
+    fontWeight: 'bold',
+  },
+  speciality: {
+    fontSize: fonts.size.font12,
+  },
+  textContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  empty: {
+    fontSize: fonts.size.font16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: colors.accent1,
+    width: '100%',
+    marginVertical: dimensions.Height,
+  },
+
+  doctorCardContainer: {
+    marginRight: dimensions.Width * 0.05,
+    width: dimensions.Width / 1.2,
+    marginTop: dimensions.Height *0.02,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: dimensions.Height / 5,
+  },
+
+  doctorCard: {
+    width: dimensions.Width / 1.3,
+    borderWidth: 2,
+    borderColor: colors.primary1,
+    height: dimensions.Height / 5,
+    borderRadius: dimensions.Width / 100,
+  },
+
+  communityContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: dimensions.Height / 30,
+    paddingBottom: dimensions.Height / 20,
+
+  },
+  
+  communityCard: {
+    width: dimensions.Width / 1.2,
+    borderWidth: 1,
+    borderColor: colors.primary1,
+    borderRadius: dimensions.Width / 50,
+  }, 
+
+  communityHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: dimensions.Width / 50,
+    borderBottomWidth: 1,
+    borderColor: colors.gray,
+    marginBottom: dimensions.Height / 100,
+  },
+  headerContent: {
+    marginLeft: dimensions.Width / 50,
+  },
+  userName: {
+    marginTop: dimensions.Height / 500,
+  },
+  
+// title
+  content: {
+    fontSize: fonts.size.font14,
+    color: colors.secondary2,
+    marginVertical: dimensions.Height / 100
+  },
+  posted: {
+    color: colors.accent1,
+  },
+  footer: {
+    backgroundColor: colors.primaryMonoChrome100,
+    padding: dimensions.Width / 50,
+  },
+  statementContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: dimensions.Height / 100,
+  },
+  statement: {
+    marginLeft: dimensions.Width / 50,
+  }
 });
 
 export default Dashboard;

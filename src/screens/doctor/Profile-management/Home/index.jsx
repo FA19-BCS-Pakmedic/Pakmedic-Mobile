@@ -37,6 +37,8 @@ const ProfileManagement = ({route}) => {
   const isViewing = route.params.isViewing;
   const index = route.params.index;
 
+  console.log(route.params, "DATA IN PROFILE VIEWING");
+
   const dispatch = useDispatch();
 
   const getUserData = async () => {
