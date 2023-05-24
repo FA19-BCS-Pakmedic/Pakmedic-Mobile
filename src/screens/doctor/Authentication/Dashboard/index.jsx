@@ -285,6 +285,11 @@ const styles = StyleSheet.create({
   header: {
     width: dimensions.Width * 0.9,
   },
+  subTitle: {
+    marginTop: dimensions.Height * 0.01,
+    fontSize: fonts.size.font14,
+    color: colors.secondary1,
+  },
   title: {
     alignSelf: 'flex-start',
     borderBottomWidth: 2,
@@ -292,12 +297,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   appContainer: {
-    marginTop: dimensions.Height * 0.05,
-  },
-  textContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    marginTop: dimensions.Height * 0.03,
   },
   appTitle: {
     fontSize: fonts.size.font16,
@@ -372,6 +372,97 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: dimensions.Height * 0.02,
   },
+  name: {
+    fontSize: fonts.size.font16,
+    fontWeight: 'bold',
+  },
+  speciality: {
+    fontSize: fonts.size.font12,
+  },
+  textContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  empty: {
+    fontSize: fonts.size.font16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: colors.accent1,
+    width: '100%',
+    marginVertical: dimensions.Height,
+  },
+
+  doctorCardContainer: {
+    marginRight: dimensions.Width * 0.05,
+    width: dimensions.Width / 1.2,
+    marginTop: dimensions.Height *0.02,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: dimensions.Height / 5,
+  },
+
+  doctorCard: {
+    width: dimensions.Width / 1.3,
+    borderWidth: 2,
+    borderColor: colors.primary1,
+    height: dimensions.Height / 5,
+    borderRadius: dimensions.Width / 100,
+  },
+
+  communityContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: dimensions.Height / 30,
+    paddingBottom: dimensions.Height / 20,
+
+  },
+  
+  communityCard: {
+    width: dimensions.Width / 1.2,
+    borderWidth: 1,
+    borderColor: colors.primary1,
+    borderRadius: dimensions.Width / 50,
+  }, 
+
+  communityHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: dimensions.Width / 50,
+    borderBottomWidth: 1,
+    borderColor: colors.gray,
+    marginBottom: dimensions.Height / 100,
+  },
+  headerContent: {
+    marginLeft: dimensions.Width / 50,
+  },
+  userName: {
+    marginTop: dimensions.Height / 500,
+  },
+  
+// title
+  content: {
+    fontSize: fonts.size.font14,
+    color: colors.secondary2,
+    marginVertical: dimensions.Height / 100
+  },
+  posted: {
+    color: colors.accent1,
+  },
+  footer: {
+    backgroundColor: colors.primaryMonoChrome100,
+    padding: dimensions.Width / 50,
+  },
+  statementContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: dimensions.Height / 100,
+  },
+  statement: {
+    marginLeft: dimensions.Width / 50,
+  }
 });
 
 export default Dashboard;

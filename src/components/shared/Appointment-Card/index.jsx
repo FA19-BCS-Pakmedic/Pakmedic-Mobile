@@ -17,6 +17,7 @@ import ROLES from '../../../utils/constants/ROLES';
 import {useNavigation} from '@react-navigation/native';
 import { useCustomToast } from '../../../hooks/useCustomToast';
 import { requestEhrAccess } from '../../../services/ehrServices';
+import { requestPermissions } from '../../../services/voxServices';
 
 const AppointmentCard = ({appointment}) => {
   const doctor = appointment.doctor;
@@ -53,6 +54,22 @@ const AppointmentCard = ({appointment}) => {
       setBtnLoading(false);
     }
   }
+
+  const onPressCall = async (receiver) => {
+    const permissionsGranted = await requestPermissions(true);
+
+    if (permissionsGranted) {
+      navigation.navigate('App', {
+        screen: 'OngoingCall',
+        params: {
+          callee: receiver._id,
+          isVideoCall: false,
+          isIncomingCall: false,
+          otherUsername: receiver.name,
+        },
+      });
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -117,8 +134,15 @@ const AppointmentCard = ({appointment}) => {
           width={dimensions.Width / 4}
           marginVertical={'5%'}
           label={'Message'}
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate('Chat', 
+            {
+              data: role === 'Doctor' ? patient._id : doctor._id, //TODO: remove this id as it is only used for testing purpose
+              receiver: role === 'Doctor' ? patient : doctor,
+            })
+          }}
           type="filled">
+            
           <MessageIcon />
         </Button>
 
@@ -128,7 +152,9 @@ const AppointmentCard = ({appointment}) => {
           width={dimensions.Width / 4}
           marginVertical={'5%'}
           label="Call"
-          onPress={() => {}}
+          onPress={() => {
+            onPressCall(role === 'Doctor' ? patient : doctor);
+          }}
           type="filled">
           <CallIcon width={15} />
         </Button>

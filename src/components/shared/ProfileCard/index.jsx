@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -30,6 +30,23 @@ const ProfileCard = ({user, isViewing}) => {
 
   const [AddModalVisible, setAddVisible] = React.useState(false);
 
+  
+  const getRatings = (doctor) => {
+    const ratings = doctor.reviews.map(review => review.ratings);
+    const total = ratings.reduce((acc, curr) => acc + curr, 0);
+    return (total / ratings.length || 0).toFixed(1);
+  }
+
+
+  useEffect(() => {
+
+    if(user && user.role === ROLES.doctor) {
+      user.ratings = getRatings(user);
+    }
+
+  }, [user])
+
+
   return (
     <View style={styles(role).container}>
       <Image
@@ -47,8 +64,7 @@ const ProfileCard = ({user, isViewing}) => {
           <LocationSvg width={dimensions.Width / 20} />
           <Text style={styles().otherInfo}>{user?.location}</Text>
         </View>
-        {role !== ROLES.patient ||
-          (isViewing && (
+        {user && user.role !== ROLES.patient && (
             <>
               <View style={styles().iconTextContainer}>
                 <SpecialistSvg width={dimensions.Width / 20} />
@@ -64,11 +80,11 @@ const ProfileCard = ({user, isViewing}) => {
                       color: colors.secondaryMonoChrome800,
                     },
                   ]}>
-                  4.5/5 (674 reviews)
+                  {getRatings(user)}/5.0 ({user.reviews.length} reviews)
                 </Text>
               </View>
             </>
-          ))}
+          )}
       </View>
       <View style={styles().buttonContainer}>
         {!isViewing ? (

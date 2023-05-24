@@ -164,7 +164,12 @@ const AppointmentDetails = () => {
               <Button
                 label={'View Profile'}
                 width={dimensions.Width / 3}
-                onPress={() => {}}
+                onPress={() => {
+                  navigation.navigate('ViewProfile', {
+                    userId: role === ROLES.doctor ? appointment?.patient?._id : appointment?.doctor?._id,
+                    isViewing: true
+                  })
+                }}
                 type="filled"
               />
             </View>
