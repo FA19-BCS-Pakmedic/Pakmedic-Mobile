@@ -31,6 +31,8 @@ const Dashboard = () => {
   const [appointments, setAppointments] = React.useState([]);
   const [Citydata, setCitydata] = React.useState([]);
   const [data, setData] = React.useState(null);
+  const [earning, setEarning] = React.useState(null);
+
 
   const navigation = useNavigation();
 
@@ -51,13 +53,17 @@ const Dashboard = () => {
     callApi, error, isLoading, setMessage
   } = useCustomApi();
 
+
+  React.useEffect(() => {
+    console.log(earning);
+  }, [setEarning])
+
   React.useEffect(() => {
 
     if(data && data.success) {
       setAppointments(data.data.appointments);
-      // console.log(data.data.appointments[1]);
-      console.log(data.data);
       setCitydata(convertedData(data.data.locations));
+      setEarning(data.data.payments);
     }
 
   }, [data]);
@@ -73,13 +79,14 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  const convertedData = (data,) => data.map((item, index) => ({
+  const convertedData = (data) => data.map((item, index) => ({
     name: item._id[0] || 'Unknown',
     appointments: item.count,
     color: Object.values(chartColors)[index % Object.values(chartColors).length],
     legendFontColor: colors.black,
     legendFontSize: 15
   }));
+
 
 
   // const Citydata = [
@@ -120,21 +127,21 @@ const Dashboard = () => {
   //   },
   // ];
 
-  const earning = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        data: [
-          10, // January
-          25, // February
-          14, // March
-          40, // April
-          7, // May
-          50, // June
-        ],
-      },
-    ],
-  };
+  // const earning = {
+  //   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  //   datasets: [
+  //     {
+  //       data: [
+  //         10, // January
+  //         25, // February
+  //         14, // March
+  //         40, // April
+  //         7, // May
+  //         50, // June
+  //       ],
+  //     },
+  //   ],
+  // };
 
   const chartConfig = {
     backgroundGradientFrom: colors.secondaryMonoChrome100,
@@ -232,8 +239,11 @@ const Dashboard = () => {
           </View>
           <View style={styles.chartContainer}>
             <Text style={styles.appTitle}>Earnings by months (Rs.):</Text>
+            {
+              earning &&
             <LineChart
               data={earning}
+            
               width={dimensions.Width * 0.9} // from react-native
               height={dimensions.Height * 0.25}
               yAxisSuffix="k"
@@ -258,7 +268,7 @@ const Dashboard = () => {
                 marginVertical: 8,
                 borderRadius: 16,
               }}
-            />
+            />}
           </View>
         </View>
       </View>
