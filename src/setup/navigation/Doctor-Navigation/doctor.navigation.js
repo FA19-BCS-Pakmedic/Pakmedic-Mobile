@@ -36,7 +36,6 @@ import notifee, {EventType, AndroidImportance} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import {useEffect} from 'react';
 
-
 import {useNavigation} from '@react-navigation/native';
 import ResultsScreen from '../../../screens/doctor/Assistant/ResultsScreen';
 
@@ -50,24 +49,23 @@ import FinanceHome from '../../../screens/shared/Finance/Home';
 import {eventEmitter} from '../../../../index.js';
 
 import logout from '../../../utils/helpers/logout';
-import { useDispatch } from 'react-redux';
-import { authLogout } from '../../redux/actions';
+import {useDispatch} from 'react-redux';
+import {authLogout} from '../../redux/actions';
 
 const Stack = createNativeStackNavigator();
 
 const DoctorNavigation = () => {
-
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     eventEmitter.on('notificationReceived', notification => {
 
       console.log(notification);
 
       if (notification?.data?.navigate) {
-        // console.log(notification.data);
+        console.log(notification.data);
         navigation.navigate(notification?.data?.navigate, {
             image: notification?.data?.image,
             data: notification?.data?.data,
@@ -77,7 +75,7 @@ const DoctorNavigation = () => {
 
     eventEmitter.on('logout', () => {
       logout(dispatch, authLogout, navigation);
-    })
+    });
   }, []);
 
   return (

@@ -40,6 +40,7 @@ import TickIcon from '../../../../assets/svgs/tick2.svg'
 
 const Dashboard = () => {
   const user = useSelector(state => state.auth.user);
+  console.log(user);
 
   const navigation = useNavigation();
 

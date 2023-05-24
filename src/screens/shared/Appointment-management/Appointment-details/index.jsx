@@ -88,6 +88,8 @@ const AppointmentDetails = () => {
     });
   };
 
+  
+
 
   const _openMaps = () => createOpenLink({provider: 'google', end, travelType: 'drive'});
   // const _openMaps = () => createOpenLink(address && address.lat && address.lng ? {latitude: address.lat, longitude: address.lng, navigate: true} : {travelType, end, provider: 'google', navigate: true});

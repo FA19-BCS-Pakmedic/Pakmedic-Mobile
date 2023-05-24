@@ -123,6 +123,7 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
     } finally {
       setIsBtnLoading(false);
       setIsEdit(false);
+      setOpen(false);
     }
   };
 
@@ -288,7 +289,6 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
                   const pickerResult = await DocumentPicker.pickSingle({
                     presentationStyle: 'fullScreen',
                     copyTo: 'cachesDirectory',
-                    type: [types.images],
                   });
                   setScanImage([pickerResult]);
                 } catch (e) {
@@ -301,7 +301,11 @@ const Scans = ({scans, visible, setVisible, updateUser, isEdit, setIsEdit}) => {
             <Button
               label="Cancel"
               type="outlined"
-              onPress={() => setVisible(false)}
+              onPress={() => {
+                setVisible(false);
+                setOpen(false);
+                reset();
+              }}
               width={'48%'}
             />
             <Button
@@ -408,7 +412,7 @@ const styles = StyleSheet.create({
   controls: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: dimensions.Height / 100,
+    //marginTop: dimensions.Height / 100,
     justifyContent: 'space-between',
     padding: dimensions.Width / 30,
   },
