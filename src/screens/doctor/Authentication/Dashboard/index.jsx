@@ -1,4 +1,11 @@
-import {View, Text, Image, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 //import {styles} from './styles';
 
 import {useSelector} from 'react-redux';
@@ -20,9 +27,9 @@ import {
   StackedBarChart,
 } from 'react-native-chart-kit';
 import useCustomApi from '../../../../hooks/useCustomApi';
-import { getDashboardData } from '../../../../services/doctorServices';
-import { apiEndpoint } from '../../../../utils/constants/APIendpoint';
-import { useNavigation } from '@react-navigation/native';
+import {getDashboardData} from '../../../../services/doctorServices';
+import {apiEndpoint} from '../../../../utils/constants/APIendpoint';
+import {useNavigation} from '@react-navigation/native';
 import Loader from '../../../../components/shared/Loader';
 
 const Dashboard = () => {
@@ -32,7 +39,6 @@ const Dashboard = () => {
   const [Citydata, setCitydata] = React.useState([]);
   const [data, setData] = React.useState(null);
   const [earning, setEarning] = React.useState(null);
-
 
   const navigation = useNavigation();
 
@@ -47,47 +53,41 @@ const Dashboard = () => {
     secondaryMonoChrome800: '#005496',
     secondaryMonoChrome900: '#004174',
     secondaryMonoChrome1000: '#003056',
-  }
-  
-  const {
-    callApi, error, isLoading, setMessage
-  } = useCustomApi();
+  };
 
+  const {callApi, error, isLoading, setMessage} = useCustomApi();
 
   React.useEffect(() => {
-    console.log(earning);
-  }, [setEarning])
+    console.log(data);
+  }, [data]);
 
   React.useEffect(() => {
-
-    if(data && data.success) {
+    if (data && data.success) {
       setAppointments(data.data.appointments);
       setCitydata(convertedData(data.data.locations));
       setEarning(data.data.payments);
     }
-
   }, [data]);
 
-  
   React.useEffect(() => {
     const getData = async () => {
       const data = await callApi(getDashboardData, user._id);
       setData(data);
-    }
-    if(user && user._id) {
+    };
+    if (user && user._id) {
       getData();
     }
   }, [user]);
 
-  const convertedData = (data) => data.map((item, index) => ({
-    name: item._id[0] || 'Unknown',
-    appointments: item.count,
-    color: Object.values(chartColors)[index % Object.values(chartColors).length],
-    legendFontColor: colors.black,
-    legendFontSize: 15
-  }));
-
-
+  const convertedData = data =>
+    data.map((item, index) => ({
+      name: item._id[0] || 'Unknown',
+      appointments: item.count,
+      color:
+        Object.values(chartColors)[index % Object.values(chartColors).length],
+      legendFontColor: colors.black,
+      legendFontSize: 15,
+    }));
 
   // const Citydata = [
   //   {
@@ -154,13 +154,8 @@ const Dashboard = () => {
     useShadowColorFromDataset: false, // optional
   };
 
-  
-  if(isLoading) {
-    return (
-      <Loader
-        title="Loading Dashboard Data....."
-      />
-    )
+  if (isLoading) {
+    return <Loader title="Loading Dashboard Data....." />;
   }
 
   return (
@@ -170,105 +165,128 @@ const Dashboard = () => {
           <Text style={styles.title}>Doctor {user?.name}</Text>
         </View>
         <View style={styles.appContainer}>
-        <View style={styles.textContainer}>
+          <View style={styles.textContainer}>
             <Text style={styles.appTitle}>Upcoming Appointments:</Text>
-            <TouchableOpacity onPress={() => {
-              navigation.navigate('AppointmentScreen');
-            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AppointmentScreen');
+              }}>
               <Text style={styles.viewAll}>View All</Text>
             </TouchableOpacity>
           </View>
-          {appointments?.length === 0 ? <Text style={styles.empty}>No upcoming appointments</Text> :
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={appointments}
-            renderItem={({item}) => (
-              <View
-                style={{width: dimensions.Width * 0.9, alignItems: 'center'}}>
-                <View style={styles.appointment}>
-                  <View style={styles.imgContainer}>
-                    <Image
-                      style={styles.img}
-                      source={{uri: `${apiEndpoint}files/${item?.patient?.avatar ? item.patient.avatar : 'default.png'}`}}
-                    />
-                  </View>
-                  <View style={styles.timeContainer}>
-                    <Text style={styles.name}>{item?.patient?.name ? item.patient.name : 'Test User'}</Text>
-                    <Text style={styles.time}>
-                      {new Date(item.date).toLocaleString().split(",")[0]}
-                      {'  '}
-                      {item.time}
-                    </Text>
-                    <Button
-                      type={'filled'}
-                      label={'View Details'}
-                      onPress={() => {
-                        navigation.navigate('AppointmentDetails', {
-                          data: item._id
-                        })
-                      }}
-                      height={dimensions.Height * 0.05}
-                      width={dimensions.Width * 0.3}
-                      fontSize={fonts.size.font14}
-                    />
+          {appointments?.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.empty}>No upcoming appointments</Text>
+            </View>
+          ) : (
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              data={appointments}
+              renderItem={({item}) => (
+                <View
+                  style={{width: dimensions.Width * 0.9, alignItems: 'center'}}>
+                  <View style={styles.appointment}>
+                    <View style={styles.imgContainer}>
+                      <Image
+                        style={styles.img}
+                        source={{
+                          uri: `${apiEndpoint}files/${
+                            item?.patient?.avatar
+                              ? item.patient.avatar
+                              : 'default.png'
+                          }`,
+                        }}
+                      />
+                    </View>
+                    <View style={styles.timeContainer}>
+                      <Text style={styles.name}>
+                        {item?.patient?.name ? item.patient.name : 'Test User'}
+                      </Text>
+                      <Text style={styles.time}>
+                        {new Date(item.date).toLocaleString().split(',')[0]}
+                        {'  '}
+                        {item.time}
+                      </Text>
+                      <Button
+                        type={'filled'}
+                        label={'View Details'}
+                        onPress={() => {
+                          navigation.navigate('AppointmentDetails', {
+                            data: item._id,
+                          });
+                        }}
+                        height={dimensions.Height * 0.05}
+                        width={dimensions.Width * 0.3}
+                        fontSize={fonts.size.font14}
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
-            )}
-            keyExtractor={item => item._id.toString()}
-            initialNumToRender={1}
-            snapToInterval={dimensions.Width * 0.9}
-            decelerationRate={0.5}
-          />
-        }
+              )}
+              keyExtractor={item => item._id.toString()}
+              initialNumToRender={1}
+              snapToInterval={dimensions.Width * 0.9}
+              decelerationRate={0.5}
+            />
+          )}
         </View>
         <View style={styles.analyticsContainer}>
           <View style={styles.chartContainer}>
             <Text style={styles.appTitle}>Appointments by City:</Text>
-            <PieChart
-              data={Citydata}
-              width={dimensions.Width * 0.9}
-              height={dimensions.Height * 0.3}
-              chartConfig={chartConfig}
-              accessor={'appointments'}
-              backgroundColor={'transparent'}
-              paddingLeft={'15'}
-              absolute
-            />
+            {Citydata.length > 0 ? (
+              <PieChart
+                data={Citydata}
+                width={dimensions.Width * 0.9}
+                height={dimensions.Height * 0.3}
+                chartConfig={chartConfig}
+                accessor={'appointments'}
+                backgroundColor={'transparent'}
+                paddingLeft={'15'}
+                absolute
+              />
+            ) : (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.empty}>No appointments data available</Text>
+              </View>
+            )}
           </View>
           <View style={styles.chartContainer}>
             <Text style={styles.appTitle}>Earnings by months (Rs.):</Text>
-            {
-              earning &&
-            <LineChart
-              data={earning}
-            
-              width={dimensions.Width * 0.9} // from react-native
-              height={dimensions.Height * 0.25}
-              yAxisSuffix="k"
-              yAxisInterval={1} // optional, defaults to 1
-              chartConfig={{
-                backgroundGradientFrom: colors.secondary2,
-                backgroundGradientTo: colors.secondary1,
-                decimalPlaces: 2, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {
+            {earning ? (
+              <LineChart
+                data={earning}
+                width={dimensions.Width * 0.9} // from react-native
+                height={dimensions.Height * 0.25}
+                yAxisSuffix="k"
+                yAxisInterval={1} // optional, defaults to 1
+                chartConfig={{
+                  backgroundGradientFrom: colors.secondary2,
+                  backgroundGradientTo: colors.secondary1,
+                  decimalPlaces: 2, // optional, defaults to 2dp
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  labelColor: (opacity = 1) =>
+                    `rgba(255, 255, 255, ${opacity})`,
+                  style: {
+                    borderRadius: 16,
+                  },
+                  propsForDots: {
+                    r: '6',
+                    strokeWidth: '2',
+                    stroke: colors.primary1,
+                  },
+                }}
+                bezier
+                style={{
+                  marginVertical: 8,
                   borderRadius: 16,
-                },
-                propsForDots: {
-                  r: '6',
-                  strokeWidth: '2',
-                  stroke: colors.primary1,
-                },
-              }}
-              bezier
-              style={{
-                marginVertical: 8,
-                borderRadius: 16,
-              }}
-            />}
+                }}
+              />
+            ) : (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.empty}>No appointments data available</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -302,6 +320,12 @@ const styles = StyleSheet.create({
   appTitle: {
     fontSize: fonts.size.font16,
     fontWeight: 'bold',
+  },
+  emptyContainer: {
+    width: dimensions.Width * 0.9,
+    height: dimensions.Height * 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   appointment: {
     flexDirection: 'row',
@@ -391,15 +415,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.accent1,
     width: '100%',
-    marginVertical: dimensions.Height,
+    //marginVertical: dimensions.Height,
+    //borderWidth: 2,
   },
 
   doctorCardContainer: {
     marginRight: dimensions.Width * 0.05,
     width: dimensions.Width / 1.2,
-    marginTop: dimensions.Height *0.02,
-    justifyContent: "center",
-    alignItems: "center",
+    marginTop: dimensions.Height * 0.02,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: dimensions.Height / 5,
   },
 
@@ -417,15 +442,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: dimensions.Height / 30,
     paddingBottom: dimensions.Height / 20,
-
   },
-  
+
   communityCard: {
     width: dimensions.Width / 1.2,
     borderWidth: 1,
     borderColor: colors.primary1,
     borderRadius: dimensions.Width / 50,
-  }, 
+  },
 
   communityHeader: {
     flexDirection: 'row',
@@ -441,12 +465,12 @@ const styles = StyleSheet.create({
   userName: {
     marginTop: dimensions.Height / 500,
   },
-  
-// title
+
+  // title
   content: {
     fontSize: fonts.size.font14,
     color: colors.secondary2,
-    marginVertical: dimensions.Height / 100
+    marginVertical: dimensions.Height / 100,
   },
   posted: {
     color: colors.accent1,
@@ -462,7 +486,7 @@ const styles = StyleSheet.create({
   },
   statement: {
     marginLeft: dimensions.Width / 50,
-  }
+  },
 });
 
 export default Dashboard;

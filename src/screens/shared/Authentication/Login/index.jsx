@@ -134,12 +134,9 @@ const Login = ({navigation}) => {
 
       const hasPlayService = await GoogleSignin.hasPlayServices();
 
-
-
       if (hasPlayService) {
         const response = await GoogleSignin.signIn();
         console.log(response);
-        
       }
 
       // TODO: Send the request to the backend api endpoint to check if the user exists and redirect them to dashboard if they have completed their profile
@@ -167,7 +164,7 @@ const Login = ({navigation}) => {
       // preserving jwt token in async storage
       await deviceStorage.saveItem('jwtToken', response?.data?.token);
 
-      const user = response.data.user;
+      const user = response?.data.user;
       // console.log('calling vox login');
       if (user) {
         try {

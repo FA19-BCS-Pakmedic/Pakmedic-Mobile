@@ -146,7 +146,7 @@ const DoctorRegister = ({navigation}) => {
         issueDate: `${issueDate[2]}-${issueDate[1]}-${issueDate[0]}`,
         expiryDate: `${expiryDate[2]}-${expiryDate[1]}-${expiryDate[0]}`,
         status: pmcData?.Status?.toLowerCase(),
-        speciality: 'Dentist',
+        speciality: watch('speciality'),
       };
 
       // console.log(data);
@@ -496,6 +496,8 @@ const DoctorRegister = ({navigation}) => {
               //title="City"
               setValue={callback => {
                 setValue('speciality', callback());
+                console.log(watch('speciality'));
+                clearErrors('speciality');
               }}
               name="speciality"
               placeholder="Please select your speciality"

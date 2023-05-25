@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -30,22 +30,19 @@ const ProfileCard = ({user, isViewing}) => {
 
   const [AddModalVisible, setAddVisible] = React.useState(false);
 
-  
-  const getRatings = (doctor) => {
+  const getRatings = doctor => {
     const ratings = doctor.reviews.map(review => review.ratings);
     const total = ratings.reduce((acc, curr) => acc + curr, 0);
     return (total / ratings.length || 0).toFixed(1);
-  }
+  };
 
+  // useEffect(() => {
+  //   if (user && user.role === ROLES.doctor) {
+  //     user.ratings = getRatings(user);
+  //   }
+  // }, [user]);
 
-  useEffect(() => {
-
-    if(user && user.role === ROLES.doctor) {
-      user.ratings = getRatings(user);
-    }
-
-  }, [user])
-
+  console.log(user);
 
   return (
     <View style={styles(role).container}>
@@ -65,26 +62,26 @@ const ProfileCard = ({user, isViewing}) => {
           <Text style={styles().otherInfo}>{user?.location}</Text>
         </View>
         {user && user.role !== ROLES.patient && (
-            <>
-              <View style={styles().iconTextContainer}>
-                <SpecialistSvg width={dimensions.Width / 20} />
-                <Text style={styles().otherInfo}>{user?.speciality}</Text>
-              </View>
-              <View style={styles().iconTextContainer}>
-                <StarSvg width={dimensions.Width / 20} fill="#FBBC04" />
-                <Text
-                  style={[
-                    styles().otherInfo,
-                    {
-                      fontWeight: fonts.weight.low,
-                      color: colors.secondaryMonoChrome800,
-                    },
-                  ]}>
-                  {getRatings(user)}/5.0 ({user.reviews.length} reviews)
-                </Text>
-              </View>
-            </>
-          )}
+          <>
+            <View style={styles().iconTextContainer}>
+              <SpecialistSvg width={dimensions.Width / 20} />
+              <Text style={styles().otherInfo}>{user?.speciality}</Text>
+            </View>
+            <View style={styles().iconTextContainer}>
+              <StarSvg width={dimensions.Width / 20} fill="#FBBC04" />
+              <Text
+                style={[
+                  styles().otherInfo,
+                  {
+                    fontWeight: fonts.weight.low,
+                    color: colors.secondaryMonoChrome800,
+                  },
+                ]}>
+                {getRatings(user)}/5.0 ({user.reviews.length} reviews)
+              </Text>
+            </View>
+          </>
+        )}
       </View>
       <View style={styles().buttonContainer}>
         {!isViewing ? (
@@ -153,7 +150,7 @@ const styles = role =>
     },
 
     name: {
-      fontSize: fonts.size.font20,
+      fontSize: fonts.size.font16,
       fontWeight: fonts.weight.bold,
       maxWidth: dimensions.Width / 2,
     },
